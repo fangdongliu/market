@@ -44,6 +44,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login").failureUrl("/login-error").permitAll()
                 .and()
                 .logout().permitAll();
+        //分支测试
+        //分支测试
+        //分支测试
+        //分支测试
+        //分支测试
+        //分支测试
     }
 
 }
