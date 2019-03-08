@@ -45,11 +45,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().permitAll();
         //分支测试
-        //分支测试
-        //分支测试
-        //分支测试
-        //分支测试
-        //分支测试
     }
-
 }
