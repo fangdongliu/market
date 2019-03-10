@@ -20,7 +20,6 @@ public class MarketController {
 
     @PostMapping("/save1")
     public void save1(HttpServletRequest request, Record record) throws Exception{
-
         AppUserDetail appUserDetail= AppUserDetail.fromRequest(request);
         record.setApplyDate();
         Integer n=marketMapper.save1(appUserDetail.getId(),record);
@@ -38,6 +37,7 @@ public class MarketController {
             throw new Exception();
         }
     }
+
 
     @PostMapping("/download")
     public Record download(HttpServletRequest request,Integer stateFlag) throws Exception{

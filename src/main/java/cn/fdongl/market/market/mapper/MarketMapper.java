@@ -43,4 +43,6 @@ public interface MarketMapper {
             "examine_date AS examineDate" +
             "from t_record_info where region_emp_id=#{param1} and state_flag=#{param2}")
     Record download(Integer userId,Integer stateFlag);
+
+
 }
