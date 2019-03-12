@@ -47,6 +47,5 @@ public class MarketController {
             throw new Exception();
         }
         return record;
-        //xlktest
     }
 }
