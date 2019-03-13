@@ -12,40 +12,40 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/market")//指定接口的一级路径
+@RequestMapping("/market/record")//指定接口的一级路径
 public class MarketController {
 
     @Autowired
     MarketMapper marketMapper;
 
-    @PostMapping("/save1")
-    public void save1(HttpServletRequest request, Record record) throws Exception{
-
+    //新建备案
+    @PostMapping("/insert")
+    public Integer insert(HttpServletRequest request, Record record,Integer stateFlag) throws Exception{
         AppUserDetail appUserDetail= AppUserDetail.fromRequest(request);
-        record.setApplyDate();
-        Integer n=marketMapper.save1(appUserDetail.getId(),record);
+        record.setCreateTime();
+        Integer n=marketMapper.insert(appUserDetail.getId(),record,stateFlag);
         if(n<=0){
-            throw new Exception();
+            return 1;
         }
+        return 0;
     }
 
-    @PostMapping("/save2")
-    public void save2(HttpServletRequest request,Record record) throws Exception{
+    //更新备案
+    @PostMapping("/update")
+    public Integer update(HttpServletRequest request,Record record,Integer stateFlag) throws Exception{
         AppUserDetail appUserDetail= AppUserDetail.fromRequest(request);
-        record.setApplyDate();
-        Integer n=marketMapper.save2(appUserDetail.getId(),record);
+        record.setCreateTime();
+        Integer n=marketMapper.update(appUserDetail.getId(),record,stateFlag);
         if(n<=0){
-            throw new Exception();
+            return 1;
         }
+        return 0;
     }
 
-    @PostMapping("/download")
-    public Record download(HttpServletRequest request,Integer stateFlag) throws Exception{
+    //
+    @PostMapping("/select")
+    public Record select(HttpServletRequest request) throws Exception{
         AppUserDetail appUserDetail= AppUserDetail.fromRequest(request);
-        Record record=marketMapper.download(appUserDetail.getId(),stateFlag);
-        if(record==null){
-            throw new Exception();
-        }
-        return record;
+        return marketMapper.select(appUserDetail.getId());
     }
 }

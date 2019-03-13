@@ -14,7 +14,7 @@ public interface MarketMapper {
     @Insert("INSERT INTO" +
             "t_record_info(region_emp_id,region_emp_name,region_name,region_emp_contact,region_emp_contact_mobi,region_emp_contact_num,region_emp_fax,state_flag,apply_date,examine_date)" +
             "VALUES(#{param1},#{regionEmpName},#{regionName},#{regionEmpContact},#{regionEmpContactMobi},#{regionEmpContactNum},#{regionEmpFax},#{stateFlag},#{applyDate},#{examineDate})")
-    Integer save1(Integer userId,Record record);
+    Integer insert(Integer userId,Record record,Integer stateFlag);
 
     //用户修改保存信息,或者上报备案信息
     @Update("UPDATE t_record_info SET" +
@@ -28,7 +28,7 @@ public interface MarketMapper {
             "apply_date=#{applyDate}" +
             "examine_date=#{examineDate}" +
             "where region_emp_id=#{param1} and state_flag=0")
-    Integer save2(Integer userId,Record record);
+    Integer update(Integer userId,Record record,Integer stateFlag);
 
     //根据用户id和state查询备案信息
     @Select("SELECT" +
@@ -42,5 +42,5 @@ public interface MarketMapper {
             "apply_date AS applyDate," +
             "examine_date AS examineDate" +
             "from t_record_info where region_emp_id=#{param1} and state_flag=#{param2}")
-    Record download(Integer userId,Integer stateFlag);
+    Record select(Integer userId);
 }
