@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 @Mapper
 public interface ProvinceMapper {
     //根据用户id审核通过或打回对应备案
@@ -20,4 +22,16 @@ public interface ProvinceMapper {
             "state_flag=#{param2}"+
             "where user_id=#{param1}")
     Integer userStateUpdate(Integer userId,Integer stateFlag);
+
+    @Select("")
+    List<Record> examineQuery();
+
+    @Select("")
+    List<Record> conditionalQuery(Integer state,String condition);
+
+    @Select("")
+    Integer reject(Integer examineId,Integer aimId);
+
+    @Select("")
+    Integer pass(Integer examineId,Integer aimId);
 }
