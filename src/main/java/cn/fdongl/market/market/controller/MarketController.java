@@ -42,7 +42,7 @@ public class MarketController {
         return 0;
     }
 
-    //
+    //查询备案
     @PostMapping("/select")
     public Record select(HttpServletRequest request) throws Exception{
         AppUserDetail appUserDetail= AppUserDetail.fromRequest(request);
