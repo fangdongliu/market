@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="../css/stylesheet.css">
+    <title>Index</title>
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <!-- Vue -->
     <script src="//vuejs.org/js/vue.min.js"></script>
@@ -12,42 +11,232 @@
     <!--elementUI-->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="../css/stylesheet.css">
+    <script src="../js/jump.js"></script>
 </head>
 <body>
 <div id="app">
     <el-container style="height: 100%">
-        <el-header class="header">Header</el-header>
+        <el-header class="header">
+            <el-row class="headerRow" type="flex" align="middle">
+                <e-col>人力资源管理中心</e-col>
+                <e-col>
+                    <img onerror="javascript:this.src='http://online.bit.edu.cn:80/eip/core/miniui/themes/2018-skin/2018-img/avatar.jpg';" src="http://online.bit.edu.cn:80/eip/user/photo.htm" style="width:30px; margin-top: -4.5px; display: block;"></e-col>
+            </el-row>
+        </el-header>
         <el-container class="wrapper" style="min-height: calc(100% - 60px)">
-            <el-aside class="menu" style="height: 100%;overflow: scroll;">Aside</el-aside>
-            <el-container style="min-height: 100%;overflow: scroll;">
-                <el-main class="content"style="overflow: visible">
-                    <div>1</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>2</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>2</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>2</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>2</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>1</div>
-                    <div>2</div>
+            <el-aside class="menu" style="height: 100%;">
+                <el-menu
+                        default-active="2"
+                        class="el-menu-vertical-demo"
+                        @open="handleOpen"
+                        @close="handleClose">
+                    <el-submenu index="1">
+                        <template slot="title">
+                            <i class="el-icon-location"></i>
+                            <span slot="title">导航一</span>
+                        </template>
+                        <div onclick="jumpProvinceRecord()"><el-menu-item index="1-1">省审核备案</el-menu-item></div>
+                        <div onclick="jumpPointRecord()"><el-menu-item index="1-2">监测点填报备案</el-menu-item></div>
+                        <el-menu-item v-for="(item,index) in 10" :index="'1-'+index">fghj</el-menu-item>
+                    </el-submenu>
+                    <el-menu-item index="2">
+                        <i class="el-icon-menu"></i>
+                        <span slot="title">导航二</span>
+                    </el-menu-item>
+                </el-menu>
+            </el-aside>
+            <el-container style="min-height: 100%;">
+                <el-main style="padding:0; overflow: hidden;">
+                    <!--<el-row class="titleRow">-->
+                        <!--<el-col :span="1">-->
+                            <!--2-->
+                        <!--</el-col>-->
+                        <!--<el-col :span="4" class="titleContent">-->
+                            <!--填报备案-->
+                        <!--</el-col>-->
+                    <!--</el-row>-->
+                    <iframe id="menuFrame" name="menuFrame"
+                            style="height:calc(100%); width:calc(100%)" frameborder="no"></iframe>
                 </el-main>
-                <el-footer>Footer</el-footer>
+
+
+
+                <!--<el-main class="content"style="overflow: visible">-->
+                    <!--<el-row class="titleRow">-->
+                        <!--<el-col :span="1">-->
+                            <!--1-->
+                        <!--</el-col>-->
+                        <!--<el-col :span="4" class="titleContent">-->
+                            <!--审核备案-->
+                        <!--</el-col>-->
+                    <!--</el-row>-->
+                    <!--<div class="contentDetail">-->
+                        <!--<el-table-->
+                                <!--:data="marketData"-->
+                                <!--stripe-->
+                                <!--style="width: 100%">-->
+                            <!--<el-table-column-->
+                                    <!--prop="name"-->
+                                    <!--label="人力资源市场名"-->
+                                    <!--width="350">-->
+                            <!--</el-table-column>-->
+                            <!--<el-table-column-->
+                                    <!--prop="date"-->
+                                    <!--label="申请时间"-->
+                                    <!--width="200">-->
+                            <!--</el-table-column>-->
+                            <!--<el-table-column-->
+                                    <!--prop="state"-->
+                                    <!--label="审核状态"-->
+                                    <!--width="200">-->
+                            <!--</el-table-column>-->
+                            <!--<el-table-column-->
+                                    <!--label="操作">-->
+                                <!--<template slot-scope="scope">-->
+                                    <!--<el-button @click="handleClick()" type="text" size="small">查看</el-button>-->
+                                <!--</template>-->
+                            <!--</el-table-column>-->
+                        <!--</el-table>-->
+                    <!--</div>-->
+                    <!--<el-dialog-->
+                        <!--title="查看备案信息"-->
+                        <!--:visible.sync="detailVisible"-->
+                        <!--width="50%"-->
+                        <!--:before-close="handleClose">-->
+                        <!--<span>这是一段信息</span>-->
+                        <!--<span slot="footer" class="dialog-footer">-->
+                            <!--<el-button @click="detailVisible = false">取 消</el-button>-->
+                            <!--<el-button type="primary" @click="detailVisible = false">确 定</el-button>-->
+                        <!--</span>-->
+                    <!--</el-dialog>-->
+                <!--</el-main>-->
+
+                <!--<el-main class="content"style="overflow: visible">-->
+                    <!--<el-row class="titleRow">-->
+                        <!--<el-col :span="1">-->
+                            <!--2-->
+                        <!--</el-col>-->
+                        <!--<el-col :span="4" class="titleContent">-->
+                            <!--填报备案-->
+                        <!--</el-col>-->
+                    <!--</el-row>-->
+                    <!--<div class="contentDetail">-->
+                        <!--<el-row type="flex" class="littleTitle">-->
+                            <!--<el-col :span="24">填报人力资源市场信息</el-col>-->
+                        <!--</el-row>-->
+                        <!--<el-row v-if="ifSubmitMarketDetail" class="littleWarning">您当前的信息正在被审核</el-row>-->
+                        <!--<el-row type="flex" justify="center">-->
+                            <!--<el-col :span="16">-->
+                                <!--<el-form ref="marketDetailForm" :model="marketDetailForm" label-width="150px">-->
+                                    <!--<el-form-item label="人力资源市场名称">-->
+                                        <!--<el-input v-model="marketDetailForm.name"></el-input>-->
+                                    <!--</el-form-item>-->
+                                    <!--<el-form-item label="所在地区" >-->
+                                        <!--<el-cascader-->
+                                                <!--:options="locationOption"-->
+                                                <!--@active-item-change="handleLocationItemChange"-->
+                                                <!--:props="props"-->
+                                                <!--v-model="marketDetailForm.location"-->
+                                        <!--&gt;</el-cascader>-->
+                                    <!--</el-form-item>-->
+                                    <!--<el-form-item label="联系人姓名">-->
+                                        <!--<el-input v-model="marketDetailForm.people"></el-input>-->
+                                    <!--</el-form-item>-->
+                                    <!--<el-form-item label="联系人手机号">-->
+                                        <!--<el-input v-model="marketDetailForm.mobile"></el-input>-->
+                                    <!--</el-form-item>-->
+                                    <!--<el-form-item label="联系电话">-->
+                                        <!--<el-input v-model="marketDetailForm.phone"></el-input>-->
+                                    <!--</el-form-item>-->
+                                    <!--<el-form-item label="传真">-->
+                                        <!--<el-input v-model="marketDetailForm.fax"></el-input>-->
+                                    <!--</el-form-item>-->
+                                    <!--<el-form-item>-->
+                                        <!--<el-button type="primary" @click="onSubmitMarketDetail" v-if="!ifSubmitMarketDetail">申报</el-button>-->
+                                        <!--<el-button @click="resetMarketDetailForm('marketDetailForm')" v-if="!ifSubmitMarketDetail">重置</el-button>-->
+                                        <!--<el-button type="primary" v-if="ifSubmitMarketDetail" disabled>申报</el-button>-->
+                                        <!--<el-button v-if="ifSubmitMarketDetail" disabled>重置</el-button>-->
+                                    <!--</el-form-item>-->
+                                <!--</el-form>-->
+                            <!--</el-col>-->
+                        <!--</el-row>-->
+                    <!--</div>-->
+                <!--</el-main>-->
+
+                <!--<el-main class="content"style="overflow: visible">-->
+                    <!--<el-row class="titleRow">-->
+                        <!--<el-col :span="1">-->
+                            <!--3-->
+                        <!--</el-col>-->
+                        <!--<el-col :span="4" class="titleContent">-->
+                            <!--查看备案-->
+                        <!--</el-col>-->
+                    <!--</el-row>-->
+                    <!--<div class="contentDetail">-->
+                        <!--<el-row type="flex" justify="center" align="middle">-->
+                            <!--<el-col :span="8" style="font-size: larger; font-weight: bold;">-->
+                                <!--请选择要查看的人力资源市场-->
+                            <!--</el-col>-->
+                            <!--<el-col :span="6">-->
+                                <!--<el-cascader-->
+                                        <!--:options="detailOption"-->
+                                        <!--@active-item-change="handleDetailItemChange"-->
+                                        <!--:props="props"-->
+                                <!--&gt;</el-cascader>-->
+                            <!--</el-col>-->
+                        <!--</el-row>-->
+                        <!--<el-row type="flex" justify="center" class="info" align="middle">-->
+                            <!--<el-col :span="6" class="infoTitle">-->
+                                <!--人力资源市场名：-->
+                            <!--</el-col>-->
+                            <!--<el-col :span="6" class="infoContent">-->
+                                <!--123123123-->
+                            <!--</el-col>-->
+                        <!--</el-row>-->
+                        <!--<el-row type="flex" justify="center" class="info" align="middle">-->
+                            <!--<el-col :span="6" class="infoTitle">-->
+                                <!--所属地区：-->
+                            <!--</el-col>-->
+                            <!--<el-col :span="6" class="infoContent">-->
+                                <!--123123123-->
+                            <!--</el-col>-->
+                        <!--</el-row>-->
+                        <!--<el-row type="flex" justify="center" class="info" align="middle">-->
+                            <!--<el-col :span="6" class="infoTitle">-->
+                                <!--联系人：-->
+                            <!--</el-col>-->
+                            <!--<el-col :span="6" class="infoContent">-->
+                                <!--123123123-->
+                            <!--</el-col>-->
+                        <!--</el-row>-->
+                        <!--<el-row type="flex" justify="center" class="info" align="middle">-->
+                            <!--<el-col :span="6" class="infoTitle">-->
+                                <!--联系人手机：-->
+                            <!--</el-col>-->
+                            <!--<el-col :span="6" class="infoContent">-->
+                                <!--123123123-->
+                            <!--</el-col>-->
+                        <!--</el-row>-->
+                        <!--<el-row type="flex" justify="center" class="info" align="middle">-->
+                            <!--<el-col :span="6" class="infoTitle">-->
+                                <!--联系电话：-->
+                            <!--</el-col>-->
+                            <!--<el-col :span="6" class="infoContent">-->
+                                <!--123123123-->
+                            <!--</el-col>-->
+                        <!--</el-row>-->
+                        <!--<el-row type="flex" justify="center" class="info" align="middle">-->
+                            <!--<el-col :span="6" class="infoTitle">-->
+                                <!--传真：-->
+                            <!--</el-col>-->
+                            <!--<el-col :span="6" class="infoContent">-->
+                                <!--123123123-->
+                            <!--</el-col>-->
+                        <!--</el-row>-->
+                    <!--</div>-->
+                <!--</el-main>-->
+
             </el-container>
         </el-container>
     </el-container>
@@ -57,10 +246,15 @@
     var vue = new Vue({
         el:'#app',
         data:{
-
+            visible:''
         },
         methods:{
-
+            handleOpen: function(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            handleClose: function(key, keyPath) {
+                console.log(key, keyPath);
+            }
         }
     })
 </script>
