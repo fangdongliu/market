@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>人力资源管理系统</title>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Vue -->
+    <script src="//vuejs.org/js/vue.min.js"></script>
+    <link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">
+    <script src="//unpkg.com/iview/dist/iview.min.js"></script>
+    <!--elementUI-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="../css/stylesheet.css">
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+<body>
+<div id="app">
+    <div v-if="isLogout"  class="bg-color" >
+        <el-row>
+        <el-col :span="10" offset="8"><el-card id="login">
+            <div slot="header" class="clearfix">
+                <span>人力资源管理系统</span>
+            </div>
+            <div class="login-content">
+                <el-row class="text-item">
+                    <el-col :span="3" offset="2">用户名</el-col>
+                    <el-col :span="17" offset="1"><el-input style="float: right" placeholder="请输入用户名" v-model="inputName" clearable></el-input></el-col>
+                </el-row>
+                <el-row class="text-item" glutter="30">
+                    <el-col :span="3" offset="2">密码</el-col>
+                    <el-col :span="17" offset="1"><el-input placeholder="请输入密码" v-model="inputPswd" show-password></el-input></el-col>
+                </el-row>
+            </div>
+            <hr/>
+            <el-row>
+            <el-col :span="4" offset="9"><el-button @click="login"  type="primary" plain>登录</el-button></el-col>
+            </el-row>
+        </el-col></el-card>
+        </el-row>
+    </div>
+    <el-container style="height: 100%">
+        <el-header class="header">Header</el-header>
+        <el-container class="wrapper" style="min-height: calc(100% - 60px)">
+            <el-aside class="menu" style="height: 100%;overflow: scroll;">
+                <el-menu
+                        default-active="2"
+                        class="el-menu-vertical-demo"
+                        @open="handleOpen"
+                        @close="handleClose">
+                    <el-submenu index="1">
+                        <template slot="title">
+                            <i class="el-icon-location"></i>
+                            <span slot="title">导航一</span>
+                        </template>
+                        <el-menu-item index="1-1">省审核备案</el-menu-item>
+                        <el-menu-item index="1-2">监测点填报备案</el-menu-item>
+                    </el-submenu>
+                    <el-menu-item index="2">
+                        <i class="el-icon-menu"></i>
+                        <span slot="title">导航二</span>
+                    </el-menu-item>
+                </el-menu>
+            </el-aside>
+        </el-container>
+    </el-container>
+</div>
+</body>
+<script>
+    var vue = new Vue({
+        el:'#app',
+        data:{
+            isLogout:true,
+            inputName:'',
+            inputPswd:'',
+            detailVisible:false,
+            marketData: [{
+                name: '北京市海淀区中关村人力资源市场',
+                date: '2016-05-01',
+                state: '待审核'
+            },{
+                name: '北京市海淀区中关村人力资源市场',
+                date: '2016-05-02',
+                state: '待审核'
+            },{
+                name: '北京市海淀区中关村人力资源市场',
+                date: '2016-05-03',
+                state: '待审核'
+            },{
+                name: '北京市海淀区中关村人力资源市场',
+                date: '2016-05-04',
+                state: '待审核'
+            },{
+                name: '北京市海淀区中关村人力资源市场',
+                date: '2016-05-05',
+                state: '待审核'
+            },{
+                name: '北京市海淀区中关村人力资源市场',
+                date: '2016-05-06',
+                state: '待审核'
+            }]
+        },
+        methods:{
+            handleOpen(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            handleClose(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            handleClick() {
+                vue.detailVisible = true;
+            },
+            login(){
+                console.log(vue.inputName,vue.inputPswd);
+                vue.isLogout=false;
+            }
+        }
+    })
+</script>
+</html>
