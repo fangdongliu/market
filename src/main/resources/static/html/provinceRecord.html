@@ -13,11 +13,16 @@
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <link rel="stylesheet" href="../css/stylesheet.css">
     <script src="../js/jump.js"></script>
+    <style>
+        .el-dialog{
+            margin-top: 7vh !important;
+        }
+    </style>
 </head>
 <body>
-    <div id="provinceRecordApp">
-        <el-container>
-            <el-main class="content"style="overflow: visible">
+    <div id="provinceRecordApp" style="height: 100%;">
+        <el-container style="height: 100%;">
+            <el-main class="content">
                 <div class="contentDetail">
                     <el-table
                             :data="marketData"
@@ -47,14 +52,63 @@
                     </el-table>
                 </div>
                 <el-dialog
-                    title="提示"
+                    title="详细信息"
                     :visible.sync="dialogVisible"
-                    width="30%"
-                    :before-close="handleClose">
-                    <span>这是一段信息</span>
+                    width="60%"
+                    :before-close="handleClose"
+                    lock-scroll>
+                        <el-row type="flex" justify="center" class="info" align="middle" style="margin-top: 20px">
+                            <el-col :span="6" class="infoTitle">
+                                人力资源市场名：
+                            </el-col>
+                            <el-col :span="6" class="infoContent">
+                                123123123
+                            </el-col>
+                        </el-row>
+                        <el-row type="flex" justify="center" class="info" align="middle">
+                            <el-col :span="6" class="infoTitle">
+                                所属地区：
+                            </el-col>
+                            <el-col :span="6" class="infoContent">
+                                123123123
+                            </el-col>
+                        </el-row>
+                        <el-row type="flex" justify="center" class="info" align="middle">
+                            <el-col :span="6" class="infoTitle">
+                                联系人：
+                            </el-col>
+                            <el-col :span="6" class="infoContent">
+                                123123123
+                            </el-col>
+                        </el-row>
+                        <el-row type="flex" justify="center" class="info" align="middle">
+                            <el-col :span="6" class="infoTitle">
+                                联系人手机：
+                            </el-col>
+                            <el-col :span="6" class="infoContent">
+                                123123123
+                            </el-col>
+                        </el-row>
+                        <el-row type="flex" justify="center" class="info" align="middle">
+                            <el-col :span="6" class="infoTitle">
+                                联系电话：
+                            </el-col>
+                            <el-col :span="6" class="infoContent">
+                                123123123
+                            </el-col>
+                        </el-row>
+                        <el-row type="flex" justify="center" class="info" align="middle">
+                            <el-col :span="6" class="infoTitle">
+                                传真：
+                            </el-col>
+                            <el-col :span="6" class="infoContent">
+                                123123123
+                            </el-col>
+                        </el-row>
+
                     <span slot="footer" class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                        <el-button @click="dialogVisible = false" type="success" plain>通过审核</el-button>
+                        <el-button @click="dialogVisible = false" type="danger" plain>未通过审核</el-button>
                     </span>
                 </el-dialog>
 
@@ -84,20 +138,12 @@
                 name: '北京市海淀区中关村人力资源市场',
                 date: '2016-05-04',
                 state: '待审核'
-            }, {
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-05',
-                state: '待审核'
-            }, {
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-06',
-                state: '待审核'
             }],
             dialogVisible:false
         },
         methods:{
-            handleClose: function(key, keyPath) {
-                console.log(key, keyPath);
+            handleClose(done) {
+                    done();
             },
             handleClick: function() {
                 vue2.dialogVisible = true;

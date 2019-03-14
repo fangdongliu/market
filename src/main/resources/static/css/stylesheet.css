@@ -28,6 +28,8 @@ html,body,#app{
 
 .content{
     background-color: #EBEFF2;
+    overflow: visible;
+    min-height: calc(100% - 60px);
 }
 
 .titleRow{
@@ -62,7 +64,6 @@ html,body,#app{
 
 .info{
     margin:10px 0;
-    padding:10px 0;
 }
 
 .infoTitle{
