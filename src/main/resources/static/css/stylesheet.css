@@ -1,0 +1,83 @@
+*{
+    margin:0;
+    padding:0;
+}
+
+html,body,#app{
+    height:100%;
+}
+
+.header{
+    background-color: #36404A;
+}
+
+.headerRow{
+    height: 100%;
+    font-weight: bold;
+    font-size:x-large;
+    color: white;
+}
+
+.wrapper,body{
+    background-color: #EBEFF2;
+}
+
+.menu{
+    background-color: #FFFFFF;
+}
+
+.content{
+    background-color: #EBEFF2;
+}
+
+.titleRow{
+    margin-left:20px;
+    margin-top: 20px;
+}
+
+.titleContent{
+    font-size: large;
+    font-weight: bold;
+}
+
+.contentDetail{
+    background-color: #FFFFFF;
+    padding:25px;
+    border-radius: 10px;
+}
+
+.littleTitle{
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    margin-top: 10px;
+}
+
+.littleWarning{
+    text-align: center;
+    margin-bottom: 30px;
+    color: #FF0000;
+}
+
+.info{
+    margin:10px 0;
+    padding:10px 0;
+}
+
+.infoTitle{
+    font-size: larger;
+}
+
+.infoContent{
+    font-size: larger;
+}
+
+#menuFrame {
+    overflow: visible;
+}
+
+.footer{
+    background-color: #EBEFF2;
+    text-align:center;
+}

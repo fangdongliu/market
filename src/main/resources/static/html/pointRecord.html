@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>checkPointRecord</title>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Vue -->
+    <script src="//vuejs.org/js/vue.min.js"></script>
+    <link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">
+    <script src="//unpkg.com/iview/dist/iview.min.js"></script>
+    <!--elementUI-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="../css/stylesheet.css">
+</head>
+<body>
+    <div id="pointRecordApp">
+        <el-main class="content"style="overflow: visible">
+            <div class="contentDetail">
+                <el-row type="flex" class="littleTitle">
+                    <el-col :span="24">填报人力资源市场信息</el-col>
+                </el-row>
+                <el-row v-if="ifSubmitMarketDetail" class="littleWarning">您当前的信息正在被审核</el-row>
+                <el-row type="flex" justify="center">
+                    <el-col :span="16">
+                        <el-form ref="marketDetailForm" :model="marketDetailForm" label-width="150px">
+                            <el-form-item label="人力资源市场名称">
+                                <el-input v-model="marketDetailForm.name"></el-input>
+                            </el-form-item>
+                            <el-form-item label="所在地区" >
+                                <el-cascader
+                                        :options="locationOption"
+                                        @active-item-change="handleLocationItemChange"
+                                        :props="props"
+                                        v-model="marketDetailForm.location"
+                                ></el-cascader>
+                            </el-form-item>
+                            <el-form-item label="联系人姓名">
+                                <el-input v-model="marketDetailForm.people"></el-input>
+                            </el-form-item>
+                            <el-form-item label="联系人手机号">
+                                <el-input v-model="marketDetailForm.mobile"></el-input>
+                            </el-form-item>
+                            <el-form-item label="联系电话">
+                                <el-input v-model="marketDetailForm.phone"></el-input>
+                            </el-form-item>
+                            <el-form-item label="传真">
+                                <el-input v-model="marketDetailForm.fax"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="onSubmitMarketDetail" v-if="!ifSubmitMarketDetail">申报</el-button>
+                                <el-button @click="resetMarketDetailForm('marketDetailForm')" v-if="!ifSubmitMarketDetail">重置</el-button>
+                                <el-button type="primary" v-if="ifSubmitMarketDetail" disabled>申报</el-button>
+                                <el-button v-if="ifSubmitMarketDetail" disabled>重置</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </el-col>
+                </el-row>
+            </div>
+        </el-main>
+        <el-footer class="footer">2019 &copy; 第二组织</el-footer>
+    </div>
+</body>
+
+<script>
+    var vue3 = new Vue({
+        el:'#pointRecordApp',
+        data:{
+            marketDetailForm:{
+                name:'',
+                location:'',
+                people:'',
+                mobile:'',
+                phone:'',
+                fax:''
+            },
+            ifSubmitMarketDetail:true,
+            props: {
+                value: 'label',
+                children: 'cities'
+            },
+            locationOption: [{
+                label: '江苏',
+                cities: []
+            }, {
+                label: '浙江',
+                cities: []
+            }]
+        },
+        methods:{
+            onSubmitMarketDetail: function() {
+                console.log(vue.marketDetailForm.name);
+            },
+            resetMarketDetailForm:function(formName) {
+                this.$refs[formName].resetFields();
+            },
+            handleLocationItemChange: function(val) {
+                console.log('active item:', val);
+                setTimeout(_ => {
+                    if (val.indexOf('江苏') > -1 && !vue.locationOption[0].cities.length) {
+                    this.locationOption[0].cities = [{
+                        label: '南京'
+                    }];
+                    } else if (val.indexOf('浙江') > -1 && !vue.locationOption[1].cities.length) {
+                        this.locationOption[1].cities = [{
+                            label: '杭州'
+                        }];
+                    }
+                }, 300);
+            }
+        }
+    })
+</script>
+</html>
