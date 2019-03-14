@@ -39,14 +39,9 @@
         </el-col></el-card>
         </el-row>
     </div>
-    <el-container style="height: 100%">
-        <el-header class="header">Header</el-header>
-        <el-container class="wrapper" style="min-height: calc(100% - 60px)">
-            <el-aside class="menu" style="height: 100%;overflow: scroll;">
+
     <script src="../js/jump.js"></script>
-</head>
-<body>
-<div id="app">
+
     <el-container style="height: 100%">
         <el-header class="header">
             <el-row class="headerRow" type="flex" align="middle">
@@ -67,8 +62,6 @@
                             <i class="el-icon-location"></i>
                             <span slot="title">导航一</span>
                         </template>
-                        <el-menu-item index="1-1">省审核备案</el-menu-item>
-                        <el-menu-item index="1-2">监测点填报备案</el-menu-item>
                         <div onclick="jumpProvinceRecord()"><el-menu-item index="1-1">省审核备案</el-menu-item></div>
                         <div onclick="jumpPointRecord()"><el-menu-item index="1-2">监测点填报备案</el-menu-item></div>
                         <el-menu-item v-for="(item,index) in 10" :index="'1-'+index">fghj</el-menu-item>
