@@ -2,6 +2,7 @@ package cn.fdongl.market.example.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.core.annotation.Order;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  */
 
 @Mapper
+@Order(1)
 public interface ExampleMapper {
 
     /**

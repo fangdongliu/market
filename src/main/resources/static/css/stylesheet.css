@@ -8,7 +8,7 @@ html,body,#app{
 }
 
 .header{
-    background-color: #36404A;
+    background-color: #adacac;
 }
 
 .headerRow{
@@ -19,15 +19,59 @@ html,body,#app{
 }
 
 .wrapper,body{
-    background-color: #EBEFF2;
+    background-color: #eeeeee;
 }
 
 .menu{
-    background-color: #FFFFFF;
+    /*background-color: #FFFFFF;*/
+    height: 100%;
+    background-image: url("../image/menuImg.png");
+    background-size: 100% 100%;
+}
+
+.el-menu{
+    background-color: transparent !important;
+}
+
+.el-menu-item, .el-submenu{
+    margin: 0 15px;
+    border-radius: 3px;
+}
+
+.el-menu-item:hover{
+    /*background-color: #4cb050 !important;*/
+    background-color: transparent;
+    transition-duration: 0.2s;
+    color: #ffd04b !important;
+}
+
+.el-menu-item:focus{
+    background-color: #515a6e;
+    color: #ffd04b !important;
+}
+
+.el-submenu__title{
+    border-radius: 3px;
+}
+
+.el-submenu__title:hover{
+    /*background-color: #4cb050 !important;*/
+    background-color: transparent;
+    transition-duration: 0.2s;
+    color: #ffd04b !important;
 }
 
 .content{
-    background-color: #EBEFF2;
+    background-color: #eeeeee;
+    overflow: visible;
+    min-height: calc(100% - 60px);
+}
+
+#navTitle{
+    height: 60px;
+    color: white;
+    font-size: large;
+    font-weight: bolder;
 }
 
 .titleRow{
@@ -62,7 +106,6 @@ html,body,#app{
 
 .info{
     margin:10px 0;
-    padding:10px 0;
 }
 
 .infoTitle{
@@ -78,6 +121,30 @@ html,body,#app{
 }
 
 .footer{
-    background-color: #EBEFF2;
+    background-color: #eeeeee;
     text-align:center;
 }
+
+/*!*自定义滚动条样式*!*/
+/*!*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*!*/
+/*::-webkit-scrollbar*/
+/*{*/
+    /*width: 16px;  !*滚动条宽度*!*/
+    /*height: 16px;  !*滚动条高度*!*/
+/*}*/
+
+/*!*定义滚动条轨道 内阴影+圆角*!*/
+/*::-webkit-scrollbar-track*/
+/*{*/
+    /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
+    /*border-radius: 10px;  !*滚动条的背景区域的圆角*!*/
+    /*background-color: red;!*滚动条的背景颜色*!*/
+/*}*/
+
+/*!*定义滑块 内阴影+圆角*!*/
+/*::-webkit-scrollbar-thumb*/
+/*{*/
+    /*border-radius: 10px;  !*滚动条的圆角*!*/
+    /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);*/
+    /*background-color: green;  !*滚动条的背景颜色*!*/
+/*}*/
