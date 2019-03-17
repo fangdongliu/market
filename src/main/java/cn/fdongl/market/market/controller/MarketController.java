@@ -22,8 +22,13 @@ public class MarketController {
     @PostMapping("/insert")
     public Integer insert(HttpServletRequest request, Record record,Integer stateFlag) throws Exception{
         AppUserDetail appUserDetail= AppUserDetail.fromRequest(request);
+        record.setRegionEmpId(appUserDetail.getId());
+        record.setStateFlag(stateFlag);
         record.setCreateTime();
-        Integer n=marketMapper.insert(appUserDetail.getId(),record,stateFlag);
+        record.setCreater(appUserDetail.getId());
+        record.setReviseTIme(null);
+        record.setReviser(null);
+        Integer n=marketMapper.insert(record);
         if(n<=0){
             return 1;
         }
@@ -34,8 +39,13 @@ public class MarketController {
     @PostMapping("/update")
     public Integer update(HttpServletRequest request,Record record,Integer stateFlag) throws Exception{
         AppUserDetail appUserDetail= AppUserDetail.fromRequest(request);
+        record.setRegionEmpId(appUserDetail.getId());
+        record.setStateFlag(stateFlag);
         record.setCreateTime();
-        Integer n=marketMapper.update(appUserDetail.getId(),record,stateFlag);
+        record.setCreater(appUserDetail.getId());
+        record.setReviseTIme(null);
+        record.setReviser(null);
+        Integer n=marketMapper.update(record);
         if(n<=0){
             return 1;
         }
