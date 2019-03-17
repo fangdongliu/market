@@ -3,6 +3,7 @@ package cn.fdongl.market.market.controller;
 
 import cn.fdongl.market.market.entity.Record;
 import cn.fdongl.market.market.mapper.MarketMapper;
+import cn.fdongl.market.market.service.MarketService;
 import cn.fdongl.market.security.entity.AppUserDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,11 +18,12 @@ public class MarketController {
 
     @Autowired
     MarketMapper marketMapper;
+    @Autowired
+    MarketService marketService;
 
     //新建备案
     @PostMapping("/insert")
-    public Integer insert(HttpServletRequest request, Record record,Integer stateFlag) throws Exception{
-        AppUserDetail appUserDetail= AppUserDetail.fromRequest(request);
+    public Integer insert(AppUserDetail appUserDetail, Record record,Integer stateFlag) throws Exception{
         record.setRegionEmpId(appUserDetail.getId());
         record.setStateFlag(stateFlag);
         record.setCreateTime();
@@ -37,8 +39,7 @@ public class MarketController {
 
     //更新备案
     @PostMapping("/update")
-    public Integer update(HttpServletRequest request,Record record,Integer stateFlag) throws Exception{
-        AppUserDetail appUserDetail= AppUserDetail.fromRequest(request);
+    public Integer update(AppUserDetail appUserDetail,Record record,Integer stateFlag) throws Exception{
         record.setRegionEmpId(appUserDetail.getId());
         record.setStateFlag(stateFlag);
         record.setCreateTime();
@@ -54,8 +55,7 @@ public class MarketController {
 
     //查询备案
     @PostMapping("/select")
-    public Record select(HttpServletRequest request) throws Exception{
-        AppUserDetail appUserDetail= AppUserDetail.fromRequest(request);
-        return marketMapper.select(appUserDetail.getId());
+    public Record select(AppUserDetail appUserDetail) throws Exception{
+        return marketService.select(appUserDetail.getId());
     }
 }

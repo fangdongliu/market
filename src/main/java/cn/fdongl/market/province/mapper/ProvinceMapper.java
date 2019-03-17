@@ -2,13 +2,8 @@ package cn.fdongl.market.province.mapper;
 
 
 import cn.fdongl.market.market.entity.Record;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.springframework.core.annotation.Order;
-
 import java.util.List;
 
 @Mapper
@@ -16,31 +11,107 @@ import java.util.List;
 public interface ProvinceMapper {
 
     //查询所有待审核的备案
-    @Select("SELECT" +
-            "region_emp_id AS regionEmpId" +
-            "region_emp_name AS regionEmpName," +
-            "region_name AS regionName," +
-            "region_emp_contact AS regionEmpContact," +
-            "region_emp_contact_mobi AS regionEmpContactMobi," +
-            "region_emp_contact_num AS regionEmpContactNum," +
-            "region_emp_fax AS regionEmpFax," +
-            "state_flag AS stateFlag," +
-            "create_time AS createTime," +
-            "creater AS creater" +
-            "revise_time AS reviseTIme," +
-            "reviser AS reviser" +
-            "from t_record_info where state_flag=1")
+    @Select("SELECT \n" +
+            "region_emp_id AS regionEmpId, \n" +
+            "region_emp_name AS regionEmpName, \n" +
+            "region_name AS regionName, \n" +
+            "region_emp_contact AS regionEmpContact, \n" +
+            "region_emp_contact_mobi AS regionEmpContactMobi, \n" +
+            "region_emp_contact_num AS regionEmpContactNum, \n" +
+            "region_emp_fax AS regionEmpFax, \n" +
+            "state_flag AS stateFlag, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTIme, \n" +
+            "reviser AS reviser \n" +
+            "from t_record_info where state_flag=1;")
     List<Record> examineQuery();
 
-    //根据条件查询已通过的备案，存储过程
-    @Select("")
-    List<Record> conditionalQuery(Integer state,String condition);
+    //查询监测点名称
+    @Select("SELECT \n" +
+            "region_emp_id AS regionEmpId, \n" +
+            "region_emp_name AS regionEmpName, \n" +
+            "region_name AS regionName, \n" +
+            "region_emp_contact AS regionEmpContact, \n" +
+            "region_emp_contact_mobi AS regionEmpContactMobi, \n" +
+            "region_emp_contact_num AS regionEmpContactNum, \n" +
+            "region_emp_fax AS regionEmpFax, \n" +
+            "state_flag AS stateFlag, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTIme, \n" +
+            "reviser AS reviser \n" +
+            "from t_record_info where state_flag=2 and region_emp_name like #{param1};")
+    List<Record> regionEmpNameQuery(String condition);
 
-    //审核拒绝通过，存储过程
-    @Select("")
-    Integer reject(Integer examineId,Integer aimId);
+    //查询地区名称
+    @Select("SELECT \n" +
+            "region_emp_id AS regionEmpId, \n" +
+            "region_emp_name AS regionEmpName, \n" +
+            "region_name AS regionName, \n" +
+            "region_emp_contact AS regionEmpContact, \n" +
+            "region_emp_contact_mobi AS regionEmpContactMobi, \n" +
+            "region_emp_contact_num AS regionEmpContactNum, \n" +
+            "region_emp_fax AS regionEmpFax, \n" +
+            "state_flag AS stateFlag, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTIme, \n" +
+            "reviser AS reviser \n" +
+            "from t_record_info where state_flag=2 and region_name like #{param1};")
+    List<Record> regionNameQuery(String condition);
 
-    //审核通过，存储过程
-    @Select("")
-    Integer pass(Integer examineId,Integer aimId);
+    //查询联系人名称
+    @Select("SELECT \n" +
+            "region_emp_id AS regionEmpId, \n" +
+            "region_emp_name AS regionEmpName, \n" +
+            "region_name AS regionName, \n" +
+            "region_emp_contact AS regionEmpContact, \n" +
+            "region_emp_contact_mobi AS regionEmpContactMobi, \n" +
+            "region_emp_contact_num AS regionEmpContactNum, \n" +
+            "region_emp_fax AS regionEmpFax, \n" +
+            "state_flag AS stateFlag, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTIme, \n" +
+            "reviser AS reviser \n" +
+            "from t_record_info where state_flag=2 and region_emp_contact like #{param1};")
+    List<Record> regionEmpContactQuery(String condition);
+
+    //备案未通过时更新数据
+    @Update("update t_record_info \n" +
+            "set state_flag=0,revise_time=now(),reviser=#{param1} \n" +
+            "where region_emp_id=#{param2} and state_flag=1;")
+    Integer updateReject(Integer examineId,Integer aimId);
+
+    //备案未通过时删除数据
+    @Delete("delete from t_record_info \n" +
+            "where region_emp_id=#{param1} and state_flag=1;")
+    Integer deleteReject(Integer aimId);
+
+    //备案通过时更新数据
+    @Update("update t_record_info \n" +
+            "set state_flag=2,revise_time=now(),reviser=#{param1} \n" +
+            "where region_emp_id=#{param2} and state_flag=1;")
+    Integer updatePass(Integer examineId,Integer aimId);
+
+    //备案通过时更新过期数据
+    @Update("update t_record_info \n" +
+            "set state_flag=3,revise_time=now(),reviser=#{param1} \n" +
+            "where region_emp_id=#{param2} and state_flag=2;")
+    Integer updateExpirePass(Integer examineId,Integer aimId);
+
+    //激活账号
+    @Update("update t_user set state_flag=1 \n" +
+            "where user_id=#{param1};")
+    Integer updateActivation(Integer examineId,Integer aimId);
+
+    //根据id查询已通过备案的个数
+    @Select("select count(1) from t_record_info where region_emp_id=#{param1} and state_flag=2;")
+    Integer selectNum(Integer userId);
+
+    //发送一条通知
+    @Insert("insert into t_notice(notice_title,notice_content,create_time,creator,reciver) \n" +
+            "values(#{param1},#{param2},now(),#{param3},#{param4});")
+    Integer sendMessage(String title,String content,Integer examineId,Integer aimId);
 }
