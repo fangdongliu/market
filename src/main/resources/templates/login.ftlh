@@ -11,16 +11,16 @@
     <!--elementUI-->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    <link rel="stylesheet" href="../static/css/index.css">
+    <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
 <div id="app">
     <div id="pics">
         <el-carousel :height="screenH+'px'">
-            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="../static/res/index1.jpg"/> </el-carousel-item>
-            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="../static/res/index2.jpg"/> </el-carousel-item>
-            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="../static/res/index3.jpg"/> </el-carousel-item>
-            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="../static/res/index4.jpg"/> </el-carousel-item>
+            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="/res/index1.jpg"/> </el-carousel-item>
+            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="/res/index2.jpg"/> </el-carousel-item>
+            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="/res/index3.jpg"/> </el-carousel-item>
+            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="/res/index4.jpg"/> </el-carousel-item>
         </el-carousel>
     </div>
 
@@ -74,7 +74,7 @@
         methods:{
             imgLoad(){
                 this.screenH=this.$refs.bannerHeight[0].height;
-                cosole.log(this.screenH);
+                console.log(this.screenH);
             },
 
             login() {
