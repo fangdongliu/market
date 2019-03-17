@@ -2,9 +2,11 @@ package cn.fdongl.market.province.mapper;
 
 
 import cn.fdongl.market.market.entity.Record;
+import cn.fdongl.market.province.entity.uploadPeriod;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+
 
 import org.apache.ibatis.annotations.Update;
 import org.springframework.core.annotation.Order;
@@ -43,4 +45,5 @@ public interface ProvinceMapper {
     //审核通过，存储过程
     @Select("")
     Integer pass(Integer examineId,Integer aimId);
+
 }
