@@ -1,5 +1,8 @@
 package cn.fdongl.market.market.entity;
 
+import lombok.Data;
+
+@Data
 public class TechGrageNum {
 
     Integer profLevel5Need;//职业资格五级（初级技能）需求人数

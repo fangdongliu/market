@@ -1,5 +1,8 @@
 package cn.fdongl.market.market.entity;
 
+import lombok.Data;
+
+@Data
 public class IndustryNum {
     Integer industry1Need;//第一产业需求人数
     Integer industry2Need;//第二产业需求人数

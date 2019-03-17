@@ -1,5 +1,8 @@
 package cn.fdongl.market.market.entity;
 
+import lombok.Data;
+
+@Data
 public class AgeNum {
 
     Integer sixteenTwentyfourNeed;//16-24岁需求人数
