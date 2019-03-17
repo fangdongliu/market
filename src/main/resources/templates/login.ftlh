@@ -11,17 +11,18 @@
     <!--elementUI-->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    <link rel="stylesheet" href="../static/css/stylesheet.css">
     <link rel="stylesheet" href="../static/css/index.css">
 </head>
 <body>
 <div id="app">
-    <el-carousel id="pics" indicator-position="outside" :height="cHeight + 'px'">
-        <el-carousel-item><img src="../static/res/index1.jpg"/> </el-carousel-item>
-        <el-carousel-item><img src="../static/res/index2.jpg"/> </el-carousel-item>
-        <el-carousel-item><img src="../static/res/index3.jpg"/> </el-carousel-item>
-        <el-carousel-item><img src="../static/res/index4.jpg"/> </el-carousel-item>
-    </el-carousel>
+    <div id="pics">
+        <el-carousel :height="screenH+'px'">
+            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="../static/res/index1.jpg"/> </el-carousel-item>
+            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="../static/res/index2.jpg"/> </el-carousel-item>
+            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="../static/res/index3.jpg"/> </el-carousel-item>
+            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="../static/res/index4.jpg"/> </el-carousel-item>
+        </el-carousel>
+    </div>
 
     <el-form id="login" ref="form" :model="form" label-width="80px">
         <div class="formtitle">人力资源管理系统</div>
@@ -60,16 +61,6 @@
 </div>
 </body>
 <script>
-    // mounted:function () {
-    //     alert(1);
-    //     console.log('aa');
-    //     this.setSize();
-    //     const that = this;
-    //     window.addEventListener('resize', function() {
-    //         that.screenWidth = $(window).width();
-    //         that.setSize();
-    //     }, false);
-    // }
     var vue = new Vue({
         el:'#app',
         data:{
@@ -77,9 +68,15 @@
                 name:'',
                 pswd:'',
             },
-            cHeight:0,
+            screenW:document.documentElement.clientWidth,
+            screenH:document.documentElement.clientHeight
         },
         methods:{
+            imgLoad(){
+                this.screenH=this.$refs.bannerHeight[0].height;
+                cosole.log(this.screenH);
+            },
+
             login() {
                 console.log(this.form);
 
@@ -91,17 +88,36 @@
                     method:'post',
                     success(res){
                         console.log(res);
+                        if(res.code=='200') {
+                            alert('登录成功');
+                        }
                     },
                     error(res){
                         console.log(res);
+                        alert('登录失败');
                     }
                 })
             },
-            setSize: function () {
-                this.cHeight = 740 / 2560 * this.screenWidth
-                if(this.cHeight > 740) this.cHeight = 740
-                if(this.cHeight < 360) this.cHeight = 360
+        },
+        // create:function () {
+        //     this.setSize();
+        // },
+        watch: {
+            screenW (val) {
+                this.screenW = val;
+                console.log(this.screenW);
+            },
+            screenH (val) {
+                this.screenH = val;
+            },
+        },
+        mounted:function () {
+            // this.setSize();
+            window.onresize = function () { // 定义窗口大小变更通知事件
+                this.screenW = document.documentElement.clientWidth;
+                this.screenH = document.documentElement.clientHeight;
             }
+            console.log(this.screenW,this.screenH);
         }
     })
 </script>
