@@ -7,10 +7,12 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import org.apache.ibatis.annotations.Update;
+import org.springframework.core.annotation.Order;
 
 import java.util.List;
 
 @Mapper
+@Order(1)
 public interface ProvinceMapper {
 
     //查询所有待审核的备案

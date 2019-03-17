@@ -6,8 +6,10 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.core.annotation.Order;
 
 @Mapper
+@Order(1)
 public interface MarketMapper {
 
     //用户新建一条备案信息

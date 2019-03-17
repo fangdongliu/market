@@ -3,10 +3,12 @@ package cn.fdongl.market.security.mapper;
 import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.security.entity.UserData;
 import org.apache.ibatis.annotations.*;
+import org.springframework.core.annotation.Order;
 
 import java.util.List;
 
 @Mapper
+@Order(1)
 public interface UserMapper {
 
     @Select("select 1;")
