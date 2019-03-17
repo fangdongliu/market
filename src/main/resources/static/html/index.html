@@ -29,10 +29,10 @@
         <div class="formtitle">人力资源管理系统</div>
         <hr/>
         <el-form-item class="formitem" label="用户名">
-            <el-input v-model="form.name" placeholder="请输入用户名" clearable></el-input>
+            <el-input v-model="form.name" placeholder="请输入用户名" name="username" clearable></el-input>
         </el-form-item>
         <el-form-item class="formitem" label="密码">
-            <el-input v-model="form.pswd" placeholder="请输入密码" show-password></el-input>
+            <el-input v-model="form.pswd" placeholder="请输入密码" name="password" show-password></el-input>
         </el-form-item>
         <el-form-item class="formitem">
             <el-button type="primary" @click="login">登录</el-button>
@@ -80,6 +80,7 @@
 
             login() {
                 console.log(this.form);
+                // window.location.href='index.html';
 
                 $.ajax({
                     url:'/login',

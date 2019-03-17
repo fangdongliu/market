@@ -74,12 +74,12 @@
         methods:{
             imgLoad(){
                 this.screenH=this.$refs.bannerHeight[0].height;
-                cosole.log(this.screenH);
+                console.log(this.screenH);
             },
 
             login() {
                 console.log(this.form);
-
+                // window.location.href="../static/html/index.html"
                 $.ajax({
                     url:'/login',
                     data:{
