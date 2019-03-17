@@ -4,6 +4,7 @@ import cn.fdongl.market.example.mapper.ExampleMapper;
 import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.security.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

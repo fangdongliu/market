@@ -24,17 +24,17 @@
         </el-carousel>
     </div>
 
-    <el-form id="login" ref="form" :model="form" label-width="80px">
+    <el-form id="login" ref="form" :model="form" label-width="80px" action="/login" method="post">
         <div class="formtitle">人力资源管理系统</div>
         <hr/>
         <el-form-item class="formitem" label="用户名">
-            <el-input v-model="form.name" placeholder="请输入用户名" clearable></el-input>
+            <el-input v-model="form.name" placeholder="请输入用户名" name="username" clearable></el-input>
         </el-form-item>
         <el-form-item class="formitem" label="密码">
-            <el-input v-model="form.pswd" placeholder="请输入密码" show-password></el-input>
+            <el-input v-model="form.pswd" placeholder="请输入密码" name="password" show-password></el-input>
         </el-form-item>
         <el-form-item class="formitem">
-            <el-button type="primary" @click="login">登录</el-button>
+            <el-button type="primary" native-type="submit">登录</el-button>
         </el-form-item>
     </el-form>
     <!--<el-row>-->
