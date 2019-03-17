@@ -1,5 +1,8 @@
 package cn.fdongl.market.market.entity;
 
+import lombok.Data;
+
+@Data
 public class ProfNum {
     Integer leaderNeed;//单位负责人需求人数
     Integer leaderJobseek;//单位负责人求职人数

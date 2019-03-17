@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>人力资源管理系统</title>
@@ -13,186 +13,113 @@
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <link rel="stylesheet" href="../css/stylesheet.css">
     <link rel="stylesheet" href="../css/index.css">
-    <script src="../js/jump.js"></script>
 </head>
 <body>
 <div id="app">
-    <div v-if="isLogout"  class="bg-color" >
-        <el-row>
-        <el-col :span="10" offset="8">
-            <el-card id="login">
-                <div slot="header" class="clearfix">
-                    <span>人力资源管理系统</span>
-                </div>
-                <div class="login-content">
-                    <el-row class="text-item">
-                        <el-col :span="3" offset="2">用户名</el-col>
-                        <el-col :span="17" offset="1"><el-input style="float: right" placeholder="请输入用户名" v-model="inputName" clearable></el-input></el-col>
-                    </el-row>
-                    <el-row class="text-item" glutter="30">
-                        <el-col :span="3" offset="2">密码</el-col>
-                        <el-col :span="17" offset="1"><el-input placeholder="请输入密码" v-model="inputPswd" show-password></el-input></el-col>
-                    </el-row>
-                </div>
-                <hr/>
-                <el-row>
-                <el-col :span="4" offset="9"><el-button @click="login"  type="primary" plain>登录</el-button></el-col>
-                </el-row>
-            </el-card>
-            </el-col>
-        </el-row>
+    <div id="pics">
+    <el-carousel :height="screenH+'px'">
+        <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="../res/index1.jpg"/> </el-carousel-item>
+        <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="../res/index2.jpg"/> </el-carousel-item>
+        <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="../res/index3.jpg"/> </el-carousel-item>
+        <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="../res/index4.jpg"/> </el-carousel-item>
+    </el-carousel>
     </div>
 
-    <el-container style="height: 100%">
-        <el-aside class="menu" width="250px"  style="overflow-x: hidden;position:absolute;">
-            <div style="overflow-y: scroll;position: absolute;height:100%;">
-                <el-menu
-                        default-active="2"
-                        class="el-menu-vertical-demo"
-                        @open="handleOpen"
-                        @close="handleClose"
-                        @select="handleSelect"
-                        text-color="#fff"
-                        active-text-color="#fff"
-                        style="width:250px;">
-                    <el-row id="navTitle" align="middle" type="flex">
-                        <i-col :span="2" :offset="2">
-                            <img onerror="javascript:this.src='http://online.bit.edu.cn:80/eip/core/miniui/themes/2018-skin/2018-img/avatar.jpg';" src="http://online.bit.edu.cn:80/eip/user/photo.htm" style="width:30px; margin-top: -4.5px; display: block;">
-                        </i-col>
-                        <i-col :offset="3">
-                            <span>Welcome!</span></i-col>
-                    </el-row>
-                    <el-row type="flex" justify="center" style="margin-bottom: 20px">
-                        <el-col :span="22">
-                            <div style="border-bottom: #6d6f71 solid;"></div>
-                        </el-col>
-                    </el-row>
-
-                    <template v-for = "(item, index) in menu">
-                        <el-submenu v-if = "item.child !== null" :index="index">
-                            <template slot="title">
-                                <i :class="item.icon"></i>
-                                <span slot="title">{{item.name}}</span>
-                            </template>
-                            <el-menu-item v-for="(i, index2) in item.child" :index="index+'-'+index2">{{i.name}}</el-menu-item>
-                        </el-submenu>
-                        <el-menu-item v-else :index="index">
-                            <i :class="item.icon"></i>
-                            <span slot="title">{{item.name}}</span>
-                        </el-menu-item>
-                    </template>
-                </el-menu>
-            </div>
-
-        </el-aside>
-        <el-container class="wrapper" style="min-height: calc(100% - 60px); position: absolute;left:250px;width: calc(100% - 250px);height:100%;">
-            <el-header class="header">
-                <el-row class="headerRow" type="flex" align="middle">
-                    <e-col>人力资源管理中心</e-col>
-                </el-row>
-            </el-header>
-
-            <el-container style="min-height: calc(100% - 60px);">
-                <el-main style="height:100%; padding:0; overflow: hidden;">
-
-                    <el-row v-if="loading" style="height:100%;" type="flex" align="middle" justify="center">
-                        <el-col :span="3">
-                            <img src="../image/ajax-loader.gif">
-                        </el-col>
-                    </el-row>
-
-                    <iframe id="menuFrame" name="menuFrame"
-                            v-bind:src="src"
-                            style="height:calc(100%); width:calc(100%)" frameborder="no"></iframe>
-                </el-main>
-            </el-container>
-        </el-container>
-    </el-container>
+    <el-form id="login" ref="form" :model="form" label-width="80px">
+        <div class="formtitle">人力资源管理系统</div>
+        <hr/>
+        <el-form-item class="formitem" label="用户名">
+            <el-input v-model="form.name" placeholder="请输入用户名" clearable></el-input>
+        </el-form-item>
+        <el-form-item class="formitem" label="密码">
+            <el-input v-model="form.pswd" placeholder="请输入密码" show-password></el-input>
+        </el-form-item>
+        <el-form-item class="formitem">
+            <el-button type="primary" @click="login">登录</el-button>
+        </el-form-item>
+    </el-form>
+    <!--<el-row>-->
+        <!--<el-col :span="10" offset="14"><el-card id="login">-->
+            <!--<div slot="header" class="clearfix">-->
+                <!--<span>人力资源管理系统</span>-->
+            <!--</div>-->
+            <!--<div class="login-content">-->
+                <!--<el-row class="text-item">-->
+                    <!--<el-col :span="3" offset="2">用户名</el-col>-->
+                    <!--<el-col :span="17" offset="1"><el-input style="float: right" placeholder="请输入用户名" v-model="inputName" clearable></el-input></el-col>-->
+                <!--</el-row>-->
+                <!--<el-row class="text-item" glutter="30">-->
+                    <!--<el-col :span="3" offset="2">密码</el-col>-->
+                    <!--<el-col :span="17" offset="1"><el-input placeholder="请输入密码" v-model="inputPswd" show-password></el-input></el-col>-->
+                <!--</el-row>-->
+            <!--</div>-->
+            <!--<hr/>-->
+            <!--<el-row>-->
+                <!--<el-col :span="4" offset="9"><el-button @click="login"  type="primary" plain>登录</el-button></el-col>-->
+            <!--</el-row>-->
+        <!--</el-card></el-col>-->
+    <!--</el-row>-->
 </div>
 </body>
 <script>
     var vue = new Vue({
         el:'#app',
         data:{
-            menu:[
-                {
-                    icon:'el-icon-location',
-                    name:'导航一',
-                    child:[
-                        {name:'省审核备案', url:'provinceRecord.html'},
-                        {name:'监测点填报备案', url:'pointRecord.html'}
-                    ]
-                },
-                {
-                    icon:'el-icon-menu',
-                    name:'导航二',
-                    url:''
-                }
-            ],
-            isLogout:true,
-            visible:'',
-            inputName:'',
-            inputPswd:'',
-            detailVisible:false,
-            marketData: [{
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-01',
-                state: '待审核'
-            },{
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-02',
-                state: '待审核'
-            },{
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-03',
-                state: '待审核'
-            },{
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-04',
-                state: '待审核'
-            },{
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-05',
-                state: '待审核'
-            },{
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-06',
-                state: '待审核'
-            }],
-            src:'',
-            loading:false
+            form:{
+                name:'',
+                pswd:'',
+            },
+            screenW:document.documentElement.clientWidth,
+            screenH:document.documentElement.clientHeight
         },
         methods:{
-            handleSelect(index){
-                this.loading=true;
-                if(index.toString().indexOf('-')===-1){
-                   this.src=this.menu[index].url;
-                   this.setupWatcher();
-                }else{
-                    var i = index.indexOf('-');
-                    this.src=this.menu[index.substring(0,i)].child[index.substring(i+1)].url;
-                    this.setupWatcher();
-                }
-            },
-            setupWatcher(){
-                document.getElementById("menuFrame").addEventListener("load",function (ev) {
-                    console.log(1);
-                    vue.loading=false;
+            imgLoad(){
+                this.screenH=this.$refs.bannerHeight[0].height;
+                cosole.log(this.screenH);
+    },
+
+            login() {
+                console.log(this.form);
+
+                $.ajax({
+                    url:'/login',
+                    data:{
+                        form:this.form,
+                    },
+                    method:'post',
+                    success(res){
+                        console.log(res);
+                        if(res.code=='200') {
+                            alert('登录成功');
+                            window.location.href='pointRecord.html';
+                        }
+                    },
+                    error(res){
+                        console.log(res);
+                        alert('登录失败');
+                    }
                 })
             },
-            handleOpen(key, keyPath) {
-                console.log(key, keyPath);
+        },
+        // create:function () {
+        //     this.setSize();
+        // },
+        watch: {
+            screenW (val) {
+                this.screenW = val;
+                console.log(this.screenW);
             },
-            handleClose(key, keyPath) {
-                console.log(key, keyPath);
+            screenH (val) {
+                this.screenH = val;
             },
-            handleClick() {
-                vue.detailVisible = true;
-            },
-            login() {
-                console.log(vue.inputName, vue.inputPswd);
-                vue.isLogout = false;
+        },
+        mounted:function () {
+            // this.setSize();
+            window.onresize = function () { // 定义窗口大小变更通知事件
+                this.screenW = document.documentElement.clientWidth;
+                this.screenH = document.documentElement.clientHeight;
             }
+            console.log(this.screenW,this.screenH);
         }
     })
 </script>

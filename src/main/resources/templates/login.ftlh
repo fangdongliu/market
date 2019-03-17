@@ -2,115 +2,124 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>人力资源管理系统</title>
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Vue -->
     <script src="//vuejs.org/js/vue.min.js"></script>
-    <!-- import stylesheet -->
     <link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">
-    <!-- import iView -->
     <script src="//unpkg.com/iview/dist/iview.min.js"></script>
-    <link rel="stylesheet" href="/css/stylesheet.css">
+    <!--elementUI-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="../static/css/index.css">
 </head>
-<body class="setbg">
+<body>
+<div id="app">
+    <div id="pics">
+        <el-carousel :height="screenH+'px'">
+            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="../static/res/index1.jpg"/> </el-carousel-item>
+            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="../static/res/index2.jpg"/> </el-carousel-item>
+            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="../static/res/index3.jpg"/> </el-carousel-item>
+            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="../static/res/index4.jpg"/> </el-carousel-item>
+        </el-carousel>
+    </div>
 
-<div class="intro-container">
-<div class = "layout">
-    <script src='/js/logjs/jquery.min.js'></script>
-    <script src='/js/logjs/TweenMax.min.js'></script>
-    <script src='/js/logjs/three.min.js'></script>
-    <script src="/js/logjs/index.js"></script>
-    <Layout class="layoutWrapper">
-        <i-Header class="header">
-            <Row type="flex"  align="bottom">
-                <i-col span = "1" offset="1" >
-                    <img :src="imgUrl" class="logo" onclick="goLogin()"/>
-                </i-col>
-                <i-col span = "5" class="name">
-                    EMMM NOTE
-                </i-col>
-                <#--<i-col span = "18"></i-col>-->
-            </Row>
-        </i-Header>
-        <i-content >
-            <Row justify="center">
-                <i-col span="18" offset="3">
-                    <card :bordered="false" id="loginCard">
-                        <Row type="flex" justify="center">
-                            <i-col span="10">
-                                <i-form action="/login" method="post" :mod5el="formItem" :label-width="80">
-                                    <Form-Item label="Username">
-                                        <i-Input name="username" type="text" placeholder="Username" v-model="formItem.username"></i-Input>
-                                    </Form-Item>
-                                    <Form-Item label="Password">
-                                        <i-Input name="password" type="password" placeholder="Password" v-model="formItem.password"></i-Input>
-                                    </Form-Item>
-                                    <Form-Item >
-                                        <i-Button type="primary" html-type="submit" class="card-button">Signin</i-Button>
-
-                                        <i-Button @click="register() "class="card-button">Register</i-Button>
-
-                                    </Form-Item>
-                                </i-form>
-                            </i-col>
-                            <i-col span = "10" offset="2">
-                                <Carousel autoplay v-model="value2" loop >
-                                    <Carousel-Item>
-                                        <div class="demo-carousel" >
-                                            <img :src="imgr1" class="Carousel-img" />
-                                           </div>
-                                    </Carousel-Item>
-                                    <Carousel-Item>
-                                        <div class="demo-carousel" >
-                                            <img :src="imgr2" class="Carousel-img"/>
-                                         </div>
-                                    </Carousel-Item>
-                                    <Carousel-Item>
-                                        <div class="demo-carousel" >
-                                            <img :src="imgr3" class="Carousel-img"/>
-                                            </div>
-                                    </Carousel-Item>
-
-                                </Carousel>
-                            </i-col>
-                        </Row>
-                    </card>
-                </i-col>
-            </Row>
-        </i-Content>
-        <i-Footer class="layout-footer-center">2019 &copy; EMMM NOTE</i-Footer>
-    </Layout>
+    <el-form id="login" ref="form" :model="form" label-width="80px">
+        <div class="formtitle">人力资源管理系统</div>
+        <hr/>
+        <el-form-item class="formitem" label="用户名">
+            <el-input v-model="form.name" placeholder="请输入用户名" clearable></el-input>
+        </el-form-item>
+        <el-form-item class="formitem" label="密码">
+            <el-input v-model="form.pswd" placeholder="请输入密码" show-password></el-input>
+        </el-form-item>
+        <el-form-item class="formitem">
+            <el-button type="primary" @click="login">登录</el-button>
+        </el-form-item>
+    </el-form>
+    <!--<el-row>-->
+    <!--<el-col :span="10" offset="14"><el-card id="login">-->
+    <!--<div slot="header" class="clearfix">-->
+    <!--<span>人力资源管理系统</span>-->
+    <!--</div>-->
+    <!--<div class="login-content">-->
+    <!--<el-row class="text-item">-->
+    <!--<el-col :span="3" offset="2">用户名</el-col>-->
+    <!--<el-col :span="17" offset="1"><el-input style="float: right" placeholder="请输入用户名" v-model="inputName" clearable></el-input></el-col>-->
+    <!--</el-row>-->
+    <!--<el-row class="text-item" glutter="30">-->
+    <!--<el-col :span="3" offset="2">密码</el-col>-->
+    <!--<el-col :span="17" offset="1"><el-input placeholder="请输入密码" v-model="inputPswd" show-password></el-input></el-col>-->
+    <!--</el-row>-->
+    <!--</div>-->
+    <!--<hr/>-->
+    <!--<el-row>-->
+    <!--<el-col :span="4" offset="9"><el-button @click="login"  type="primary" plain>登录</el-button></el-col>-->
+    <!--</el-row>-->
+    <!--</el-card></el-col>-->
+    <!--</el-row>-->
 </div>
-<#--<#if loginError??>登录出错</#if>-->
-<#--<#if user??>welcome ${user}</#if>-->
-    <#--<form action="/login" method="post">-->
-        <#--<input name="username">-->
-        <#--<input name="password">-->
-        <#--<button type="submit">login</button>-->
-    <#--</form>-->
-</div>
+</body>
 <script>
-    function goLogin(){
-        window.location.href="/login"
-    }
     var vue = new Vue({
-        el:'.layout',
+        el:'#app',
         data:{
-            imgUrl:'/image/logo.png',
-            imgr1:'/image/free.jpg',
-            imgr2:'/image/search.png',
-            imgr3:'/image/teamwork.png',
-            value2:0,
-            formItem: {
-                username: '',
-                password:''
-            }
+            form:{
+                name:'',
+                pswd:'',
+            },
+            screenW:document.documentElement.clientWidth,
+            screenH:document.documentElement.clientHeight
         },
         methods:{
-            register(){
-                window.location.href='/reg';
+            imgLoad(){
+                this.screenH=this.$refs.bannerHeight[0].height;
+                cosole.log(this.screenH);
+            },
+
+            login() {
+                console.log(this.form);
+
+                $.ajax({
+                    url:'/login',
+                    data:{
+                        form:this.form,
+                    },
+                    method:'post',
+                    success(res){
+                        console.log(res);
+                        if(res.code=='200') {
+                            alert('登录成功');
+                            window.location.href='../static/html/pointRecord.html';
+                        }
+                    },
+                    error(res){
+                        console.log(res);
+                        alert('登录失败');
+                    }
+                })
+            },
+        },
+        // create:function () {
+        //     this.setSize();
+        // },
+        watch: {
+            screenW (val) {
+                this.screenW = val;
+                console.log(this.screenW);
+            },
+            screenH (val) {
+                this.screenH = val;
+            },
+        },
+        mounted:function () {
+            // this.setSize();
+            window.onresize = function () { // 定义窗口大小变更通知事件
+                this.screenW = document.documentElement.clientWidth;
+                this.screenH = document.documentElement.clientHeight;
             }
+            console.log(this.screenW,this.screenH);
         }
     })
 </script>
-</body>
 </html>
