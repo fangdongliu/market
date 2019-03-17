@@ -79,7 +79,7 @@
 
             login() {
                 console.log(this.form);
-                // window.location.href="../static/html/index.html"
+
                 $.ajax({
                     url:'/login',
                     data:{
