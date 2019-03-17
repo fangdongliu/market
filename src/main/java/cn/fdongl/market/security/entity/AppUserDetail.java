@@ -19,8 +19,6 @@ public class AppUserDetail implements UserDetails {
     private String username;
     private String password;
     private Integer status;
-    private Timestamp createDate;
-    private Timestamp modifyDate;
 
     private Collection<? extends GrantedAuthority>authorities;
 

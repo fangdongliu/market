@@ -1,6 +1,8 @@
 package cn.fdongl.market.security.service;
 
 import cn.fdongl.market.security.entity.AppUserDetail;
+import cn.fdongl.market.security.entity.UserData;
+import cn.fdongl.market.security.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,22 +20,31 @@ import java.util.List;
 public class AppUserDetailService implements UserDetailsService {
 
     @Autowired
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+    UserMapper userMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        AppUserDetail detail = new AppUserDetail();
-        detail.setUsername("aaa");
-        detail.setPassword(passwordEncoder().encode("bbb"));
-        detail.setStatus(0);
-        if(detail==null){
-            throw new UsernameNotFoundException(String.format("未发现目标用户：%s",s));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        UserData userData = userMapper.getUserData(username);
+
+        if(userData==null){
+            throw new UsernameNotFoundException(String.format("未发现目标用户：%s",username));
         }
 
+        AppUserDetail detail = new AppUserDetail();
+        detail.setId(userData.getId());
+        detail.setUsername(username);
+        detail.setPassword(userData.getPassword());
+        detail.setStatus(0);
+
         List<GrantedAuthority> authorities = new ArrayList<>();
+
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+        for(String s:userData.getRights()){
+            authorities.add(new SimpleGrantedAuthority("ROLE_"+s));
+        }
+
         detail.setAuthorities(authorities);
         return detail;
     }
