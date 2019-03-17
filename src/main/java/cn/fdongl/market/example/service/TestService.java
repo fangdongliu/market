@@ -13,9 +13,9 @@ public class TestService {
     UserMapper userMapper;
 
     @Transactional
-    public void hh() throws RuntimeException {
+    public void hh()throws RuntimeException {
 
-        userMapper.test2();
+        int i = userMapper.test2();
 
         throw new RuntimeException();
 
