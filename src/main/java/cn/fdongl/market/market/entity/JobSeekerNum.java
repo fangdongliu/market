@@ -1,5 +1,8 @@
 package cn.fdongl.market.market.entity;
 
+import lombok.Data;
+
+@Data
 public class JobSeekerNum {
 
     Integer unempYouth;//新成长失业青年

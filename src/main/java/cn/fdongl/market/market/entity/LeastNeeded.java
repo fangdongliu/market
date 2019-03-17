@@ -1,5 +1,8 @@
 package cn.fdongl.market.market.entity;
 
+import lombok.Data;
+
+@Data
 public class LeastNeeded {
 
     String leastProf1Name;//最饱和排名第一的职业名称

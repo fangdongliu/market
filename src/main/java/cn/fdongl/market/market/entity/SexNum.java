@@ -1,5 +1,8 @@
 package cn.fdongl.market.market.entity;
 
+import lombok.Data;
+
+@Data
 public class SexNum {
 
     Integer maleNeed;//男性需求人数

@@ -1,5 +1,8 @@
 package cn.fdongl.market.market.entity;
 
+import lombok.Data;
+
+@Data
 public class EmployerNum {
     Integer staOwnNeed;//国有企业，内资企业，企业
     Integer collNeed;//集体企业，内资企业，企业
