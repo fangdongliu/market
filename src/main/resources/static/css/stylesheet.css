@@ -35,23 +35,30 @@ html,body,#app{
 
 .el-menu-item, .el-submenu{
     margin: 0 15px;
-    border-radius: 7px;
+    border-radius: 3px;
 }
 
 .el-menu-item:hover{
-    background-color: #4cb050 !important;
+    /*background-color: #4cb050 !important;*/
+    background-color: transparent;
+    transition-duration: 0.2s;
+    color: #ffd04b !important;
 }
 
 .el-menu-item:focus{
-    background-color: #4cb050 !important;
+    background-color: #515a6e;
+    color: #ffd04b !important;
 }
 
 .el-submenu__title{
-    border-radius: 7px;
+    border-radius: 3px;
 }
 
 .el-submenu__title:hover{
-    background-color: #4cb050 !important;
+    /*background-color: #4cb050 !important;*/
+    background-color: transparent;
+    transition-duration: 0.2s;
+    color: #ffd04b !important;
 }
 
 .content{

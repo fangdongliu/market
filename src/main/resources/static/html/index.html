@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>人力资源管理系统</title>
@@ -44,42 +44,48 @@
     </div>
 
     <el-container style="height: 100%">
-        <el-aside class="menu" width="250px" >
-            <el-menu
-                    default-active="2"
-                    class="el-menu-vertical-demo"
-                    @open="handleOpen"
-                    @close="handleClose"
-                    text-color="#fff"
-                    active-text-color="#fff">
-                <el-row id="navTitle" align="middle" type="flex">
-                    <i-col :span="2" :offset="2">
-                        <img onerror="javascript:this.src='http://online.bit.edu.cn:80/eip/core/miniui/themes/2018-skin/2018-img/avatar.jpg';" src="http://online.bit.edu.cn:80/eip/user/photo.htm" style="position:fixed; top:15px; left:20px; width:30px; margin-top: -4.5px; display: block;">
-                    </i-col>
-                    <i-col :offset="3">
-                        <span>Welcome!</span></i-col>
-                </el-row>
-                <el-row type="flex" justify="center" style="margin-bottom: 20px">
-                    <el-col :span="22">
-                        <div style="border-bottom: #6d6f71 solid;"></div>
-                    </el-col>
-                </el-row>
-                <el-submenu index="1">
-                    <template slot="title">
-                        <i class="el-icon-location"></i>
-                        <span slot="title">导航一</span>
+        <el-aside class="menu" width="250px"  style="overflow-x: hidden;position:absolute;">
+            <div style="overflow-y: scroll;position: absolute;height:100%;">
+                <el-menu
+                        default-active="2"
+                        class="el-menu-vertical-demo"
+                        @open="handleOpen"
+                        @close="handleClose"
+                        @select="handleSelect"
+                        text-color="#fff"
+                        active-text-color="#fff"
+                        style="width:250px;">
+                    <el-row id="navTitle" align="middle" type="flex">
+                        <i-col :span="2" :offset="2">
+                            <img onerror="javascript:this.src='http://online.bit.edu.cn:80/eip/core/miniui/themes/2018-skin/2018-img/avatar.jpg';" src="http://online.bit.edu.cn:80/eip/user/photo.htm" style="width:30px; margin-top: -4.5px; display: block;">
+                        </i-col>
+                        <i-col :offset="3">
+                            <span>Welcome!</span></i-col>
+                    </el-row>
+                    <el-row type="flex" justify="center" style="margin-bottom: 20px">
+                        <el-col :span="22">
+                            <div style="border-bottom: #6d6f71 solid;"></div>
+                        </el-col>
+                    </el-row>
+
+                    <template v-for = "(item, index) in menu">
+                        <el-submenu v-if = "item.child !== null" :index="index">
+                            <template slot="title">
+                                <i :class="item.icon"></i>
+                                <span slot="title">{{item.name}}</span>
+                            </template>
+                            <el-menu-item v-for="(i, index2) in item.child" :index="index+'-'+index2">{{i.name}}</el-menu-item>
+                        </el-submenu>
+                        <el-menu-item v-else :index="index">
+                            <i :class="item.icon"></i>
+                            <span slot="title">{{item.name}}</span>
+                        </el-menu-item>
                     </template>
-                    <div onclick="jumpProvinceRecord()"><el-menu-item index="1-1">省审核备案</el-menu-item></div>
-                    <div onclick="jumpPointRecord()"><el-menu-item index="1-2">监测点填报备案</el-menu-item></div>
-                    <el-menu-item v-for="(item,index) in 10" :index="'1-'+index+1">fghj</el-menu-item>
-                </el-submenu>
-                <el-menu-item index="2">
-                    <i class="el-icon-menu"></i>
-                    <span slot="title">导航二</span>
-                </el-menu-item>
-            </el-menu>
+                </el-menu>
+            </div>
+
         </el-aside>
-        <el-container class="wrapper" style="min-height: calc(100% - 60px)">
+        <el-container class="wrapper" style="min-height: calc(100% - 60px); position: absolute;left:250px;width: calc(100% - 250px);height:100%;">
             <el-header class="header">
                 <el-row class="headerRow" type="flex" align="middle">
                     <e-col>人力资源管理中心</e-col>
@@ -88,7 +94,15 @@
 
             <el-container style="min-height: calc(100% - 60px);">
                 <el-main style="height:100%; padding:0; overflow: hidden;">
+
+                    <el-row v-if="loading" style="height:100%;" type="flex" align="middle" justify="center">
+                        <el-col :span="3">
+                            <img src="../image/ajax-loader.gif">
+                        </el-col>
+                    </el-row>
+
                     <iframe id="menuFrame" name="menuFrame"
+                            v-bind:src="src"
                             style="height:calc(100%); width:calc(100%)" frameborder="no"></iframe>
                 </el-main>
             </el-container>
@@ -100,6 +114,21 @@
     var vue = new Vue({
         el:'#app',
         data:{
+            menu:[
+                {
+                    icon:'el-icon-location',
+                    name:'导航一',
+                    child:[
+                        {name:'省审核备案', url:'provinceRecord.html'},
+                        {name:'监测点填报备案', url:'pointRecord.html'}
+                    ]
+                },
+                {
+                    icon:'el-icon-menu',
+                    name:'导航二',
+                    url:''
+                }
+            ],
             isLogout:true,
             visible:'',
             inputName:'',
@@ -129,9 +158,28 @@
                 name: '北京市海淀区中关村人力资源市场',
                 date: '2016-05-06',
                 state: '待审核'
-            }]
+            }],
+            src:'',
+            loading:false
         },
         methods:{
+            handleSelect(index){
+                this.loading=true;
+                if(index.toString().indexOf('-')===-1){
+                   this.src=this.menu[index].url;
+                   this.setupWatcher();
+                }else{
+                    var i = index.indexOf('-');
+                    this.src=this.menu[index.substring(0,i)].child[index.substring(i+1)].url;
+                    this.setupWatcher();
+                }
+            },
+            setupWatcher(){
+                document.getElementById("menuFrame").addEventListener("load",function (ev) {
+                    console.log(1);
+                    vue.loading=false;
+                })
+            },
             handleOpen(key, keyPath) {
                 console.log(key, keyPath);
             },
