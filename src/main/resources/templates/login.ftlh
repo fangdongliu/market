@@ -90,6 +90,7 @@
                         console.log(res);
                         if(res.code=='200') {
                             alert('登录成功');
+                            window.location.href='../static/html/pointRecord.html';
                         }
                     },
                     error(res){
