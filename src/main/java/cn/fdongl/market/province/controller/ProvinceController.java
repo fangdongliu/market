@@ -4,6 +4,7 @@ import cn.fdongl.market.market.entity.Record;
 import cn.fdongl.market.province.mapper.ProvinceMapper;
 import cn.fdongl.market.province.service.ProvinceService;
 import cn.fdongl.market.security.entity.AppUserDetail;
+import cn.fdongl.market.util.ControllerBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,17 +13,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/province")
-public class ProvinceController{
+public class ProvinceController extends ControllerBase {
 
-    @Autowired
-    ProvinceMapper provinceMapper;
     @Autowired
     ProvinceService provinceService;
 
     //查询所有待审核的备案信息
     @PostMapping("/record/examineQuery")
     public List<Record> RecordExamineQuery(){
-        return provinceMapper.recordExamineQuery();
+        return provinceService.recordExamineQuery();
     }
 
     //根据条件查询已通过的备案信息

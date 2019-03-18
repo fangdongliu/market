@@ -2,23 +2,19 @@ package cn.fdongl.market.market.controller;
 
 
 import cn.fdongl.market.market.entity.*;
-import cn.fdongl.market.market.mapper.MarketMapper;
 import cn.fdongl.market.market.service.MarketService;
 import cn.fdongl.market.security.entity.AppUserDetail;
+import cn.fdongl.market.util.ControllerBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @RestController
 @RequestMapping("/market")//指定接口的一级路径
-public class MarketController {
+public class MarketController extends ControllerBase {
 
-    @Autowired
-    MarketMapper marketMapper;
     @Autowired
     MarketService marketService;
 
@@ -26,12 +22,12 @@ public class MarketController {
     @PostMapping("/record/insert")
     public Integer RecordInsert(AppUserDetail appUserDetail, Record record,Integer stateFlag) throws Exception{
         record.setRegionEmpId(appUserDetail.getId());
-      //  record.setStateFlag(stateFlag);
+        record.setStateFlag(stateFlag);
         record.setCreateTime(new Date());
         record.setCreator(appUserDetail.getId());
         record.setReviseTime(null);
         record.setReviser(null);
-        Integer n=marketMapper.recordInsert(record);
+        Integer n=marketService.recordInsert(record);
         if(n<=0){
             return 1;
         }
@@ -47,7 +43,7 @@ public class MarketController {
         record.setCreator(appUserDetail.getId());
         record.setReviseTime(null);
         record.setReviser(null);
-        Integer n=marketMapper.recordUpdate(record);
+        Integer n=marketService.recordUpdate(record);
         if(n<=0){
             return 1;
         }
@@ -79,7 +75,7 @@ public class MarketController {
         UploadInfo uploadInfo=new UploadInfo();
         uploadInfo.setStateFlag(stateFlag);
         uploadInfo.setCreator(appUserDetail.getId());
-        uploadInfo.setCreateTime();
+        uploadInfo.setCreateTime(new Date());
         int n=marketService.uploadInsert(
                 uploadInfo,
                 totalNum,

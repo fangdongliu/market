@@ -12,13 +12,13 @@ import org.springframework.core.annotation.Order;
 @Order(1)
 public interface MarketMapper {
 
-    //用户新建一条备案信息
+    //新建一条备案信息
     @Insert("INSERT INTO \n" +
             "t_record_info(region_emp_id,region_emp_name,region_name,region_emp_contact,region_emp_contact_mobi,region_emp_contact_num,region_emp_fax,state_flag,create_time,creator,revise_time,reviser,delete_flag) \n" +
             "VALUES(#{regionEmpId},#{regionEmpName},#{regionName},#{regionEmpContact},#{regionEmpContactMobi},#{regionEmpContactNum},#{regionEmpFax},#{stateFlag},#{createTime},#{creator},#{reviseTime},#{reviser},0);")
     Integer recordInsert(Record record);
 
-    //用户更新一条备案信息
+    //更新一条备案信息
     @Update("UPDATE t_record_info SET \n" +
             "region_emp_id=#{regionEmpId}, \n" +
             "region_emp_name=#{regionEmpName}, \n" +
@@ -35,7 +35,7 @@ public interface MarketMapper {
             "where region_emp_id=#{regionEmpId} and state_flag=0;")
     Integer recordUpdate(Record record);
 
-    //根据用户id查询已完成的备案信息
+    //根据用户id查已完成的备案信息
     @Select("SELECT \n" +
             "region_emp_id AS regionEmpId, \n" +
             "region_emp_name AS regionEmpName, \n" +

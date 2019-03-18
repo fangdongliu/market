@@ -12,6 +12,16 @@ public class MarketService {
     @Autowired
     MarketMapper marketMapper;
 
+    //监测点新建备案
+    public Integer recordInsert(Record record){
+        return marketMapper.recordInsert(record);
+    }
+
+    //监测点更新备案
+    public Integer recordUpdate(Record record){
+        return marketMapper.recordUpdate(record);
+    }
+
     //监测点默认查询
     public Record recordSelect(Integer userId){
         Record record=marketMapper.recordSelectFinished(userId);
@@ -21,6 +31,7 @@ public class MarketService {
         else return record;
     }
 
+    //监测点新建上传数据
     @Transactional
     public Integer uploadInsert(UploadInfo uploadInfo,
                                 TotalNum totalNum,
@@ -37,5 +48,3 @@ public class MarketService {
 
     }
 }
-
-

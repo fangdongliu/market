@@ -13,6 +13,11 @@ public class ProvinceService {
     @Autowired
     ProvinceMapper provinceMapper;
 
+    //查询所有待审核的备案
+    public List<Record> recordExamineQuery(){
+        return provinceMapper.recordExamineQuery();
+    }
+
     //根据条件查询已通过的备案
     public List<Record> conditionalQuery(Integer state, String condition){
         if(state==0){

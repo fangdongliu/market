@@ -19,8 +19,4 @@ public class Record {
     Integer creator;//创建人id
     Date reviseTime;//审核时间
     Integer reviser;//审核人id
-
-
-
-
 }
