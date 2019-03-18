@@ -1,7 +1,7 @@
 package cn.fdongl.market.market.controller;
 
 
-import cn.fdongl.market.market.entity.Record;
+import cn.fdongl.market.market.entity.*;
 import cn.fdongl.market.market.mapper.MarketMapper;
 import cn.fdongl.market.market.service.MarketService;
 import cn.fdongl.market.security.entity.AppUserDetail;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/market/record")//指定接口的一级路径
+@RequestMapping("/market")//指定接口的一级路径
 public class MarketController {
 
     @Autowired
@@ -23,15 +23,15 @@ public class MarketController {
     MarketService marketService;
 
     //新建备案
-    @PostMapping("/insert")
-    public Integer insert(AppUserDetail appUserDetail, Record record) throws Exception{
+    @PostMapping("/record/insert")
+    public Integer RecordInsert(AppUserDetail appUserDetail, Record record,Integer stateFlag) throws Exception{
         record.setRegionEmpId(appUserDetail.getId());
       //  record.setStateFlag(stateFlag);
         record.setCreateTime(new Date());
         record.setCreator(appUserDetail.getId());
         record.setReviseTime(null);
         record.setReviser(null);
-        Integer n=marketMapper.insert(record);
+        Integer n=marketMapper.recordInsert(record);
         if(n<=0){
             return 1;
         }
@@ -39,15 +39,15 @@ public class MarketController {
     }
 
     //更新备案
-    @PostMapping("/update")
-    public Integer update(AppUserDetail appUserDetail,Record record,Integer stateFlag) throws Exception{
+    @PostMapping("/record/update")
+    public Integer RecordUpdate(AppUserDetail appUserDetail,Record record,Integer stateFlag) throws Exception{
         record.setRegionEmpId(appUserDetail.getId());
         record.setStateFlag(stateFlag);
         record.setCreateTime(new Date());
         record.setCreator(appUserDetail.getId());
         record.setReviseTime(null);
         record.setReviser(null);
-        Integer n=marketMapper.update(record);
+        Integer n=marketMapper.recordUpdate(record);
         if(n<=0){
             return 1;
         }
@@ -55,8 +55,32 @@ public class MarketController {
     }
 
     //查询备案
-    @PostMapping("/select")
-    public Record select(AppUserDetail appUserDetail) throws Exception{
-        return marketService.select(appUserDetail.getId());
+    @PostMapping("/record/select")
+    public Record RecordSelect(AppUserDetail appUserDetail) throws Exception{
+        return marketService.recordSelect(appUserDetail.getId());
+    }
+
+    //新建数据上传
+    @PostMapping("/upload/insert")
+    public Integer UploadInsert(
+            AppUserDetail appUserDetail,
+            TotalNum totalNum,
+            IndustryNum industryNum,
+            EmployerNum employerNum,
+            ProfNum profNum,
+            MostNeeded mostNeeded,
+            LeastNeeded leastNeeded,
+            JobSeekerNum jobSeekerNum,
+            SexNum sexNum,
+            AgeNum ageNum,
+            DegreeNum degreeNum,
+            TechGrageNum techGrageNum,
+            Integer stateFlag) throws Exception {
+        UploadInfo uploadInfo=new UploadInfo();
+        uploadInfo.setStateFlag(stateFlag);
+        uploadInfo.setCreator(appUserDetail.getId());
+        uploadInfo.setCreateTime();
+
+        return 0;
     }
 }

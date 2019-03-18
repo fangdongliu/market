@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/province/record")
+@RequestMapping("/province")
 public class ProvinceController{
 
     @Autowired
@@ -20,20 +20,20 @@ public class ProvinceController{
     ProvinceService provinceService;
 
     //查询所有待审核的备案信息
-    @PostMapping("/examineQuery")
-    public List<Record> ExamineQuery(){
-        return provinceMapper.examineQuery();
+    @PostMapping("/record/examineQuery")
+    public List<Record> RecordExamineQuery(){
+        return provinceMapper.recordExamineQuery();
     }
 
     //根据条件查询已通过的备案信息
-    @PostMapping("conditionalQuery")
-    public List<Record> ConditionalQuery(Integer state,String condition){
+    @PostMapping("/record/conditionalQuery")
+    public List<Record> RecordConditionalQuery(Integer state,String condition){
         return provinceService.conditionalQuery(state, condition);
     }
 
     //审核拒绝通过
-    @PostMapping("/reject")
-    public Integer Reject(AppUserDetail appUserDetail,Integer aimId,String feedback) throws Exception{
+    @PostMapping("/record/reject")
+    public Integer RecordReject(AppUserDetail appUserDetail,Integer aimId,String feedback) throws Exception{
         int n=provinceService.reject(appUserDetail.getId(),aimId,feedback);
         if(n==1){
             throw new Exception();
@@ -42,8 +42,8 @@ public class ProvinceController{
     }
 
     //审核通过
-    @PostMapping("/pass")
-    public Integer Pass(AppUserDetail appUserDetail,Integer aimId,String feedback) throws Exception{
+    @PostMapping("/record/pass")
+    public Integer RecordPass(AppUserDetail appUserDetail,Integer aimId,String feedback) throws Exception{
         int n=provinceService.pass(appUserDetail.getId(),aimId,feedback);
         if(n==1){
             throw new Exception();
