@@ -17,15 +17,10 @@ public class Record {
     Integer stateFlag;//状态标志，保存0，上传1，通过2，过期3
     Date createTime;//创建时间
     Integer creator;//创建人id
-    Date reviseTIme;//审核时间
+    Date reviseTime;//审核时间
     Integer reviser;//审核人id
 
-    public void setCreateTime(){
-        createTime.getTime();
-    }
 
-    public void setReviseTIme(){
-        reviseTIme.getTime();
-    }
+
 
 }

@@ -28,12 +28,7 @@
                                 <el-input v-model="marketDetailForm.name"></el-input>
                             </el-form-item>
                             <el-form-item label="所在地区" >
-                                <el-cascader
-                                        :options="locationOption"
-                                        @active-item-change="handleLocationItemChange"
-                                        :props="props"
-                                        v-model="marketDetailForm.location"
-                                ></el-cascader>
+                                <el-input v-model="marketDetailForm.location"></el-input>
                             </el-form-item>
                             <el-form-item label="联系人姓名">
                                 <el-input v-model="marketDetailForm.people"></el-input>
@@ -74,7 +69,7 @@
                 phone:'',
                 fax:''
             },
-            ifSubmitMarketDetail:true,
+            ifSubmitMarketDetail:false,
             props: {
                 value: 'label',
                 children: 'cities'
@@ -89,24 +84,41 @@
         },
         methods:{
             onSubmitMarketDetail: function() {
-                console.log(vue.marketDetailForm.name);
+                this.newMarketDetail();
             },
             resetMarketDetailForm:function(formName) {
                 this.$refs[formName].resetFields();
             },
-            handleLocationItemChange: function(val) {
-                console.log('active item:', val);
-                setTimeout(_ => {
-                    if (val.indexOf('江苏') > -1 && !vue.locationOption[0].cities.length) {
-                    this.locationOption[0].cities = [{
-                        label: '南京'
-                    }];
-                    } else if (val.indexOf('浙江') > -1 && !vue.locationOption[1].cities.length) {
-                        this.locationOption[1].cities = [{
-                            label: '杭州'
-                        }];
+            newMarketDetail(){
+                console.log({
+
+                    regionEmpName:this.marketDetailForm.name,
+                        regionName:this.marketDetailForm.location,
+                        regionEmpContact:this.marketDetailForm.people,
+                        regionEmpContactMobi:this.marketDetailForm.mobile,
+                        regionEmpContactNum:this.marketDetailForm.phone,
+                        regionEmpFax:this.marketDetailForm.fax
+                        ,
+                        stateFlag:0
+                })
+                $.ajax({
+                    url:'/market/record/insert',
+                    type:'post',
+                    data:{
+
+                            regionEmpName:this.marketDetailForm.name,
+                            regionName:this.marketDetailForm.location,
+                            regionEmpContact:this.marketDetailForm.people,
+                            regionEmpContactMobi:this.marketDetailForm.mobile,
+                            regionEmpContactNum:this.marketDetailForm.phone,
+                            regionEmpFax:this.marketDetailForm.fax
+                        ,
+                        stateFlag:0
+                    },
+                    success(res){
+                        console.log(res)
                     }
-                }, 300);
+                })
             }
         }
     })

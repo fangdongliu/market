@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+
 @RestController
 @RequestMapping("/market")//指定接口的一级路径
 public class MarketController {
@@ -23,10 +26,10 @@ public class MarketController {
     @PostMapping("/record/insert")
     public Integer RecordInsert(AppUserDetail appUserDetail, Record record,Integer stateFlag) throws Exception{
         record.setRegionEmpId(appUserDetail.getId());
-        record.setStateFlag(stateFlag);
-        record.setCreateTime();
+      //  record.setStateFlag(stateFlag);
+        record.setCreateTime(new Date());
         record.setCreator(appUserDetail.getId());
-        record.setReviseTIme(null);
+        record.setReviseTime(null);
         record.setReviser(null);
         Integer n=marketMapper.recordInsert(record);
         if(n<=0){
@@ -40,9 +43,9 @@ public class MarketController {
     public Integer RecordUpdate(AppUserDetail appUserDetail,Record record,Integer stateFlag) throws Exception{
         record.setRegionEmpId(appUserDetail.getId());
         record.setStateFlag(stateFlag);
-        record.setCreateTime();
+        record.setCreateTime(new Date());
         record.setCreator(appUserDetail.getId());
-        record.setReviseTIme(null);
+        record.setReviseTime(null);
         record.setReviser(null);
         Integer n=marketMapper.recordUpdate(record);
         if(n<=0){

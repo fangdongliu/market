@@ -24,6 +24,7 @@
         <el-container style="height: 100%;">
             <el-main class="content">
                 <div class="contentDetail">
+                    <div style="float: right; margin-bottom: 15px; margin-right: 15px;">添加/修改上报时限</div>
                     <el-table
                             :data="marketData"
                             stripe
@@ -148,7 +149,19 @@
             },
             handleClick: function() {
                 vue2.dialogVisible = true;
+            },
+            getList(){
+                $.ajax({
+                    url:'/province/record/examineQuery',
+                    type:'post',
+                    success(res){
+                        console.log(res)
+                    }
+                })
             }
+        },
+        mounted:function () {
+            this.getList()
         }
         })
 </script>
