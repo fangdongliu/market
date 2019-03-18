@@ -2,8 +2,11 @@ package cn.fdongl.market.province.mapper;
 
 
 import cn.fdongl.market.market.entity.Record;
+import cn.fdongl.market.province.entity.uploadPeriod;
 import org.apache.ibatis.annotations.*;
 import org.springframework.core.annotation.Order;
+
+import java.sql.Date;
 import java.util.List;
 
 @Mapper
@@ -114,4 +117,59 @@ public interface ProvinceMapper {
     @Insert("insert into t_notice(notice_title,notice_content,create_time,creator,reciver) \n" +
             "values(#{param1},#{param2},now(),#{param3},#{param4});")
     Integer sendMessage(String title,String content,Integer examineId,Integer aimId);
+    //新增调查期
+    @Insert("insert into t_upload_period(upload_period_id,start_date,end_date,create_time,creator,delete_flag)\n"
+            +"values(#{uploadPeriodId},#{startDate},#{endDate},#{creatTime},#{crateor},#{deleteFlag});"
+    )
+    Integer periodInsert(uploadPeriod period);
+
+    //修改调查期
+    @Update("update t_upload_period\n" +
+            "set start_date=#{param1},end_date=#{param2},revise_date=#{param3},reviser=#{param4}\n" +
+            "where upload_period_id=#{param5};")
+    Integer periodUpdate(Date startDate, Date endDate, java.util.Date reviseDate, Integer reviser, Integer uploadPeriodID);
+
+    //时间点查询调查期
+    @Select("select \n" +
+            "upload_period_id AS uploadPeriodId \n" +
+            "start_date AS startDate \n" +
+            "end_date AS endDate \n" +
+            "create_time AS createTime \n" +
+            "creator AS creator \n" +
+            "revise_date AS reviseDate \n" +
+            "reviser AS reviser \n" +
+            "from t_upload_period \n" +
+            "delete_flag AS deleteFlag \n" +
+            "from t_upload_period \n" +
+            "where #{param1} between start_date and end_date;")
+    List<uploadPeriod>selectByTime(Date aimDate);
+
+    //时间段查询调查期
+    @Select("select \n" +
+            "upload_period_id AS uploadPeriodId \n" +
+            "start_date AS startDate \n" +
+            "end_date AS endDate \n" +
+            "create_time AS createTime \n" +
+            "creator AS creator \n" +
+            "revise_date AS reviseDate \n" +
+            "reviser AS reviser \n" +
+            "from t_upload_period \n" +
+            "delete_flag AS deleteFlag \n" +
+            "from t_upload_period \n" +
+            "where create_time between #{param1} and #{param2};")
+    List<uploadPeriod>selectByPeriod(Date startDate,Date endDate);
+
+    //按id查询调查期
+    @Select("select \n" +
+            "upload_period_id AS uploadPeriodId \n" +
+            "start_date AS startDate \n" +
+            "end_date AS endDate \n" +
+            "create_time AS createTime \n" +
+            "creator AS creator \n" +
+            "revise_date AS reviseDate \n" +
+            "reviser AS reviser \n" +
+            "from t_upload_period \n" +
+            "delete_flag AS deleteFlag \n" +
+            "where upload_period_id=#{param1};")
+    List<uploadPeriod> selectById(Integer uploadPeriodID);
 }
