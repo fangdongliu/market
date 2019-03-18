@@ -1,11 +1,13 @@
 package cn.fdongl.market.province.service;
 
 import cn.fdongl.market.market.entity.Record;
+import cn.fdongl.market.province.entity.InnerUploadPeriod;
 import cn.fdongl.market.province.mapper.ProvinceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.util.List;
 
 @Service
@@ -114,5 +116,38 @@ public class ProvinceService {
             return 0;
         }
         else throw new RuntimeException();
+    }
+
+    //检查日期是否合法
+    public boolean timeCheck(Date startDate, Date endDate){
+        if(startDate!=null && endDate!=null){
+            if(startDate.compareTo(endDate)<0){
+                float f=endDate.getTime()-startDate.getTime();
+                f=f/86400000;
+                if(f>30){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
+    }
+
+    //创建新的上报时限
+    public Integer periodInsert(InnerUploadPeriod innerUploadPeriod){
+        innerUploadPeriod.setUploadPeriodId(provinceMapper.getPeriodNumber());
+        return provinceMapper.periodInsert(innerUploadPeriod);
+    }
+
+    //更新上报时限
+    public Integer periodUpdate(Date startDate, Date endDate, java.util.Date reviseDate, Integer reviser,Integer uploadPeriodId){
+        return provinceMapper.periodUpdate(startDate,endDate,reviseDate,reviser,uploadPeriodId);
     }
 }
