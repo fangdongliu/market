@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-
 @RestController
 @RequestMapping("/market/record")//指定接口的一级路径
 public class MarketController {
@@ -27,7 +25,7 @@ public class MarketController {
         record.setRegionEmpId(appUserDetail.getId());
         record.setStateFlag(stateFlag);
         record.setCreateTime();
-        record.setCreater(appUserDetail.getId());
+        record.setCreator(appUserDetail.getId());
         record.setReviseTIme(null);
         record.setReviser(null);
         Integer n=marketMapper.insert(record);
@@ -43,7 +41,7 @@ public class MarketController {
         record.setRegionEmpId(appUserDetail.getId());
         record.setStateFlag(stateFlag);
         record.setCreateTime();
-        record.setCreater(appUserDetail.getId());
+        record.setCreator(appUserDetail.getId());
         record.setReviseTIme(null);
         record.setReviser(null);
         Integer n=marketMapper.update(record);
