@@ -90,17 +90,7 @@
                 this.$refs[formName].resetFields();
             },
             newMarketDetail(){
-                console.log({
 
-                    regionEmpName:this.marketDetailForm.name,
-                        regionName:this.marketDetailForm.location,
-                        regionEmpContact:this.marketDetailForm.people,
-                        regionEmpContactMobi:this.marketDetailForm.mobile,
-                        regionEmpContactNum:this.marketDetailForm.phone,
-                        regionEmpFax:this.marketDetailForm.fax
-                        ,
-                        stateFlag:0
-                })
                 $.ajax({
                     url:'/market/record/insert',
                     type:'post',
@@ -113,7 +103,7 @@
                             regionEmpContactNum:this.marketDetailForm.phone,
                             regionEmpFax:this.marketDetailForm.fax
                         ,
-                        stateFlag:0
+                        stateFlag:1
                     },
                     success(res){
                         console.log(res)
