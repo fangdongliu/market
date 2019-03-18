@@ -24,7 +24,7 @@ public interface UserMapper {
             "\tusername,\n" +
             "\t`password`,\n" +
             "\tstate_flag AS `status`\n" +
-            "\t FROM t_user WHERE t_user.username = #{param1} AND `delete_flag`=0;")
+            "\t FROM t_user WHERE t_user.username = #{param1} AND `delete_flag`=0 limit 1;")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "rights",column = "id",many = @Many(select = "cn.fdongl.market.security.mapper.UserMapper.getUserRights"))
