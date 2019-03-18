@@ -45,6 +45,6 @@ public class MarketService {
                                 AgeNum ageNum,
                                 DegreeNum degreeNum,
                                 TechGrageNum techGrageNum) throws RuntimeException {
-        return 0;
+
     }
 }

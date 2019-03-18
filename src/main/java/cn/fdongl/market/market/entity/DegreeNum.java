@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class DegreeNum {
 
+    Integer tableId;//数据表id
     Integer belowJuniHighSchoNeed;//初中及以下需求人数
     Integer belowJuniHighSchoJobseek;//初中及以下求职人数
     Integer highSchoNeed;//高中需求人数

@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class MostNeeded {
+
+    Integer tableId;//数据表id
     String mostProf1Name;//最需要排名第一的职业名称
     Integer mostProf1Num;//最需要排名第一的职业代码
     Integer mostProf1Need;//最需要排名第一的职业需求人数

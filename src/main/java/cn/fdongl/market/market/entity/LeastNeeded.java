@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class LeastNeeded {
 
+    Integer tableId;//数据表id
     String leastProf1Name;//最饱和排名第一的职业名称
     Integer leastProf1Num;//最饱和排名第一的职业代码
     Integer leastProf1Need;//最饱和排名第一的职业需求人数

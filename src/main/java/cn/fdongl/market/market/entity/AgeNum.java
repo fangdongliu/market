@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class AgeNum {
 
+    Integer tableId;//数据表id
     Integer sixteenTwentyfourNeed;//16-24岁需求人数
     Integer sixteenTwentyfourJobseek;//16-24岁求职人数
     Integer twentyfiveThirtyfourNeed;//25-34岁需求人数

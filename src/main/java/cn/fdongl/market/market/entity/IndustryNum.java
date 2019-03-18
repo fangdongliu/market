@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class IndustryNum {
+
+    Integer tableId;//数据表id
     Integer industry1Need;//第一产业需求人数
     Integer industry2Need;//第二产业需求人数
     Integer industry3Need;//第三产业需求人数

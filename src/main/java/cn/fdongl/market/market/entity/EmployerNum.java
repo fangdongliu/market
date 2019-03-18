@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class EmployerNum {
+
+    Integer tableId;//数据表id
     Integer staOwnNeed;//国有企业，内资企业，企业
     Integer collNeed;//集体企业，内资企业，企业
     Integer coopStockNeed;//股份合作企业，内资企业，企业

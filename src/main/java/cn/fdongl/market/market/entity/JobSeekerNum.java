@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class JobSeekerNum {
 
+    Integer tableId;//数据表id
     Integer unempYouth;//新成长失业青年
     Integer graduate;//应届高校毕业生
     Integer empToUnemp;//就业转失业人员

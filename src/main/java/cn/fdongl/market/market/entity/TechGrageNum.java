@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class TechGrageNum {
 
+    Integer tableId;//数据表id
     Integer profLevel5Need;//职业资格五级（初级技能）需求人数
     Integer profLevel5Jobseek;//职业资格五级（初级技能）求职人数
     Integer profLevel4Need;//职业资格四级（中级技能）需求人数

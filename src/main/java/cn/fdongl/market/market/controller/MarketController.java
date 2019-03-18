@@ -66,7 +66,7 @@ public class MarketController extends ControllerBase {
 
     //新建数据上传,未完成
     @PostMapping("/upload/insert")
-    public Integer UploadInsert(
+    public Object UploadInsert(
             AppUserDetail appUserDetail,
             TotalNum totalNum,
             IndustryNum industryNum,
@@ -84,19 +84,26 @@ public class MarketController extends ControllerBase {
         uploadInfo.setStateFlag(stateFlag);
         uploadInfo.setCreator(appUserDetail.getId());
         uploadInfo.setCreateTime(new Date());
-        int n=marketService.uploadInsert(
-                uploadInfo,
-                totalNum,
-                industryNum,
-                employerNum,
-                profNum,
-                mostNeeded,
-                leastNeeded,
-                jobSeekerNum,
-                sexNum,
-                ageNum,
-                degreeNum,
-                techGrageNum);
-        return 0;
+        try {
+            int n=marketService.uploadInsert(
+                    uploadInfo,
+                    totalNum,
+                    industryNum,
+                    employerNum,
+                    profNum,
+                    mostNeeded,
+                    leastNeeded,
+                    jobSeekerNum,
+                    sexNum,
+                    ageNum,
+                    degreeNum,
+                    techGrageNum);
+            if(n!=0){
+                return fail();
+            }
+            return success();
+        }catch (Exception e){
+            return fail();
+        }
     }
 }
