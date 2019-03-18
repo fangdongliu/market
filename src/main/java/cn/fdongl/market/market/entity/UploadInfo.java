@@ -11,4 +11,8 @@ public class UploadInfo {
     Integer creator;//创建者
     Date reviseTime;//修改时间
     Integer reviser;//修改者
+
+    public void setCreateTime(){
+        createTime.getTime();
+    }
 }

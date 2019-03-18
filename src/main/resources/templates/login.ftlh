@@ -74,7 +74,7 @@
         methods:{
             imgLoad(){
                 this.screenH=this.$refs.bannerHeight[0].height;
-                cosole.log(this.screenH);
+                console.log(this.screenH);
             },
 
             login() {
