@@ -30,22 +30,20 @@
                             stripe
                             style="width: 100%">
                         <el-table-column
-                                prop="name"
-                                label="人力资源市场名"
-                                width="350">
+                                prop="regionName"
+                                label="人力资源市场名">
                         </el-table-column>
                         <el-table-column
-                                prop="date"
-                                label="申请时间"
-                                width="200">
+                                prop="createTime"
+                                label="申请时间">
                         </el-table-column>
                         <el-table-column
-                                prop="state"
-                                label="审核状态"
-                                width="200">
+                                prop="stateFlag"
+                                label="审核状态">
                         </el-table-column>
                         <el-table-column
-                                label="操作">
+                                label="操作"
+                                width="150px">
                             <template slot-scope="scope">
                                 <el-button @click="handleClick()" type="text" size="small">查看</el-button>
                             </template>
@@ -124,23 +122,7 @@
     var vue2 = new Vue({
         el:'#provinceRecordApp',
         data: {
-            marketData: [{
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-01',
-                state: '待审核'
-            }, {
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-02',
-                state: '待审核'
-            }, {
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-03',
-                state: '待审核'
-            }, {
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-04',
-                state: '待审核'
-            }],
+            marketData: [],
             dialogVisible:false
         },
         methods:{
@@ -155,7 +137,10 @@
                     url:'/province/record/examineQuery',
                     type:'post',
                     success(res){
-                        console.log(res)
+                        // for(var i = 0; i < res.length;i ++){
+                        //     res[i].createTime=
+                        // }
+                        vue2.marketData=res;
                     }
                 })
             }
