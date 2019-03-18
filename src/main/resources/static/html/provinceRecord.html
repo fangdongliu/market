@@ -30,6 +30,11 @@
                             stripe
                             style="width: 100%">
                         <el-table-column
+                                prop="number"
+                                label="序号"
+                                width="100px">
+                        </el-table-column>
+                        <el-table-column
                                 prop="regionName"
                                 label="人力资源市场名">
                         </el-table-column>
@@ -38,14 +43,14 @@
                                 label="申请时间">
                         </el-table-column>
                         <el-table-column
-                                prop="stateFlag"
+                                prop="stateInChinese"
                                 label="审核状态">
                         </el-table-column>
                         <el-table-column
                                 label="操作"
                                 width="150px">
                             <template slot-scope="scope">
-                                <el-button @click="handleClick()" type="text" size="small">查看</el-button>
+                                <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -62,7 +67,7 @@
                                 人力资源市场名：
                             </el-col>
                             <el-col :span="6" class="infoContent">
-                                123123123
+                                {{detailData.name}}
                             </el-col>
                         </el-row>
                         <el-row type="flex" justify="center" class="info" align="middle">
@@ -70,7 +75,7 @@
                                 所属地区：
                             </el-col>
                             <el-col :span="6" class="infoContent">
-                                123123123
+                                {{detailData.location}}
                             </el-col>
                         </el-row>
                         <el-row type="flex" justify="center" class="info" align="middle">
@@ -78,7 +83,7 @@
                                 联系人：
                             </el-col>
                             <el-col :span="6" class="infoContent">
-                                123123123
+                                {{detailData.people}}
                             </el-col>
                         </el-row>
                         <el-row type="flex" justify="center" class="info" align="middle">
@@ -86,7 +91,7 @@
                                 联系人手机：
                             </el-col>
                             <el-col :span="6" class="infoContent">
-                                123123123
+                                {{detailData.mobile}}
                             </el-col>
                         </el-row>
                         <el-row type="flex" justify="center" class="info" align="middle">
@@ -94,7 +99,7 @@
                                 联系电话：
                             </el-col>
                             <el-col :span="6" class="infoContent">
-                                123123123
+                                {{detailData.phone}}
                             </el-col>
                         </el-row>
                         <el-row type="flex" justify="center" class="info" align="middle">
@@ -102,13 +107,13 @@
                                 传真：
                             </el-col>
                             <el-col :span="6" class="infoContent">
-                                123123123
+                                {{detailData.fax}}
                             </el-col>
                         </el-row>
 
                     <span slot="footer" class="dialog-footer">
-                        <el-button @click="dialogVisible = false" type="success" plain>通过审核</el-button>
-                        <el-button @click="dialogVisible = false" type="danger" plain>未通过审核</el-button>
+                        <el-button @click="handlePass" type="success" plain>通过审核</el-button>
+                        <el-button @click="handleReject" type="danger" plain>不通过审核</el-button>
                     </span>
                 </el-dialog>
 
@@ -123,24 +128,75 @@
         el:'#provinceRecordApp',
         data: {
             marketData: [],
-            dialogVisible:false
+            dialogVisible:false,
+            detailData:{
+                name:'',
+                location:'',
+                people:'',
+                mobile:'',
+                phone:'',
+                fax:'',
+                marketId:0,
+                feedback:''
+            }
         },
         methods:{
             handleClose(done) {
                     done();
             },
-            handleClick: function() {
+            handleClick: function(obj) {
+                // console.log(obj.number);
+                this.detailData.name = obj.regionName;
+                this.detailData.fax = obj.regionEmpFax;
+                this.detailData.location = obj.regionName;
+                this.detailData.mobile = obj.regionEmpContactMobi;
+                this.detailData.phone = obj.regionEmpContactNum;
+                this.detailData.people = obj.regionEmpContact;
+                this.detailData.marketId = obj.regionEmpId;
                 vue2.dialogVisible = true;
+            },
+            handlePass(){
+                var flag = 0;
+                $.ajax({
+                    url:'/province/record/pass',
+                    type:'post',
+                    data:{
+                        aimId:this.detailData.marketId,
+                        feedback:''
+                    },
+                    success(res){
+                        console.log('success');
+                    },
+                    error(res){
+                        console.log('error')
+                    }
+                });
+                    // this.$message({
+                    //     type: 'success',
+                    //     message: '备案通过!'
+                    // });
+                    // this.dialogVisible = false;
+                    // this.$message({
+                    //     type: 'error',
+                    //     message: '出错了哦!'
+                    // });
+            },
+            handleReject(){
+                this.$message.error('错了哦，这是一条错误消息');
+                this.dialogVisible = false;
             },
             getList(){
                 $.ajax({
                     url:'/province/record/examineQuery',
                     type:'post',
                     success(res){
-                        // for(var i = 0; i < res.length;i ++){
-                        //     res[i].createTime=
-                        // }
-                        vue2.marketData=res;
+                        for(var i = 0; i < res.data.length;i ++){
+                            res.data[i].createTime=res.data[i].createTime.substring(0,10) + ' '
+                                + res.data[i].createTime.substring(11,19);
+                            res.data[i].stateInChinese='待审核';
+                            res.data[i].number=i+1;
+                        }
+                        vue2.marketData=res.data;
                     }
                 })
             }

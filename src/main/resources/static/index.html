@@ -169,14 +169,15 @@
                     this.src='/html/'+this.menu[index].url;
                     this.setupWatcher();
                 }else{
+                    console.log(1);
                     var i = index.indexOf('-');
+                    console.log(2);
                     this.src='/html/'+this.menu[index.substring(0,i)].child[index.substring(i+1)].url;
                     this.setupWatcher();
                 }
             },
             setupWatcher(){
                 document.getElementById("menuFrame").addEventListener("load",function (ev) {
-                    console.log(1);
                     vue.loading=false;
                 })
             },
