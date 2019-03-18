@@ -46,7 +46,12 @@ html,body,#app{
 }
 
 .el-menu-item:focus{
-    background-color: #515a6e;
+    background-color: transparent;
+    color: #ffd04b !important;
+}
+
+.el-menu-item:active{
+    background-color: transparent;
     color: #ffd04b !important;
 }
 

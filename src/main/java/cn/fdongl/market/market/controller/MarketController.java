@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/market/record")//指定接口的一级路径
@@ -23,12 +24,12 @@ public class MarketController {
 
     //新建备案
     @PostMapping("/insert")
-    public Integer insert(AppUserDetail appUserDetail, Record record,Integer stateFlag) throws Exception{
+    public Integer insert(AppUserDetail appUserDetail, Record record) throws Exception{
         record.setRegionEmpId(appUserDetail.getId());
-        record.setStateFlag(stateFlag);
-        record.setCreateTime();
-        record.setCreater(appUserDetail.getId());
-        record.setReviseTIme(null);
+      //  record.setStateFlag(stateFlag);
+        record.setCreateTime(new Date());
+        record.setCreator(appUserDetail.getId());
+        record.setReviseTime(null);
         record.setReviser(null);
         Integer n=marketMapper.insert(record);
         if(n<=0){
@@ -42,9 +43,9 @@ public class MarketController {
     public Integer update(AppUserDetail appUserDetail,Record record,Integer stateFlag) throws Exception{
         record.setRegionEmpId(appUserDetail.getId());
         record.setStateFlag(stateFlag);
-        record.setCreateTime();
-        record.setCreater(appUserDetail.getId());
-        record.setReviseTIme(null);
+        record.setCreateTime(new Date());
+        record.setCreator(appUserDetail.getId());
+        record.setReviseTime(null);
         record.setReviser(null);
         Integer n=marketMapper.update(record);
         if(n<=0){
