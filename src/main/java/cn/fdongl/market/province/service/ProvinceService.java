@@ -5,7 +5,6 @@ import cn.fdongl.market.province.mapper.ProvinceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 @Service
@@ -17,13 +16,13 @@ public class ProvinceService {
     //根据条件查询已通过的备案
     public List<Record> conditionalQuery(Integer state, String condition){
         if(state==0){
-            return provinceMapper.regionEmpNameQuery(condition);
+            return provinceMapper.recordRegionEmpNameQuery(condition);
         }
         else if(state==1){
-            return provinceMapper.regionNameQuery(condition);
+            return provinceMapper.recordRegionNameQuery(condition);
         }
         else if(state==2){
-            return provinceMapper.regionEmpContactQuery(condition);
+            return provinceMapper.recordRegionEmpContactQuery(condition);
         }
         else return null;
     }
@@ -31,9 +30,9 @@ public class ProvinceService {
     //审核未通过
     @Transactional
     public Integer reject(Integer examineId,Integer aimId,String feedback) throws RuntimeException{
-        int n=provinceMapper.selectNum(aimId);
+        int n=provinceMapper.recordSelectNum(aimId);
         if(n>0){
-            n=provinceMapper.deleteReject(aimId);
+            n=provinceMapper.recordDeleteReject(aimId);
             if(n<=0){
                 throw new RuntimeException();
             }
@@ -48,7 +47,7 @@ public class ProvinceService {
             return 0;
         }
         else{
-            n=provinceMapper.updateReject(examineId,aimId);
+            n=provinceMapper.recordUpdateReject(examineId,aimId);
             if(n<=0){
                 throw new RuntimeException();
             }
@@ -67,13 +66,13 @@ public class ProvinceService {
     //审核通过
     @Transactional
     public Integer pass(Integer examineId,Integer aimId,String feedback) throws RuntimeException{
-        int n=provinceMapper.selectNum(aimId);
+        int n=provinceMapper.recordSelectNum(aimId);
         if(n>0){
-            n=provinceMapper.updateExpirePass(examineId,aimId);
+            n=provinceMapper.recordUpdateExpirePass(examineId,aimId);
             if(n<=0){
                 throw new RuntimeException();
             }
-            n=provinceMapper.updatePass(examineId, aimId);
+            n=provinceMapper.recordUpdatePass(examineId, aimId);
             if(n<=0){
                 throw new RuntimeException();
             }
@@ -88,11 +87,11 @@ public class ProvinceService {
             return 0;
         }
         else{
-            n=provinceMapper.updatePass(examineId,aimId);
+            n=provinceMapper.recordUpdatePass(examineId,aimId);
             if(n<=0){
                 throw new RuntimeException();
             }
-            n=provinceMapper.updateActivation(examineId,aimId);
+            n=provinceMapper.recordUpdateActivation(examineId,aimId);
             if(n<=0){
                 throw new RuntimeException();
             }

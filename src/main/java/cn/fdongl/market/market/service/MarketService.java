@@ -12,11 +12,16 @@ public class MarketService {
     MarketMapper marketMapper;
 
     //监测点默认查询
-    public Record select(Integer userId){
-        Record record=marketMapper.selectFinished(userId);
+    public Record recordSelect(Integer userId){
+        Record record=marketMapper.recordSelectFinished(userId);
         if(record==null){
-            return marketMapper.selectUnfinished(userId);
+            return marketMapper.recordSelectUnfinished(userId);
         }
         else return record;
     }
+    
+    public Integer uploadInsert(){
+    }
 }
+
+

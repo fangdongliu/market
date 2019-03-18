@@ -25,7 +25,7 @@ public interface ProvinceMapper {
             "revise_time AS reviseTIme, \n" +
             "reviser AS reviser \n" +
             "from t_record_info where state_flag=1;")
-    List<Record> examineQuery();
+    List<Record> recordExamineQuery();
 
     //查询监测点名称
     @Select("SELECT \n" +
@@ -42,7 +42,7 @@ public interface ProvinceMapper {
             "revise_time AS reviseTIme, \n" +
             "reviser AS reviser \n" +
             "from t_record_info where state_flag=2 and region_emp_name like #{param1};")
-    List<Record> regionEmpNameQuery(String condition);
+    List<Record> recordRegionEmpNameQuery(String condition);
 
     //查询地区名称
     @Select("SELECT \n" +
@@ -59,7 +59,7 @@ public interface ProvinceMapper {
             "revise_time AS reviseTIme, \n" +
             "reviser AS reviser \n" +
             "from t_record_info where state_flag=2 and region_name like #{param1};")
-    List<Record> regionNameQuery(String condition);
+    List<Record> recordRegionNameQuery(String condition);
 
     //查询联系人名称
     @Select("SELECT \n" +
@@ -76,39 +76,39 @@ public interface ProvinceMapper {
             "revise_time AS reviseTIme, \n" +
             "reviser AS reviser \n" +
             "from t_record_info where state_flag=2 and region_emp_contact like #{param1};")
-    List<Record> regionEmpContactQuery(String condition);
+    List<Record> recordRegionEmpContactQuery(String condition);
 
     //备案未通过时更新数据
     @Update("update t_record_info \n" +
             "set state_flag=0,revise_time=now(),reviser=#{param1} \n" +
             "where region_emp_id=#{param2} and state_flag=1;")
-    Integer updateReject(Integer examineId,Integer aimId);
+    Integer recordUpdateReject(Integer examineId,Integer aimId);
 
     //备案未通过时删除数据
     @Delete("delete from t_record_info \n" +
             "where region_emp_id=#{param1} and state_flag=1;")
-    Integer deleteReject(Integer aimId);
+    Integer recordDeleteReject(Integer aimId);
 
     //备案通过时更新数据
     @Update("update t_record_info \n" +
             "set state_flag=2,revise_time=now(),reviser=#{param1} \n" +
             "where region_emp_id=#{param2} and state_flag=1;")
-    Integer updatePass(Integer examineId,Integer aimId);
+    Integer recordUpdatePass(Integer examineId,Integer aimId);
 
     //备案通过时更新过期数据
     @Update("update t_record_info \n" +
             "set state_flag=3,revise_time=now(),reviser=#{param1} \n" +
             "where region_emp_id=#{param2} and state_flag=2;")
-    Integer updateExpirePass(Integer examineId,Integer aimId);
+    Integer recordUpdateExpirePass(Integer examineId,Integer aimId);
 
     //激活账号
     @Update("update t_user set state_flag=1 \n" +
             "where user_id=#{param1};")
-    Integer updateActivation(Integer examineId,Integer aimId);
+    Integer recordUpdateActivation(Integer examineId,Integer aimId);
 
     //根据id查询已通过备案的个数
     @Select("select count(1) from t_record_info where region_emp_id=#{param1} and state_flag=2;")
-    Integer selectNum(Integer userId);
+    Integer recordSelectNum(Integer userId);
 
     //发送一条通知
     @Insert("insert into t_notice(notice_title,notice_content,create_time,creator,reciver) \n" +

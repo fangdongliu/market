@@ -16,7 +16,7 @@ public interface MarketMapper {
     @Insert("INSERT INTO \n" +
             "t_record_info(region_emp_id,region_emp_name,region_name,region_emp_contact,region_emp_contact_mobi,region_emp_contact_num,region_emp_fax,state_flag,create_time,creator,revise_time,reviser,delete_flag) \n" +
             "VALUES(#{regionEmpId},#{regionEmpName},#{regionName},#{regionEmpContact},#{regionEmpContactMobi},#{regionEmpContactNum},#{regionEmpFax},#{stateFlag},#{createTime},#{creator},#{reviseTime},#{reviser},0);")
-    Integer insert(Record record);
+    Integer recordInsert(Record record);
 
     //用户更新一条备案信息
     @Update("UPDATE t_record_info SET \n" +
@@ -33,7 +33,7 @@ public interface MarketMapper {
             "revise_time=#{reviseTIme}, \n" +
             "reviser=#{reviser} \n" +
             "where region_emp_id=#{regionEmpId} and state_flag=0;")
-    Integer update(Record record);
+    Integer recordUpdate(Record record);
 
     //根据用户id查询已完成的备案信息
     @Select("SELECT \n" +
@@ -50,7 +50,7 @@ public interface MarketMapper {
             "revise_time AS reviseTIme, \n" +
             "reviser AS reviser \n" +
             "from t_record_info where state_flag=2;")
-    Record selectFinished(Integer userId);
+    Record recordSelectFinished(Integer userId);
 
     //根据用户id查询保存或上传的备案信息
     @Select("SELECT \n" +
@@ -67,5 +67,5 @@ public interface MarketMapper {
             "revise_time AS reviseTIme, \n" +
             "reviser AS reviser \n" +
             "from t_record_info where (state_flag=0 or state_flag=1);")
-    Record selectUnfinished(Integer userId);
+    Record recordSelectUnfinished(Integer userId);
 }
