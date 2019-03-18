@@ -1,9 +1,10 @@
 package cn.fdongl.market.market.service;
 
-import cn.fdongl.market.market.entity.Record;
+import cn.fdongl.market.market.entity.*;
 import cn.fdongl.market.market.mapper.MarketMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MarketService {
@@ -19,8 +20,21 @@ public class MarketService {
         }
         else return record;
     }
-    
-    public Integer uploadInsert(){
+
+    @Transactional
+    public Integer uploadInsert(UploadInfo uploadInfo,
+                                TotalNum totalNum,
+                                IndustryNum industryNum,
+                                EmployerNum employerNum,
+                                ProfNum profNum,
+                                MostNeeded mostNeeded,
+                                LeastNeeded leastNeeded,
+                                JobSeekerNum jobSeekerNum,
+                                SexNum sexNum,
+                                AgeNum ageNum,
+                                DegreeNum degreeNum,
+                                TechGrageNum techGrageNum) throws RuntimeException{
+
     }
 }
 

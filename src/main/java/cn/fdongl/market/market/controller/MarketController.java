@@ -80,7 +80,22 @@ public class MarketController {
         uploadInfo.setStateFlag(stateFlag);
         uploadInfo.setCreator(appUserDetail.getId());
         uploadInfo.setCreateTime();
-
+        int n=marketService.uploadInsert(
+                uploadInfo,
+                totalNum,
+                industryNum,
+                employerNum,
+                profNum,
+                mostNeeded,
+                leastNeeded,
+                jobSeekerNum,
+                sexNum,
+                ageNum,
+                degreeNum,
+                techGrageNum);
+        if(n<=0){
+            throw new Exception();
+        }
         return 0;
     }
 }
