@@ -30,7 +30,7 @@ public interface ProvinceMapper {
             "from t_record_info where state_flag=1;")
     List<Record> recordExamineQuery();
 
-    //查询监测点名称
+    //查询备案，根据监测点名称
     @Select("SELECT \n" +
             "region_emp_id AS regionEmpId, \n" +
             "region_emp_name AS regionEmpName, \n" +
@@ -47,7 +47,7 @@ public interface ProvinceMapper {
             "from t_record_info where state_flag=2 and region_emp_name like #{param1};")
     List<Record> recordRegionEmpNameQuery(String condition);
 
-    //查询地区名称
+    //查询备案，根据地区名称
     @Select("SELECT \n" +
             "region_emp_id AS regionEmpId, \n" +
             "region_emp_name AS regionEmpName, \n" +
@@ -64,7 +64,7 @@ public interface ProvinceMapper {
             "from t_record_info where state_flag=2 and region_name like #{param1};")
     List<Record> recordRegionNameQuery(String condition);
 
-    //查询联系人名称
+    //查询备案，根据联系人名称
     @Select("SELECT \n" +
             "region_emp_id AS regionEmpId, \n" +
             "region_emp_name AS regionEmpName, \n" +
@@ -114,12 +114,13 @@ public interface ProvinceMapper {
     Integer recordSelectNum(Integer userId);
 
     //发送一条通知
-    @Insert("insert into t_notice(notice_title,notice_content,create_time,creator,reciver) \n" +
+    @Insert("insert into t_notice(notice_title,notice_content,create_time,creator,receiver) \n" +
             "values(#{param1},#{param2},now(),#{param3},#{param4});")
     Integer sendMessage(String title,String content,Integer examineId,Integer aimId);
+
     //新增调查期
     @Insert("insert into t_upload_period(upload_period_id,start_date,end_date,create_time,creator,delete_flag)\n"
-            +"values(#{uploadPeriodId},#{startDate},#{endDate},#{creatTime},#{crateor},#{deleteFlag});"
+            +"values(#{uploadPeriodId},#{startDate},#{endDate},#{creatTime},#{creator},#{deleteFlag});"
     )
     Integer periodInsert(uploadPeriod period);
 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.Date;
 
 @RestController
@@ -20,43 +21,50 @@ public class MarketController extends ControllerBase {
 
     //新建备案
     @PostMapping("/record/insert")
-    public Integer RecordInsert(AppUserDetail appUserDetail, Record record,Integer stateFlag) throws Exception{
+    public Object RecordInsert(AppUserDetail appUserDetail, Record record){
         record.setRegionEmpId(appUserDetail.getId());
-        record.setStateFlag(stateFlag);
         record.setCreateTime(new Date());
         record.setCreator(appUserDetail.getId());
-        record.setReviseTime(null);
-        record.setReviser(null);
-        Integer n=marketService.recordInsert(record);
-        if(n<=0){
-            return 1;
+        try {
+            Integer n=marketService.recordInsert(record);
+            if(n<=0){
+                return fail();
+            }
+            return success();
+        }catch (Exception e){
+            return fail();
         }
-        return 0;
     }
 
     //更新备案
     @PostMapping("/record/update")
-    public Integer RecordUpdate(AppUserDetail appUserDetail,Record record,Integer stateFlag) throws Exception{
+    public Object RecordUpdate(AppUserDetail appUserDetail,Record record){
         record.setRegionEmpId(appUserDetail.getId());
-        record.setStateFlag(stateFlag);
         record.setCreateTime(new Date());
         record.setCreator(appUserDetail.getId());
-        record.setReviseTime(null);
-        record.setReviser(null);
-        Integer n=marketService.recordUpdate(record);
-        if(n<=0){
-            return 1;
+        try {
+            Integer n=marketService.recordUpdate(record);
+            if(n<=0){
+                return fail();
+            }
+            return success();
+        }catch (Exception e){
+            return fail();
         }
-        return 0;
     }
 
-    //查询备案
+    //查询个人备案
     @PostMapping("/record/select")
-    public Record RecordSelect(AppUserDetail appUserDetail) throws Exception{
-        return marketService.recordSelect(appUserDetail.getId());
+    public Object RecordSelect(AppUserDetail appUserDetail){
+        try {
+            Object data=marketService.recordSelect(appUserDetail.getId());
+            return success(data);
+        }catch (Exception e){
+            return fail();
+        }
     }
 
-    //新建数据上传
+    //新建数据上传,未完成
     @PostMapping("/upload/insert")
     public Integer UploadInsert(
             AppUserDetail appUserDetail,
@@ -71,7 +79,7 @@ public class MarketController extends ControllerBase {
             AgeNum ageNum,
             DegreeNum degreeNum,
             TechGrageNum techGrageNum,
-            Integer stateFlag) throws Exception {
+            Integer stateFlag){
         UploadInfo uploadInfo=new UploadInfo();
         uploadInfo.setStateFlag(stateFlag);
         uploadInfo.setCreator(appUserDetail.getId());
@@ -89,9 +97,6 @@ public class MarketController extends ControllerBase {
                 ageNum,
                 degreeNum,
                 techGrageNum);
-        if(n<=0){
-            throw new Exception();
-        }
         return 0;
     }
 }

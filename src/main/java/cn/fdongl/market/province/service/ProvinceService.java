@@ -5,6 +5,7 @@ import cn.fdongl.market.province.mapper.ProvinceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
@@ -13,13 +14,13 @@ public class ProvinceService {
     @Autowired
     ProvinceMapper provinceMapper;
 
-    //查询所有待审核的备案
-    public List<Record> recordExamineQuery(){
+    //查询所有待审核的备案,非事务
+    public List<Record> recordExamineQuery() throws Exception {
         return provinceMapper.recordExamineQuery();
     }
 
-    //根据条件查询已通过的备案
-    public List<Record> conditionalQuery(Integer state, String condition){
+    //根据条件查询已通过的备案，非事务
+    public List<Record> recordConditionalQuery(Integer state,String condition) throws Exception {
         if(state==0){
             return provinceMapper.recordRegionEmpNameQuery(condition);
         }
@@ -32,18 +33,19 @@ public class ProvinceService {
         else return null;
     }
 
-    //审核未通过
+    //审核未通过，事务
     @Transactional
-    public Integer reject(Integer examineId,Integer aimId,String feedback) throws RuntimeException{
+    public Integer recordReject(Integer examineId,Integer aimId,String content) throws RuntimeException {
         int n=provinceMapper.recordSelectNum(aimId);
         if(n>0){
             n=provinceMapper.recordDeleteReject(aimId);
             if(n<=0){
                 throw new RuntimeException();
+
             }
             n=provinceMapper.sendMessage(
                     "您的备案修改未通过审核",
-                    feedback,
+                    content,
                     examineId,
                     aimId);
             if(n<=0){
@@ -51,14 +53,14 @@ public class ProvinceService {
             }
             return 0;
         }
-        else{
+        else if(n==0){
             n=provinceMapper.recordUpdateReject(examineId,aimId);
             if(n<=0){
                 throw new RuntimeException();
             }
             n=provinceMapper.sendMessage(
                     "您的备案未通过审核",
-                    feedback,
+                    content,
                     examineId,
                     aimId);
             if(n<=0){
@@ -66,11 +68,12 @@ public class ProvinceService {
             }
             return 0;
         }
+        else throw new RuntimeException();
     }
 
-    //审核通过
+    //审核通过，事务
     @Transactional
-    public Integer pass(Integer examineId,Integer aimId,String feedback) throws RuntimeException{
+    public Integer recordPass(Integer examineId, Integer aimId, String content) throws RuntimeException {
         int n=provinceMapper.recordSelectNum(aimId);
         if(n>0){
             n=provinceMapper.recordUpdateExpirePass(examineId,aimId);
@@ -83,7 +86,7 @@ public class ProvinceService {
             }
             n=provinceMapper.sendMessage(
                     "您的备案修改已通过审核",
-                    feedback,
+                    content,
                     examineId,
                     aimId);
             if(n<=0){
@@ -91,18 +94,18 @@ public class ProvinceService {
             }
             return 0;
         }
-        else{
-            n=provinceMapper.recordUpdatePass(examineId,aimId);
+        else if(n==0){
+            n=provinceMapper.recordUpdateActivation(examineId,aimId);
             if(n<=0){
                 throw new RuntimeException();
             }
-            n=provinceMapper.recordUpdateActivation(examineId,aimId);
+            n=provinceMapper.recordUpdatePass(examineId,aimId);
             if(n<=0){
                 throw new RuntimeException();
             }
             n=provinceMapper.sendMessage(
                     "您的备案已通过审核",
-                    feedback,
+                    content,
                     examineId,
                     aimId);
             if(n<=0){
@@ -110,5 +113,6 @@ public class ProvinceService {
             }
             return 0;
         }
+        else throw new RuntimeException();
     }
 }

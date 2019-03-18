@@ -12,18 +12,18 @@ public class MarketService {
     @Autowired
     MarketMapper marketMapper;
 
-    //监测点新建备案
-    public Integer recordInsert(Record record){
+    //监测点新建备案，非事务
+    public Integer recordInsert(Record record) throws Exception {
         return marketMapper.recordInsert(record);
     }
 
-    //监测点更新备案
-    public Integer recordUpdate(Record record){
+    //监测点更新备案，非事务
+    public Integer recordUpdate(Record record) throws Exception {
         return marketMapper.recordUpdate(record);
     }
 
-    //监测点默认查询
-    public Record recordSelect(Integer userId){
+    //监测点默认查询，非事务
+    public Record recordSelect(Integer userId) throws Exception {
         Record record=marketMapper.recordSelectFinished(userId);
         if(record==null){
             return marketMapper.recordSelectUnfinished(userId);
@@ -31,7 +31,7 @@ public class MarketService {
         else return record;
     }
 
-    //监测点新建上传数据
+    //监测点新建上传数据，事务，未完成
     @Transactional
     public Integer uploadInsert(UploadInfo uploadInfo,
                                 TotalNum totalNum,
@@ -44,7 +44,7 @@ public class MarketService {
                                 SexNum sexNum,
                                 AgeNum ageNum,
                                 DegreeNum degreeNum,
-                                TechGrageNum techGrageNum) throws RuntimeException{
-
+                                TechGrageNum techGrageNum) throws RuntimeException {
+        return 0;
     }
 }

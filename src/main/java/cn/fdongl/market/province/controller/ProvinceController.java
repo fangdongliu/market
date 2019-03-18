@@ -1,7 +1,5 @@
 package cn.fdongl.market.province.controller;
 
-import cn.fdongl.market.market.entity.Record;
-import cn.fdongl.market.province.mapper.ProvinceMapper;
 import cn.fdongl.market.province.service.ProvinceService;
 import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.util.ControllerBase;
@@ -9,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
 
 @RestController
 @RequestMapping("/province")
@@ -20,33 +17,51 @@ public class ProvinceController extends ControllerBase {
 
     //查询所有待审核的备案信息
     @PostMapping("/record/examineQuery")
-    public List<Record> RecordExamineQuery(){
-        return provinceService.recordExamineQuery();
+    public Object RecordExamineQuery(){
+        try {
+            Object data=provinceService.recordExamineQuery();
+            return success(data);
+        }catch (Exception e){
+            return fail();
+        }
     }
 
     //根据条件查询已通过的备案信息
     @PostMapping("/record/conditionalQuery")
-    public List<Record> RecordConditionalQuery(Integer state,String condition){
-        return provinceService.conditionalQuery(state, condition);
+    public Object RecordConditionalQuery(Integer state,String condition){
+        try {
+            Object data=provinceService.recordConditionalQuery(state, condition);
+            return success(data);
+        }catch (Exception e){
+            return fail();
+        }
     }
 
     //审核拒绝通过
     @PostMapping("/record/reject")
-    public Integer RecordReject(AppUserDetail appUserDetail,Integer aimId,String feedback) throws Exception{
-        int n=provinceService.reject(appUserDetail.getId(),aimId,feedback);
-        if(n==1){
-            throw new Exception();
+    public Object RecordReject(AppUserDetail appUserDetail,Integer aimId,String feedback){
+        try {
+            int n=provinceService.recordReject(appUserDetail.getId(),aimId,feedback);
+            if(n!=0){
+                return fail();
+            }
+            return success();
+        }catch (Exception e){
+            return fail();
         }
-        return 0;
     }
 
     //审核通过
     @PostMapping("/record/pass")
-    public Integer RecordPass(AppUserDetail appUserDetail,Integer aimId,String feedback) throws Exception{
-        int n=provinceService.pass(appUserDetail.getId(),aimId,feedback);
-        if(n==1){
-            throw new Exception();
+    public Object RecordPass(AppUserDetail appUserDetail,Integer aimId,String feedback){
+        try {
+            int n=provinceService.recordPass(appUserDetail.getId(),aimId,feedback);
+            if(n!=0){
+                return fail();
+            }
+            return success();
+        }catch (Exception e){
+            return fail();
         }
-        return 0;
     }
 }
