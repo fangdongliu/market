@@ -11,7 +11,7 @@ public class uploadPeriod {
     String  startDate;//开始日期,sql.date
     String endDate;//结束日期,sql.date
     String creatTime;//创建日期,util.date
-    Integer crateor;//创建用户id
+    Integer creator;//创建用户id
     String reviseTime;//最后修改日期,util.date
     Integer reviser;//最后修改用户id
     Integer deleteFlag;//删除标志位，弃用
