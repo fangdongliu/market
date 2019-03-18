@@ -1,5 +1,7 @@
 package cn.fdongl.market.province.controller;
 
+import cn.fdongl.market.province.entity.InnerUploadPeriod;
+import cn.fdongl.market.province.entity.uploadPeriod;
 import cn.fdongl.market.province.service.ProvinceService;
 import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.util.ControllerBase;
@@ -7,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.sql.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/province")
@@ -64,4 +69,50 @@ public class ProvinceController extends ControllerBase {
             return fail();
         }
     }
+    //新建上报时限
+    @PostMapping("/investigatePeriod/insert")
+    public Object uploadPeriodInsert(AppUserDetail appUserDetail, uploadPeriod period){
+        try{
+            Date start=null;
+            Date end=null;//将日期从字符串转换为日期类
+            if(!provinceService.timeCheck(start,end)){
+                return fail();//日期不合法则返回fail
+            }
+            InnerUploadPeriod innerPeriod=new InnerUploadPeriod(start,end);
+            innerPeriod.setCrateor(appUserDetail.getId());
+            innerPeriod.setCreatTime(new java.util.Date());
+            innerPeriod.setDeleteFlag(0);
+            if(provinceService.periodInsert(innerPeriod)<=0){
+                return fail();//插入失败则返回fail
+            }
+            else{
+                return success();
+            }
+        }
+        catch (Exception e){
+            return fail();
+        }
+    }
+
+    //修改上报时限
+    @PostMapping("/investigate/update")
+    public Object uploadPeriodUpdate(AppUserDetail appUserDetail,uploadPeriod period){
+        try{
+            Date start=null;
+            Date end=null;//将日期从字符串转换为日期类
+            if(!provinceService.timeCheck(start,end)){
+                return fail();//日期不合法则返回fail
+            }
+            if(provinceService.periodUpdate(start,end,new java.util.Date(),appUserDetail.getId(),period.getUploadPeriodId())<=0){
+                return fail();//update影响条数小于0则返回fail
+            }
+            else {
+                return success();
+            }
+        }
+        catch (Exception e){
+            return fail();
+        }
+    }
+
 }

@@ -2,6 +2,7 @@ package cn.fdongl.market.province.mapper;
 
 
 import cn.fdongl.market.market.entity.Record;
+import cn.fdongl.market.province.entity.InnerUploadPeriod;
 import cn.fdongl.market.province.entity.uploadPeriod;
 import org.apache.ibatis.annotations.*;
 import org.springframework.core.annotation.Order;
@@ -122,7 +123,7 @@ public interface ProvinceMapper {
     @Insert("insert into t_upload_period(upload_period_id,start_date,end_date,create_time,creator,delete_flag)\n"
             +"values(#{uploadPeriodId},#{startDate},#{endDate},#{creatTime},#{creator},#{deleteFlag});"
     )
-    Integer periodInsert(uploadPeriod period);
+    Integer periodInsert(InnerUploadPeriod period);
 
     //修改调查期
     @Update("update t_upload_period\n" +
@@ -173,4 +174,9 @@ public interface ProvinceMapper {
             "delete_flag AS deleteFlag \n" +
             "where upload_period_id=#{param1};")
     List<uploadPeriod> selectById(Integer uploadPeriodID);
+
+    //获取目前调查期数据条数
+    @Select("select \n" +
+            "count(upload_period_id) from t_upload_period;")
+    Integer getPeriodNumber();
 }
