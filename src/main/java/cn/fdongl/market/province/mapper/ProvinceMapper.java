@@ -136,14 +136,13 @@ public interface ProvinceMapper {
 
     //时间点查询调查期
     @Select("SELECT \n" +
-            "upload_period_id AS uploadPeriodId \n" +
-            "start_date AS startDate \n" +
-            "end_date AS endDate \n" +
-            "create_time AS createTime \n" +
-            "creator AS creator \n" +
-            "revise_date AS reviseDate \n" +
-            "reviser AS reviser \n" +
-            "from t_upload_period \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "start_date AS startDate, \n" +
+            "end_date AS endDate, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_date AS reviseDate, \n" +
+            "reviser AS reviser, \n" +
             "delete_flag AS deleteFlag \n" +
             "from t_upload_period \n" +
             "where #{param1} between start_date and end_date limit 1;")
@@ -151,30 +150,29 @@ public interface ProvinceMapper {
 
     //时间段查询调查期
     @Select("SELECT \n" +
-            "upload_period_id AS uploadPeriodId \n" +
-            "start_date AS startDate \n" +
-            "end_date AS endDate \n" +
-            "create_time AS createTime \n" +
-            "creator AS creator \n" +
-            "revise_date AS reviseDate \n" +
-            "reviser AS reviser \n" +
-            "from t_upload_period \n" +
-            "delete_flag AS deleteFlag \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "start_date AS startDate, \n" +
+            "end_date AS endDate, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_date AS reviseDate, \n" +
+            "reviser AS reviser, \n" +
+            "delete_flag AS deleteFlag, \n" +
             "from t_upload_period \n" +
             "where create_time between #{param1} and #{param2};")
     List<InnerUploadPeriod> selectByPeriod(Date startDate,Date endDate);
 
     //按id查询调查期
     @Select("SELECT \n" +
-            "upload_period_id AS uploadPeriodId \n" +
-            "start_date AS startDate \n" +
-            "end_date AS endDate \n" +
-            "create_time AS createTime \n" +
-            "creator AS creator \n" +
-            "revise_date AS reviseDate \n" +
-            "reviser AS reviser \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "start_date AS startDate, \n" +
+            "end_date AS endDate, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_date AS reviseDate, \n" +
+            "reviser AS reviser, \n" +
+            "delete_flag AS deleteFlag, \n" +
             "from t_upload_period \n" +
-            "delete_flag AS deleteFlag \n" +
             "where upload_period_id=#{param1} limit 1;")
     InnerUploadPeriod selectById(Integer uploadPeriodID);
 
