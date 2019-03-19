@@ -2,12 +2,14 @@ package cn.fdongl.market.province.service;
 
 import cn.fdongl.market.market.entity.Record;
 import cn.fdongl.market.province.entity.InnerUploadPeriod;
+import cn.fdongl.market.province.entity.uploadPeriod;
 import cn.fdongl.market.province.mapper.ProvinceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
@@ -149,5 +151,49 @@ public class ProvinceService {
     //更新上报时限
     public Integer periodUpdate(Date startDate, Date endDate, java.util.Date reviseDate, Integer reviser,Integer uploadPeriodId){
         return provinceMapper.periodUpdate(startDate,endDate,reviseDate,reviser,uploadPeriodId);
+    }
+
+    //按id查询上报时限
+    public InnerUploadPeriod uploadPeriodSelectById(Integer periodId){
+        return provinceMapper.selectById(periodId);
+    }
+
+    //将InnerUploadPeriod对象转化为uploadPeriod对象
+    public uploadPeriod InnerUploadPeriodTranform(InnerUploadPeriod input){
+        try {
+            if(input==null){
+                return null;
+            }
+            uploadPeriod output = new uploadPeriod();
+            output.setUploadPeriodId(input.getUploadPeriodId());
+            output.setCreator(input.getCreator());
+            output.setReviser(input.getReviser());
+            output.setDeleteFlag(input.getDeleteFlag());
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            if (input.getStartDate() == null) {
+                output.setStartDate(null);
+            } else {
+                output.setStartDate(format.format(input.getStartDate()));
+            }
+            if (input.getEndDate() == null) {
+                output.setEndDate(null);
+            } else {
+                output.setEndDate(format.format(input.getEndDate()));
+            }
+            if (input.getReviseTime() == null) {
+                output.setReviseTime(null);
+            } else {
+                output.setReviseTime(format.format(input.getReviseTime()));
+            }
+            if (input.getCreatTime() == null) {
+                output.setCreatTime(null);
+            } else {
+                output.setCreatTime(format.format(input.getCreatTime()));
+            }
+            return output;
+        }
+        catch (Exception e){
+            return null;
+        }
     }
 }

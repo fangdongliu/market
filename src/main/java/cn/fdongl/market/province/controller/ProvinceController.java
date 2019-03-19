@@ -98,7 +98,7 @@ public class ProvinceController extends ControllerBase {
     }
 
     //修改上报时限
-    @PostMapping("/investigate/update")
+    @PostMapping("/investigatePeriod/update")
     public Object uploadPeriodUpdate(AppUserDetail appUserDetail,uploadPeriod period){
         try{
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -116,6 +116,28 @@ public class ProvinceController extends ControllerBase {
         }
         catch (Exception e){
             return fail(1);
+        }
+    }
+
+    @PostMapping("/investigatePeriod/selectById")
+    public Object uploadPeriodSelectById(AppUserDetail appUserDetail,Integer uploadPeriodId){
+        try{
+            InnerUploadPeriod innerUploadPeriod=provinceService.uploadPeriodSelectById(uploadPeriodId);
+            if(innerUploadPeriod==null){
+                return fail(null,"No result");
+            }
+            else{
+                uploadPeriod output=provinceService.InnerUploadPeriodTranform(innerUploadPeriod);
+                if(output==null){
+                    return fail("Unknown Error");
+                }
+                else{
+                    return success(output);
+                }
+            }
+        }
+        catch (Exception e){
+            return fail(null,"Unknown Error");
         }
     }
 
