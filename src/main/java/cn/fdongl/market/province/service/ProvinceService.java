@@ -158,6 +158,11 @@ public class ProvinceService {
         return provinceMapper.selectById(periodId);
     }
 
+    //按时间点查询上报时限
+    public InnerUploadPeriod uploadPeriodSelectByTime(Date inputDate){
+        return provinceMapper.selectByTime(inputDate);
+    }
+
     //将InnerUploadPeriod对象转化为uploadPeriod对象
     public uploadPeriod InnerUploadPeriodTranform(InnerUploadPeriod input){
         try {

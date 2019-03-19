@@ -119,6 +119,7 @@ public class ProvinceController extends ControllerBase {
         }
     }
 
+    //按id查询上报时限
     @PostMapping("/investigatePeriod/selectById")
     public Object uploadPeriodSelectById(AppUserDetail appUserDetail,Integer uploadPeriodId){
         try{
@@ -130,6 +131,31 @@ public class ProvinceController extends ControllerBase {
                 uploadPeriod output=provinceService.InnerUploadPeriodTranform(innerUploadPeriod);
                 if(output==null){
                     return fail("Unknown Error");
+                }
+                else{
+                    return success(output);
+                }
+            }
+        }
+        catch (Exception e){
+            return fail(null,"Unknown Error");
+        }
+    }
+
+    //按时间点查询上报时限
+    @PostMapping("/investigatePeriod/selectByTime")
+    public Object uploadPeriodSelectByTime(AppUserDetail appUserDetail,String inputDate){
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            java.sql.Date date = new java.sql.Date(format.parse(inputDate).getTime());
+            InnerUploadPeriod innerUploadPeriod = provinceService.uploadPeriodSelectByTime(date);
+            if(innerUploadPeriod==null){
+                return fail(null,"No result");
+            }
+            else{
+                uploadPeriod output=provinceService.InnerUploadPeriodTranform(innerUploadPeriod);
+                if(output==null){
+                    return fail(null,"Unknown Error");
                 }
                 else{
                     return success(output);
