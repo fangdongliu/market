@@ -146,8 +146,8 @@ public interface ProvinceMapper {
             "from t_upload_period \n" +
             "delete_flag AS deleteFlag \n" +
             "from t_upload_period \n" +
-            "where #{param1} between start_date and end_date;")
-    List<uploadPeriod> selectByTime(Date aimDate);
+            "where #{param1} between start_date and end_date limit 1;")
+    InnerUploadPeriod selectByTime(Date aimDate);
 
     //时间段查询调查期
     @Select("select \n" +
@@ -162,7 +162,7 @@ public interface ProvinceMapper {
             "delete_flag AS deleteFlag \n" +
             "from t_upload_period \n" +
             "where create_time between #{param1} and #{param2};")
-    List<uploadPeriod> selectByPeriod(Date startDate,Date endDate);
+    List<InnerUploadPeriod> selectByPeriod(Date startDate,Date endDate);
 
     //按id查询调查期
     @Select("select \n" +
@@ -175,8 +175,8 @@ public interface ProvinceMapper {
             "reviser AS reviser \n" +
             "from t_upload_period \n" +
             "delete_flag AS deleteFlag \n" +
-            "where upload_period_id=#{param1};")
-    List<uploadPeriod> selectById(Integer uploadPeriodID);
+            "where upload_period_id=#{param1} limit 1;")
+    InnerUploadPeriod selectById(Integer uploadPeriodID);
 
     //获取目前调查期数据条数
     @Select("select \n" +
