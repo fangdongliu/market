@@ -1,8 +1,7 @@
 package cn.fdongl.market.market.mapper;
 
 
-import cn.fdongl.market.market.entity.Record;
-import cn.fdongl.market.market.entity.UploadInfo;
+import cn.fdongl.market.market.entity.*;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -88,7 +87,7 @@ public interface MarketMapper {
     @Insert("INSERT INTO t_total_num \n" +
             "(table_id,need_popu,jobseek_popu) \n" +
             "VALUES(#{tableId},#{needPopu},#{jobseekPopu});")
-    Integer uploadInsertTotalNum();
+    Integer uploadInsertTotalNum(TotalNum totalNum);
 
     //新建一条产业需求人数信息
     @Insert("INSERT INTO t_industry_num \n" +
@@ -100,7 +99,7 @@ public interface MarketMapper {
             "#{elecGasWaterNeed},#{archNeed},#{tranStorPostNeed},#{infoCompSoftNeed},#{retailNeed},#{accoCaterNeed}, \n" +
             "#{financeNeed},#{estateNeed},#{leaseBusiServNeed},#{reseTechAddrNeed},#{waterEnviFaciNeed},#{resiServNeed}, \n" +
             "#{eduNeed},#{healSecuWelfNeed},#{cultSportEnteNeed},#{manaOrgaNeed},#{inteOrgaNeed});")
-    Integer uploadInsertIndustryNum();
+    Integer uploadInsertIndustryNum(IndustryNum industryNum);
 
     //新建一条用人单位性质需求人数信息
     @Insert("INSERT INTO t_employer_num \n" +
@@ -110,7 +109,7 @@ public interface MarketMapper {
             "VALUES(#{tableId},#{staOwnNeed},#{collNeed},#{coopStockNeed},#{jointNeed},#{limiLiabNeed}, \n" +
             "#{limitedNeed},#{privNeed},#{otherEnteNeed},#{hmtInveNeed},#{foreInveEnte},#{indiNeed}, \n" +
             "#{instNeed},#{orgaNeed},#{otherNeed});")
-    Integer uploadInsertEmployerNum();
+    Integer uploadInsertEmployerNum(EmployerNum employerNum);
 
     //新建一条职业供求人数信息
     @Insert("INSERT INTO t_prof_num \n" +
@@ -120,7 +119,7 @@ public interface MarketMapper {
             "VALUES(#{tableId},#{leaderNeed},#{leaderJobseek},#{profTechNeed},#{profTechJobseek},#{staffRelaNeed}, \n" +
             "#{staffRelaJobseek},#{busiServNeed},#{busiServJobseek},#{prodNeed},#{prodJobseek},#{operNeed}, \n" +
             "#{operJobseek},#{otherNeed},#{otherJobseek},#{noRequJobseek});")
-    Integer uploadInsertProfNum();
+    Integer uploadInsertProfNum(ProfNum profNum);
 
     //新建一条需求前十职业信息
     @Insert("INSERT INTO t_most_needed \n" +
@@ -146,7 +145,7 @@ public interface MarketMapper {
             "#{mostProf8Name},#{mostProf8Num},#{mostProf8Need},#{mostProf8Jobseek}, \n" +
             "#{mostProf9Name},#{mostProf9Num},#{mostProf9Need},#{mostProf9Jobseek}, \n" +
             "#{mostProf10Name},#{mostProf10Num},#{mostProf10Need},#{mostProf10Jobseek});")
-    Integer uploadInsertMostNeeded();
+    Integer uploadInsertMostNeeded(MostNeeded mostNeeded);
 
     //新建一条饱和前十职业信息
     @Insert("INSERT INTO t_least_needed \n" +
@@ -172,7 +171,7 @@ public interface MarketMapper {
             "#{leastProf8Name},#{leastProf8Num},#{leastProf8Need},#{leastProf8Jobseek}, \n" +
             "#{leastProf9Name},#{leastProf9Num},#{leastProf9Need},#{leastProf9Jobseek}, \n" +
             "#{leastProf10Name},#{leastProf10Num},#{leastProf10Need},#{leastProf10Jobseek});")
-    Integer uploadInsertLeastNeeded();
+    Integer uploadInsertLeastNeeded(LeastNeeded leastNeeded);
 
     //新建一条人员类别求职人数信息
     @Insert("INSERT INTO t_job_seeker_num \n" +
@@ -180,13 +179,13 @@ public interface MarketMapper {
             "laid_off,retiree,student,\tcity_rural,fore) \n" +
             "VALUES(#{tableId},#{unempYouth},#{graduate},#{empToUnemp},#{othUnemp},#{emped}, \n" +
             "#{laidOff},#{retiree},#{student},#{cityRural},#{fore});")
-    Integer uploadInsertJobSeekerNum();
+    Integer uploadInsertJobSeekerNum(JobSeekerNum jobSeekerNum);
 
     //新建一条性别供求人数信息
     @Insert("INSERT INTO t_sex_num \n" +
             "(table_id,male_need,male_jobseek,female_need,female_jobseek,no_requ_need) \n" +
             "VALUES(#{tableId},#{maleNeed},#{maleJobseek},#{femaleNeed},#{femaleJobseek},#{noRequNeed});")
-    Integer uploadInsertSexNum();
+    Integer uploadInsertSexNum(SexNum sexNum);
 
     //新建一条年龄供求人数信息
     @Insert("INSERT INTO t_age_num \n" +
@@ -194,7 +193,7 @@ public interface MarketMapper {
             "35_44_jobseek,over_45_need,over_45_jobseek,no_requ_need) \n" +
             "VALUES(#{tableId},#{sixteenTwentyfourNeed},#{sixteenTwentyfourJobseek},#{twentyfiveThirtyfourNeed},#{twentyfiveThirtyfourJobseek},#{thirtyfiveFortyfourNeed}, \n" +
             "#{thirtyfiveFortyfourJobseek},#{overFortyfourNeed},#{overFortyfourJobseek},#{noRequNeed});")
-    Integer uploadInsertAgeNum();
+    Integer uploadInsertAgeNum(AgeNum ageNum);
 
     //新建一条文化程度供求人数信息
     @Insert("INSERT INTO t_degree_num \n" +
@@ -202,7 +201,7 @@ public interface MarketMapper {
             "other_high_scho_jobseek,juni_coll_need,juni_coll_jobseek,univ_need,univ_jobseek,no_requ_need) \n" +
             "VALUES(#{tableId},#{belowJuniHighSchoNeed},#{belowJuniHighSchoJobseek},#{highSchoNeed},#{highSchoJobseek},#{otherHighSchoNeed}, \n" +
             "#{otherHighSchoJobseek},#{juniCollNeed},#{juniCollJobseek},#{univNeed},#{univJobseek},#{noRequNeed});")
-    Integer uploadInsertDegreeNum();
+    Integer uploadInsertDegreeNum(DegreeNum degreeNum);
 
     //新建一条技术等级供求人数信息
     @Insert("INSERT INTO t_tech_grade_num \n" +
@@ -214,7 +213,7 @@ public interface MarketMapper {
             "#{profLevel5Need},#{profLevel5Jobseek},#{profLevel4Need},#{profLevel4Jobseek},#{profLevel3Need},#{profLevel3Jobseek}, \n" +
             "#{profLevel2Need},#{profLevel2Jobseek},#{profLevel1Need},#{profLevel1Jobseek},#{primProfNeed},#{primProfJobseek}, \n" +
             "#{mediProfNeed},#{mediProfJobseek},#{seniProfNeed},#{seniProfJobseek},#{noTechJobseek},#{noRequNeed});")
-    Integer uploadInsertTechGrageNum();
+    Integer uploadInsertTechGrageNum(TechGrageNum techGrageNum);
 
     //TODO：12张表的改查sql，总计24个
 }
