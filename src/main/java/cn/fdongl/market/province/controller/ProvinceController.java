@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 @RestController
 @RequestMapping("/province")
@@ -72,8 +73,9 @@ public class ProvinceController extends ControllerBase {
     @PostMapping("/investigatePeriod/insert")
     public Object uploadPeriodInsert(AppUserDetail appUserDetail, uploadPeriod period){
         try{
-            Date start=null;
-            Date end=null;//将日期从字符串转换为日期类
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date start=new java.sql.Date(format.parse(period.getStartDate()).getTime());
+            Date end=new java.sql.Date(format.parse(period.getEndDate()).getTime());//将日期从字符串转换为日期类
             if(!provinceService.timeCheck(start,end)){
                 return fail(2);//日期不合法则返回fail
             }
@@ -99,8 +101,9 @@ public class ProvinceController extends ControllerBase {
     @PostMapping("/investigate/update")
     public Object uploadPeriodUpdate(AppUserDetail appUserDetail,uploadPeriod period){
         try{
-            Date start=null;
-            Date end=null;//将日期从字符串转换为日期类
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date start=new java.sql.Date(format.parse(period.getStartDate()).getTime());
+            Date end=new java.sql.Date(format.parse(period.getEndDate()).getTime());//将日期从字符串转换为日期类
             if(!provinceService.timeCheck(start,end)){
                 return fail(2);//日期不合法则返回fail
             }

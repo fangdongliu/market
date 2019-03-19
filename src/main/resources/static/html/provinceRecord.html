@@ -62,6 +62,20 @@
                     :before-close="handleClose"
                     lock-scroll
                     >
+
+                    <el-dialog
+                            width="30%"
+                            title="请填写拒绝通过备案的原因："
+                            :visible.sync="innerVisible"
+                            append-to-body>
+                        <el-input v-model="rejectedMessage" autosize type="textarea"></el-input>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="handleCancelReject">取消</el-button>
+                            <el-button @click="handleConfirmReject" type="primary">确定</el-button>
+                        </span>
+
+                    </el-dialog>
+
                         <el-row type="flex" justify="center" class="info" align="middle" style="margin-top: 20px">
                             <el-col :span="6" class="infoTitle">
                                 人力资源市场名：
@@ -113,7 +127,7 @@
 
                     <span slot="footer" class="dialog-footer">
                         <el-button @click="handlePass" type="success" plain>通过审核</el-button>
-                        <el-button @click="handleReject" type="danger" plain>不通过审核</el-button>
+                        <el-button @click="innerVisible = true" type="danger" plain>不通过审核</el-button>
                     </span>
                 </el-dialog>
 
@@ -138,15 +152,17 @@
                 fax:'',
                 marketId:0,
                 feedback:''
-            }
+            },
+            innerVisible:false,
+            rejectedMessage:''
         },
         methods:{
             handleClose(done) {
                     done();
             },
             handleClick: function(obj) {
-                // console.log(obj.number);
-                this.detailData.name = obj.regionName;
+                console.log(obj);
+                this.detailData.name = obj.regionEmpName;
                 this.detailData.fax = obj.regionEmpFax;
                 this.detailData.location = obj.regionName;
                 this.detailData.mobile = obj.regionEmpContactMobi;
@@ -156,7 +172,6 @@
                 vue2.dialogVisible = true;
             },
             handlePass(){
-                var flag = 0;
                 $.ajax({
                     url:'/province/record/pass',
                     type:'post',
@@ -165,25 +180,53 @@
                         feedback:''
                     },
                     success(res){
-                        console.log('success');
+                        vue2.$message({
+                            type: 'success',
+                            message: '成功!'
+                        });
+                        vue2.dialogVisible = false;
+                        vue2.getList();
                     },
                     error(res){
-                        console.log('error')
+                        this.$message({
+                            type: 'error',
+                            message: '出错了哦!'
+                        });
+                        vue2.dialogVisible = false;
                     }
                 });
-                    // this.$message({
-                    //     type: 'success',
-                    //     message: '备案通过!'
-                    // });
-                    // this.dialogVisible = false;
-                    // this.$message({
-                    //     type: 'error',
-                    //     message: '出错了哦!'
-                    // });
             },
-            handleReject(){
-                this.$message.error('错了哦，这是一条错误消息');
-                this.dialogVisible = false;
+            handleCancelReject(){
+                this.innerVisible = false;
+                this.dialogVisible = true;
+            },
+            handleConfirmReject(){
+                this.innerVisible = false;
+
+                $.ajax({
+                    url:'/province/record/reject',
+                    type:'post',
+                    data:{
+                        aimId:this.detailData.marketId,
+                        feedback:this.rejectedMessage
+                    },
+                    success(res){
+                        vue2.$message({
+                            type: 'success',
+                            message: '已拒绝!'
+                        });
+                        vue2.dialogVisible = false;
+                        vue2.getList();
+                    },
+                    error(res){
+                        this.$message({
+                            type: 'error',
+                            message: '出错了哦!'
+                        });
+                        vue2.dialogVisible = false;
+                    }
+                })
+
             },
             getList(){
                 $.ajax({
