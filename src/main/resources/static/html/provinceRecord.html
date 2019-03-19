@@ -180,21 +180,21 @@
                         feedback:''
                     },
                     success(res){
-                        console.log('agree success');
+                        vue2.$message({
+                            type: 'success',
+                            message: '成功!'
+                        });
+                        vue2.dialogVisible = false;
+                        vue2.getList();
                     },
                     error(res){
-                        console.log('agree fail')
+                        this.$message({
+                            type: 'error',
+                            message: '出错了哦!'
+                        });
+                        vue2.dialogVisible = false;
                     }
                 });
-                    // this.$message({
-                    //     type: 'success',
-                    //     message: '备案通过!'
-                    // });
-                    // this.dialogVisible = false;
-                    // this.$message({
-                    //     type: 'error',
-                    //     message: '出错了哦!'
-                    // });
             },
             handleCancelReject(){
                 this.innerVisible = false;
@@ -211,14 +211,22 @@
                         feedback:this.rejectedMessage
                     },
                     success(res){
-                        console.log('reject success');
+                        vue2.$message({
+                            type: 'success',
+                            message: '已拒绝!'
+                        });
+                        vue2.dialogVisible = false;
+                        vue2.getList();
                     },
                     error(res){
-                        console.log('reject fail');
+                        this.$message({
+                            type: 'error',
+                            message: '出错了哦!'
+                        });
+                        vue2.dialogVisible = false;
                     }
                 })
 
-                this.dialogVisible = false;
             },
             getList(){
                 $.ajax({

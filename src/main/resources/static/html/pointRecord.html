@@ -20,7 +20,9 @@
                 <el-row type="flex" class="littleTitle">
                     <el-col :span="24">填报人力资源市场信息</el-col>
                 </el-row>
-                <el-row v-if="ifSubmitMarketDetail" class="littleWarning">您当前的信息正在被审核</el-row>
+                <el-row v-if="marketStateFlag===1" class="littleWarning">您当前的信息正在被审核，不可修改</el-row>
+                <el-row v-if="marketStateFlag===2" class="littleWarning">您当前的信息已经通过审核且未过期，不可修改</el-row>
+
                 <el-row type="flex" justify="center">
                     <el-col :span="16">
                         <el-form ref="marketDetailForm" :model="marketDetailForm" label-width="150px">
@@ -69,33 +71,71 @@
                 phone:'',
                 fax:''
             },
-            ifSubmitMarketDetail:-1,
+            ifSubmitMarketDetail:null,
             marketStateFlag:-1
         },
         methods:{
             onSubmitMarketDetail: function() {
-                this.newMarketDetail();
+                if(this.marketStateFlag === -1) {//新建备案
+                    $.ajax({
+                        url:'/market/record/insert',
+                        type:'post',
+                        data:{
+                            regionEmpName:this.marketDetailForm.name,
+                            regionName:this.marketDetailForm.location,
+                            regionEmpContact:this.marketDetailForm.people,
+                            regionEmpContactMobi:this.marketDetailForm.mobile,
+                            regionEmpContactNum:this.marketDetailForm.phone,
+                            regionEmpFax:this.marketDetailForm.fax,
+                            stateFlag:1
+                        },
+                        success(res){
+                            console.log(2)
+                            vue3.$message({
+                                type: 'success',
+                                message: '已提交!'
+                            });
+                            vue3.ifSubmitMarketDetail = true;
+                        },
+                        error(res){
+                            this.$message({
+                                type: 'error',
+                                message: '出错了哦!'
+                            });
+                        }
+                    })
+                }
+                else{//更新备案
+                    $.ajax({
+                        url:'/market/record/update',
+                        type:'post',
+                        data:{
+                            regionEmpName:this.marketDetailForm.name,
+                            regionName:this.marketDetailForm.location,
+                            regionEmpContact:this.marketDetailForm.people,
+                            regionEmpContactMobi:this.marketDetailForm.mobile,
+                            regionEmpContactNum:this.marketDetailForm.phone,
+                            regionEmpFax:this.marketDetailForm.fax,
+                            stateFlag:1
+                        },
+                        success(res){
+                            vue3.$message({
+                                type: 'success',
+                                message: '已提交!'
+                            });
+                            vue3.ifSubmitMarketDetail = true;
+                        },
+                        error(res){
+                            this.$message({
+                                type: 'error',
+                                message: '出错了哦!'
+                            });
+                        }
+                    })
+                }
             },
             resetMarketDetailForm:function(formName) {
                 this.$refs[formName].resetFields();
-            },
-            newMarketDetail(){
-                $.ajax({
-                    url:'/market/record/insert',
-                    type:'post',
-                    data:{
-                        regionEmpName:this.marketDetailForm.name,
-                        regionName:this.marketDetailForm.location,
-                        regionEmpContact:this.marketDetailForm.people,
-                        regionEmpContactMobi:this.marketDetailForm.mobile,
-                        regionEmpContactNum:this.marketDetailForm.phone,
-                        regionEmpFax:this.marketDetailForm.fax,
-                        stateFlag:1
-                    },
-                    success(res){
-                        console.log(res)
-                    }
-                })
             }
         },
         mounted:function () {
@@ -103,16 +143,18 @@
                 url:'/market/record/select',
                 type:'post',
                 success(res){
-                    // console.log(res);
-                    this.marketStateFlag = res.data.stateFlag;
-                    // console.log(this.marketStateFlag);
-                    if(this.marketStateFlag===1) {
-                        this.ifSubmitMarketDetail = true;
-                        // console.log(1)
-                        console.log(this.ifSubmitMarketDetail)
+                    if(res.data === null){
+                        vue3.marketStateFlag = -1;//没有创建过备案
                     }
                     else{
-                        this.ifSubmitMarketDetail = false;
+                        vue3.marketStateFlag = res.data.stateFlag;
+                    }
+                    if(vue3.marketStateFlag===1 || vue3.marketStateFlag ===2) {
+                        //待审核状态 已完成未过期状态 不可修改
+                        vue3.ifSubmitMarketDetail = true;
+                    }
+                    else{
+                        vue3.ifSubmitMarketDetail = false;
                     }
                 },
                 error(res){
