@@ -1,6 +1,5 @@
 package cn.fdongl.market.market.mapper;
 
-
 import cn.fdongl.market.market.entity.*;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -215,8 +214,6 @@ public interface MarketMapper {
             "#{mediProfNeed},#{mediProfJobseek},#{seniProfNeed},#{seniProfJobseek},#{noTechJobseek},#{noRequNeed});")
     Integer uploadInsertTechGrageNum(TechGrageNum techGrageNum);
 
-    //TODO：12张表的改查sql，总计24个
-
     //更新一条上传数据信息
     @Update("UPDATE t_upload_info SET \n" +
             "upload_period_id=#{uploadPeriodId},state_flag={stateFlag},create_time={createTime}, \n" +
@@ -245,64 +242,97 @@ public interface MarketMapper {
 
     //更新一条用人单位性质需求人数信息
     @Update("UPDATE t_employer_num SET \n" +
-            "=#{},=#{},=#{}, \n" +
-            "=#{},=#{},=#{}, \n" +
+            "sta_own_need=#{staOwnNeed},coll_need=#{collNeed},coop_stock_need=#{coopStockNeed}, \n" +
+            "joint_need=#{jointNeed},limi_liab_need=#{limiLiabNeed},limited_need=#{limitedNeed}, \n" +
+            "priv_need=#{privNeed},other_ente_need=#{otherEnteNeed},hmt_inve_need=#{hmtInveNeed}, \n" +
+            "fore_inve_ente=#{foreInveEnte},indi_need=#{indiNeed},inst_need=#{instNeed}, \n" +
+            "orga_need=#{orgaNeed},other_need=#{otherNeed} \n" +
             "where table_id=#{tableId};")
     Integer uploadUpdateEmployerNum(EmployerNum employerNum);
 
     //更新一条职业供求人数信息
     @Update("UPDATE t_prof_num SET \n" +
-            "=#{},=#{},=#{}, \n" +
-            "=#{},=#{},=#{}, \n" +
+            "leader_need=#{leaderNeed},leader_jobseek=#{leaderJobseek},prof_tech_need=#{profTechNeed}, \n" +
+            "prof_tech_jobseek=#{profTechJobseek},staff_rela_need=#{staffRelaNeed},staff_rela_jobseek=#{staffRelaJobseek}, \n" +
+            "busi_serv_need=#{busiServNeed},busi_serv_jobseek=#{busiServJobseek},prod_need=#{prodNeed}, \n" +
+            "prod_jobseek=#{prodJobseek},oper_need=#{operNeed},oper_jobseek=#{operJobseek}, \n" +
+            "other_need=#{otherNeed},other_jobseek=#{otherJobseek},no_requ_jobseek=#{noRequJobseek} \n" +
             "where table_id=#{tableId};")
     Integer uploadUpdateProfNum(ProfNum profNum);
 
     //更新一条需求前十职业信息
     @Update("UPDATE t_most_needed SET \n" +
-            "=#{},=#{},=#{}, \n" +
-            "=#{},=#{},=#{}, \n" +
+            "most_prof1_name=#{mostProf1Name},most_prof1_num=#{mostProf1Num},most_prof1_need=#{mostProf1Need},most_prof1_jobseek=#{mostProf1Jobseek}, \n" +
+            "most_prof2_name=#{mostProf2Name},most_prof2_num=#{mostProf2Num},most_prof2_need=#{mostProf2Need},most_prof2_jobseek=#{mostProf2Jobseek}, \n" +
+            "most_prof3_name=#{mostProf3Name},most_prof3_num=#{mostProf3Num},most_prof3_need=#{mostProf3Need},most_prof3_jobseek=#{mostProf3Jobseek}, \n" +
+            "most_prof4_name=#{mostProf4Name},most_prof4_num=#{mostProf4Num},most_prof4_need=#{mostProf4Need},most_prof4_jobseek=#{mostProf4Jobseek}, \n" +
+            "most_prof5_name=#{mostProf5Name},most_prof5_num=#{mostProf5Num},most_prof5_need=#{mostProf5Need},most_prof5_jobseek=#{mostProf5Jobseek}, \n" +
+            "most_prof6_name=#{mostProf6Name},most_prof6_num=#{mostProf6Num},most_prof6_need=#{mostProf6Need},most_prof6_jobseek=#{mostProf6Jobseek}, \n" +
+            "most_prof7_name=#{mostProf7Name},most_prof7_num=#{mostProf7Num},most_prof7_need=#{mostProf7Need},most_prof7_jobseek=#{mostProf7Jobseek}, \n" +
+            "most_prof8_name=#{mostProf8Name},most_prof8_num=#{mostProf8Num},most_prof8_need=#{mostProf8Need},most_prof8_jobseek=#{mostProf8Jobseek}, \n" +
+            "most_prof9_name=#{mostProf9Name},most_prof9_num=#{mostProf9Num},most_prof9_need=#{mostProf9Need},most_prof9_jobseek=#{mostProf9Jobseek}, \n" +
+            "most_prof10_name=#{mostProf10Name},most_prof10_num=#{mostProf10Num},most_prof10_need=#{mostProf10Need},most_prof10_jobseek=#{mostProf10Jobseek} \n" +
             "where table_id=#{tableId};")
     Integer uploadUpdateMostNeeded(MostNeeded mostNeeded);
 
     //更新一条饱和前十职业信息
     @Update("UPDATE t_least_needed SET \n" +
-            "=#{},=#{},=#{}, \n" +
-            "=#{},=#{},=#{}, \n" +
+            "least_prof1_name=#{leastProf1Name},least_prof1_num=#{leastProf1Num},least_prof1_need=#{leastProf1Need},least_prof1_jobseek=#{leastProf1Jobseek}, \n" +
+            "least_prof2_name=#{leastProf2Name},least_prof2_num=#{leastProf2Num},least_prof2_need=#{leastProf2Need},least_prof2_jobseek=#{leastProf2Jobseek}, \n" +
+            "least_prof3_name=#{leastProf3Name},least_prof3_num=#{leastProf3Num},least_prof3_need=#{leastProf3Need},least_prof3_jobseek=#{leastProf3Jobseek}, \n" +
+            "least_prof4_name=#{leastProf4Name},least_prof4_num=#{leastProf4Num},least_prof4_need=#{leastProf4Need},least_prof4_jobseek=#{leastProf4Jobseek}, \n" +
+            "least_prof5_name=#{leastProf5Name},least_prof5_num=#{leastProf5Num},least_prof5_need=#{leastProf5Need},least_prof5_jobseek=#{leastProf5Jobseek}, \n" +
+            "least_prof6_name=#{leastProf6Name},least_prof6_num=#{leastProf6Num},least_prof6_need=#{leastProf6Need},least_prof6_jobseek=#{leastProf6Jobseek}, \n" +
+            "least_prof7_name=#{leastProf7Name},least_prof7_num=#{leastProf7Num},least_prof7_need=#{leastProf7Need},least_prof7_jobseek=#{leastProf7Jobseek}, \n" +
+            "least_prof8_name=#{leastProf8Name},least_prof8_num=#{leastProf8Num},least_prof8_need=#{leastProf8Need},least_prof8_jobseek=#{leastProf8Jobseek}, \n" +
+            "least_prof9_name=#{leastProf9Name},least_prof9_num=#{leastProf9Num},least_prof9_need=#{leastProf9Need},least_prof9_jobseek=#{leastProf9Jobseek}, \n" +
+            "least_prof10_name=#{leastProf10Name},least_prof10_num=#{leastProf10Num},least_prof10_need=#{leastProf10Need},least_prof10_jobseek=#{leastProf10Jobseek} \n" +
             "where table_id=#{tableId};")
     Integer uploadUpdateLeastNeeded(LeastNeeded leastNeeded);
 
     //更新一条人员类别求职人数信息
     @Update("UPDATE t_job_seeker_num SET \n" +
-            "=#{},=#{},=#{}, \n" +
-            "=#{},=#{},=#{}, \n" +
+            "unemp_youth=#{unempYouth},graduate=#{graduate},emp_to_unemp=#{empToUnemp}, \n" +
+            "oth_unemp=#{othUnemp},emped=#{emped},laid_off=#{laidOff}, \n" +
+            "retiree=#{retiree},student=#{student},city_rural=#{cityRural}, \n" +
+            "fore=#{fore} \n" +
             "where table_id=#{tableId};")
     Integer uploadUpdateJobSeekerNum(JobSeekerNum jobSeekerNum);
 
     //更新一条性别供求人数表信息
     @Update("UPDATE t_sex_num SET \n" +
-            "=#{},=#{},=#{}, \n" +
-            "=#{},=#{},=#{}, \n" +
+            "male_need=#{maleNeed},male_jobseek=#{maleJobseek},female_need=#{femaleNeed}, \n" +
+            "female_jobseek=#{femaleJobseek},no_requ_need=#{noRequNeed} \n" +
             "where table_id=#{tableId};")
     Integer uploadUpdateSexNum(SexNum sexNum);
 
     //更新一条年龄供求人数信息
     @Update("UPDATE t_age_num SET \n" +
-            "=#{},=#{},=#{}, \n" +
-            "=#{},=#{},=#{}, \n" +
+            "16_24_need=#{sixteenTwentyfourNeed},16_24_jobseek=#{sixteenTwentyfourJobseek},25_34_need=#{twentyfiveThirtyfourNeed}, \n" +
+            "25_34_jobseek=#{twentyfiveThirtyfourJobseek},35_44_need=#{thirtyfiveFortyfourNeed},35_44_jobseek=#{thirtyfiveFortyfourJobseek}, \n" +
+            "over_45_need=#{overFortyfourNeed},over_45_jobseek=#{overFortyfourJobseek},no_requ_need=#{noRequNeed} \n" +
             "where table_id=#{tableId};")
     Integer uploadUpdateAgeNum(AgeNum ageNum);
 
     //更新一条文化程度供求人数信息
     @Update("UPDATE t_degree_num SET \n" +
-            "=#{},=#{},=#{}, \n" +
-            "=#{},=#{},=#{}, \n" +
+            "below_juni_high_scho_need=#{belowJuniHighSchoNeed},below_juni_high_scho_jobseek=#{belowJuniHighSchoJobseek},high_scho_need=#{highSchoNeed}, \n" +
+            "high_scho_jobseek=#{highSchoJobseek},other_high_scho_need=#{otherHighSchoNeed},other_high_scho_jobseek=#{otherHighSchoJobseek}, \n" +
+            "juni_coll_need=#{juniCollNeed},juni_coll_jobseek=#{juniCollJobseek},univ_need=#{univNeed}, \n" +
+            "univ_jobseek=#{univJobseek},no_requ_need=#{noRequNeed} \n" +
             "where table_id=#{tableId};")
     Integer uploadUpdateDegreeNum(DegreeNum degreeNum);
 
     //更新一条技术等级供求人数信息
     @Update("UPDATE t_tech_grade_num SET \n" +
-            "=#{},=#{},=#{}, \n" +
-            "=#{},=#{},=#{}, \n" +
+            "prof_level_5_need=#{profLevel5Need},prof_level_5_jobseek=#{profLevel5Jobseek},prof_level_4_need=#{profLevel4Need}, \n" +
+            "prof_level_4_jobseek=#{profLevel4Jobseek},prof_level_3_need=#{profLevel3Need},prof_level_3_jobseek=#{profLevel3Jobseek}, \n" +
+            "prof_level_2_need=#{profLevel2Need},prof_level_2_jobseek=#{profLevel2Jobseek},prof_level_1_need=#{profLevel1Need}, \n" +
+            "prof_level_1_jobseek=#{profLevel1Jobseek},prim_prof_need=#{primProfNeed},prim_prof_jobseek=#{primProfJobseek}, \n" +
+            "medi_prof_need=#{mediProfNeed},medi_prof_jobseek=#{mediProfJobseek},seni_prof_need=#{seniProfNeed}, \n" +
+            "seni_prof_jobseek=#{seniProfJobseek},no_tech_jobseek=#{noTechJobseek},no_requ_need=#{noRequNeed} \n" +
             "where table_id=#{tableId};")
     Integer uploadUpdateTechGrageNum(TechGrageNum techGrageNum);
+
+    //TODO：12张表的查sql，总计12个
 }
