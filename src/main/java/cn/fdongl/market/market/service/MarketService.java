@@ -31,7 +31,7 @@ public class MarketService {
         else return record;
     }
 
-    //监测点新建上传数据，事务，未完成
+    //监测点新建上传数据，事务
     @Transactional
     public Integer uploadInsert(UploadInfo uploadInfo,
                                 TotalNum totalNum,
@@ -49,6 +49,65 @@ public class MarketService {
         if(tableId<=0){
             throw new RuntimeException();
         }
-        int n;
+        int n=marketMapper.uploadInsertUploadInfo(uploadInfo);
+        if(n<=0){
+            throw new RuntimeException();
+        }
+        totalNum.setTableId(tableId);
+        industryNum.setTableId(tableId);
+        employerNum.setTableId(tableId);
+        profNum.setTableId(tableId);
+        mostNeeded.setTableId(tableId);
+        leastNeeded.setTableId(tableId);
+        jobSeekerNum.setTableId(tableId);
+        sexNum.setTableId(tableId);
+        ageNum.setTableId(tableId);
+        degreeNum.setTableId(tableId);
+        techGrageNum.setTableId(tableId);
+        n=marketMapper.uploadInsertTotalNum(totalNum);
+        if(n<=0){
+            throw new RuntimeException();
+        }
+        n=marketMapper.uploadInsertIndustryNum(industryNum);
+        if(n<=0){
+            throw new RuntimeException();
+        }
+        n=marketMapper.uploadInsertEmployerNum(employerNum);
+        if(n<=0){
+            throw new RuntimeException();
+        }
+        n=marketMapper.uploadInsertProfNum(profNum);
+        if(n<=0){
+            throw new RuntimeException();
+        }
+        n=marketMapper.uploadInsertMostNeeded(mostNeeded);
+        if(n<=0){
+            throw new RuntimeException();
+        }
+        n=marketMapper.uploadInsertLeastNeeded(leastNeeded);
+        if(n<=0){
+            throw new RuntimeException();
+        }
+        n=marketMapper.uploadInsertJobSeekerNum(jobSeekerNum);
+        if(n<=0){
+            throw new RuntimeException();
+        }
+        n=marketMapper.uploadInsertSexNum(sexNum);
+        if(n<=0){
+            throw new RuntimeException();
+        }
+        n=marketMapper.uploadInsertAgeNum(ageNum);
+        if(n<=0){
+            throw new RuntimeException();
+        }
+        n=marketMapper.uploadInsertDegreeNum(degreeNum);
+        if(n<=0){
+            throw new RuntimeException();
+        }
+        n=marketMapper.uploadInsertTechGrageNum(techGrageNum);
+        if(n<=0){
+            throw new RuntimeException();
+        }
+        return 0;
     }
 }
