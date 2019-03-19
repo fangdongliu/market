@@ -32,7 +32,7 @@ public interface MarketMapper {
             "state_flag=#{stateFlag}, \n" +
             "create_time=#{createTime}, \n" +
             "creator=#{creator}, \n" +
-            "revise_time=#{reviseTIme}, \n" +
+            "revise_time=#{reviseTime}, \n" +
             "reviser=#{reviser} \n" +
             "where region_emp_id=#{regionEmpId} and state_flag=0;")
     Integer recordUpdate(Record record);
@@ -216,4 +216,6 @@ public interface MarketMapper {
     Integer uploadInsertTechGrageNum(TechGrageNum techGrageNum);
 
     //TODO：12张表的改查sql，总计24个
+
+    //
 }
