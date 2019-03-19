@@ -3,7 +3,7 @@ package cn.fdongl.market.market.entity;
 import lombok.Data;
 
 @Data
-public class DegreeNum {
+public class DegreeNum {//文化程度供求人数表，共12条数据
 
     Integer tableId;//数据表id
     Integer belowJuniHighSchoNeed;//初中及以下需求人数

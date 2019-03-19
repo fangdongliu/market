@@ -3,7 +3,7 @@ package cn.fdongl.market.market.entity;
 import lombok.Data;
 
 @Data
-public class AgeNum {
+public class AgeNum {//年龄供求人数表，共10条数据
 
     Integer tableId;//数据表id
     Integer sixteenTwentyfourNeed;//16-24岁需求人数

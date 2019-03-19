@@ -15,7 +15,7 @@ import java.util.List;
 public interface ProvinceMapper {
 
     //查询所有待审核的备案
-    @Select("select \n" +
+    @Select("SELECT \n" +
             "region_emp_id AS regionEmpId, \n" +
             "region_emp_name AS regionEmpName, \n" +
             "region_name AS regionName, \n" +
@@ -32,7 +32,7 @@ public interface ProvinceMapper {
     List<Record> recordExamineQuery();
 
     //查询备案，根据监测点名称
-    @Select("select \n" +
+    @Select("SELECT \n" +
             "region_emp_id AS regionEmpId, \n" +
             "region_emp_name AS regionEmpName, \n" +
             "region_name AS regionName, \n" +
@@ -49,7 +49,7 @@ public interface ProvinceMapper {
     List<Record> recordRegionEmpNameQuery(String condition);
 
     //查询备案，根据地区名称
-    @Select("select \n" +
+    @Select("SELECT \n" +
             "region_emp_id AS regionEmpId, \n" +
             "region_emp_name AS regionEmpName, \n" +
             "region_name AS regionName, \n" +
@@ -66,7 +66,7 @@ public interface ProvinceMapper {
     List<Record> recordRegionNameQuery(String condition);
 
     //查询备案，根据联系人名称
-    @Select("select \n" +
+    @Select("SELECT \n" +
             "region_emp_id AS regionEmpId, \n" +
             "region_emp_name AS regionEmpName, \n" +
             "region_name AS regionName, \n" +
@@ -83,59 +83,59 @@ public interface ProvinceMapper {
     List<Record> recordRegionEmpContactQuery(String condition);
 
     //备案未通过时更新数据
-    @Update("update t_record_info \n" +
+    @Update("UPDATE t_record_info \n" +
             "set state_flag=0,revise_time=now(),reviser=#{param1} \n" +
             "where region_emp_id=#{param2} and state_flag=1;")
     Integer recordUpdateReject(Integer examineId,Integer aimId);
 
     //备案未通过时删除数据
-    @Delete("delete from t_record_info \n" +
+    @Delete("DELETE FROM t_record_info \n" +
             "where region_emp_id=#{param1} and state_flag=1;")
     Integer recordDeleteReject(Integer aimId);
 
     //备案通过时更新数据
-    @Update("update t_record_info \n" +
+    @Update("UPDATE t_record_info \n" +
             "set state_flag=2,revise_time=now(),reviser=#{param1} \n" +
             "where region_emp_id=#{param2} and state_flag=1;")
     Integer recordUpdatePass(Integer examineId,Integer aimId);
 
     //备案通过时更新过期数据
-    @Update("update t_record_info \n" +
+    @Update("UPDATE t_record_info \n" +
             "set state_flag=3,revise_time=now(),reviser=#{param1} \n" +
             "where region_emp_id=#{param2} and state_flag=2;")
     Integer recordUpdateExpirePass(Integer examineId,Integer aimId);
 
     //激活账号
-    @Update("update t_user \n" +
+    @Update("UPDATE t_user \n" +
             "set state_flag=1 \n" +
             "where user_id=#{param1};")
     Integer recordUpdateActivation(Integer examineId,Integer aimId);
 
     //根据id查询已通过备案的个数
-    @Select("select count(1) \n" +
+    @Select("SELECT count(1) \n" +
             "from t_record_info where region_emp_id=#{param1} and state_flag=2;")
     Integer recordSelectNum(Integer userId);
 
     //发送一条通知
-    @Insert("insert into t_notice \n" +
+    @Insert("INSERT INTO t_notice \n" +
             "(notice_title,notice_content,create_time,creator,receiver,delete_flag) \n" +
             "values(#{param1},#{param2},now(),#{param3},#{param4},0);")
     Integer sendMessage(String title,String content,Integer examineId,Integer aimId);
 
     //新增调查期
-    @Insert("insert into t_upload_period " +
+    @Insert("INSERT INTO t_upload_period " +
             "(upload_period_id,start_date,end_date,create_time,creator,delete_flag) \n" +
             "values(#{uploadPeriodId},#{startDate},#{endDate},#{creatTime},#{creator},#{deleteFlag});")
     Integer periodInsert(InnerUploadPeriod period);
 
     //修改调查期
-    @Update("update t_upload_period \n" +
+    @Update("UPDATE t_upload_period \n" +
             "set start_date=#{param1},end_date=#{param2},revise_date=#{param3},reviser=#{param4} \n" +
             "where upload_period_id=#{param5};")
     Integer periodUpdate(Date startDate, Date endDate, java.util.Date reviseDate, Integer reviser, Integer uploadPeriodID);
 
     //时间点查询调查期
-    @Select("select \n" +
+    @Select("SELECT \n" +
             "upload_period_id AS uploadPeriodId \n" +
             "start_date AS startDate \n" +
             "end_date AS endDate \n" +
@@ -150,7 +150,7 @@ public interface ProvinceMapper {
     List<uploadPeriod> selectByTime(Date aimDate);
 
     //时间段查询调查期
-    @Select("select \n" +
+    @Select("SELECT \n" +
             "upload_period_id AS uploadPeriodId \n" +
             "start_date AS startDate \n" +
             "end_date AS endDate \n" +
@@ -165,7 +165,7 @@ public interface ProvinceMapper {
     List<uploadPeriod> selectByPeriod(Date startDate,Date endDate);
 
     //按id查询调查期
-    @Select("select \n" +
+    @Select("SELECT \n" +
             "upload_period_id AS uploadPeriodId \n" +
             "start_date AS startDate \n" +
             "end_date AS endDate \n" +
@@ -179,7 +179,7 @@ public interface ProvinceMapper {
     List<uploadPeriod> selectById(Integer uploadPeriodID);
 
     //获取目前调查期数据条数
-    @Select("select \n" +
+    @Select("SELECT \n" +
             "count(upload_period_id) \n" +
             "from t_upload_period limit 1;")
     Integer getPeriodNumber();

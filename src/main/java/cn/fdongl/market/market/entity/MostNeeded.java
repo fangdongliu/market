@@ -3,7 +3,7 @@ package cn.fdongl.market.market.entity;
 import lombok.Data;
 
 @Data
-public class MostNeeded {
+public class MostNeeded {//需求前十职业表，共41条数据
 
     Integer tableId;//数据表id
     String mostProf1Name;//最需要排名第一的职业名称

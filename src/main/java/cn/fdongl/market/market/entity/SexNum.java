@@ -3,7 +3,7 @@ package cn.fdongl.market.market.entity;
 import lombok.Data;
 
 @Data
-public class SexNum {
+public class SexNum {//性别供求人数表，共6条数据
 
     Integer tableId;//数据表id
     Integer maleNeed;//男性需求人数

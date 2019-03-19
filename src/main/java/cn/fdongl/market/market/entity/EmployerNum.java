@@ -3,7 +3,7 @@ package cn.fdongl.market.market.entity;
 import lombok.Data;
 
 @Data
-public class EmployerNum {
+public class EmployerNum {//用人单位性质需求人数表，共15条数据
 
     Integer tableId;//数据表id
     Integer staOwnNeed;//国有企业，内资企业，企业

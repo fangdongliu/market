@@ -3,7 +3,7 @@ package cn.fdongl.market.market.entity;
 import lombok.Data;
 
 @Data
-public class JobSeekerNum {
+public class JobSeekerNum {//人员类别求职人数表，共11条数据
 
     Integer tableId;//数据表id
     Integer unempYouth;//新成长失业青年

@@ -217,5 +217,92 @@ public interface MarketMapper {
 
     //TODO：12张表的改查sql，总计24个
 
-    //
+    //更新一条上传数据信息
+    @Update("UPDATE t_upload_info SET \n" +
+            "upload_period_id=#{uploadPeriodId},state_flag={stateFlag},create_time={createTime}, \n" +
+            "creator=#{creator},revise_time=#{reviseTime},reviser=#{reviser} \n" +
+            "where table_id=#{tableId};")
+    Integer uploadUpdateUploadInfo(UploadInfo uploadInfo);
+
+    //更新一条供求总体人数信息
+    @Update("UPDATE t_total_num SET \n" +
+            "need_popu=#{needPopu},jobseek_popu#{jobseekPopu}, \n" +
+            "where table_id=#{tableId};")
+    Integer uploadUpdateTotalNum(TotalNum totalNum);
+
+    //更新一条产业需求人数信息
+    @Update("UPDATE t_industry_num SET \n" +
+            "industry1_need=#{industry1Need},industry2_need=#{industry2Need},industry3_need=#{industry3Need}, \n" +
+            "mine_need=#{mineNeed},manu_need=#{manuNeed},elec_gas_water_need=#{elecGasWaterNeed}, \n" +
+            "arch_need=#{archNeed},tran_stor_post_need=#{tranStorPostNeed},info_comp_soft_need=#{infoCompSoftNeed}, \n" +
+            "retail_need=#{retailNeed},acco_cater_need=#{accoCaterNeed},finance_need=#{financeNeed}, \n" +
+            "estate_need=#{estateNeed},lease_busi_serv_need=#{leaseBusiServNeed},rese_tech_addr_need=#{reseTechAddrNeed}, \n" +
+            "water_envi_faci_need=#{waterEnviFaciNeed},resi_serv_need=#{resiServNeed},edu_need=#{eduNeed}, \n" +
+            "heal_secu_welf_need=#{healSecuWelfNeed},cult_sport_ente_need=#{cultSportEnteNeed},mana_orga_need=#{manaOrgaNeed}, \n" +
+            "inte_orga_need=#{inteOrgaNeed} \n" +
+            "where table_id=#{tableId};")
+    Integer uploadUpdateIndustryNum(IndustryNum industryNum);
+
+    //更新一条用人单位性质需求人数信息
+    @Update("UPDATE t_employer_num SET \n" +
+            "=#{},=#{},=#{}, \n" +
+            "=#{},=#{},=#{}, \n" +
+            "where table_id=#{tableId};")
+    Integer uploadUpdateEmployerNum(EmployerNum employerNum);
+
+    //更新一条职业供求人数信息
+    @Update("UPDATE t_prof_num SET \n" +
+            "=#{},=#{},=#{}, \n" +
+            "=#{},=#{},=#{}, \n" +
+            "where table_id=#{tableId};")
+    Integer uploadUpdateProfNum(ProfNum profNum);
+
+    //更新一条需求前十职业信息
+    @Update("UPDATE t_most_needed SET \n" +
+            "=#{},=#{},=#{}, \n" +
+            "=#{},=#{},=#{}, \n" +
+            "where table_id=#{tableId};")
+    Integer uploadUpdateMostNeeded(MostNeeded mostNeeded);
+
+    //更新一条饱和前十职业信息
+    @Update("UPDATE t_least_needed SET \n" +
+            "=#{},=#{},=#{}, \n" +
+            "=#{},=#{},=#{}, \n" +
+            "where table_id=#{tableId};")
+    Integer uploadUpdateLeastNeeded(LeastNeeded leastNeeded);
+
+    //更新一条人员类别求职人数信息
+    @Update("UPDATE t_job_seeker_num SET \n" +
+            "=#{},=#{},=#{}, \n" +
+            "=#{},=#{},=#{}, \n" +
+            "where table_id=#{tableId};")
+    Integer uploadUpdateJobSeekerNum(JobSeekerNum jobSeekerNum);
+
+    //更新一条性别供求人数表信息
+    @Update("UPDATE t_sex_num SET \n" +
+            "=#{},=#{},=#{}, \n" +
+            "=#{},=#{},=#{}, \n" +
+            "where table_id=#{tableId};")
+    Integer uploadUpdateSexNum(SexNum sexNum);
+
+    //更新一条年龄供求人数信息
+    @Update("UPDATE t_age_num SET \n" +
+            "=#{},=#{},=#{}, \n" +
+            "=#{},=#{},=#{}, \n" +
+            "where table_id=#{tableId};")
+    Integer uploadUpdateAgeNum(AgeNum ageNum);
+
+    //更新一条文化程度供求人数信息
+    @Update("UPDATE t_degree_num SET \n" +
+            "=#{},=#{},=#{}, \n" +
+            "=#{},=#{},=#{}, \n" +
+            "where table_id=#{tableId};")
+    Integer uploadUpdateDegreeNum(DegreeNum degreeNum);
+
+    //更新一条技术等级供求人数信息
+    @Update("UPDATE t_tech_grade_num SET \n" +
+            "=#{},=#{},=#{}, \n" +
+            "=#{},=#{},=#{}, \n" +
+            "where table_id=#{tableId};")
+    Integer uploadUpdateTechGrageNum(TechGrageNum techGrageNum);
 }
