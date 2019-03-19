@@ -8,5 +8,4 @@ public class Result {
     Integer code;
     String message;
     Object data;
-
 }

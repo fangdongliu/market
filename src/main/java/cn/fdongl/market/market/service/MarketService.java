@@ -45,6 +45,10 @@ public class MarketService {
                                 AgeNum ageNum,
                                 DegreeNum degreeNum,
                                 TechGrageNum techGrageNum) throws RuntimeException {
-
+        int tableId=marketMapper.uploadSelectNextTableId();
+        if(tableId<=0){
+            throw new RuntimeException();
+        }
+        int n;
     }
 }

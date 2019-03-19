@@ -115,8 +115,8 @@ public interface ProvinceMapper {
     Integer recordSelectNum(Integer userId);
 
     //发送一条通知
-    @Insert("insert into t_notice(notice_title,notice_content,create_time,creator,receiver) \n" +
-            "values(#{param1},#{param2},now(),#{param3},#{param4});")
+    @Insert("insert into t_notice(notice_title,notice_content,create_time,creator,receiver,delete_flag) \n" +
+            "values(#{param1},#{param2},now(),#{param3},#{param4},0);")
     Integer sendMessage(String title,String content,Integer examineId,Integer aimId);
 
     //新增调查期

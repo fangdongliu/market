@@ -68,4 +68,12 @@ public interface MarketMapper {
             "reviser AS reviser \n" +
             "from t_record_info where (state_flag=0 or state_flag=1) limit 1;")
     Record recordSelectUnfinished(Integer userId);
+
+    //查询upload_info的下一个自增id
+    @Select("SELECT AUTO_INCREMENT \n" +
+            "FROM INFORMATION_SCHEMA.TABLES \n" +
+            "WHERE TABLE_NAME = '{t_upload_info}' limit 1;")
+    Integer uploadSelectNextTableId();
+
+    //TODO：12张表的增改查sql，总计36个
 }
