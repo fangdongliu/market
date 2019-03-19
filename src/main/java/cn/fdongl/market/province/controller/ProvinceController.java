@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping("/province")
@@ -78,8 +77,10 @@ public class ProvinceController extends ControllerBase {
             if(!provinceService.timeCheck(start,end)){
                 return fail(2);//日期不合法则返回fail
             }
-            InnerUploadPeriod innerPeriod=new InnerUploadPeriod(start,end);
-            innerPeriod.setCrateor(appUserDetail.getId());
+            InnerUploadPeriod innerPeriod=new InnerUploadPeriod();
+            innerPeriod.setStartDate(start);
+            innerPeriod.setEndDate(end);
+            innerPeriod.setCreator(appUserDetail.getId());
             innerPeriod.setCreatTime(new java.util.Date());
             innerPeriod.setDeleteFlag(0);
             if(provinceService.periodInsert(innerPeriod)<=0){

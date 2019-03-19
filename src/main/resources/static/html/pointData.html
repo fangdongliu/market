@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据填报</title>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Vue -->
+    <script src="//vuejs.org/js/vue.min.js"></script>
+    <link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">
+    <script src="//unpkg.com/iview/dist/iview.min.js"></script>
+    <!--elementUI-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="../css/formdata.css">
+</head>
+<body>
+<div id="app">
+    <div class="formIndex">
+            <el-button v-for="form in forms" @click="turnForm(form.index)" circle>
+                {{form.index}}
+            </el-button>
+    </div>
+    <div id="tabletitle">{{forms[this.index].title}}</div>
+    <el-table class="table" v-if="this.index==0">
+
+    </el-table>
+    <el-table class="table" v-elif="this.index==1">
+
+    </el-table>
+    <el-table class="table" v-elif="this.index==2">
+        <el-table-colunm prop="id"
+                         label="ID"
+                         width="180"></el-table-colunm>
+    </el-table>
+    <el-table class="table" v-elif="this.index==3">
+
+    </el-table>
+    <el-table class="table" v-elif="this.index==4">
+
+    </el-table>
+    <el-table class="table" v-elif="this.index==5">
+
+    </el-table>
+    <el-table class="table" v-elif="this.index==6">
+
+    </el-table>
+    <el-table class="table" v-elif="this.index==7">
+
+    </el-table>
+    <el-table class="table" v-elif="this.index==8">
+
+    </el-table>
+    <el-table class="table" v-elif="this.index==9">
+
+    </el-table>
+    <el-table class="table" v-elif="this.index==10">
+
+    </el-table>
+    <el-table class="table" v-elif="this.index==11">
+
+    </el-table>
+</div>
+
+</body>
+
+<script>
+    var vue = new Vue({
+        el:'#app',
+        data:{
+            index:0,
+            forms:[
+                {index:1, title:'表1：供求总体人数'},
+                {index:2, title:'表2：按产业分组的需求人数'},
+                {index:3, title:'表3：按行业分组的需求人数'},
+                {index:4, title:'表4：按用人单位性质划分的需求人数'},
+                {index:5, title:'表5：按职业分组的需求人数'},
+                {index:6, title:'表6：需求大于求职的十个行业'},
+                {index:7, title:'表7：需求小于求职的十个行业'},
+                {index:8, title:'表8：按求职人员类别分组的需求人数'},
+                {index:9, title:'表9：按性别分组的供求人数'},
+                {index:10, title:'表10：按年龄分组的供求人数'},
+                {index:11, title:'表11：按文化程度的供求人数'},
+                {index:12, title:'表12：按技能等级分组的供求人数'},
+            ]
+        },
+        methods:{
+          turnForm:function (param) {
+             this.index=param-1;
+          }
+        }
+    })
+</script>
+</html>
