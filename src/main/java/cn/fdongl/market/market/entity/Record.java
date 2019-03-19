@@ -7,7 +7,7 @@ import java.util.Date;
 @Data
 public class Record {//人力资源市场用户备案信息表，共13条数据
 
-    Integer recordInfoId;//备案id
+    Integer recordId;//备案id
     Integer regionEmpId;//地区级编号,即监测点用户id
     String regionEmpName;//人力资源市场名称
     String regionName;//所属地市名称
