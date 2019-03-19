@@ -25,22 +25,22 @@
                     <el-col :span="16">
                         <el-form ref="marketDetailForm" :model="marketDetailForm" label-width="150px">
                             <el-form-item label="人力资源市场名称">
-                                <el-input v-model="marketDetailForm.name"></el-input>
+                                <el-input v-model="marketDetailForm.name" :disabled="ifSubmitMarketDetail"></el-input>
                             </el-form-item>
                             <el-form-item label="所在地区" >
-                                <el-input v-model="marketDetailForm.location"></el-input>
+                                <el-input v-model="marketDetailForm.location" :disabled="ifSubmitMarketDetail"></el-input>
                             </el-form-item>
                             <el-form-item label="联系人姓名">
-                                <el-input v-model="marketDetailForm.people"></el-input>
+                                <el-input v-model="marketDetailForm.people" :disabled="ifSubmitMarketDetail"></el-input>
                             </el-form-item>
                             <el-form-item label="联系人手机号">
-                                <el-input v-model="marketDetailForm.mobile"></el-input>
+                                <el-input v-model="marketDetailForm.mobile" :disabled="ifSubmitMarketDetail"></el-input>
                             </el-form-item>
                             <el-form-item label="联系电话">
-                                <el-input v-model="marketDetailForm.phone"></el-input>
+                                <el-input v-model="marketDetailForm.phone" :disabled="ifSubmitMarketDetail"></el-input>
                             </el-form-item>
                             <el-form-item label="传真">
-                                <el-input v-model="marketDetailForm.fax"></el-input>
+                                <el-input v-model="marketDetailForm.fax" :disabled="ifSubmitMarketDetail"></el-input>
                             </el-form-item>
                             <el-form-item>
                                 <el-button type="primary" @click="onSubmitMarketDetail" v-if="!ifSubmitMarketDetail">申报</el-button>
@@ -69,18 +69,8 @@
                 phone:'',
                 fax:''
             },
-            ifSubmitMarketDetail:false,
-            props: {
-                value: 'label',
-                children: 'cities'
-            },
-            locationOption: [{
-                label: '江苏',
-                cities: []
-            }, {
-                label: '浙江',
-                cities: []
-            }]
+            ifSubmitMarketDetail:-1,
+            marketStateFlag:-1
         },
         methods:{
             onSubmitMarketDetail: function() {
@@ -90,7 +80,6 @@
                 this.$refs[formName].resetFields();
             },
             newMarketDetail(){
-
                 $.ajax({
                     url:'/market/record/insert',
                     type:'post',
@@ -108,6 +97,29 @@
                     }
                 })
             }
+        },
+        mounted:function () {
+            $.ajax({
+                url:'/market/record/select',
+                type:'post',
+                success(res){
+                    // console.log(res);
+                    this.marketStateFlag = res.data.stateFlag;
+                    // console.log(this.marketStateFlag);
+                    if(this.marketStateFlag===1) {
+                        this.ifSubmitMarketDetail = true;
+                        // console.log(1)
+                        console.log(this.ifSubmitMarketDetail)
+                    }
+                    else{
+                        this.ifSubmitMarketDetail = false;
+                    }
+                },
+                error(res){
+                    console.log('error');
+                }
+            })
+
         }
     })
 </script>
