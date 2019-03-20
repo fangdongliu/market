@@ -1,5 +1,6 @@
 package cn.fdongl.market.security.service;
 
+import cn.fdongl.market.security.entity.ListUserData;
 import cn.fdongl.market.security.entity.Right;
 import cn.fdongl.market.security.entity.UsernameAndFullname;
 import cn.fdongl.market.security.mapper.UserMapper;
@@ -21,7 +22,31 @@ public class UserService {
     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     public Object list(Integer userId)throws Exception{
-        return userMapper.list(userId);
+
+        if(userId==1){
+            return userMapper.list();
+        }else{
+            Map<Integer, ListUserData>userDataMap = userMapper.userList(userId);
+            for (Iterator<Map.Entry<Integer, ListUserData>> it = userDataMap.entrySet().iterator(); it.hasNext();){
+                Map.Entry<Integer, ListUserData> item = it.next();
+                if(item.getValue().getFather()!=null){
+                    if(item.getValue().getFather()==userId){
+                        continue;
+                    }
+                    ListUserData r = userDataMap.get(item.getValue().getFather());
+                    if(r!=null){
+                        if(r.getChild()==null){
+                            r.setChild(new ArrayList<ListUserData>());
+                        }
+                        ((List)r.getChild()).add(item.getValue());
+                    }
+                    it.remove();
+                }
+            }
+            return userDataMap.values().toArray();
+        }
+
+
     }
 
     public void enable(Integer userId)throws Exception{
@@ -64,8 +89,12 @@ public class UserService {
             if(item.getValue().getFather()!=null){
                 Right r = menu.get(item.getValue().getFather());
                 if(r!=null){
-                    r.setChild(item.getValue());
+                    if(r.getChild()==null){
+                        r.setChild(new ArrayList<Right>());
+                    }
+                    ((List)r.getChild()).add(item.getValue());
                 }
+
                 it.remove();
             }
         }
