@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/province")
@@ -167,4 +169,27 @@ public class ProvinceController extends ControllerBase {
         }
     }
 
+    //按时间段查询上报时限
+    @PostMapping("/investigatePeriod/selectByPeriod")
+    public List<Object> uploadPeriodSelectByPeriod(AppUserDetail appUserDetail, uploadPeriod period){
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            java.sql.Date startDate = new java.sql.Date(format.parse(period.getStartDate()).getTime());
+            java.sql.Date endDate = new java.sql.Date(format.parse(period.getEndDate()).getTime());
+            List<InnerUploadPeriod> outPutList=provinceService.uploadPeriodSelectByPeriod(startDate,endDate);
+            if(outPutList==null){
+                return (List<Object>) fail(null,"No Result");
+            }
+            else{
+                List<uploadPeriod> output=new ArrayList<uploadPeriod>();
+                for (InnerUploadPeriod innerUploadPeriod : outPutList) {
+                    output.add(provinceService.InnerUploadPeriodTranform(innerUploadPeriod));
+                }
+                return (List<Object>) success(output);
+            }
+        }
+        catch (Exception e){
+            return (List<Object>) fail(null,"Unknown Error");
+        }
+    }
 }
