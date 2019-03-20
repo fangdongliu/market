@@ -13,6 +13,13 @@ public class ControllerBase {
         return result;
     }
 
+    protected Object fail(Exception e){
+        result.setCode(1);
+        result.setData(null);
+        result.setMessage(e.getMessage());
+        return result;
+    }
+
     protected Object fail(Object data){
         result.setCode(1);
         result.setData(data);
