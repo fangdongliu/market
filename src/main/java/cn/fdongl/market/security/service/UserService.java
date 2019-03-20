@@ -20,6 +20,10 @@ public class UserService {
 
     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
+    public Object list(Integer userId)throws Exception{
+        return userMapper.list(userId);
+    }
+
     public void enable(Integer userId)throws Exception{
         if(userId==1){
             throw new Exception("无法修改管理员");

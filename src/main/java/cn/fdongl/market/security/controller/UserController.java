@@ -18,6 +18,11 @@ public class UserController extends ControllerBase {
     @Autowired
     UserService userService;
 
+    @RequestMapping("list")
+    public Object list(AppUserDetail userDetail) throws Exception {
+        return success(userService.list(userDetail.getId()));
+    }
+
     @RequestMapping("enable")
     public Object enable(@RequestParam Integer userId) throws Exception {
         userService.enable(userId);
