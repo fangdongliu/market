@@ -77,7 +77,6 @@
                                     v-model="scope.row.deleteFlag"
                                     active-color="#13ce66"
                                     inactive-color="#ff4949"
-                                    @click.native="switchConfirm(scope.row.deleteFlag)"
                                     @change="changeSwitch(scope.row)">
                             </el-switch>
                         </template>
@@ -119,7 +118,7 @@
                     userRole:1,
                     superior:1,
                     stateFlag:1,
-                    deleteFlag:false
+                    deleteFlag:true
                 },
                 {
                     userId:1,
@@ -277,13 +276,13 @@
                     this.$message({
                     type: 'success',
                     message: '已创建' + value + '个市级用户'
-                    });
-                }).catch(() => {
+                });
+            }).catch(() => {
                     this.$message({
                     type: 'info',
                     message: '取消输入'
-                    });
                 });
+            });
             },
             createPoint() {
                 this.$prompt('请输入您要创建的监测点用户个数', '提示', {
@@ -304,50 +303,18 @@
                     });
                 });
             },
-            switchConfirm (autoUpdate) {
-                let strOpen = '是否确认开启开关。';
-                let strClose = '是否确认关闭开关。';
-                if (!autoUpdate) {
-                    // 弹窗询问，这个是封装过的element ui 弹窗
-                    this.wConfirmTip('开启开关', strOpen, () => {
-                        this.autoUpdate = true
-                    })
-                } else {
-                    this.wConfirmTip('关闭开关', strClose, () => {
-                        this.autoUpdate = false
-                    })
-                }
-            },
             changeSwitch (data) {
-                this.$confirm('确定修改此用户的删除标记?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.$message({
-                        type: 'success',
-                        message: '操作成功!'
-                    });
-                }).catch(() => {
-                    data.deleteFlag=!data.deleteFlag;
-                    this.$message({
-                        type: 'info',
-                        message: '已取消操作'
-                    });
-
-                });
                 console.log(data.deleteFlag)
             },
-            getUserList(){
+            getList(){
                 $.ajax({
-                    url:'/user/list',
+                    url:'/',
                     type:'post',
                     success(res){
+                        // for(var i = 0; i < res.length;i ++){
+                        //     res[i].createTime=
+                        // }
                         vue3.userDate=res;
-                        //console.log(res);
-                    },
-                    error(res){
-                        console.log("getUserList出错");
                         console.log(res);
                     }
                 })
@@ -357,7 +324,7 @@
             }
         },
         mounted:function () {
-            this.getUserList()
+            this.getList()
         }
     })
 </script>
