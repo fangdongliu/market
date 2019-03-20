@@ -3,7 +3,6 @@ package cn.fdongl.market.example.controller;
 import cn.fdongl.market.example.service.TestService;
 import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.util.ControllerBase;
-import javafx.util.Pair;
 import org.aspectj.weaver.ast.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +18,7 @@ public class ExampleController extends ControllerBase {
     @Autowired
     TestService testService;
 
-    @RequestMapping("/gg")
-    public Object ff(@RequestParam("ss[]") Integer[] ss,@RequestParam("gg[]")Integer[]gg){
-        return new Pair<>(ss,gg);
-    }
+
 
     @GetMapping("/hh")//指定接口的下一级路径，最终路径为 '/example/hh'
     public Object hhh(String hh,Integer dd){
