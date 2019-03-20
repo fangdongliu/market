@@ -18,8 +18,8 @@ public interface UserMapper {
             "VALUES(1,1,NOW(),1,0,'')")
     Integer test2();
 
-    @Select("SELECT * FROM t_user WHERE t_user.user_id!=1&&t_user.user_id!=#{param1}")
-    List<Object>list(Integer userId);
+    @Select("SELECT user_id as id,username,fullname,superior as father,state_flag as `status` FROM t_user WHERE t_user.user_id!=1&&t_user.user_id!=#{param1}")
+    List<ListUserData>list(Integer userId);
 
     @Update("UPDATE t_user\n" +
             "SET state_flag = 0 WHERE user_id = #{param1};")
