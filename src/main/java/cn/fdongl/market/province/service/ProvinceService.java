@@ -163,6 +163,11 @@ public class ProvinceService {
         return provinceMapper.selectByTime(inputDate);
     }
 
+    //按时间段查询上报时限
+    public List<InnerUploadPeriod> uploadPeriodSelectByPeriod(Date startDate,Date endDate){
+        return provinceMapper.selectByPeriod(startDate,endDate);
+    }
+
     //将InnerUploadPeriod对象转化为uploadPeriod对象
     public uploadPeriod InnerUploadPeriodTranform(InnerUploadPeriod input){
         try {
