@@ -120,13 +120,23 @@
                     name:'导航一',
                     child:[
                         {name:'省审核备案', url:'provinceRecord.html'},
-                        {name:'监测点填报备案', url:'pointRecord.html'}
+                        {name:'监测点填报备案', url:'pointRecord.html'},
+                        {name:'用户查询', url:'provinceQueryUser.html'},
+                        {name:'权限授予', url:'adminRightManage.html'}
                     ]
                 },
                 {
                     icon:'el-icon-menu',
                     name:'导航二',
                     url:''
+                },
+                {
+                    icon:'el-icon-location',
+                    name:'导航三',
+                    child:[
+                        {name:'省审核备案', url:'provinceRecord.html'},
+                        {name:'监测点填报备案', url:'pointRecord.html'}
+                    ]
                 }
             ],
             isLogout:true,
@@ -164,6 +174,7 @@
         },
         methods:{
             handleSelect(index){
+                console.log(index)
                 this.loading=true;
                 if(index.toString().indexOf('-')===-1){
                     this.src='/html/'+this.menu[index].url;
@@ -171,6 +182,7 @@
                 }else{
                     var i = index.indexOf('-');
                     this.src='/html/'+this.menu[index.substring(0,i)].child[index.substring(i+1)].url;
+                    console.log(this.src);
                     this.setupWatcher();
                 }
             },
