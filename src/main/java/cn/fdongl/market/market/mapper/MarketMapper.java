@@ -51,7 +51,7 @@ public interface MarketMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTIme, \n" +
             "reviser AS reviser \n" +
-            "from t_record_info where state_flag=2 limit 1;")
+            "from t_record_info where region_emp_id=#{param1} and state_flag=2 limit 1;")
     Record recordSelectFinished(Integer userId);
 
     //根据用户id查询保存或上传的备案信息
@@ -68,7 +68,7 @@ public interface MarketMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTIme, \n" +
             "reviser AS reviser \n" +
-            "from t_record_info where (state_flag=0 or state_flag=1) limit 1;")
+            "from t_record_info where region_emp_id=#{param1} and (state_flag=0 or state_flag=1) limit 1;")
     Record recordSelectUnfinished(Integer userId);
 
     //查询upload_info的下一个自增id
@@ -334,7 +334,7 @@ public interface MarketMapper {
             "seni_prof_jobseek=#{seniProfJobseek},no_tech_jobseek=#{noTechJobseek},no_requ_need=#{noRequNeed} \n" +
             "where table_id=#{tableId};")
     Integer uploadUpdateTechGrageNum(TechGrageNum techGrageNum);
-
+    
     //查询上传数据信息
     @Select("SELECT \n" +
             "table_id AS tableId, \n" +
