@@ -188,7 +188,6 @@ public interface ProvinceMapper {
             "end_date AS endDate, \n" +
             "create_time AS createTime, \n" +
             "creator AS creator, \n" +
-            "revise_date AS reviseDate, \n" +
             "reviser AS reviser, \n" +
             "delete_flag AS deleteFlag \n" +
             "from t_upload_period;")
