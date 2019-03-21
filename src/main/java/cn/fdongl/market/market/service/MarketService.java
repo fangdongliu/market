@@ -205,6 +205,7 @@ public class MarketService {
 //            throw new RuntimeException("新建技术等级供求人数失败");
 //        }
 //    }
+    //年龄供求人数表查询
     public AgeNum AgeNumSelect(Integer tableId) throws Exception{
         AgeNum output = marketMapper.uploadSelectAgeNum(tableId);
         if(output==null){
@@ -215,6 +216,7 @@ public class MarketService {
         }
     }
 
+    //文化程度供求人数表查询
     public DegreeNum DegreeNumSelect(Integer tableId) throws Exception{
         DegreeNum output=marketMapper.uploadSelectDegreeNum(tableId);
         if(output==null){
@@ -225,8 +227,100 @@ public class MarketService {
         }
     }
 
+    //用人单位性质需求人数表查询
     public EmployerNum EmployerNumSelect(Integer tableId) throws Exception{
         EmployerNum output=marketMapper.uploadSelectEmployNum(tableId);
+        if(output==null){
+            throw new Exception("No result");
+        }
+        else{
+            return output;
+        }
+    }
+
+    //产业需求人数表查询
+    public IndustryNum IndustryNumSelect(Integer tableId) throws Exception{
+        IndustryNum output=marketMapper.uploadSelectIndustryNum(tableId);
+        if(output==null){
+            throw new Exception("No result");
+        }
+        else{
+            return output;
+        }
+    }
+    //人员类别求职人数表查询
+    public JobSeekerNum JobSeekerNumSelect(Integer tableId)throws Exception{
+        JobSeekerNum output = marketMapper.uploadSelectJobSeekerNum(tableId);
+        if(output==null){
+            throw new Exception("No result");
+        }
+        else{
+            return output;
+        }
+    }
+    //饱和前十职业表查询
+    public LeastNeeded LeastNeededSelect(Integer tableId)throws Exception{
+        LeastNeeded output = marketMapper.uploadSelectLeastNeeded(tableId);
+        if(output==null){
+            throw new Exception("No result");
+        }
+        else{
+            return output;
+        }
+    }
+    //需求前十职业表查询
+    public MostNeeded MostNeededSelect(Integer tableId)throws Exception{
+        MostNeeded output = marketMapper.uploadSelectMostNeeded(tableId);
+        if(output==null){
+            throw new Exception("No result");
+        }
+        else{
+            return output;
+        }
+    }
+    //职业供求人数表查询
+    public ProfNum ProfNumSelect(Integer tableId)throws Exception{
+        ProfNum output = marketMapper.uploadSelectProfNum(tableId);
+        if(output==null){
+            throw new Exception("No result");
+        }
+        else{
+            return output;
+        }
+    }
+    //性别供求人数表查询
+    public SexNum SexNumSelect(Integer tableId)throws Exception{
+        SexNum output = marketMapper.uploadSelectSexNum(tableId);
+        if(output==null){
+            throw new Exception("No result");
+        }
+        else{
+            return output;
+        }
+    }
+    //技术等级供求人数表查询
+    public TechGrageNum TechGrageNumSelect(Integer tableId)throws Exception{
+        TechGrageNum output=marketMapper.uploadSelectTechGrageNum(tableId);
+        if(output==null){
+            throw new Exception("No result");
+        }
+        else{
+            return output;
+        }
+    }
+    //上传数据信息表查询
+    public UploadInfo UploadInfoSelect(Integer tableId)throws Exception{
+        UploadInfo output=marketMapper.uploadSelectUploadInfo(tableId);
+        if(output==null){
+            throw new Exception("No result");
+        }
+        else{
+            return output;
+        }
+    }
+    //供求总体人数表查询
+    public TotalNum TotalNumSelect(Integer tableId)throws Exception{
+        TotalNum output=marketMapper.uploadSelectTotalNum(tableId);
         if(output==null){
             throw new Exception("No result");
         }
