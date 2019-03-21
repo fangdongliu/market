@@ -10,5 +10,6 @@ public class ListUserData {
     Integer id;//用户ID
     Integer status;//用户状态，0表示有效，1表示无效
     Integer father;//父级ID
+    Object child;
 
 }
