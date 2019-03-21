@@ -1,12 +1,14 @@
 package cn.fdongl.market.market.mapper;
 
-
 import cn.fdongl.market.market.entity.*;
+import cn.fdongl.market.province.entity.InnerUploadPeriod;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.core.annotation.Order;
+
+import java.sql.Date;
 
 @Mapper
 @Order(1)
@@ -70,6 +72,20 @@ public interface MarketMapper {
             "reviser AS reviser \n" +
             "from t_record_info where region_emp_id=#{param1} and (state_flag=0 or state_flag=1) limit 1;")
     Record recordSelectUnfinished(Integer userId);
+
+    //根据时间点查询调查期
+    @Select("SELECT \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "start_date AS startDate, \n" +
+            "end_date AS endDate, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_date AS reviseDate, \n" +
+            "reviser AS reviser, \n" +
+            "delete_flag AS deleteFlag \n" +
+            "from t_upload_period \n" +
+            "where #{param1} between start_date and end_date limit 1;")
+    InnerUploadPeriod uploadSelectUploadPeriod(Date aimDate);
 
     //查询upload_info的下一个自增id
     @Select("SELECT AUTO_INCREMENT \n" +
