@@ -2,7 +2,7 @@ package cn.fdongl.market.province.service;
 
 import cn.fdongl.market.market.entity.Record;
 import cn.fdongl.market.province.entity.InnerUploadPeriod;
-import cn.fdongl.market.province.entity.uploadPeriod;
+import cn.fdongl.market.province.entity.UploadPeriod;
 import cn.fdongl.market.province.mapper.ProvinceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -169,12 +169,12 @@ public class ProvinceService {
     }
 
     //将InnerUploadPeriod对象转化为uploadPeriod对象
-    public uploadPeriod InnerUploadPeriodTranform(InnerUploadPeriod input){
+    public UploadPeriod InnerUploadPeriodTranform(InnerUploadPeriod input){
         try {
             if(input==null){
                 return null;
             }
-            uploadPeriod output = new uploadPeriod();
+            UploadPeriod output = new UploadPeriod();
             output.setUploadPeriodId(input.getUploadPeriodId());
             output.setCreator(input.getCreator());
             output.setReviser(input.getReviser());

@@ -6,7 +6,7 @@ import java.sql.Date;
 
 @Data
 //这个类用于接收从前端传来的json文件
-public class uploadPeriod {
+public class UploadPeriod {
     Integer uploadPeriodId;//时限id
     String  startDate;//开始日期,sql.date
     String endDate;//结束日期,sql.date
