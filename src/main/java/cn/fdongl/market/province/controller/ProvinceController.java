@@ -82,6 +82,8 @@ public class ProvinceController extends ControllerBase {
                 return fail(2);//日期不合法则返回fail
             }
             InnerUploadPeriod innerPeriod=new InnerUploadPeriod();
+            innerPeriod.setReviser(appUserDetail.getId());
+            innerPeriod.setReviseTime(new java.util.Date());
             innerPeriod.setStartDate(start);
             innerPeriod.setEndDate(end);
             innerPeriod.setCreator(appUserDetail.getId());

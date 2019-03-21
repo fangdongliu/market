@@ -156,7 +156,7 @@ public interface ProvinceMapper {
             "creator AS creator, \n" +
             "revise_date AS reviseDate, \n" +
             "reviser AS reviser, \n" +
-            "delete_flag AS deleteFlag, \n" +
+            "delete_flag AS deleteFlag \n" +
             "from t_upload_period \n" +
             "where create_time between #{param1} and #{param2};")
     List<InnerUploadPeriod> selectByPeriod(Date startDate,Date endDate);
@@ -170,7 +170,7 @@ public interface ProvinceMapper {
             "creator AS creator, \n" +
             "revise_date AS reviseDate, \n" +
             "reviser AS reviser, \n" +
-            "delete_flag AS deleteFlag, \n" +
+            "delete_flag AS deleteFlag \n" +
             "from t_upload_period \n" +
             "where upload_period_id=#{param1} limit 1;")
     InnerUploadPeriod selectById(Integer uploadPeriodID);
@@ -190,7 +190,7 @@ public interface ProvinceMapper {
             "creator AS creator, \n" +
             "revise_date AS reviseDate, \n" +
             "reviser AS reviser, \n" +
-            "delete_flag AS deleteFlag, \n" +
+            "delete_flag AS deleteFlag \n" +
             "from t_upload_period;")
     List<InnerUploadPeriod> selectAllPeriod();
 }
