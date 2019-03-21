@@ -113,7 +113,7 @@
                                 联系电话：
                             </el-col>
                             <el-col :span="6" class="infoContent">
-                                {{detailData.phone}}
+                                {{detailData.phone.substring(0,3) + ' - ' + detailData.phone.substring(3)}}
                             </el-col>
                         </el-row>
                         <el-row type="flex" justify="center" class="info" align="middle">
@@ -121,7 +121,7 @@
                                 传真：
                             </el-col>
                             <el-col :span="6" class="infoContent">
-                                {{detailData.fax}}
+                                {{detailData.fax.substring(0,4) + ' - ' + detailData.fax.substring(4)}}
                             </el-col>
                         </el-row>
 

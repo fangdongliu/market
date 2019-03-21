@@ -69,5 +69,4 @@ public class UserController extends ControllerBase {
         return success(userService.getMenu(userDetail.getId()));
     }
 
-
 }

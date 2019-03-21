@@ -4,6 +4,7 @@ import cn.fdongl.market.security.entity.*;
 import org.apache.ibatis.annotations.*;
 import org.springframework.core.annotation.Order;
 
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Map;
 
@@ -18,8 +19,14 @@ public interface UserMapper {
             "VALUES(1,1,NOW(),1,0,'')")
     Integer test2();
 
-    @Select("SELECT user_id as id,username,fullname,superior as father,state_flag as `status` FROM t_user WHERE t_user.user_id!=1&&t_user.user_id!=#{param1}")
-    List<ListUserData>list(Integer userId);
+    @Select("(SELECT user_id as id,username,fullname,superior as father,state_flag as `status` FROM t_user T1 WHERE T1.superior = #{param1})\n" +
+            "UNION\n" +
+            "(SELECT user_id as id,username,fullname,superior as father,state_flag as `status` FROM t_user WHERE superior IN (SELECT T1.user_id FROM t_user T1 WHERE T1.superior = #{param1}))\n")
+    @MapKey("id")
+    Map<Integer,ListUserData>userList(Integer userId);
+
+    @Select("SELECT user_id as id,username,fullname,superior as father,state_flag as `status` FROM t_user")
+    List<ListUserData>list();
 
     @Update("UPDATE t_user\n" +
             "SET state_flag = 0 WHERE user_id = #{param1};")

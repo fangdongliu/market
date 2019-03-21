@@ -1,10 +1,12 @@
 package cn.fdongl.market.security.service;
 
+import cn.fdongl.market.security.entity.ListUserData;
 import cn.fdongl.market.security.entity.Right;
 import cn.fdongl.market.security.mapper.RightMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +25,10 @@ public class RightService {
             if(item.getValue().getFather()!=null){
                 Right r = rights.get(item.getValue().getFather());
                 if(r!=null){
-                    r.setChild(item.getValue());
+                    if(r.getChild()==null){
+                        r.setChild(new ArrayList<Right>());
+                    }
+                    ((List)r.getChild()).add(item.getValue());
                 }
                 it.remove();
             }
