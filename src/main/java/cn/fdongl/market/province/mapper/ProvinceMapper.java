@@ -180,4 +180,17 @@ public interface ProvinceMapper {
             "count(upload_period_id) \n" +
             "from t_upload_period limit 1;")
     Integer getPeriodNumber();
+
+    //查询所有调查期
+    @Select("SELECT \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "start_date AS startDate, \n" +
+            "end_date AS endDate, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_date AS reviseDate, \n" +
+            "reviser AS reviser, \n" +
+            "delete_flag AS deleteFlag, \n" +
+            "from t_upload_period;")
+    List<InnerUploadPeriod> selectAllPeriod();
 }

@@ -3,6 +3,7 @@ package cn.fdongl.market.market.service;
 import cn.fdongl.market.market.entity.*;
 import cn.fdongl.market.market.mapper.MarketMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -204,4 +205,33 @@ public class MarketService {
 //            throw new RuntimeException("新建技术等级供求人数失败");
 //        }
 //    }
+    public AgeNum AgeNumSelect(Integer tableId) throws Exception{
+        AgeNum output = marketMapper.uploadSelectAgeNum(tableId);
+        if(output==null){
+            throw new Exception("No result");
+        }
+        else{
+            return output;
+        }
+    }
+
+    public DegreeNum DegreeNumSelect(Integer tableId) throws Exception{
+        DegreeNum output=marketMapper.uploadSelectDegreeNum(tableId);
+        if(output==null){
+            throw new Exception("No result");
+        }
+        else{
+            return output;
+        }
+    }
+
+    public EmployerNum EmployerNumSelect(Integer tableId) throws Exception{
+        EmployerNum output=marketMapper.uploadSelectEmployNum(tableId);
+        if(output==null){
+            throw new Exception("No result");
+        }
+        else{
+            return output;
+        }
+    }
 }

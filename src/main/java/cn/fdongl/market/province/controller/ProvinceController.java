@@ -192,4 +192,9 @@ public class ProvinceController extends ControllerBase {
             return fail(null,"Unknown Error");
         }
     }
+
+    //查询所有上报时限
+    public Object uploadPeriodSelectAll(AppUserDetail appUserDetail)throws Exception{
+        return success(provinceService.uploadPeriodsSelectAll());
+    }
 }

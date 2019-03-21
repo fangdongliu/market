@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -167,6 +168,22 @@ public class ProvinceService {
     public List<InnerUploadPeriod> uploadPeriodSelectByPeriod(Date startDate,Date endDate){
         return provinceMapper.selectByPeriod(startDate,endDate);
     }
+
+    //查询所有上报时限
+    public List<UploadPeriod> uploadPeriodsSelectAll() throws Exception{
+        List<InnerUploadPeriod> preOutput=provinceMapper.selectAllPeriod();
+        if(preOutput==null||preOutput.size()==0){
+            throw new Exception("No result");
+        }
+        else{
+            List<UploadPeriod> output = new ArrayList<UploadPeriod>();
+            for(int i=0;i<preOutput.size();i++){
+                output.add(InnerUploadPeriodTranform(preOutput.get(i)));
+            }
+            return  output;
+        }
+    }
+
 
     //将InnerUploadPeriod对象转化为uploadPeriod对象
     public UploadPeriod InnerUploadPeriodTranform(InnerUploadPeriod input){
