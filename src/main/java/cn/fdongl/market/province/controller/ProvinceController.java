@@ -194,6 +194,7 @@ public class ProvinceController extends ControllerBase {
     }
 
     //查询所有上报时限
+    @PostMapping("/investigatePeriod/selectAllPeriod")
     public Object uploadPeriodSelectAll(AppUserDetail appUserDetail)throws Exception{
         return success(provinceService.uploadPeriodsSelectAll());
     }
