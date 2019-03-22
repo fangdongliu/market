@@ -131,7 +131,7 @@ public interface ProvinceMapper {
     @Update("UPDATE t_upload_period \n" +
             "set start_date=#{param1},end_date=#{param2},revise_time=#{param3},reviser=#{param4} \n" +
             "where upload_period_id=#{param5};")
-    Integer periodUpdate(Date startDate, Date endDate, java.util.Date reviseDate, Integer reviser, Integer uploadPeriodID);
+    Integer periodUpdate(java.sql.Date startDate, java.sql.Date endDate, java.util.Date reviseDate, Integer reviser, Integer uploadPeriodID);
 
     //时间点查询调查期
     @Select("SELECT \n" +
@@ -144,7 +144,7 @@ public interface ProvinceMapper {
             "reviser AS reviser, \n" +
             "delete_flag AS deleteFlag \n" +
             "from t_upload_period \n" +
-            "where #{param1} between start_date and end_date limit 1;")
+            "where #{param1} >= start_date and #{param1} < end_date limit 1;")
     InnerUploadPeriod selectByTime(Date aimDate);
 
     //时间段查询调查期
@@ -158,8 +158,8 @@ public interface ProvinceMapper {
             "reviser AS reviser, \n" +
             "delete_flag AS deleteFlag \n" +
             "from t_upload_period \n" +
-            "where create_time between #{param1} and #{param2};")
-    List<InnerUploadPeriod> selectByPeriod(Date startDate,Date endDate);
+            "where #{param1}<end_date and start_date<=#{param2};")
+    List<InnerUploadPeriod> selectByPeriod(java.sql.Date startDate,java.sql.Date endDate);
 
     //按id查询调查期
     @Select("SELECT \n" +
