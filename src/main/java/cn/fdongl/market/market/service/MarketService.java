@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class MarketService {
@@ -336,4 +337,15 @@ public class MarketService {
             return output;
         }
     }
+    //查询目标用户的报表
+    public List<UploadInfo> UploadInfoSelectByUser(Integer userId) throws Exception{
+        List<UploadInfo> output=marketMapper.uploadInfoSelectByUser(userId);
+        if(output==null){
+            throw new Exception("No result");
+        }
+        else {
+            return output;
+        }
+    }
+
 }

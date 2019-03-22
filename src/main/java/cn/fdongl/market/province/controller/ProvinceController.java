@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import cn.fdongl.market.market.service.MarketService;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,9 @@ public class ProvinceController extends ControllerBase {
 
     @Autowired
     ProvinceService provinceService;
+
+    @Autowired
+    MarketService marketService;
 
     //查询所有待审核的备案信息
     @PostMapping("/record/examineQuery")
@@ -172,5 +176,11 @@ public class ProvinceController extends ControllerBase {
     @PostMapping("/investigatePeriod/selectAllPeriod")
     public Object uploadPeriodSelectAll(AppUserDetail appUserDetail)throws Exception{
         return success(provinceService.uploadPeriodsSelectAll());
+    }
+
+    //查询目标用户报表
+    @PostMapping("/data/selectMarketData")
+    public Object SelectNowUserUploadInfo(AppUserDetail appUserDetail,Integer aimUserId)throws Exception{
+        return success(marketService.UploadInfoSelectByUser(aimUserId));
     }
 }
