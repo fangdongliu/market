@@ -83,12 +83,12 @@ public interface UserMapper {
             "(SELECT t_role.role_id FROM t_role WHERE t_role.role_id IN \n" +
             "(SELECT t_user_role.role_id FROM t_user_role WHERE t_user_role.user_id = 1)\n" +
             "AND t_role.delete_flag = 0)\n" +
-            ") AND t_right.delete_flag=0 AND menu_path != null")
+            ") AND t_right.delete_flag=0 AND menu_name != null")
     @MapKey("id")
     Map<Integer, Right>getMenu(Integer userId);
 
     @Select("SELECT t_right.menu_name,menu_path,father_id,right_id\n" +
-            "from t_right where t_right.delete_flag=0 AND menu_path != null")
+            "from t_right where t_right.delete_flag=0 AND menu_name != null")
     @MapKey("id")
     Map<Integer, Right>getSysMenu();
 
@@ -99,5 +99,8 @@ public interface UserMapper {
             "(#{item.username},#{param3},#{item.fullname},#{param2},0,now(),#{param4},0)" +
             "</foreach></script>")
     int addUsers(List<UsernameAndFullname>array,Integer parent,String password,Integer currentUser);
+
+    @Update("update t_user set password=#{param1} where user_id = #{param2}")
+    int updatePassword(String password,int userId);
 
 }

@@ -1,6 +1,5 @@
 package cn.fdongl.market.security.service;
 
-import cn.fdongl.market.security.entity.ListUserData;
 import cn.fdongl.market.security.entity.Right;
 import cn.fdongl.market.security.mapper.RightMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +24,10 @@ public class RightService {
             if(item.getValue().getFather()!=null){
                 Right r = rights.get(item.getValue().getFather());
                 if(r!=null){
-                    if(r.getChild()==null){
-                        r.setChild(new ArrayList<Right>());
+                    if(r.getChildren()==null){
+                        r.setChildren(new ArrayList<Right>());
                     }
-                    ((List)r.getChild()).add(item.getValue());
+                    ((List)r.getChildren()).add(item.getValue());
                 }
                 it.remove();
             }

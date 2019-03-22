@@ -5,6 +5,9 @@ import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.security.service.UserService;
 import cn.fdongl.market.util.ControllerBase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +20,10 @@ public class UserController extends ControllerBase {
 
     @Autowired
     UserService userService;
+
+
+    @Autowired
+    public PasswordEncoder passwordEncoder;
 
     @RequestMapping("list")
     public Object list(AppUserDetail userDetail) throws Exception {
@@ -67,6 +74,15 @@ public class UserController extends ControllerBase {
     @RequestMapping("menu")
     public Object menu(AppUserDetail userDetail) throws Exception {
         return success(userService.getMenu(userDetail.getId()));
+    }
+
+    @RequestMapping("updatePassword")
+    public Object updatePassword(AppUserDetail userDetail,@RequestParam String oldPassword,@RequestParam String newPassword) throws Exception {
+        if(passwordEncoder.encode(oldPassword).equals(userDetail.getPassword())) {
+            userService.updatePassword(newPassword, userDetail.getId());
+            return success();
+        }
+        return fail(null,"密码校验失败");
     }
 
 }

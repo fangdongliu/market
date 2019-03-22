@@ -26,6 +26,6 @@ public class Right {
 
     Integer status;//权限状态，0表示启用，1表示禁用
     Integer father;//父权限ID
-    Object child;//用于生成树
+    Object children;//用于生成树
 
 }
