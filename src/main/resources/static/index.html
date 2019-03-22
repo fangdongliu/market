@@ -122,59 +122,26 @@
                         {name:'省审核备案', url:'provinceRecord.html'},
                         {name:'监测点填报备案', url:'pointRecord.html'},
                         {name:'用户查询', url:'provinceQueryUser.html'},
-                        {name:'权限授予', url:'adminRightManage.html'}
+                        {name:'角色管理', url:'adminRoleManage.html'},
+                        {name:'通知中心', url:'messageCenter.html'},
+                        {name:'上报时限管理', url:'deadline.html'}
                     ]
                 },
                 {
                     icon:'el-icon-menu',
                     name:'导航二',
                     url:''
-                },
-                {
-                    icon:'el-icon-location',
-                    name:'导航三',
-                    child:[
-                        {name:'省审核备案', url:'provinceRecord.html'},
-                        {name:'监测点填报备案', url:'pointRecord.html'}
-                    ]
                 }
             ],
             isLogout:true,
             visible:'',
             inputName:'',
             inputPswd:'',
-            detailVisible:false,
-            marketData: [{
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-01',
-                state: '待审核'
-            },{
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-02',
-                state: '待审核'
-            },{
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-03',
-                state: '待审核'
-            },{
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-04',
-                state: '待审核'
-            },{
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-05',
-                state: '待审核'
-            },{
-                name: '北京市海淀区中关村人力资源市场',
-                date: '2016-05-06',
-                state: '待审核'
-            }],
             src:'',
             loading:false
         },
         methods:{
             handleSelect(index){
-                console.log(index)
                 this.loading=true;
                 if(index.toString().indexOf('-')===-1){
                     this.src='/html/'+this.menu[index].url;
@@ -182,7 +149,6 @@
                 }else{
                     var i = index.indexOf('-');
                     this.src='/html/'+this.menu[index.substring(0,i)].child[index.substring(i+1)].url;
-                    console.log(this.src);
                     this.setupWatcher();
                 }
             },
@@ -196,9 +162,6 @@
             },
             handleClose(key, keyPath) {
                 console.log(key, keyPath);
-            },
-            handleClick() {
-                vue.detailVisible = true;
             },
             login() {
                 console.log(vue.inputName, vue.inputPswd);

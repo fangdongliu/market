@@ -7,9 +7,9 @@ public class ControllerBase {
 
     Result result = new Result();
 
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    SimpleDateFormat datetimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-    SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+    protected SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    protected SimpleDateFormat datetimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    protected SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
 
     protected Object fail(Object data,String message){
         result.setCode(1);

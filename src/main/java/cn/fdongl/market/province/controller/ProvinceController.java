@@ -1,14 +1,13 @@
 package cn.fdongl.market.province.controller;
 
 import cn.fdongl.market.province.entity.InnerUploadPeriod;
-import cn.fdongl.market.province.entity.uploadPeriod;
+import cn.fdongl.market.province.entity.UploadPeriod;
 import cn.fdongl.market.province.service.ProvinceService;
 import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.util.ControllerBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
@@ -74,7 +73,7 @@ public class ProvinceController extends ControllerBase {
     }
     //新建上报时限
     @PostMapping("/investigatePeriod/insert")
-    public Object uploadPeriodInsert(AppUserDetail appUserDetail, uploadPeriod period){
+    public Object uploadPeriodInsert(AppUserDetail appUserDetail, UploadPeriod period){
         try{
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date start=new java.sql.Date(format.parse(period.getStartDate()).getTime());
@@ -83,6 +82,8 @@ public class ProvinceController extends ControllerBase {
                 return fail(2);//日期不合法则返回fail
             }
             InnerUploadPeriod innerPeriod=new InnerUploadPeriod();
+            innerPeriod.setReviser(appUserDetail.getId());
+            innerPeriod.setReviseTime(new java.util.Date());
             innerPeriod.setStartDate(start);
             innerPeriod.setEndDate(end);
             innerPeriod.setCreator(appUserDetail.getId());
@@ -102,7 +103,7 @@ public class ProvinceController extends ControllerBase {
 
     //修改上报时限
     @PostMapping("/investigatePeriod/update")
-    public Object uploadPeriodUpdate(AppUserDetail appUserDetail,uploadPeriod period){
+    public Object uploadPeriodUpdate(AppUserDetail appUserDetail, UploadPeriod period){
         try{
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date start=new java.sql.Date(format.parse(period.getStartDate()).getTime());
@@ -131,7 +132,7 @@ public class ProvinceController extends ControllerBase {
                 return fail(null,"No result");
             }
             else{
-                uploadPeriod output=provinceService.InnerUploadPeriodTranform(innerUploadPeriod);
+                UploadPeriod output=provinceService.InnerUploadPeriodTranform(innerUploadPeriod);
                 if(output==null){
                     return fail("Unknown Error");
                 }
@@ -156,7 +157,7 @@ public class ProvinceController extends ControllerBase {
                 return fail(null,"No result");
             }
             else{
-                uploadPeriod output=provinceService.InnerUploadPeriodTranform(innerUploadPeriod);
+                UploadPeriod output=provinceService.InnerUploadPeriodTranform(innerUploadPeriod);
                 if(output==null){
                     return fail(null,"Unknown Error");
                 }
@@ -172,25 +173,31 @@ public class ProvinceController extends ControllerBase {
 
     //按时间段查询上报时限
     @PostMapping("/investigatePeriod/selectByPeriod")
-    public List<Object> uploadPeriodSelectByPeriod(AppUserDetail appUserDetail, uploadPeriod period){
+    public Object uploadPeriodSelectByPeriod(AppUserDetail appUserDetail, UploadPeriod period){
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             java.sql.Date startDate = new java.sql.Date(format.parse(period.getStartDate()).getTime());
             java.sql.Date endDate = new java.sql.Date(format.parse(period.getEndDate()).getTime());
             List<InnerUploadPeriod> outPutList=provinceService.uploadPeriodSelectByPeriod(startDate,endDate);
             if(outPutList==null){
-                return (List<Object>) fail(null,"No Result");
+                return fail(null,"No Result");
             }
             else{
-                List<uploadPeriod> output=new ArrayList<uploadPeriod>();
+                List<UploadPeriod> output=new ArrayList<UploadPeriod>();
                 for (InnerUploadPeriod innerUploadPeriod : outPutList) {
                     output.add(provinceService.InnerUploadPeriodTranform(innerUploadPeriod));
                 }
-                return (List<Object>) success(output);
+                return success(output);
             }
         }
         catch (Exception e){
-            return (List<Object>) fail(null,"Unknown Error");
+            return fail(null,"Unknown Error");
         }
+    }
+
+    //查询所有上报时限
+    @PostMapping("/investigatePeriod/selectAllPeriod")
+    public Object uploadPeriodSelectAll(AppUserDetail appUserDetail)throws Exception{
+        return success(provinceService.uploadPeriodsSelectAll());
     }
 }

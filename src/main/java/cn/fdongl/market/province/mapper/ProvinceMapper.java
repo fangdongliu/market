@@ -3,7 +3,6 @@ package cn.fdongl.market.province.mapper;
 
 import cn.fdongl.market.market.entity.Record;
 import cn.fdongl.market.province.entity.InnerUploadPeriod;
-import cn.fdongl.market.province.entity.uploadPeriod;
 import org.apache.ibatis.annotations.*;
 import org.springframework.core.annotation.Order;
 
@@ -157,7 +156,7 @@ public interface ProvinceMapper {
             "creator AS creator, \n" +
             "revise_date AS reviseDate, \n" +
             "reviser AS reviser, \n" +
-            "delete_flag AS deleteFlag, \n" +
+            "delete_flag AS deleteFlag \n" +
             "from t_upload_period \n" +
             "where create_time between #{param1} and #{param2};")
     List<InnerUploadPeriod> selectByPeriod(Date startDate,Date endDate);
@@ -171,7 +170,7 @@ public interface ProvinceMapper {
             "creator AS creator, \n" +
             "revise_date AS reviseDate, \n" +
             "reviser AS reviser, \n" +
-            "delete_flag AS deleteFlag, \n" +
+            "delete_flag AS deleteFlag \n" +
             "from t_upload_period \n" +
             "where upload_period_id=#{param1} limit 1;")
     InnerUploadPeriod selectById(Integer uploadPeriodID);
@@ -181,4 +180,16 @@ public interface ProvinceMapper {
             "count(upload_period_id) \n" +
             "from t_upload_period limit 1;")
     Integer getPeriodNumber();
+
+    //查询所有调查期
+    @Select("SELECT \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "start_date AS startDate, \n" +
+            "end_date AS endDate, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "reviser AS reviser, \n" +
+            "delete_flag AS deleteFlag \n" +
+            "from t_upload_period;")
+    List<InnerUploadPeriod> selectAllPeriod();
 }

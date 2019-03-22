@@ -5,12 +5,9 @@
     <title>checkPointRecord</title>
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <!-- Vue -->
-    <script src="//vuejs.org/js/vue.min.js"></script>
-    <link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">
-    <script src="//unpkg.com/iview/dist/iview.min.js"></script>
-    <!--elementUI-->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.6.9/vue.min.js"></script>
+    <link href="https://cdn.bootcss.com/element-ui/2.6.1/theme-chalk/index.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/element-ui/2.6.1/index.js"></script>
     <link rel="stylesheet" href="../css/stylesheet.css">
 </head>
 <body>
@@ -25,27 +22,54 @@
 
                 <el-row type="flex" justify="center">
                     <el-col :span="16">
-                        <el-form ref="marketDetailForm" :model="marketDetailForm" label-width="150px">
-                            <el-form-item label="人力资源市场名称">
+                        <el-form ref="marketDetailForm" :model="marketDetailForm" :rules="formRules" label-width="150px">
+                            <el-form-item label="人力资源市场名称" prop="name">
                                 <el-input v-model="marketDetailForm.name" :disabled="ifSubmitMarketDetail"></el-input>
                             </el-form-item>
-                            <el-form-item label="所在地区" >
-                                <el-input v-model="marketDetailForm.location" :disabled="ifSubmitMarketDetail"></el-input>
+                            <el-form-item label="所在地区" prop="location">
+                                <el-cascader
+                                        :options="cityOptions"
+                                        v-model="marketDetailForm.location"
+                                        @change="handleChange"
+                                        :disabled="ifSubmitMarketDetail">
+                                </el-cascader>
+
+                                <!--<el-input v-model="marketDetailForm.location" :disabled="ifSubmitMarketDetail"></el-input>-->
                             </el-form-item>
-                            <el-form-item label="联系人姓名">
+                            <el-form-item label="联系人姓名" prop="people">
                                 <el-input v-model="marketDetailForm.people" :disabled="ifSubmitMarketDetail"></el-input>
                             </el-form-item>
-                            <el-form-item label="联系人手机号">
-                                <el-input v-model="marketDetailForm.mobile" :disabled="ifSubmitMarketDetail"></el-input>
+                            <el-form-item label="联系人手机号" prop="mobile">
+                                <el-input v-model.number="marketDetailForm.mobile" :disabled="ifSubmitMarketDetail"></el-input>
                             </el-form-item>
-                            <el-form-item label="联系电话">
-                                <el-input v-model="marketDetailForm.phone" :disabled="ifSubmitMarketDetail"></el-input>
+                            <el-form-item label="联系电话" required>
+                                <el-col :span="7">
+                                    <el-form-item prop="phonePre">
+                                        <el-input v-model.number="marketDetailForm.phonePre" :disabled="ifSubmitMarketDetail" placeholder="区域号"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="line" :span="2" style="text-align: center">-</el-col>
+                                <el-col :span="15">
+                                    <el-form-item prop="phone">
+                                        <el-input v-model.number="marketDetailForm.phone" :disabled="ifSubmitMarketDetail" placeholder="电话号"></el-input>
+                                    </el-form-item>
+                                </el-col>
                             </el-form-item>
-                            <el-form-item label="传真">
-                                <el-input v-model="marketDetailForm.fax" :disabled="ifSubmitMarketDetail"></el-input>
+                            <el-form-item label="传真" required>
+                                <el-col :span="7">
+                                    <el-form-item prop="faxPre">
+                                        <el-input v-model.number="marketDetailForm.faxPre" :disabled="ifSubmitMarketDetail" placeholder="传真区域号"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="line" :span="2" style="text-align: center">-</el-col>
+                                <el-col :span="15">
+                                    <el-form-item prop="fax">
+                                        <el-input v-model.number="marketDetailForm.fax" :disabled="ifSubmitMarketDetail" placeholder="传真号"></el-input>
+                                    </el-form-item>
+                                </el-col>
                             </el-form-item>
                             <el-form-item>
-                                <el-button type="primary" @click="onSubmitMarketDetail" v-if="!ifSubmitMarketDetail">申报</el-button>
+                                <el-button type="primary" @click="onSubmitMarketDetail('marketDetailForm')" v-if="!ifSubmitMarketDetail">申报</el-button>
                                 <el-button @click="resetMarketDetailForm('marketDetailForm')" v-if="!ifSubmitMarketDetail">重置</el-button>
                                 <el-button type="primary" v-if="ifSubmitMarketDetail" disabled>申报</el-button>
                                 <el-button v-if="ifSubmitMarketDetail" disabled>重置</el-button>
@@ -60,6 +84,82 @@
 </body>
 
 <script>
+    var checkMobile = (rule, value, callback) => {
+        if (!value) {
+            return callback(new Error('请填写手机号码'));
+        }
+        if (!Number.isInteger(value)) {
+            callback(new Error('请输入数字值'));
+        } else {
+            if (value.toString().length !== 11) {
+                callback(new Error('手机号码必须11位数字！'));
+            } else {
+                callback();
+            }
+        }
+    };
+
+    var checkPhonePre = (rule, value, callback) => {
+        if (!value) {
+            return callback(new Error('电话区域号不能为空'));
+        }
+        if (!Number.isInteger(value)) {
+            callback(new Error('请输入数字值'));
+        } else {
+            if (value.toString().length !== 3) {
+                callback(new Error('必须3位数字！'));
+            } else {
+                callback();
+            }
+        }
+    };
+
+    var checkPhone = (rule, value, callback) => {
+        if (!value) {
+            return callback(new Error('电话号码不能为空'));
+        }
+        if (!Number.isInteger(value)) {
+            callback(new Error('请输入数字值'));
+        } else {
+            if (value.toString().length !== 8) {
+                callback(new Error('必须8位数字！'));
+            } else {
+                callback();
+            }
+        }
+    };
+
+    var checkFaxPre = (rule, value, callback) => {
+        if (!value) {
+            return callback(new Error('传真区域号不能为空'));
+        }
+        if (!Number.isInteger(value)) {
+            callback(new Error('请输入数字值'));
+        } else {
+            if (value.toString().length !== 4) {
+                callback(new Error('必须4位数字！'));
+            } else {
+                callback();
+            }
+        }
+    };
+
+    var checkFax = (rule, value, callback) => {
+        if (!value) {
+            return callback(new Error('传真号不能为空'));
+        }
+        if (!Number.isInteger(value)) {
+            console.log(value)
+            callback(new Error('请输入数字值'));
+        } else {
+            if (value.toString().length !== 8) {
+                callback(new Error('必须8位数字！'));
+            } else {
+                callback();
+            }
+        }
+    };
+
     var vue3 = new Vue({
         el:'#pointRecordApp',
         data:{
@@ -68,74 +168,206 @@
                 location:'',
                 people:'',
                 mobile:'',
+                phonePre:'',
                 phone:'',
+                faxPre:'',
                 fax:''
             },
             ifSubmitMarketDetail:null,
-            marketStateFlag:-1
+            marketStateFlag:-1,
+            formRules:{
+                name:{required:true, min:3, max:60, message:'长度在3~60字符之间！', trigger:'blur'},
+                location:{required:true, min:3, max:60, message:'长度在3~60字符之间！', trigger:'blur'},
+                people:{required:true, max:30, message:'请填写姓名，至多30字符！', trigger:'blur'},
+                mobile:{required:true, validator:checkMobile, trigger:'blur'},
+                phonePre:{validator:checkPhonePre, trigger:'blur'},
+                phone:{validator:checkPhone, trigger:'blur'},
+                faxPre:{validator:checkFaxPre, trigger:'blur'},
+                fax:{validator:checkFax, trigger:'blur'}
+            },
+            phone:'',
+            fax:'',
+            cityOptions:{
+                value:'anhui',
+                label:'安徽省',
+                children:[{
+                    value:'anqing',
+                    label:'安庆',
+                    children:[{
+                        value:'anqingshi',
+                        label:'安庆市'
+                    },{
+                        value:'huainingxian',
+                        label:'怀宁县'
+                    },{
+                        value:'qianshanxian',
+                        label:'潜山县'
+                    },{
+                        value:'susongxian',
+                        label:'宿松县'
+                    },{
+                        value:'taihuxian',
+                        label:'太湖县'
+                    },{
+                        value:'tongchengshi',
+                        label:'桐城市'
+                    },{
+                        value:'wangjiangxian',
+                        label:'望江县'
+                    },{
+                        value:'yuexixian',
+                        label:'岳西县'
+                    },{
+                        value:'zongyangxian',
+                        label:'枞阳县'
+                    },{
+                        value:'anqingshi',
+                        label:'安庆市'
+                    }]
+                },{
+                    value:'bengbu',
+                    label:'蚌埠',
+                    children:[],
+                },{
+                    value:'chaohu',
+                    label:'巢湖',
+                    children:[],
+                },{
+                    value:'chizhou',
+                    label:'池州',
+                    children:[],
+                },{
+                    value:'chuzhou',
+                    label:'滁州',
+                    children:[],
+                },{
+                    value:'fuyang',
+                    label:'阜阳',
+                    children:[],
+                },{
+                    value:'hefei',
+                    label:'合肥',
+                    children:[],
+                },{
+                    value:'huanbei',
+                    label:'淮北',
+                    children:[],
+                },{
+                    value:'huainan',
+                    label:'淮南',
+                    children:[],
+                },{
+                    value:'huangshan',
+                    label:'黄山',
+                    children:[],
+                },{
+                    value:'liuan',
+                    label:'六安',
+                    children:[],
+                },{
+                    value:'maanshan',
+                    label:'马鞍山',
+                    children:[],
+                },{
+                    value:'suzhou',
+                    label:'宿州',
+                    children:[],
+                },{
+                    value:'tongling',
+                    label:'铜陵',
+                    children:[],
+                },{
+                    value:'wuhu',
+                    label:'芜湖',
+                    children:[],
+                },{
+                    value:'xuancheng',
+                    label:'宣城',
+                    children:[],
+                },{
+                    value:'bozhou',
+                    label:'亳州',
+                    children:[],
+                }
+                ]
+            }
         },
         methods:{
-            onSubmitMarketDetail: function() {
-                if(this.marketStateFlag === -1) {//新建备案
-                    $.ajax({
-                        url:'/market/record/insert',
-                        type:'post',
-                        data:{
-                            regionEmpName:this.marketDetailForm.name,
-                            regionName:this.marketDetailForm.location,
-                            regionEmpContact:this.marketDetailForm.people,
-                            regionEmpContactMobi:this.marketDetailForm.mobile,
-                            regionEmpContactNum:this.marketDetailForm.phone,
-                            regionEmpFax:this.marketDetailForm.fax,
-                            stateFlag:1
-                        },
-                        success(res){
-                            console.log(2)
-                            vue3.$message({
-                                type: 'success',
-                                message: '已提交!'
-                            });
-                            vue3.ifSubmitMarketDetail = true;
-                        },
-                        error(res){
-                            this.$message({
-                                type: 'error',
-                                message: '出错了哦!'
-                            });
-                        }
-                    })
+            onSubmitMarketDetail: function(formName) {
+
+                vue3.$refs[formName].validate((valid) => {
+                        if (valid) {
+                            this.phone = this.marketDetailForm.phonePre.toString()+this.marketDetailForm.phone.toString();
+                            this.fax = this.marketDetailForm.faxPre.toString() + this.marketDetailForm.fax.toString();
+                            if(this.marketStateFlag === -1) {//新建备案
+                                $.ajax({
+                                    url:'/market/record/insert',
+                                    type:'post',
+                                    data:{
+                                        regionEmpName:this.marketDetailForm.name,
+                                        regionName:this.marketDetailForm.location,
+                                        regionEmpContact:this.marketDetailForm.people,
+                                        regionEmpContactMobi:this.marketDetailForm.mobile,
+                                        regionEmpContactNum:this.phone,
+                                        regionEmpFax:this.fax,
+                                        stateFlag:1
+                                    },
+                                    success(res){
+                                        vue3.$message({
+                                            type: 'success',
+                                            message: '已提交!'
+                                        });
+                                        vue3.ifSubmitMarketDetail = true;
+                                    },
+                                    error(res){
+                                        this.$message({
+                                            type: 'error',
+                                            message: '出错了哦!'
+                                        });
+                                    }
+                                })
+                            }
+                            else{//更新备案
+                                $.ajax({
+                                    url:'/market/record/update',
+                                    type:'post',
+                                    data:{
+                                        regionEmpName:this.marketDetailForm.name,
+                                        regionName:this.marketDetailForm.location,
+                                        regionEmpContact:this.marketDetailForm.people,
+                                        regionEmpContactMobi:this.marketDetailForm.mobile,
+                                        regionEmpContactNum:this.phone,
+                                        regionEmpFax:this.fax,
+                                        stateFlag:1
+                                    },
+                                    success(res){
+                                        vue3.$message({
+                                            type: 'success',
+                                            message: '已提交!'
+                                        });
+                                        vue3.ifSubmitMarketDetail = true;
+                                    },
+                                    error(res){
+                                        this.$message({
+                                            type: 'error',
+                                            message: '出错了哦!'
+                                        });
+                                    }
+                                })
+                            }
+                            //
+                            // alert('submit!');
+                        } else {
+                            console.log('error submit!!');
+                    return false;
                 }
-                else{//更新备案
-                    $.ajax({
-                        url:'/market/record/update',
-                        type:'post',
-                        data:{
-                            regionEmpName:this.marketDetailForm.name,
-                            regionName:this.marketDetailForm.location,
-                            regionEmpContact:this.marketDetailForm.people,
-                            regionEmpContactMobi:this.marketDetailForm.mobile,
-                            regionEmpContactNum:this.marketDetailForm.phone,
-                            regionEmpFax:this.marketDetailForm.fax,
-                            stateFlag:1
-                        },
-                        success(res){
-                            vue3.$message({
-                                type: 'success',
-                                message: '已提交!'
-                            });
-                            vue3.ifSubmitMarketDetail = true;
-                        },
-                        error(res){
-                            this.$message({
-                                type: 'error',
-                                message: '出错了哦!'
-                            });
-                        }
-                    })
-                }
+                });
             },
             resetMarketDetailForm:function(formName) {
                 this.$refs[formName].resetFields();
+            },
+            handleChange(value) {
+                console.log(value);
             }
         },
         mounted:function () {
@@ -143,15 +375,36 @@
                 url:'/market/record/select',
                 type:'post',
                 success(res){
+                    console.log(res);
                     if(res.data === null){
                         vue3.marketStateFlag = -1;//没有创建过备案
                     }
                     else{
                         vue3.marketStateFlag = res.data.stateFlag;
                     }
-                    if(vue3.marketStateFlag===1 || vue3.marketStateFlag ===2) {
+                    if(vue3.marketStateFlag===1 || vue3.marketStateFlag===2) {
                         //待审核状态 已完成未过期状态 不可修改
+                        vue3.marketDetailForm.faxPre = parseInt(res.data.regionEmpFax.substring(0,4));
+                        vue3.marketDetailForm.fax = parseInt(res.data.regionEmpFax.substring(4,12));
+                        vue3.marketDetailForm.phonePre = parseInt(res.data.regionEmpContactNum.substring(0,3));
+                        vue3.marketDetailForm.phone = parseInt(res.data.regionEmpContactNum.substring(3,11));
+                        vue3.marketDetailForm.mobile = parseInt(res.data.regionEmpContactMobi);
+                        vue3.marketDetailForm.people = res.data.regionEmpContact;
+                        vue3.marketDetailForm.location = res.data.regionName;
+                        vue3.marketDetailForm.name = res.data.regionEmpName;
                         vue3.ifSubmitMarketDetail = true;
+                    }
+                    else if(vue3.marketStateFlag===0){
+                        //被拒绝了 重新修改
+                        vue3.marketDetailForm.faxPre = parseInt(res.data.regionEmpFax.substring(0,4));
+                        vue3.marketDetailForm.fax = parseInt(res.data.regionEmpFax.substring(4,12));
+                        vue3.marketDetailForm.phonePre = parseInt(res.data.regionEmpContactNum.substring(0,3));
+                        vue3.marketDetailForm.phone = parseInt(res.data.regionEmpContactNum.substring(3,11));
+                        vue3.marketDetailForm.mobile = parseInt(res.data.regionEmpContactMobi);
+                        vue3.marketDetailForm.people = res.data.regionEmpContact;
+                        vue3.marketDetailForm.location = res.data.regionName;
+                        vue3.marketDetailForm.name = res.data.regionEmpName;
+                        vue3.ifSubmitMarketDetail = false;
                     }
                     else{
                         vue3.ifSubmitMarketDetail = false;
