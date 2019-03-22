@@ -3,7 +3,6 @@ package cn.fdongl.market.province.mapper;
 
 import cn.fdongl.market.market.entity.Record;
 import cn.fdongl.market.province.entity.InnerUploadPeriod;
-import cn.fdongl.market.province.entity.uploadPeriod;
 import org.apache.ibatis.annotations.*;
 import org.springframework.core.annotation.Order;
 
@@ -124,13 +123,13 @@ public interface ProvinceMapper {
 
     //新增调查期
     @Insert("INSERT INTO t_upload_period " +
-            "(upload_period_id,start_date,end_date,create_time,creator,delete_flag) \n" +
-            "values(#{uploadPeriodId},#{startDate},#{endDate},#{creatTime},#{creator},#{deleteFlag});")
+            "(upload_period_id,start_date,end_date,create_time,creator,revise_time,reviser,delete_flag) \n" +
+            "values(#{uploadPeriodId},#{startDate},#{endDate},#{creatTime},#{creator},#{reviseTime},#{reviser},#{deleteFlag});")
     Integer periodInsert(InnerUploadPeriod period);
 
     //修改调查期
     @Update("UPDATE t_upload_period \n" +
-            "set start_date=#{param1},end_date=#{param2},revise_date=#{param3},reviser=#{param4} \n" +
+            "set start_date=#{param1},end_date=#{param2},revise_time=#{param3},reviser=#{param4} \n" +
             "where upload_period_id=#{param5};")
     Integer periodUpdate(Date startDate, Date endDate, java.util.Date reviseDate, Integer reviser, Integer uploadPeriodID);
 
@@ -141,7 +140,7 @@ public interface ProvinceMapper {
             "end_date AS endDate, \n" +
             "create_time AS createTime, \n" +
             "creator AS creator, \n" +
-            "revise_date AS reviseDate, \n" +
+            "revise_time AS reviseTime, \n" +
             "reviser AS reviser, \n" +
             "delete_flag AS deleteFlag \n" +
             "from t_upload_period \n" +
@@ -155,9 +154,9 @@ public interface ProvinceMapper {
             "end_date AS endDate, \n" +
             "create_time AS createTime, \n" +
             "creator AS creator, \n" +
-            "revise_date AS reviseDate, \n" +
+            "revise_time AS reviseTime, \n" +
             "reviser AS reviser, \n" +
-            "delete_flag AS deleteFlag, \n" +
+            "delete_flag AS deleteFlag \n" +
             "from t_upload_period \n" +
             "where create_time between #{param1} and #{param2};")
     List<InnerUploadPeriod> selectByPeriod(Date startDate,Date endDate);
@@ -169,9 +168,9 @@ public interface ProvinceMapper {
             "end_date AS endDate, \n" +
             "create_time AS createTime, \n" +
             "creator AS creator, \n" +
-            "revise_date AS reviseDate, \n" +
+            "revise_time AS reviseTime, \n" +
             "reviser AS reviser, \n" +
-            "delete_flag AS deleteFlag, \n" +
+            "delete_flag AS deleteFlag \n" +
             "from t_upload_period \n" +
             "where upload_period_id=#{param1} limit 1;")
     InnerUploadPeriod selectById(Integer uploadPeriodID);
@@ -181,4 +180,17 @@ public interface ProvinceMapper {
             "count(upload_period_id) \n" +
             "from t_upload_period limit 1;")
     Integer getPeriodNumber();
+
+    //查询所有调查期
+    @Select("SELECT \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "start_date AS startDate, \n" +
+            "end_date AS endDate, \n" +
+            "create_time AS createTime, \n" +
+            "revise_time AS reviseTime" +
+            "creator AS creator, \n" +
+            "reviser AS reviser, \n" +
+            "delete_flag AS deleteFlag \n" +
+            "from t_upload_period;")
+    List<InnerUploadPeriod> selectAllPeriod();
 }

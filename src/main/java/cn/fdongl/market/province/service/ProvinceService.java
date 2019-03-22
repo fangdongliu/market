@@ -2,7 +2,7 @@ package cn.fdongl.market.province.service;
 
 import cn.fdongl.market.market.entity.Record;
 import cn.fdongl.market.province.entity.InnerUploadPeriod;
-import cn.fdongl.market.province.entity.uploadPeriod;
+import cn.fdongl.market.province.entity.UploadPeriod;
 import cn.fdongl.market.province.mapper.ProvinceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -168,13 +169,29 @@ public class ProvinceService {
         return provinceMapper.selectByPeriod(startDate,endDate);
     }
 
+    //查询所有上报时限
+    public List<UploadPeriod> uploadPeriodsSelectAll() throws Exception{
+        List<InnerUploadPeriod> preOutput=provinceMapper.selectAllPeriod();
+        if(preOutput==null||preOutput.size()==0){
+            throw new Exception("No result");
+        }
+        else{
+            List<UploadPeriod> output = new ArrayList<UploadPeriod>();
+            for(int i=0;i<preOutput.size();i++){
+                output.add(InnerUploadPeriodTranform(preOutput.get(i)));
+            }
+            return  output;
+        }
+    }
+
+
     //将InnerUploadPeriod对象转化为uploadPeriod对象
-    public uploadPeriod InnerUploadPeriodTranform(InnerUploadPeriod input){
+    public UploadPeriod InnerUploadPeriodTranform(InnerUploadPeriod input){
         try {
             if(input==null){
                 return null;
             }
-            uploadPeriod output = new uploadPeriod();
+            UploadPeriod output = new UploadPeriod();
             output.setUploadPeriodId(input.getUploadPeriodId());
             output.setCreator(input.getCreator());
             output.setReviser(input.getReviser());
