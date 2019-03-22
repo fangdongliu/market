@@ -432,7 +432,6 @@ public interface MarketMapper {
             "from t_prof_num where table_id = #{param1};")
     ProfNum uploadSelectProfNum(Integer tableId);
 
-
     //查询需求前十职业表
     @Select("SELECT \n" +
             "table_id AS tableId,\n" +
@@ -478,7 +477,6 @@ public interface MarketMapper {
             "most_prof10_jobseek AS mostProf10Jobseek \n" +
             "from t_most_needed where table_id = #{param1};")
     MostNeeded uploadSelectMostNeeded(Integer tableId);
-
 
     //查询饱和前十职业表
     @Select("SELECT \n" +
@@ -542,7 +540,6 @@ public interface MarketMapper {
             "from t_job_seeker_num where table_id = #{param1};")
     JobSeekerNum uploadSelectJobSeekerNum(Integer tableId);
 
-
     //查询性别供求人数表
     @Select("SELECT \n" +
             "table_id AS tableId,\n" +
@@ -553,7 +550,6 @@ public interface MarketMapper {
             "no_requ_need AS noRequNeed \n" +
             "from t_sex_num where table_id = #{param1};")
     SexNum uploadSelectSexNum(Integer tableId);
-
 
     //查询文化程度供求人数表
     @Select("SELECT \n" +
@@ -572,7 +568,6 @@ public interface MarketMapper {
             "from t_degree_num where table_id = #{param1};")
     DegreeNum uploadSelectDegreeNum(Integer tableId);
 
-
     //查询年龄供求人数表
     @Select("SELECT \n" +
             "table_id AS tableId,\n" +
@@ -587,7 +582,6 @@ public interface MarketMapper {
             "no_requ_need AS noRequNeed \n" +
             "from t_age_num where table_id = #{param1};")
     AgeNum uploadSelectAgeNum(Integer tableId);
-
 
     //查询技术等级供求人数表
     @Select("SELECT \n" +

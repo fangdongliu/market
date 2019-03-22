@@ -155,7 +155,7 @@ public class MarketService {
         ageNum.setTableId(tableId);
         degreeNum.setTableId(tableId);
         techGradeNum.setTableId(tableId);
-        int n=marketMapper.uploadInsertUploadInfo(uploadInfo);
+        int n=marketMapper.uploadUpdateUploadInfo(uploadInfo);
         if(n!=1){
             throw new RuntimeException("更新上传数据信息失败");
         }
