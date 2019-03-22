@@ -61,7 +61,7 @@ public class MarketController extends ControllerBase {
             AgeNum ageNum,
             DegreeNum degreeNum,
             TechGradeNum techGradeNum) throws Exception {
-        SimpleUploadPeriod simpleUploadPeriod=marketService.uploadSelectUploadPeriod(new Date());
+        SimpleUploadPeriod simpleUploadPeriod=marketService.UploadPeriodSelect(new Date());
         if(simpleUploadPeriod==null){
             throw new Exception("当前时间不在上传期内，无法上传数据");
         }
@@ -101,7 +101,7 @@ public class MarketController extends ControllerBase {
             AgeNum ageNum,
             DegreeNum degreeNum,
             TechGradeNum techGradeNum) throws Exception {
-        SimpleUploadPeriod simpleUploadPeriod=marketService.uploadSelectUploadPeriod(new Date());
+        SimpleUploadPeriod simpleUploadPeriod=marketService.UploadPeriodSelect(new Date());
         if(uploadInfo.getUploadPeriodId()==null&&simpleUploadPeriod==null){
             throw new Exception("当前时间不在上传期内，无法上传数据");
         }
@@ -125,8 +125,8 @@ public class MarketController extends ControllerBase {
 
     //查询当前上传期
     @PostMapping("/data/uploadPeriodSelect")
-    public SimpleUploadPeriod UploadSelectUploadPeriod(){
-        return marketService.uploadSelectUploadPeriod(new Date());
+    public SimpleUploadPeriod UploadPeriodSelect(){
+        return marketService.UploadPeriodSelect(new Date());
     }
 
     //查询上传信息
@@ -196,7 +196,7 @@ public class MarketController extends ControllerBase {
     }
 
     //查询技术等级供求人数
-    @PostMapping("/data/techGrageNumSelect")
+    @PostMapping("/data/techGradeNumSelect")
     public Object TechGradeNumSelect(Integer tableId) throws Exception {
         return success(marketService.TechGradeNumSelect(tableId));
     }

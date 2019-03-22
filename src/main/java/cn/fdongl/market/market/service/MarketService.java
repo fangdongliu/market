@@ -39,12 +39,6 @@ public class MarketService {
         else return record;
     }
 
-    //按时间点查询上报时限，非事务
-    public SimpleUploadPeriod uploadSelectUploadPeriod(Date date){
-        java.sql.Date sqlDate=new java.sql.Date(date.getTime());
-        return marketMapper.uploadSelectUploadPeriod(sqlDate);
-    }
-
     //监测点新建上传数据，事务
     @Transactional
     public void uploadInsert(UploadInfo uploadInfo,
@@ -203,6 +197,12 @@ public class MarketService {
         if(n!=1){
             throw new RuntimeException("更新技术等级供求人数失败");
         }
+    }
+
+    //按时间点查询上报时限，非事务
+    public SimpleUploadPeriod UploadPeriodSelect(Date date){
+        java.sql.Date sqlDate=new java.sql.Date(date.getTime());
+        return marketMapper.uploadSelectUploadPeriod(sqlDate);
     }
 
     //上传数据信息表查询
