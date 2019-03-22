@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class MarketService {
@@ -59,7 +58,7 @@ public class MarketService {
                              SexNum sexNum,
                              AgeNum ageNum,
                              DegreeNum degreeNum,
-                             TechGrageNum techGrageNum) throws RuntimeException {
+                             TechGradeNum techGradeNum) throws RuntimeException {
         Integer tableId=marketMapper.uploadSelectNextTableId();//在事务中获取下一个id，失败则回滚
         if(tableId==null||tableId<=0){
             throw new RuntimeException("数据错误");
@@ -75,7 +74,7 @@ public class MarketService {
         sexNum.setTableId(tableId);
         ageNum.setTableId(tableId);
         degreeNum.setTableId(tableId);
-        techGrageNum.setTableId(tableId);
+        techGradeNum.setTableId(tableId);
         int n=marketMapper.uploadInsertUploadInfo(uploadInfo);
         if(n!=1){
             throw new RuntimeException("新建上传数据信息失败");
@@ -120,7 +119,7 @@ public class MarketService {
         if(n!=1){
             throw new RuntimeException("新建文化程度供求人数失败");
         }
-        n=marketMapper.uploadInsertTechGrageNum(techGrageNum);
+        n=marketMapper.uploadInsertTechGradeNum(techGradeNum);
         if(n!=1){
             throw new RuntimeException("新建技术等级供求人数失败");
         }
@@ -139,7 +138,7 @@ public class MarketService {
                              SexNum sexNum,
                              AgeNum ageNum,
                              DegreeNum degreeNum,
-                             TechGrageNum techGrageNum) throws RuntimeException {
+                             TechGradeNum techGradeNum) throws RuntimeException {
         Integer tableId=uploadInfo.getTableId();
         if(tableId==null||tableId<=0){
             throw new RuntimeException("数据错误");
@@ -155,7 +154,7 @@ public class MarketService {
         sexNum.setTableId(tableId);
         ageNum.setTableId(tableId);
         degreeNum.setTableId(tableId);
-        techGrageNum.setTableId(tableId);
+        techGradeNum.setTableId(tableId);
         int n=marketMapper.uploadInsertUploadInfo(uploadInfo);
         if(n!=1){
             throw new RuntimeException("更新上传数据信息失败");
@@ -200,7 +199,7 @@ public class MarketService {
         if(n!=1){
             throw new RuntimeException("更新文化程度供求人数失败");
         }
-        n=marketMapper.uploadUpdateTechGrageNum(techGrageNum);
+        n=marketMapper.uploadUpdateTechGradeNum(techGradeNum);
         if(n!=1){
             throw new RuntimeException("更新技术等级供求人数失败");
         }
@@ -328,8 +327,8 @@ public class MarketService {
     }
 
     //技术等级供求人数表查询
-    public TechGrageNum TechGrageNumSelect(Integer tableId) throws Exception {
-        TechGrageNum output=marketMapper.uploadSelectTechGrageNum(tableId);
+    public TechGradeNum TechGradeNumSelect(Integer tableId) throws Exception {
+        TechGradeNum output=marketMapper.uploadSelectTechGradeNum(tableId);
         if(output==null){
             throw new Exception("No result");
         }

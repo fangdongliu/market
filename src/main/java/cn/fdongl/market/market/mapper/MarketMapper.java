@@ -221,7 +221,7 @@ public interface MarketMapper {
             "#{profLevel5Need},#{profLevel5Jobseek},#{profLevel4Need},#{profLevel4Jobseek},#{profLevel3Need},#{profLevel3Jobseek}, \n" +
             "#{profLevel2Need},#{profLevel2Jobseek},#{profLevel1Need},#{profLevel1Jobseek},#{primProfNeed},#{primProfJobseek}, \n" +
             "#{mediProfNeed},#{mediProfJobseek},#{seniProfNeed},#{seniProfJobseek},#{noTechJobseek},#{noRequNeed});")
-    Integer uploadInsertTechGrageNum(TechGrageNum techGrageNum);
+    Integer uploadInsertTechGradeNum(TechGradeNum techGradeNum);
 
     //更新一条上传数据信息
     @Update("UPDATE t_upload_info SET \n" +
@@ -341,7 +341,7 @@ public interface MarketMapper {
             "medi_prof_need=#{mediProfNeed},medi_prof_jobseek=#{mediProfJobseek},seni_prof_need=#{seniProfNeed}, \n" +
             "seni_prof_jobseek=#{seniProfJobseek},no_tech_jobseek=#{noTechJobseek},no_requ_need=#{noRequNeed} \n" +
             "where table_id=#{tableId};")
-    Integer uploadUpdateTechGrageNum(TechGrageNum techGrageNum);
+    Integer uploadUpdateTechGradeNum(TechGradeNum techGradeNum);
     
     //查询上传数据信息
     @Select("SELECT \n" +
@@ -611,5 +611,5 @@ public interface MarketMapper {
             "no_tech_jobseek AS noTechJobseek,\n" +
             "no_requ_need AS noRequNeed \n" +
             "from t_tech_grade_num where table_id =#{param1};")
-    TechGrageNum uploadSelectTechGrageNum(Integer tableId);
+    TechGradeNum uploadSelectTechGradeNum(Integer tableId);
 }

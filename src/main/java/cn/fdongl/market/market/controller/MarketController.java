@@ -1,6 +1,5 @@
 package cn.fdongl.market.market.controller;
 
-
 import cn.fdongl.market.market.entity.*;
 import cn.fdongl.market.market.service.MarketService;
 import cn.fdongl.market.security.entity.AppUserDetail;
@@ -61,7 +60,7 @@ public class MarketController extends ControllerBase {
             SexNum sexNum,
             AgeNum ageNum,
             DegreeNum degreeNum,
-            TechGrageNum techGrageNum) throws Exception {
+            TechGradeNum techGradeNum) throws Exception {
         SimpleUploadPeriod simpleUploadPeriod=marketService.uploadSelectUploadPeriod(new Date());
         if(simpleUploadPeriod==null){
             throw new Exception("当前时间不在上传期内，无法上传数据");
@@ -83,7 +82,7 @@ public class MarketController extends ControllerBase {
                 sexNum,
                 ageNum,
                 degreeNum,
-                techGrageNum);
+                techGradeNum);
         return success();
     }
 
@@ -101,7 +100,7 @@ public class MarketController extends ControllerBase {
             SexNum sexNum,
             AgeNum ageNum,
             DegreeNum degreeNum,
-            TechGrageNum techGrageNum) throws Exception {
+            TechGradeNum techGradeNum) throws Exception {
         SimpleUploadPeriod simpleUploadPeriod=marketService.uploadSelectUploadPeriod(new Date());
         if(uploadInfo.getUploadPeriodId()==null&&simpleUploadPeriod==null){
             throw new Exception("当前时间不在上传期内，无法上传数据");
@@ -120,7 +119,7 @@ public class MarketController extends ControllerBase {
                 sexNum,
                 ageNum,
                 degreeNum,
-                techGrageNum);
+                techGradeNum);
         return success();
     }
 
@@ -198,7 +197,7 @@ public class MarketController extends ControllerBase {
 
     //查询技术等级供求人数
     @PostMapping("/data/techGrageNumSelect")
-    public Object TechGrageNumSelect(Integer tableId) throws Exception {
-        return success(marketService.TechGrageNumSelect(tableId));
+    public Object TechGradeNumSelect(Integer tableId) throws Exception {
+        return success(marketService.TechGradeNumSelect(tableId));
     }
 }
