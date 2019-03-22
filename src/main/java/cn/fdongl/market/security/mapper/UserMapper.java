@@ -19,13 +19,13 @@ public interface UserMapper {
             "VALUES(1,1,NOW(),1,0,'')")
     Integer test2();
 
-    @Select("(SELECT user_id as id,username,fullname,superior as father,state_flag as `status`,delete_flag as deleteFlag FROM t_user T1 WHERE T1.superior = #{param1})\n" +
+    @Select("(SELECT user_id as id,username,fullname,usertype as userType,superior as father,state_flag as `status`,delete_flag as deleteFlag FROM t_user T1 WHERE T1.superior = #{param1})\n" +
             "UNION\n" +
-            "(SELECT user_id as id,username,fullname,superior as father,state_flag as `status`,delete_flag as deleteFlag FROM t_user WHERE superior IN (SELECT T1.user_id FROM t_user T1 WHERE T1.superior = #{param1}))\n")
+            "(SELECT user_id as id,username,fullname,usertype as userType,superior as father,state_flag as `status`,delete_flag as deleteFlag FROM t_user WHERE superior IN (SELECT T1.user_id FROM t_user T1 WHERE T1.superior = #{param1}))\n")
     @MapKey("id")
     Map<Integer,ListUserData>userList(Integer userId);
 
-    @Select("SELECT user_id as id,username,fullname,superior as father,state_flag as `status`,delete_flag as deleteFlag FROM t_user")
+    @Select("SELECT user_id as id,username,fullname,usertype as userType,superior as father,state_flag as `status`,delete_flag as deleteFlag FROM t_user")
     List<ListUserData>list();
 
     @Update("UPDATE t_user\n" +
