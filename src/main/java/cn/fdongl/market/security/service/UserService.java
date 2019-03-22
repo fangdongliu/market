@@ -6,6 +6,7 @@ import cn.fdongl.market.security.entity.UsernameAndFullname;
 import cn.fdongl.market.security.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,6 +21,9 @@ public class UserService {
     UserMapper userMapper;
 
     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public Object list(Integer userId)throws Exception{
 
@@ -89,10 +93,10 @@ public class UserService {
             if(item.getValue().getFather()!=null){
                 Right r = menu.get(item.getValue().getFather());
                 if(r!=null){
-                    if(r.getChild()==null){
-                        r.setChild(new ArrayList<Right>());
+                    if(r.getChildren()==null){
+                        r.setChildren(new ArrayList<Right>());
                     }
-                    ((List)r.getChild()).add(item.getValue());
+                    ((List)r.getChildren()).add(item.getValue());
                 }
 
                 it.remove();
@@ -119,6 +123,10 @@ public class UserService {
         catch (Exception e){
             throw new Exception("重复的用户名");
         }
+    }
+
+    public void updatePassword(String password,Integer userId){
+        userMapper.updatePassword(passwordEncoder.encode(password),userId);
     }
 
 }
