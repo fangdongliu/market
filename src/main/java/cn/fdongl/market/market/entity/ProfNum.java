@@ -3,7 +3,9 @@ package cn.fdongl.market.market.entity;
 import lombok.Data;
 
 @Data
-public class ProfNum {
+public class ProfNum {//职业供求人数表，共16条数据
+
+    Integer tableId;//数据表id
     Integer leaderNeed;//单位负责人需求人数
     Integer leaderJobseek;//单位负责人求职人数
     Integer profTechNeed;//专业技术人员需求人数

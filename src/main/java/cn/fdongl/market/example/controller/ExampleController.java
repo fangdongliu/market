@@ -5,12 +5,11 @@ import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.util.ControllerBase;
 import org.aspectj.weaver.ast.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/example")//指定接口的一级路径
@@ -18,6 +17,8 @@ public class ExampleController extends ControllerBase {
 
     @Autowired
     TestService testService;
+
+
 
     @GetMapping("/hh")//指定接口的下一级路径，最终路径为 '/example/hh'
     public Object hhh(String hh,Integer dd){

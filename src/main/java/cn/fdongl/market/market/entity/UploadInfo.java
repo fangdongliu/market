@@ -4,8 +4,10 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class UploadInfo {
+public class UploadInfo {//上传数据信息表，共7条数据
 
+    Integer tableId;//数据表id
+    Integer uploadPeriodId;//所属上传期id
     Integer stateFlag;//状态标记
     Date createTime;//创建时间
     Integer creator;//创建者

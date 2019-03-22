@@ -8,6 +8,9 @@ spring:
     static-locations: classpath:static/,file:static/
   freemarker:
     suffix: .ftlh
+  jackson:
+    date-format: yyyy/MM/dd
+    time-zone: Hongkong
 server:
   port: 8070
 

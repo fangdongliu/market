@@ -1,15 +1,27 @@
 package cn.fdongl.market.util;
 
 import javax.xml.crypto.Data;
+import java.text.SimpleDateFormat;
 
 public class ControllerBase {
 
     Result result = new Result();
 
+    protected SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    protected SimpleDateFormat datetimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    protected SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+
     protected Object fail(Object data,String message){
         result.setCode(1);
         result.setData(data);
         result.setMessage(message);
+        return result;
+    }
+
+    protected Object fail(Exception e){
+        result.setCode(1);
+        result.setData(null);
+        result.setMessage(e.getMessage());
         return result;
     }
 

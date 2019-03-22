@@ -17,10 +17,10 @@
 <div id="app">
     <div id="pics">
         <el-carousel :height="screenH+'px'">
-            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="/res/index1.jpg"/> </el-carousel-item>
-            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="/res/index2.jpg"/> </el-carousel-item>
-            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="/res/index3.jpg"/> </el-carousel-item>
-            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="/res/index4.jpg"/> </el-carousel-item>
+            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="/image/index1.jpg"/> </el-carousel-item>
+            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="/image/index2.jpg"/> </el-carousel-item>
+            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="/image/index3.jpg"/> </el-carousel-item>
+            <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="/image/index4.jpg"/> </el-carousel-item>
         </el-carousel>
     </div>
 
@@ -77,28 +77,28 @@
                 console.log(this.screenH);
             },
 
-            login() {
-                console.log(this.form);
-
-                $.ajax({
-                    url:'/login',
-                    data:{
-                        form:this.form,
-                    },
-                    method:'post',
-                    success(res){
-                        console.log(res);
-                        if(res.code=='200') {
-                            alert('登录成功');
-                            window.location.href='../static/html/pointRecord.html';
-                        }
-                    },
-                    error(res){
-                        console.log(res);
-                        alert('登录失败');
-                    }
-                })
-            },
+            // login() {
+            //     console.log(this.form);
+            //
+            //     $.ajax({
+            //         url:'/login',
+            //         data:{
+            //             form:this.form,
+            //         },
+            //         method:'post',
+            //         success(res){
+            //             console.log(res);
+            //             if(res.code=='200') {
+            //                 alert('登录成功');
+            //                 window.location.href='../static/html/pointRecord.html';
+            //             }
+            //         },
+            //         error(res){
+            //             console.log(res);
+            //             alert('登录失败');
+            //         }
+            //     })
+            // },
         },
         // create:function () {
         //     this.setSize();
@@ -112,14 +112,14 @@
                 this.screenH = val;
             },
         },
-        mounted:function () {
-            // this.setSize();
-            window.onresize = function () { // 定义窗口大小变更通知事件
-                this.screenW = document.documentElement.clientWidth;
-                this.screenH = document.documentElement.clientHeight;
-            }
-            console.log(this.screenW,this.screenH);
-        }
+        // mounted:function () {
+        //     // this.setSize();
+        //     window.onresize = function () { // 定义窗口大小变更通知事件
+        //         this.screenW = document.documentElement.clientWidth;
+        //         this.screenH = document.documentElement.clientHeight;
+        //     }
+        //     console.log(this.screenW,this.screenH);
+        // }
     })
 </script>
 </html>

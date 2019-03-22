@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.Date;
 
 @RestController
@@ -20,46 +21,43 @@ public class MarketController extends ControllerBase {
 
     //新建备案
     @PostMapping("/record/insert")
-    public Integer RecordInsert(AppUserDetail appUserDetail, Record record,Integer stateFlag) throws Exception{
+    public Object RecordInsert(AppUserDetail appUserDetail, Record record) throws Exception {
         record.setRegionEmpId(appUserDetail.getId());
-        record.setStateFlag(stateFlag);
         record.setCreateTime(new Date());
         record.setCreator(appUserDetail.getId());
-        record.setReviseTime(null);
-        record.setReviser(null);
-        Integer n=marketService.recordInsert(record);
-        if(n<=0){
-            return 1;
-        }
-        return 0;
+        marketService.recordInsert(record);
+        return success();
     }
 
     //更新备案
     @PostMapping("/record/update")
-    public Integer RecordUpdate(AppUserDetail appUserDetail,Record record,Integer stateFlag) throws Exception{
+    public Object RecordUpdate(AppUserDetail appUserDetail,Record record) throws Exception {
         record.setRegionEmpId(appUserDetail.getId());
-        record.setStateFlag(stateFlag);
         record.setCreateTime(new Date());
         record.setCreator(appUserDetail.getId());
-        record.setReviseTime(null);
-        record.setReviser(null);
-        Integer n=marketService.recordUpdate(record);
-        if(n<=0){
-            return 1;
-        }
-        return 0;
+        marketService.recordUpdate(record);
+        return success();
     }
 
-    //查询备案
+    //查询个人备案
     @PostMapping("/record/select")
-    public Record RecordSelect(AppUserDetail appUserDetail) throws Exception{
-        return marketService.recordSelect(appUserDetail.getId());
+    public Object RecordSelect(AppUserDetail appUserDetail) throws Exception {
+        Object data=marketService.recordSelect(appUserDetail.getId());
+        return success(data);
+    }
+
+    @PostMapping("/upload/selectUploadPeriod")
+    public SimpleUploadPeriod UploadSelectUploadPeriod(){
+        //TODO
+        //InnerUploadPeriod innerUploadPeriod=marketService.UploadSelectUploadPeriod(new Date());
+        return null;
     }
 
     //新建数据上传
     @PostMapping("/upload/insert")
-    public Integer UploadInsert(
+    public Object UploadInsert(
             AppUserDetail appUserDetail,
+            Integer stateFlag,
             TotalNum totalNum,
             IndustryNum industryNum,
             EmployerNum employerNum,
@@ -70,13 +68,13 @@ public class MarketController extends ControllerBase {
             SexNum sexNum,
             AgeNum ageNum,
             DegreeNum degreeNum,
-            TechGrageNum techGrageNum,
-            Integer stateFlag) throws Exception {
+            TechGrageNum techGrageNum) throws Exception {
+
         UploadInfo uploadInfo=new UploadInfo();
         uploadInfo.setStateFlag(stateFlag);
         uploadInfo.setCreator(appUserDetail.getId());
         uploadInfo.setCreateTime(new Date());
-        int n=marketService.uploadInsert(
+        marketService.uploadInsert(
                 uploadInfo,
                 totalNum,
                 industryNum,
@@ -89,9 +87,94 @@ public class MarketController extends ControllerBase {
                 ageNum,
                 degreeNum,
                 techGrageNum);
-        if(n<=0){
-            throw new Exception();
-        }
-        return 0;
+        return success();
+    }
+
+    //更新数据上传
+    @PostMapping("/upload/update")
+    public Object UploadUpdate(
+            UploadInfo uploadInfo,
+            TotalNum totalNum,
+            IndustryNum industryNum,
+            EmployerNum employerNum,
+            ProfNum profNum,
+            MostNeeded mostNeeded,
+            LeastNeeded leastNeeded,
+            JobSeekerNum jobSeekerNum,
+            SexNum sexNum,
+            AgeNum ageNum,
+            DegreeNum degreeNum,
+            TechGrageNum techGrageNum) throws Exception {
+
+        uploadInfo.setCreateTime(new Date());
+        marketService.uploadInsert(
+                uploadInfo,
+                totalNum,
+                industryNum,
+                employerNum,
+                profNum,
+                mostNeeded,
+                leastNeeded,
+                jobSeekerNum,
+                sexNum,
+                ageNum,
+                degreeNum,
+                techGrageNum);
+        return success();
+    }
+    //
+    @PostMapping("/data/ageNumSelect")
+    public Object AgeNumSelect(Integer tableId)throws Exception{
+        return success(marketService.AgeNumSelect(tableId));
+    }
+    //
+    @PostMapping("/data/degreeNumSelect")
+    public Object DegreeNumSelect(Integer tableId) throws Exception{
+        return success(marketService.DegreeNumSelect(tableId));
+    }
+    //
+    @PostMapping("/data/industryNumSelect")
+    public Object IndustryNumSelect(Integer tableId) throws Exception{
+        return success(marketService.IndustryNumSelect(tableId));
+    }
+    //
+    @PostMapping("/data/jobSeekerNumSelect")
+    public Object JobSeekerNumSelect(Integer tableId) throws Exception{
+        return success(marketService.JobSeekerNumSelect(tableId));
+    }
+    //
+    @PostMapping("/data/leastNeededSelect")
+    public Object LeastNeededSelect(Integer tableId) throws Exception{
+        return success(marketService.LeastNeededSelect(tableId));
+    }
+    //
+    @PostMapping("/data/mostNeededSelect")
+    public Object MostNeededSelect(Integer tableId) throws Exception{
+        return success(marketService.MostNeededSelect(tableId));
+    }
+    //
+    @PostMapping("/data/profNumSelect")
+    public Object ProfNumSelect(Integer tableId) throws Exception{
+        return success(marketService.ProfNumSelect(tableId));
+    }
+    //
+    @PostMapping("/data/sexNumSelect")
+    public Object SexNumSelect(Integer tableId) throws Exception{
+        return success(marketService.SexNumSelect(tableId));
+    }
+    //
+    @PostMapping("/data/techGrageNumSelect")
+    public Object TechGrageNumSelect(Integer tableId) throws Exception{
+        return success(marketService.TechGrageNumSelect(tableId));
+    }
+    //
+    @PostMapping("/data/totalNumSelect")
+    public Object TotalNumSelect(Integer tableId) throws Exception{
+        return success(marketService.TotalNumSelect(tableId));
+    }
+    //
+    @PostMapping("/data/uploadInfoSelect")
+    public Object UploadInfoNumSelect(Integer tableId) throws Exception{
+        return success(marketService.UploadInfoSelect(tableId));
     }
 }

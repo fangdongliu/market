@@ -3,7 +3,9 @@ package cn.fdongl.market.market.entity;
 import lombok.Data;
 
 @Data
-public class IndustryNum {
+public class IndustryNum {//产业需求人数表，共23条数据
+
+    Integer tableId;//数据表id
     Integer industry1Need;//第一产业需求人数
     Integer industry2Need;//第二产业需求人数
     Integer industry3Need;//第三产业需求人数
