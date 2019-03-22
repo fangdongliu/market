@@ -200,4 +200,12 @@ public class MarketController extends ControllerBase {
     public Object TechGradeNumSelect(Integer tableId) throws Exception {
         return success(marketService.TechGradeNumSelect(tableId));
     }
+
+    //查询当前用户报表
+    @PostMapping("/data/select")
+    public Object SelectNowUserUploadInfo(AppUserDetail appUserDetail)throws Exception{
+        return success(marketService.UploadInfoSelectByUser(appUserDetail.getId()));
+    }
+
+
 }

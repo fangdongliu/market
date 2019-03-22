@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.core.annotation.Order;
 
+import java.util.List;
+
 @Mapper
 @Order(1)
 public interface MarketMapper {
@@ -606,4 +608,16 @@ public interface MarketMapper {
             "no_requ_need AS noRequNeed \n" +
             "from t_tech_grade_num where table_id =#{param1};")
     TechGradeNum uploadSelectTechGradeNum(Integer tableId);
+
+    //查询目标用户报表信息
+    @Select("SELECT \n" +
+            "table_id AS tableId, \n" +
+            "upload_period_id AS uploadPeriodId,\n" +
+            "state_flag AS stateFlag,\n" +
+            "create_time AS createTime,\n" +
+            "creator AS creator,\n" +
+            "revise_time AS reviseTime,\n" +
+            "reviser AS reviser \n" +
+            "from t_upload_info where creator = #{param1};")
+    List<UploadInfo> uploadInfoSelectByUser(Integer userId);
 }
