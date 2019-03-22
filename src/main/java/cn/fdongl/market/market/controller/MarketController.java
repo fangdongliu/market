@@ -46,6 +46,7 @@ public class MarketController extends ControllerBase {
         return success(data);
     }
 
+    //查询当前上传期
     @PostMapping("/upload/selectUploadPeriod")
     public SimpleUploadPeriod UploadSelectUploadPeriod(){
         //TODO
@@ -69,8 +70,12 @@ public class MarketController extends ControllerBase {
             AgeNum ageNum,
             DegreeNum degreeNum,
             TechGrageNum techGrageNum) throws Exception {
-
         UploadInfo uploadInfo=new UploadInfo();
+        SimpleUploadPeriod simpleUploadPeriod=marketService.uploadSelectUploadPeriod(new Date());
+        if(simpleUploadPeriod==null){
+            throw new Exception("当前时间不在上传期内，无法上传数据");
+        }
+        uploadInfo.setUploadPeriodId(simpleUploadPeriod.getUploadPeriodId());
         uploadInfo.setStateFlag(stateFlag);
         uploadInfo.setCreator(appUserDetail.getId());
         uploadInfo.setCreateTime(new Date());
@@ -105,7 +110,11 @@ public class MarketController extends ControllerBase {
             AgeNum ageNum,
             DegreeNum degreeNum,
             TechGrageNum techGrageNum) throws Exception {
-
+        SimpleUploadPeriod simpleUploadPeriod=marketService.uploadSelectUploadPeriod(new Date());
+        if(uploadInfo.getUploadPeriodId()==null&&simpleUploadPeriod==null){
+            throw new Exception("当前时间不在上传期内，无法上传数据");
+        }
+        uploadInfo.setUploadPeriodId(simpleUploadPeriod.getUploadPeriodId());
         uploadInfo.setCreateTime(new Date());
         marketService.uploadInsert(
                 uploadInfo,
@@ -121,5 +130,12 @@ public class MarketController extends ControllerBase {
                 degreeNum,
                 techGrageNum);
         return success();
+    }
+
+    //查询上传信息
+    @PostMapping("upload/selectUploadInfo")
+    public Object UploadSelectUploadInfo(AppUserDetail appUserDetail) throws Exception {
+//        Object data=marketService
+        return null;
     }
 }

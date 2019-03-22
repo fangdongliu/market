@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class MarketService {
@@ -40,7 +41,7 @@ public class MarketService {
     }
 
     //按时间点查询上报时限
-    public SimpleUploadPeriod UploadSelectUploadPeriod(Date date){
+    public SimpleUploadPeriod uploadSelectUploadPeriod(Date date){
         //TODO
         return null;
     }
@@ -125,83 +126,89 @@ public class MarketService {
         }
     }
 
-//    //监测点更新上传数据，事务
-//    @Transactional
-//    public void uploadUpdate(UploadInfo uploadInfo,
-//                             TotalNum totalNum,
-//                             IndustryNum industryNum,
-//                             EmployerNum employerNum,
-//                             ProfNum profNum,
-//                             MostNeeded mostNeeded,
-//                             LeastNeeded leastNeeded,
-//                             JobSeekerNum jobSeekerNum,
-//                             SexNum sexNum,
-//                             AgeNum ageNum,
-//                             DegreeNum degreeNum,
-//                             TechGrageNum techGrageNum) throws RuntimeException {
-//        int tableId=marketMapper.uploadSelectNextTableId();
-//        if(tableId<=0){
-//            throw new RuntimeException("数据库错误");
-//        }
-//        uploadInfo.setTableId(tableId);
-//        totalNum.setTableId(tableId);
-//        industryNum.setTableId(tableId);
-//        employerNum.setTableId(tableId);
-//        profNum.setTableId(tableId);
-//        mostNeeded.setTableId(tableId);
-//        leastNeeded.setTableId(tableId);
-//        jobSeekerNum.setTableId(tableId);
-//        sexNum.setTableId(tableId);
-//        ageNum.setTableId(tableId);
-//        degreeNum.setTableId(tableId);
-//        techGrageNum.setTableId(tableId);
-//        int n=marketMapper.uploadInsertUploadInfo(uploadInfo);
-//        if(n!=1){
-//            throw new RuntimeException("新建上传数据信息失败");
-//        }
-//        n=marketMapper.uploadInsertTotalNum(totalNum);
-//        if(n!=1){
-//            throw new RuntimeException("新建供求总体人数失败");
-//        }
-//        n=marketMapper.uploadInsertIndustryNum(industryNum);
-//        if(n!=1){
-//            throw new RuntimeException("新建产业需求人数失败");
-//        }
-//        n=marketMapper.uploadInsertEmployerNum(employerNum);
-//        if(n!=1){
-//            throw new RuntimeException("新建用人单位性质需求人数失败");
-//        }
-//        n=marketMapper.uploadInsertProfNum(profNum);
-//        if(n!=1){
-//            throw new RuntimeException("新建职业供求人数失败");
-//        }
-//        n=marketMapper.uploadInsertMostNeeded(mostNeeded);
-//        if(n!=1){
-//            throw new RuntimeException("新建需求前十职业失败");
-//        }
-//        n=marketMapper.uploadInsertLeastNeeded(leastNeeded);
-//        if(n!=1){
-//            throw new RuntimeException("新建饱和前十职业失败");
-//        }
-//        n=marketMapper.uploadInsertJobSeekerNum(jobSeekerNum);
-//        if(n!=1){
-//            throw new RuntimeException("新建人员类别求职人数失败");
-//        }
-//        n=marketMapper.uploadInsertSexNum(sexNum);
-//        if(n!=1){
-//            throw new RuntimeException("新建性别供求人数失败");
-//        }
-//        n=marketMapper.uploadInsertAgeNum(ageNum);
-//        if(n!=1){
-//            throw new RuntimeException("新建年龄供求人数失败");
-//        }
-//        n=marketMapper.uploadInsertDegreeNum(degreeNum);
-//        if(n!=1){
-//            throw new RuntimeException("新建文化程度供求人数失败");
-//        }
-//        n=marketMapper.uploadInsertTechGrageNum(techGrageNum);
-//        if(n!=1){
-//            throw new RuntimeException("新建技术等级供求人数失败");
-//        }
-//    }
+    //监测点更新上传数据，事务
+    @Transactional
+    public void uploadUpdate(UploadInfo uploadInfo,
+                             TotalNum totalNum,
+                             IndustryNum industryNum,
+                             EmployerNum employerNum,
+                             ProfNum profNum,
+                             MostNeeded mostNeeded,
+                             LeastNeeded leastNeeded,
+                             JobSeekerNum jobSeekerNum,
+                             SexNum sexNum,
+                             AgeNum ageNum,
+                             DegreeNum degreeNum,
+                             TechGrageNum techGrageNum) throws RuntimeException {
+        int tableId=uploadInfo.getTableId();
+        if(tableId<=0){
+            throw new RuntimeException("数据错误");
+        }
+        uploadInfo.setTableId(tableId);
+        totalNum.setTableId(tableId);
+        industryNum.setTableId(tableId);
+        employerNum.setTableId(tableId);
+        profNum.setTableId(tableId);
+        mostNeeded.setTableId(tableId);
+        leastNeeded.setTableId(tableId);
+        jobSeekerNum.setTableId(tableId);
+        sexNum.setTableId(tableId);
+        ageNum.setTableId(tableId);
+        degreeNum.setTableId(tableId);
+        techGrageNum.setTableId(tableId);
+        int n=marketMapper.uploadInsertUploadInfo(uploadInfo);
+        if(n!=1){
+            throw new RuntimeException("新建上传数据信息失败");
+        }
+        n=marketMapper.uploadInsertTotalNum(totalNum);
+        if(n!=1){
+            throw new RuntimeException("新建供求总体人数失败");
+        }
+        n=marketMapper.uploadInsertIndustryNum(industryNum);
+        if(n!=1){
+            throw new RuntimeException("新建产业需求人数失败");
+        }
+        n=marketMapper.uploadInsertEmployerNum(employerNum);
+        if(n!=1){
+            throw new RuntimeException("新建用人单位性质需求人数失败");
+        }
+        n=marketMapper.uploadInsertProfNum(profNum);
+        if(n!=1){
+            throw new RuntimeException("新建职业供求人数失败");
+        }
+        n=marketMapper.uploadInsertMostNeeded(mostNeeded);
+        if(n!=1){
+            throw new RuntimeException("新建需求前十职业失败");
+        }
+        n=marketMapper.uploadInsertLeastNeeded(leastNeeded);
+        if(n!=1){
+            throw new RuntimeException("新建饱和前十职业失败");
+        }
+        n=marketMapper.uploadInsertJobSeekerNum(jobSeekerNum);
+        if(n!=1){
+            throw new RuntimeException("新建人员类别求职人数失败");
+        }
+        n=marketMapper.uploadInsertSexNum(sexNum);
+        if(n!=1){
+            throw new RuntimeException("新建性别供求人数失败");
+        }
+        n=marketMapper.uploadInsertAgeNum(ageNum);
+        if(n!=1){
+            throw new RuntimeException("新建年龄供求人数失败");
+        }
+        n=marketMapper.uploadInsertDegreeNum(degreeNum);
+        if(n!=1){
+            throw new RuntimeException("新建文化程度供求人数失败");
+        }
+        n=marketMapper.uploadInsertTechGrageNum(techGrageNum);
+        if(n!=1){
+            throw new RuntimeException("新建技术等级供求人数失败");
+        }
+    }
+
+    //监测点默认查询，非事务
+    public List<UploadInfo> uploadSelectUploadInfo(Integer userId) throws Exception {
+//        return marketMapper.uploadSelectUploadInfo(userId);
+        return null;
+    }
 }
