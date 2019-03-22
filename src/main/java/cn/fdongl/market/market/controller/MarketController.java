@@ -138,4 +138,59 @@ public class MarketController extends ControllerBase {
 //        Object data=marketService
         return null;
     }
+    //
+    @PostMapping("/data/ageNumSelect")
+    public Object AgeNumSelect(Integer tableId)throws Exception{
+        return success(marketService.AgeNumSelect(tableId));
+    }
+    //
+    @PostMapping("/data/degreeNumSelect")
+    public Object DegreeNumSelect(Integer tableId) throws Exception{
+        return success(marketService.DegreeNumSelect(tableId));
+    }
+    //
+    @PostMapping("/data/industryNumSelect")
+    public Object IndustryNumSelect(Integer tableId) throws Exception{
+        return success(marketService.IndustryNumSelect(tableId));
+    }
+    //
+    @PostMapping("/data/jobSeekerNumSelect")
+    public Object JobSeekerNumSelect(Integer tableId) throws Exception{
+        return success(marketService.JobSeekerNumSelect(tableId));
+    }
+    //
+    @PostMapping("/data/leastNeededSelect")
+    public Object LeastNeededSelect(Integer tableId) throws Exception{
+        return success(marketService.LeastNeededSelect(tableId));
+    }
+    //
+    @PostMapping("/data/mostNeededSelect")
+    public Object MostNeededSelect(Integer tableId) throws Exception{
+        return success(marketService.MostNeededSelect(tableId));
+    }
+    //
+    @PostMapping("/data/profNumSelect")
+    public Object ProfNumSelect(Integer tableId) throws Exception{
+        return success(marketService.ProfNumSelect(tableId));
+    }
+    //
+    @PostMapping("/data/sexNumSelect")
+    public Object SexNumSelect(Integer tableId) throws Exception{
+        return success(marketService.SexNumSelect(tableId));
+    }
+    //
+    @PostMapping("/data/techGrageNumSelect")
+    public Object TechGrageNumSelect(Integer tableId) throws Exception{
+        return success(marketService.TechGrageNumSelect(tableId));
+    }
+    //
+    @PostMapping("/data/totalNumSelect")
+    public Object TotalNumSelect(Integer tableId) throws Exception{
+        return success(marketService.TotalNumSelect(tableId));
+    }
+    //
+    @PostMapping("/data/uploadInfoSelect")
+    public Object UploadInfoNumSelect(Integer tableId) throws Exception{
+        return success(marketService.UploadInfoSelect(tableId));
+    }
 }
