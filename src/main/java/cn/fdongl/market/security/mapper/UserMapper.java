@@ -54,7 +54,7 @@ public interface UserMapper {
             "\tuser_id AS id,\n" +
             "\tusername,\n" +
             "\t`password`,\n" +
-            "\tstate_flag AS `status,`\n" +
+            "\tstate_flag AS `status`,\n" +
             "delete_flag as deleteFlag "+
             "\t FROM t_user WHERE t_user.username = #{param1} AND `delete_flag`=0 limit 1;")
     @Results({
