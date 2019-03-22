@@ -123,8 +123,8 @@ public interface ProvinceMapper {
 
     //新增调查期
     @Insert("INSERT INTO t_upload_period " +
-            "(upload_period_id,start_date,end_date,create_time,creator,revise_time,reviser,delete_flag) \n" +
-            "values(#{uploadPeriodId},#{startDate},#{endDate},#{creatTime},#{creator},#{reviseTime},#{reviser},#{deleteFlag});")
+            "(start_date,end_date,create_time,creator,revise_time,reviser,delete_flag) \n" +
+            "values(#{startDate},#{endDate},#{creatTime},#{creator},#{reviseTime},#{reviser},#{deleteFlag});")
     Integer periodInsert(InnerUploadPeriod period);
 
     //修改调查期
