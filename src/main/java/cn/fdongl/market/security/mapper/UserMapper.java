@@ -19,21 +19,21 @@ public interface UserMapper {
             "VALUES(1,1,NOW(),1,0,'')")
     Integer test2();
 
-    @Select("(SELECT user_id as id,username,fullname,superior as father,state_flag as `status` FROM t_user T1 WHERE T1.superior = #{param1})\n" +
+    @Select("(SELECT user_id as id,username,fullname,superior as father,state_flag as `status`,delete_flag as deleteFlag FROM t_user T1 WHERE T1.superior = #{param1})\n" +
             "UNION\n" +
-            "(SELECT user_id as id,username,fullname,superior as father,state_flag as `status` FROM t_user WHERE superior IN (SELECT T1.user_id FROM t_user T1 WHERE T1.superior = #{param1}))\n")
+            "(SELECT user_id as id,username,fullname,superior as father,state_flag as `status`,delete_flag as deleteFlag FROM t_user WHERE superior IN (SELECT T1.user_id FROM t_user T1 WHERE T1.superior = #{param1}))\n")
     @MapKey("id")
     Map<Integer,ListUserData>userList(Integer userId);
 
-    @Select("SELECT user_id as id,username,fullname,superior as father,state_flag as `status` FROM t_user")
+    @Select("SELECT user_id as id,username,fullname,superior as father,state_flag as `status`,delete_flag as deleteFlag FROM t_user")
     List<ListUserData>list();
 
     @Update("UPDATE t_user\n" +
-            "SET state_flag = 0 WHERE user_id = #{param1};")
+            "SET delete_flag = 0 WHERE user_id = #{param1};")
     int enable(Integer rightId);
 
     @Update("UPDATE t_user\n" +
-            "SET state_flag = 1 WHERE user_id = #{param1};")
+            "SET delete_flag = 1 WHERE user_id = #{param1};")
     int disable(Integer rightId);
 
     @Select("SELECT role_id as `id`," +
@@ -54,7 +54,8 @@ public interface UserMapper {
             "\tuser_id AS id,\n" +
             "\tusername,\n" +
             "\t`password`,\n" +
-            "\tstate_flag AS `status`\n" +
+            "\tstate_flag AS `status,`\n" +
+            "delete_flag as deleteFlag "+
             "\t FROM t_user WHERE t_user.username = #{param1} AND `delete_flag`=0 limit 1;")
     @Results({
             @Result(property = "id",column = "id"),
