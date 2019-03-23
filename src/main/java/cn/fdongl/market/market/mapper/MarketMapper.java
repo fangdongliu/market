@@ -218,7 +218,7 @@ public interface MarketMapper {
             "(table_id, \n" +
             "prof_level_5_need,prof_level_5_jobseek,prof_level_4_need,prof_level_4_jobseek,prof_level_3_need,prof_level_3_jobseek, \n" +
             "prof_level_2_need,prof_level_2_jobseek,prof_level_1_need,prof_level_1_jobseek,prim_prof_need,prim_prof_jobseek, \n" +
-            "medi_prof_need,medi_prof_jobseek,seni_prof_need,seni_prof_jobseek,no_tech_jobseek,no_tech_jobseek) \n" +
+            "medi_prof_need,medi_prof_jobseek,seni_prof_need,seni_prof_jobseek,no_tech_jobseek,no_requ_need) \n" +
             "VALUES(#{tableId}, \n" +
             "#{profLevel5Need},#{profLevel5Jobseek},#{profLevel4Need},#{profLevel4Jobseek},#{profLevel3Need},#{profLevel3Jobseek}, \n" +
             "#{profLevel2Need},#{profLevel2Jobseek},#{profLevel1Need},#{profLevel1Jobseek},#{primProfNeed},#{primProfJobseek}, \n" +
