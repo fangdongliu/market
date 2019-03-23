@@ -84,13 +84,13 @@ public interface MarketMapper {
     //查询upload_info的下一个自增id
     @Select("SELECT AUTO_INCREMENT \n" +
             "FROM INFORMATION_SCHEMA.TABLES \n" +
-            "WHERE TABLE_NAME = '{t_upload_info}' limit 1;")
+            "WHERE TABLE_SCHEMA='human_resources_sys' AND TABLE_NAME = 't_upload_info' limit 1;")
     Integer uploadSelectNextTableId();
 
     //新建一条上传数据信息
     @Insert("INSERT INTO t_upload_info \n" +
-            "(state_flag,create_time,creator,revise_time,reviser,delete_flag) \n" +
-            "VALUES(#{stateFlag},#{createTime},#{creator},#{reviseTime},#{reviser},0);")
+            "(upload_period_id,state_flag,create_time,creator,revise_time,reviser,delete_flag) \n" +
+            "VALUES(#{uploadPeriodId},#{stateFlag},#{createTime},#{creator},#{reviseTime},#{reviser},0);")
     Integer uploadInsertUploadInfo(UploadInfo uploadInfo);
 
     //新建一条供求总体人数信息
@@ -125,7 +125,7 @@ public interface MarketMapper {
     @Insert("INSERT INTO t_prof_num \n" +
             "(table_id,leader_need,leader_jobseek,prof_tech_need,prof_tech_jobseek,staff_rela_need, \n" +
             "staff_rela_jobseek,busi_serv_need,busi_serv_jobseek,prod_need,prod_jobseek,oper_need, \n" +
-            "oper_jobseek,other_jobseek,no_requ_jobseek) \n" +
+            "oper_jobseek,other_need,other_jobseek,no_requ_jobseek) \n" +
             "VALUES(#{tableId},#{leaderNeed},#{leaderJobseek},#{profTechNeed},#{profTechJobseek},#{staffRelaNeed}, \n" +
             "#{staffRelaJobseek},#{busiServNeed},#{busiServJobseek},#{prodNeed},#{prodJobseek},#{operNeed}, \n" +
             "#{operJobseek},#{otherNeed},#{otherJobseek},#{noRequJobseek});")
