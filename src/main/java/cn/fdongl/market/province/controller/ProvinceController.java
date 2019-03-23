@@ -38,19 +38,33 @@ public class ProvinceController extends ControllerBase {
         return success(provinceService.recordConditionalQuery(state, condition));
     }
 
-    //审核拒绝通过
+    //备案审核拒绝通过
     @PostMapping("/record/reject")
     public Object RecordReject(AppUserDetail appUserDetail,Integer aimId,String content) throws Exception {
         provinceService.recordReject(appUserDetail.getId(),aimId,content);
         return success();
     }
 
-    //审核通过
+    //备案审核通过
     @PostMapping("/record/pass")
     public Object RecordPass(AppUserDetail appUserDetail,Integer aimId,String content){
         provinceService.recordPass(appUserDetail.getId(),aimId,content);
         return success();
     }
+
+    //上传数据审核拒绝通过，为完成
+    @PostMapping("/upload/reject")
+    public Object UploadReject(AppUserDetail appUserDetail,Integer aimId,String content) throws Exception {
+        provinceService.uploadReject(appUserDetail.getId(),aimId,content);
+        return success();
+    }
+
+//    //上传数据审核通过，未完成
+//    @PostMapping("/upload/pass")
+//    public Object UploadPass(AppUserDetail appUserDetail,Integer aimId,String content){
+//        provinceService.uploadPass(appUserDetail.getId(),aimId,content);
+//        return success();
+//    }
 
     //新建上报时限
     @PostMapping("/investigatePeriod/insert")
