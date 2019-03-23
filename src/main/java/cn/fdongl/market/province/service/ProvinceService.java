@@ -80,11 +80,11 @@ public class ProvinceService {
         int n=provinceMapper.recordSelectNum(aimId);
         if(n==1){
             n=provinceMapper.recordUpdateExpirePass(examineId,aimId);
-            if(n!=0){
+            if(n!=1){
                 throw new RuntimeException("更新过期备案信息失败");
             }
             n=provinceMapper.recordUpdatePass(examineId, aimId);
-            if(n!=0){
+            if(n!=1){
                 throw new RuntimeException("修改备案信息失败");
             }
             n=provinceMapper.sendMessage(
@@ -92,17 +92,17 @@ public class ProvinceService {
                     content,
                     examineId,
                     aimId);
-            if(n!=0){
+            if(n!=1){
                 throw new RuntimeException("通知发送失败");
             }
         }
         else if(n==0){
             n=provinceMapper.recordUpdateActivation(examineId,aimId);
-            if(n!=0){
+            if(n!=1){
                 throw new RuntimeException("修改激活状态失败");
             }
             n=provinceMapper.recordUpdatePass(examineId,aimId);
-            if(n!=0){
+            if(n!=1){
                 throw new RuntimeException("修改备案信息失败");
             }
             n=provinceMapper.sendMessage(
@@ -110,11 +110,45 @@ public class ProvinceService {
                     content,
                     examineId,
                     aimId);
-            if(n!=0){
+            if(n!=1){
                 throw new RuntimeException("通知发送失败");
             }
         }
         else throw new RuntimeException("查询失败");
+    }
+
+    //上传数据审核未通过，事务
+    @Transactional
+    public void uploadReject(Integer examineId,Integer aimId,String content) throws RuntimeException {
+        int n=provinceMapper.uploadUpdateReject(examineId,aimId);
+        if(n!=1){
+            throw new RuntimeException("修改上传数据失败");
+        }
+        n=provinceMapper.sendMessage(
+                "您的上传数据未通过审核",
+                content,
+                examineId,
+                aimId);
+        if(n!=1){
+            throw new RuntimeException("通知发送失败");
+        }
+    }
+
+    //上传数据审核通过，事务
+    @Transactional
+    public void uploadPass(Integer examineId,Integer aimId,String content) throws RuntimeException {
+        int n=provinceMapper.uploadUpdatePass(examineId,aimId);
+        if(n!=1){
+            throw new RuntimeException("修改上传数据失败");
+        }
+        n=provinceMapper.sendMessage(
+                "您的上传数据已通过审核",
+                content,
+                examineId,
+                aimId);
+        if(n!=1){
+            throw new RuntimeException("通知发送失败");
+        }
     }
 
     //检查日期是否合法，不含数据库操作
@@ -242,4 +276,24 @@ public class ProvinceService {
         }
     }
 
+    //条件查询所有用户
+    public List<UserInfoDisplay> userSearch(String input) throws Exception{
+        List<UserInfoDisplay> output=provinceMapper.userSearch(input);
+        if(output==null){
+            throw new Exception("No Result");
+        }
+        else{
+            return output;
+        }
+    }
+    //条件查询当前用户下属的监测点
+    public List<UserInfoDisplay> userSearchByuser(Integer userId,String input) throws Exception{
+        List<UserInfoDisplay> output=provinceMapper.userSearchByuser(userId,input);
+        if(output==null){
+            throw new Exception("No Result");
+        }
+        else{
+            return output;
+        }
+    }
 }

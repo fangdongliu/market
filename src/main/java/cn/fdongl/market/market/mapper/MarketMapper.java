@@ -84,13 +84,13 @@ public interface MarketMapper {
     //查询upload_info的下一个自增id
     @Select("SELECT AUTO_INCREMENT \n" +
             "FROM INFORMATION_SCHEMA.TABLES \n" +
-            "WHERE TABLE_NAME = '{t_upload_info}' limit 1;")
+            "WHERE TABLE_SCHEMA='human_resources_sys' AND TABLE_NAME = 't_upload_info' limit 1;")
     Integer uploadSelectNextTableId();
 
     //新建一条上传数据信息
     @Insert("INSERT INTO t_upload_info \n" +
-            "(state_flag,create_time,creator,revise_time,reviser,delete_flag) \n" +
-            "VALUES(#{stateFlag},#{createTime},#{creator},#{reviseTime},#{reviser},0);")
+            "(upload_period_id,state_flag,create_time,creator,revise_time,reviser,delete_flag) \n" +
+            "VALUES(#{uploadPeriodId},#{stateFlag},#{createTime},#{creator},#{reviseTime},#{reviser},0);")
     Integer uploadInsertUploadInfo(UploadInfo uploadInfo);
 
     //新建一条供求总体人数信息
@@ -125,7 +125,7 @@ public interface MarketMapper {
     @Insert("INSERT INTO t_prof_num \n" +
             "(table_id,leader_need,leader_jobseek,prof_tech_need,prof_tech_jobseek,staff_rela_need, \n" +
             "staff_rela_jobseek,busi_serv_need,busi_serv_jobseek,prod_need,prod_jobseek,oper_need, \n" +
-            "oper_jobseek,other_jobseek,no_requ_jobseek) \n" +
+            "oper_jobseek,other_need,other_jobseek,no_requ_jobseek) \n" +
             "VALUES(#{tableId},#{leaderNeed},#{leaderJobseek},#{profTechNeed},#{profTechJobseek},#{staffRelaNeed}, \n" +
             "#{staffRelaJobseek},#{busiServNeed},#{busiServJobseek},#{prodNeed},#{prodJobseek},#{operNeed}, \n" +
             "#{operJobseek},#{otherNeed},#{otherJobseek},#{noRequJobseek});")
@@ -218,7 +218,7 @@ public interface MarketMapper {
             "(table_id, \n" +
             "prof_level_5_need,prof_level_5_jobseek,prof_level_4_need,prof_level_4_jobseek,prof_level_3_need,prof_level_3_jobseek, \n" +
             "prof_level_2_need,prof_level_2_jobseek,prof_level_1_need,prof_level_1_jobseek,prim_prof_need,prim_prof_jobseek, \n" +
-            "medi_prof_need,medi_prof_jobseek,seni_prof_need,seni_prof_jobseek,no_tech_jobseek,no_tech_jobseek) \n" +
+            "medi_prof_need,medi_prof_jobseek,seni_prof_need,seni_prof_jobseek,no_tech_jobseek,no_requ_need) \n" +
             "VALUES(#{tableId}, \n" +
             "#{profLevel5Need},#{profLevel5Jobseek},#{profLevel4Need},#{profLevel4Jobseek},#{profLevel3Need},#{profLevel3Jobseek}, \n" +
             "#{profLevel2Need},#{profLevel2Jobseek},#{profLevel1Need},#{profLevel1Jobseek},#{primProfNeed},#{primProfJobseek}, \n" +
