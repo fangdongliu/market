@@ -1,6 +1,6 @@
 package cn.fdongl.market.market.entity;
 
-        import lombok.Data;
+import lombok.Data;
 
 @Data
 public class TotalNum {//供求总体人数表，共3条数据
