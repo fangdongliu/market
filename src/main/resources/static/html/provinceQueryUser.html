@@ -5,12 +5,9 @@
     <title>provinceQueryUser</title>
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <!-- Vue -->
-    <script src="//vuejs.org/js/vue.min.js"></script>
-    <link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">
-    <script src="//unpkg.com/iview/dist/iview.min.js"></script>
-    <!--elementUI-->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.6.9/vue.min.js"></script>
+    <link href="https://cdn.bootcss.com/element-ui/2.6.1/theme-chalk/index.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/element-ui/2.6.1/index.js"></script>
     <link rel="stylesheet" href="../css/stylesheet.css">
     <script src="../js/jump.js"></script>
     <style>
@@ -49,11 +46,11 @@
                         stripe
                         style="width: 100%">
                     <el-table-column
-                            prop="userId"
+                            prop="username"
                             label="用户名">
                     </el-table-column>
                     <el-table-column
-                            prop="fullName"
+                            prop="fullname"
                             label="用户全称">
                     </el-table-column>
                     <el-table-column
@@ -61,11 +58,11 @@
                             label="用户角色">
                     </el-table-column>
                     <el-table-column
-                            prop="superior"
+                            prop="father"
                             label="上级部门">
                     </el-table-column>
                     <el-table-column
-                            prop="stateFlag"
+                            prop="status"
                             label="激活状态">
                     </el-table-column>
                     <el-table-column
@@ -77,6 +74,8 @@
                                     v-model="scope.row.deleteFlag"
                                     active-color="#13ce66"
                                     inactive-color="#ff4949"
+                                    :active-value="0"
+                                    :inactive-value="1"
                                     @change="changeSwitch(scope.row)">
                             </el-switch>
                         </template>
@@ -273,6 +272,21 @@
                     inputPattern: /^[1-9]*[1-9][0-9]*$/,
                     inputErrorMessage: '请输入正整数'
                 }).then(({ value }) => {
+                    $.ajax({
+                        url:'/user/addUsers',
+                        type:'post',
+                        data:{
+                            count:value,
+                            prefix:'city',
+                            label:'fullname',
+                            startCount:0,
+                        },
+                        success(res){
+
+                            vue3.getList();
+                            console.log(res);
+                        }
+                    });
                     this.$message({
                     type: 'success',
                     message: '已创建' + value + '个市级用户'
@@ -292,6 +306,21 @@
                     inputPattern: /^[1-9]*[1-9][0-9]*$/,
                     inputErrorMessage: '请输入正整数'
                 }).then(({ value }) => {
+                    $.ajax({
+                        url:'/user/addUsers',
+                        type:'post',
+                        data:{
+                            count:value,
+                            prefix:'point',
+                            label:'fullname',
+                            startCount:0,
+
+                        },
+                        success(res){
+                            vue3.getList();
+                            console.log(res);
+                        }
+                    });
                     this.$message({
                         type: 'success',
                         message: '已创建' + value + '个监测点用户'
@@ -304,18 +333,56 @@
                 });
             },
             changeSwitch (data) {
-                console.log(data.deleteFlag)
-            },
+                this.$confirm('确定修改此用户的删除标记?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    if (data.deleteFlag==1)
+                        $.ajax({
+                            url:'/user/disable',
+                            type:'post',
+                            data:{
+                                userId:data.id
+                            },
+                            success(res){
+                                vue3.userData=res.data;
+                                console.log(res.data);
+                            }
+                        });
+                    else
+                        $.ajax({
+                        url:'/user/enable',
+                        type:'post',
+                        data:{
+                            userId:data.id
+                        },
+                        success(res){
+                            vue3.userData=res.data;
+                            console.log(res.data);
+                        }
+                        });
+                    this.$message({
+                        type: 'success',
+                        message: '操作成功!'
+                    });
+                }).catch(() => {
+                    data.deleteFlag=!data.deleteFlag;
+                    this.$message({
+                        type: 'info',
+                        message: '已取消操作'
+                    });
+
+                });
+                console.log(data.deleteFlag);
+                },
             getList(){
                 $.ajax({
-                    url:'/',
+                    url:'/user/list',
                     type:'post',
                     success(res){
-                        // for(var i = 0; i < res.length;i ++){
-                        //     res[i].createTime=
-                        // }
-                        vue3.userDate=res;
-                        console.log(res);
+                        vue3.userData=res.data;
+                        console.log(res.data);
                     }
                 })
             },

@@ -40,12 +40,12 @@
                 <el-dialog title="创建角色" :visible.sync="dialogFormVisibleCreate">
                     <el-form :model="newRole">
                         <el-form-item label="角色名称" :label-width="formLabelWidth">
-                            <el-input v-model="newRole.roleName" placeholder="请输入角色名称"></el-input>
+                            <el-input v-model="newRole.name" placeholder="请输入角色名称"></el-input>
                         </el-form-item>
                         <el-form-item label="角色描述" :label-width="formLabelWidth">
                             <el-input type="textarea"
                                       :rows="3"
-                                      v-model="newRole.roleDesc"
+                                      v-model="newRole.description"
                                       placeholder="请输入角色描述">
                             </el-input>
                         </el-form-item>
@@ -61,36 +61,42 @@
                         stripe
                         style="width: 100%"
                         @selection-change="handleSelectionChange">
+                    <!--<el-table-column-->
+                            <!--type="selection"-->
+                            <!--width="150px">-->
+                    <!--</el-table-column>-->
                     <el-table-column
-                            type="selection"
-                            width="150px">
+                            prop="id"
+                            label="角色id">
                     </el-table-column>
                     <el-table-column
-                            prop="roleName"
+                            prop="name"
                             label="角色名称">
                     </el-table-column>
                     <el-table-column
-                            prop="createTime"
-                            label="创建时间">
-                        <template slot-scope="scope">
-                            <el-popover trigger="hover" placement="top">
-                                <p>最近修改时间: {{ scope.row.reviseTime }}</p>
-                                <p>最近修改者: {{ scope.row.reviser }}</p>
-                                <div slot="reference" class="name-wrapper">
-                                    <el-tag size="medium">{{ scope.row.createTime }}</el-tag>
-                                </div>
-                            </el-popover>
-                        </template>
+                            prop="description"
+                            label="角色描述">
+                        <!--<template slot-scope="scope">-->
+                            <!--<el-popover trigger="hover" placement="top">-->
+                                <!--<p>最近修改时间: {{ scope.row.reviseTime }}</p>-->
+                                <!--<p>最近修改者: {{ scope.row.reviser }}</p>-->
+                                <!--<div slot="reference" class="name-wrapper">-->
+                                    <!--<el-tag size="medium">{{ scope.row.createTime }}</el-tag>-->
+                                <!--</div>-->
+                            <!--</el-popover>-->
+                        <!--</template>-->
                     </el-table-column>
                     <el-table-column
-                            prop="deleteFlag"
+                            prop="status"
                             label="状态标记"
                             width="150px">
                         <template slot-scope="scope">
                             <el-switch
-                                    v-model="scope.row.deleteFlag"
+                                    v-model="scope.row.status"
                                     active-color="#13ce66"
                                     inactive-color="#ff4949"
+                                    :active-value="0"
+                                    :inactive-value="1"
                                     @change="changeSwitch(scope.row)">
                             </el-switch>
                         </template>
@@ -111,13 +117,13 @@
                 <el-dialog title="角色详情" :visible.sync="dialogFormVisibleEdit">
                     <el-form :model="role">
                         <el-form-item label="角色名称" :label-width="formLabelWidth">
-                            <el-input v-model="role.roleName" placeholder="role.roleName"></el-input>
+                            <el-input v-model="role.name" placeholder="role.name"></el-input>
                         </el-form-item>
                         <el-form-item label="角色描述" :label-width="formLabelWidth">
                             <el-input type="textarea"
                                       :rows="3"
-                                      v-model="role.roleDesc"
-                                      placeholder="role.roleDesc">
+                                      v-model="role.description"
+                                      placeholder="role.description">
                             </el-input>
                         </el-form-item>
                     </el-form>
@@ -159,7 +165,7 @@
                     creator:1,
                     reviseTime:'2019-3-20',
                     reviser:1,
-                    deleteFlag:true
+                    deleteFlag:1
                 },
                 {
                     roleId:2,
@@ -169,7 +175,7 @@
                     creator:1,
                     reviseTime:1,
                     reviser:1,
-                    deleteFlag:true
+                    deleteFlag:0
                 },
                 {
                     roleId:3,
@@ -236,12 +242,30 @@
             pageSize:10,
             currentPage:1,
             total:1000,
-            role:'',
-            newRole:'',
+            role:{},
+            newRole:
+                {
+                    name:'',
+                    description:'',
+                    status:0
+                },
             tmpIndex:-1
         },
         methods:{
             createRole(newRole){
+                $.ajax({
+                    url:'/role/add',
+                    type:'post',
+                    data:{
+                        name:newRole.name,
+                        description:newRole.description
+                    },
+                    success(res){
+                        vue4.roleData.push(newRole);
+                        vue4.getList();
+                        console.log(res);
+                    }
+                });
                 this.dialogFormVisibleCreate = false;
                 console.log(newRole);
             },
@@ -276,6 +300,19 @@
                 //插入ajax语句更新
                 this.roleData[this.tmpIndex]=role;
                 this.dialogFormVisibleEdit = false;
+                $.ajax({
+                    url:'/role/modify',
+                    type:'post',
+                    data:{
+                        id:role.id,
+                        name:role.name,
+                        description:role.description
+                    },
+                    success(res){
+                        vue4.getList();
+                        console.log(res);
+                    }
+                });
                 console.log(role);
             },
             deleteRole(index, row) {
@@ -308,19 +345,43 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
+                    if (data.status==1)
+                        $.ajax({
+                            url:'/role/disable',
+                            type:'post',
+                            data:{
+                                roleId:data.id
+                            },
+                            success(res){
+                                vue4.userData=res.data;
+                                console.log(res.data);
+                            }
+                        });
+                    else
+                        $.ajax({
+                            url:'/role/enable',
+                            type:'post',
+                            data:{
+                                roleId:data.id
+                            },
+                            success(res){
+                                vue4.userData=res.data;
+                                console.log(res.data);
+                            }
+                        });
                     this.$message({
                         type: 'success',
                         message: '操作成功!'
                     });
                 }).catch(() => {
-                    data.deleteFlag=!data.deleteFlag;
+                    data.status=!data.status;
                     this.$message({
                         type: 'info',
                         message: '已取消操作'
                     });
 
                 });
-                console.log(data.deleteFlag);
+                console.log(data.status);
             },
             toggleSelection(rows) {
                 if (rows) {
@@ -339,8 +400,8 @@
                     url:'/role/list',
                     type:'post',
                     success(res){
-                        vue4.userDate=res;
-                        console.log(res);
+                        vue4.roleData=res.data;
+                        console.log(res.data);
                     }
                 })
             },
