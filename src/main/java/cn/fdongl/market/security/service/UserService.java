@@ -106,7 +106,7 @@ public class UserService {
         return menu.values().toArray();
     }
 
-    public void addUsers(Integer currentUser,Integer parent,String prefix,String name,Integer startCount,Integer count) throws Exception {
+    public void addUsers(Integer currentUser,Integer parent,Integer userType,String prefix,String name,Integer startCount,Integer count) throws Exception {
         List<UsernameAndFullname>array = new ArrayList<>();
 
         String password = bCryptPasswordEncoder.encode("123456");
@@ -116,7 +116,7 @@ public class UserService {
         }
 
         try {
-            if (userMapper.addUsers(array, parent, password, currentUser) != count) {
+            if (userMapper.addUsers(array, parent, password, currentUser,userType) != count) {
                 throw new Exception("创建用户时出错");
             }
         }

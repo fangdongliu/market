@@ -3,12 +3,14 @@ package cn.fdongl.market.security.mapper;
 import cn.fdongl.market.security.entity.*;
 import org.apache.ibatis.annotations.*;
 import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Map;
 
 @Mapper
+@Component
 @Order(1)
 public interface UserMapper {
 
@@ -94,12 +96,12 @@ public interface UserMapper {
     Map<Integer, Right>getSysMenu();
 
     @Insert("<script>" +
-            "insert into t_user(username,password,fullname,superior,state_flag,create_time,creator,delete_flag)" +
+            "insert into t_user(username,password,usertype,fullname,superior,state_flag,create_time,creator,delete_flag)" +
             "values" +
             "<foreach collection=\"param1\" item=\"item\" index=\"index\" separator=\",\">" +
-            "(#{item.username},#{param3},#{item.fullname},#{param2},0,now(),#{param4},0)" +
+            "(#{item.username},#{param3},#{param5},#{item.fullname},#{param2},0,now(),#{param4},0)" +
             "</foreach></script>")
-    int addUsers(List<UsernameAndFullname>array,Integer parent,String password,Integer currentUser);
+    int addUsers(List<UsernameAndFullname>array,Integer parent,String password,Integer currentUser,Integer userType);
 
     @Update("update t_user set password=#{param1} where user_id = #{param2}")
     int updatePassword(String password,int userId);

@@ -49,6 +49,7 @@ public class UserController extends ControllerBase {
             ) throws Exception {
         userService.addUsers(userDetail.getId(),
                 input.getParent(),
+                input.getUserType(),
                 input.getPrefix(),
                 input.getName(),
                 input.getStartCount(),
