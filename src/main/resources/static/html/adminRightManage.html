@@ -5,11 +5,9 @@
     <title>adminRightManage</title>
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <!-- Vue -->
-    <script src="//vuejs.org/js/vue.min.js"></script>
-
-    <!--elementUI-->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.6.9/vue.min.js"></script>
+    <link href="https://cdn.bootcss.com/element-ui/2.6.1/theme-chalk/index.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/element-ui/2.6.1/index.js"></script>
     <link rel="stylesheet" href="../css/stylesheet.css">
     <script src="../js/jump.js"></script>
     <style>
@@ -28,8 +26,8 @@
             align-items: center;
             justify-content: space-between;
             font-size: 14px;
+            line-height: 20px;
             padding-right: 8px;
-
         }
     </style>
 </head>
@@ -39,17 +37,16 @@
         <el-main class="content">
             <div class="contentDetail">
                 <div style="margin-bottom: 15px; margin-right: 15px; ">
-                    <el-button type="success" @click="dialogFormVisibleCreate = true;">创建权限</el-button>
+                    <!--<el-button type="success" @click="dialogFormVisibleCreate = true;">创建权限</el-button>-->
                     <!--<el-button type="danger" @click="deleteRights(scope.$index, scope.row)">删除权限</el-button>-->
                     <!--<el-input placeholder="请输入权限名称" v-model="input" class="input-with-select" style="margin-top: 15px;">-->
                         <!--<el-button slot="append" icon="el-icon-search"></el-button>-->
                     <!--</el-input>-->
                 </div>
-                <div></div>
                 <el-dialog title="创建权限" :visible.sync="dialogFormVisibleCreate">
                     <el-form :model="newRight">
                         <el-form-item label="权限名称" :label-width="formLabelWidth">
-                            <el-input v-model="newRight.name" placeholder="请输入权限名称(纯英文大写，用下划线隔开单词)"></el-input>
+                            <el-input v-model="newRight.label" placeholder="请输入权限名称(纯英文大写，用下划线隔开单词)"></el-input>
                         </el-form-item>
                         <el-form-item label="权限描述" :label-width="formLabelWidth">
                             <el-input type="textarea"
@@ -64,16 +61,16 @@
                         <el-form-item label="菜单路径" :label-width="formLabelWidth">
                             <el-input v-model="newRight.menuPath" placeholder="请输入菜单路径"></el-input>
                         </el-form-item>
-                        <el-form-item label="父级权限" :label-width="formLabelWidth">
-                            <el-select v-model="newRight.father" clearable placeholder="父级权限" >
-                                <el-option
-                                        v-for="item in rightData"
-                                        :key="item.id"
-                                        :label="item.name"
-                                        :value="item.id" >
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
+                        <!--<el-form-item label="父级权限" :label-width="formLabelWidth">-->
+                            <!--<el-select v-model="newRight.father" clearable placeholder="父级权限" >-->
+                                <!--<el-option-->
+                                        <!--v-for="item in rightData"-->
+                                        <!--:key="item.id"-->
+                                        <!--:label="item.label"-->
+                                        <!--:value="item.id" >-->
+                                <!--</el-option>-->
+                            <!--</el-select>-->
+                        <!--</el-form-item>-->
                     </el-form>
                     <div slot="footer" class="dialog-footer">
                         <el-button @click="dialogFormVisibleCreate = false">关 闭</el-button>
@@ -168,10 +165,17 @@
                                 node-key="id"
                                 default-expand-all
                                 :expand-on-click-node="false"
-                                label="name">
+                                label="label">
                                 <span class="custom-tree-node" slot-scope="{ node, data }">
                                 <span>{{ node.label }}</span>
                                 <span>
+                                    <el-button
+                                            v-if="node.level==1||node.level==2"
+                                            type="text"
+                                            size="mini"
+                                            @click="() => append(data)">
+                                        添加权限
+                                    </el-button>
                                     <el-button
                                             type="text"
                                             size="mini"
@@ -184,9 +188,55 @@
                                             @click="() => remove(node, data)">
                                         删除权限
                                     </el-button>
+                                    <!--<el-switch-->
+                                            <!--style="display: block"-->
+                                            <!--v-model="data.status"-->
+                                            <!--active-color="#13ce66"-->
+                                            <!--inactive-color="#ff4949"-->
+                                            <!--:active-value="0"-->
+                                            <!--:inactive-value="1"-->
+                                            <!--active-text="启用"-->
+                                            <!--inactive-text="禁用"-->
+                                            <!--@change="changeSwitch(data)">-->
+
+                                    <!--</el-switch>-->
                                 </span>
                               </span>
                         </el-tree>
+                        <el-dialog title="权限详情及修改" :visible.sync="dialogFormVisibleEdit">
+                            <el-form :model="right">
+                                <el-form-item label="权限名称" :label-width="formLabelWidth">
+                                    <el-input v-model="right.label" placeholder="right.label"></el-input>
+                                </el-form-item>
+                                <el-form-item label="权限描述" :label-width="formLabelWidth">
+                                    <el-input type="textarea"
+                                              :rows="3"
+                                              v-model="right.description"
+                                              placeholder="right.description">
+                                    </el-input>
+                                </el-form-item>
+                                <el-form-item label="菜单名称" :label-width="formLabelWidth">
+                                    <el-input v-model="right.menuName" placeholder="right.menuName"></el-input>
+                                </el-form-item>
+                                <el-form-item label="菜单路径" :label-width="formLabelWidth">
+                                    <el-input v-model="right.menuName" placeholder="right.menuName"></el-input>
+                                </el-form-item>
+                                <el-form-item label="权限状态" :label-width="formLabelWidth">
+                                    <el-switch
+                                            v-model="right.status"
+                                            active-color="#13ce66"
+                                            inactive-color="#ff4949"
+                                            :active-value="0"
+                                            :inactive-value="1"
+                                            @change="changeSwitch(right)"></el-switch>
+                                </el-form-item>
+                            </el-form>
+                            <div slot="footer" class="dialog-footer">
+                                <el-button @click="dialogFormVisibleEdit = false">关 闭</el-button>
+                                <el-button type="primary" @click="updateRight(right)">修 改</el-button>
+                            </div>
+                        </el-dialog>
+
                     </div>
                 </div>
             </div>
@@ -209,19 +259,35 @@
                     id:1,
                     label:'1',
                     description:'1',
-                    status:true,
+                    status:0,
                     children: [
                         {
                             id:5,
                             label:'5',
                             description:'5',
-                            status:true
+                            status:0,
+                            children:[
+                                {
+                                    id:3,
+                                    label:'3',
+                                    description:'3',
+                                    status:1,
+                                    children:[]
+                                },
+                                {
+                                    id:4,
+                                    label:'4',
+                                    description:'4',
+                                    status:0,
+                                    children:[]
+                                }
+                            ]
                         },
                         {
                             id:6,
                             label:'6',
                             description:'6',
-                            status:false
+                            status:0
                         }
                     ]
                 },
@@ -229,21 +295,21 @@
                     id:2,
                     label:'2',
                     description:'2',
-                    status:true,
+                    status:1,
                     children:[]
                 },
                 {
                     id:3,
                     label:'3',
                     description:'3',
-                    status:false,
+                    status:1,
                     children:[]
                 },
                 {
                     id:4,
                     label:'4',
                     description:'4',
-                    status:true,
+                    status:0,
                     children:[]
                 }
             ],
@@ -251,54 +317,71 @@
             pageSize:10,
             currentPage:1,
             total:1000,
-            right:'',
+            tmpData:{},
+            right:{},
             newRight:{
                 id:0,
                 label:'',
                 description:'',
-                status:true,
-                father:0
+                menuName:'',
+                menuPath:''
+            }
             },
-            tmpIndex:-1
-        },
         methods:{
             view(node, data){
+                var tmp =JSON.stringify(data);
+                vue.right=JSON.parse(tmp);
+                vue.dialogFormVisibleEdit = true;
                 console.log(node);
                 console.log(data);
             },
             append(data) {
-                const newChild = { id: id++, label: 'testtest', children: [] };
-                if (!data.children) {
-                    this.$set(data, 'children', []);
-                }
-                data.children.push(newChild);
+                vue.tmpData=data;
+                console.log(vue.tmpData);
+                vue.dialogFormVisibleCreate = true;
             },
 
             remove(node, data) {
-                const parent = node.parent;
-                const children = parent.data.children || parent.data;
-                const index = children.findIndex(d => d.id === data.id);
-                children.splice(index, 1);
+                this.$confirm('此操作将永久删除该权限, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    const parent = node.parent;
+                    const children = parent.data.children || parent.data;
+                    const index = children.findIndex(d => d.id === data.id);
+                    children.splice(index, 1);
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
             },
 
-            createRight:function(newRight){
+            createRight(newRight){
                 $.ajax({
                     url:'/right/add',
                     type:'post',
                     data:{
-                        name:this.newRight.name,
+                        label:this.newRight.label,
                         description:this.newRight.description,
                         menuName:this.newRight.menuName,
                         menuPath:this.newRight.menuPath,
-                        father:this.newRight.father,
+                        father:vue.tmpData.id,
                     },
                     success(res){
-
                         console.log(res);
                     }
-                })
+                });
                 this.dialogFormVisibleCreate = false;
                 console.log(newRight);
+                location.reload();
             },
             // deleteRights(){
             //     this.$confirm('确定修改这些用户的删除标记?', '提示', {
@@ -320,18 +403,29 @@
             //     });
             //     console.log(data.deleteFlag)
             // },
-            handleEdit(index, row) {
-                this.tmpIndex=index;
-                var tmp =JSON.stringify(this.rightData[index]);
-                this.right=JSON.parse(tmp);
-                this.dialogFormVisibleEdit = true;
-                console.log(index, row);
-            },
+
             updateRight(right){
                 //插入ajax语句更新
-                this.rightData[this.tmpIndex]=right;
+                // var node = getNode(this.tmpId)=right;
+                $.ajax({
+                    url:'/right/modify',
+                    type:'post',
+                    data:{
+                        id:this.right.id,
+                        label:this.right.label,
+                        description:this.right.description,
+                        menuName:this.right.menuName,
+                        menuPath:this.right.menuPath,
+                    },
+                    success(res){
+                        //vue.append(newRight, newRight.father);
+                        console.log(res);
+                    }
+                });
                 this.dialogFormVisibleEdit = false;
                 console.log(right);
+                location.reload();
+
             },
             deleteRight(index, row) {
                 this.$confirm('确定删除此用户?', '提示', {
@@ -358,7 +452,7 @@
                 this.currentPage = page;
             },
             changeSwitch (data) {
-                this.$confirm('确定修改此用户的删除标记?', '提示', {
+                this.$confirm('确定修改此权限的状态?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
@@ -368,14 +462,14 @@
                         message: '操作成功!'
                     });
                 }).catch(() => {
-                    data.deleteFlag=!data.deleteFlag;
+                    data.status=1-data.status;
                     this.$message({
                         type: 'info',
                         message: '已取消操作'
                     });
 
                 });
-                console.log(data.deleteFlag);
+                console.log(data.status);
             },
             toggleSelection(rows) {
                 if (rows) {
@@ -394,15 +488,15 @@
                     url:'/right/list',
                     type:'post',
                     success(res){
-                        vue.rightData=res;
-                        console.log(res);
+                        vue.rightData=res.data;
+                        console.log(res.data);
                     }
                 })
             },
 
         },
         mounted:function () {
-            // this.getRightList()
+            this.getRightList()
         }
     })
 </script>

@@ -3,6 +3,7 @@ package cn.fdongl.market.province.mapper;
 
 import cn.fdongl.market.market.entity.Record;
 import cn.fdongl.market.province.entity.InnerUploadPeriod;
+import cn.fdongl.market.province.entity.UserInfoDisplay;
 import org.apache.ibatis.annotations.*;
 import org.springframework.core.annotation.Order;
 
@@ -193,4 +194,47 @@ public interface ProvinceMapper {
             "delete_flag AS deleteFlag \n" +
             "from t_upload_period;")
     List<InnerUploadPeriod> selectAllPeriod();
+
+    //查询某用户所有的下级用户
+    @Select("SELECT \n" +
+            "user_id AS userId,\n" +
+            "username AS username,\n" +
+            "fullname AS fullname \n" +
+            "from t_user \n" +
+            "where superior = #{param1};")
+    List<UserInfoDisplay> selectAllSubCity(Integer aimUserId);
+
+    //返回所有监测点用户信息
+    @Select("SELECT \n" +
+            "user_id AS userId,\n" +
+            "username AS username,\n" +
+            "fullname AS fullname \n" +
+            "from t_user \n" +
+            "where usertype = 3;")
+    List<UserInfoDisplay> selectAllMarket();
+
+    //查询当前用户类型
+    @Select("SELECT \n" +
+            "usertype \n" +
+            "from t_user \n" +
+            "where user_id = #{param1};")
+    Integer selectUsertype(Integer aimUserId);
+
+    //条件查询所有监测点
+    @Select("SELECT \n" +
+            "user_id AS userId,\n" +
+            "username AS username,\n" +
+            "fullname AS fullname \n" +
+            "from t_user \n" +
+            "where username like CONCAT('%',#{param1},'%') or fullname like CONCAT('%',#{param1},'%');")
+    List<UserInfoDisplay> userSearch(String input);
+
+    //条件查询某用户直接下属的用户
+    @Select("SELECT \n" +
+            "user_id AS userId,\n" +
+            "username AS username,\n" +
+            "fullname AS fullname \n" +
+            "from t_user \n" +
+            "where (superior = #{param1}) and (username like CONCAT('%',#{param2},'%') or fullname like CONCAT('%',#{param2},'%'));")
+    List<UserInfoDisplay> userSearchByuser(Integer userId,String input);
 }

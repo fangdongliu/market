@@ -9,6 +9,8 @@ import javax.validation.constraints.Size;
 @Data
 public class AddUserInput {
 
+    Integer userType;//用户类型，1表示省，2表示市，3表示监测点
+
     @Size(max=50)
     String prefix;//用户名前缀，用于登录
     @Size(max=50)

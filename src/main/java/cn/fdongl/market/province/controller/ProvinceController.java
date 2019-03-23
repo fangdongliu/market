@@ -197,4 +197,49 @@ public class ProvinceController extends ControllerBase {
     public Object SelectNowUserUploadInfo(AppUserDetail appUserDetail,Integer aimUserId)throws Exception{
         return success(marketService.UploadInfoSelectByUser(aimUserId));
     }
+
+    //当前用户是省级用户时，查询用户下属的市级用户
+    @PostMapping("/selectCityUser")
+    public Object SelectCityUser(AppUserDetail appUserDetail)throws Exception{
+        return success(provinceService.selectSub(appUserDetail.getId()));
+    }
+
+    //当前用户是市级用户时，返回所有下级监测点用户信息；当前用户是省级用户时，返回所有监测点用户信息
+    //权限部分有待更改
+    @PostMapping("/selectAllSub")
+    public Object SelectAllSub(AppUserDetail appUserDetail)throws Exception{
+        Integer type = provinceService.selectUsertype(appUserDetail.getId());
+        if(type==1){
+            return success(provinceService.selectAllMarket());
+        }
+        else if(type==2){
+            return success(provinceService.selectSub(appUserDetail.getId()));
+        }
+        else {
+            throw new Exception("Authority Error");
+        }
+    }
+
+    //查询目标市级用户下属的监测点
+    @PostMapping("/selectCitySub")
+    public Object SelectCitySub(AppUserDetail appUserDetail,Integer aimUserId)throws Exception{
+        return success(provinceService.selectSub(aimUserId));
+    }
+
+
+    //条件查询操作用户范围内的所有监测点,流程需要优化
+    @PostMapping("/userSearch")
+    public Object userSearch(AppUserDetail appUserDetail,String input)throws Exception{
+        Integer type = provinceService.selectUsertype(appUserDetail.getId());
+        if(type==1){
+            return success(provinceService.userSearch(input));
+        }
+        else if(type==2){
+            return success(provinceService.userSearchByuser(appUserDetail.getId(),input));
+        }
+        else {
+            throw new Exception("Authority Error");
+        }
+    }
+
 }
