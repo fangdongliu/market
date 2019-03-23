@@ -28,8 +28,8 @@
         <el-main class="content">
             <div class="contentDetail">
                 <div style="float: left; margin-bottom: 15px; margin-right: 15px;">
-                    <el-button type="primary" @click="createCity">创建市级用户</el-button>
-                    <el-button type="primary" @click="createPoint">创建监测点用户</el-button>
+                    <el-button type="primary" @click="dialogFormVisibleCreateCity = true;">创建市级用户</el-button>
+                    <el-button type="primary" @click="dialogFormVisibleCreatePoint = true;">创建监测点用户</el-button>
                     <el-input placeholder="请输入用户名称" v-model="input" class="input-with-select"style="margin-top: 15px;">
                         <el-select v-model="select" slot="prepend" placeholder="请选择">
                             <el-option label="所有用户" value="1"></el-option>
@@ -39,7 +39,52 @@
                         <el-button slot="append" icon="el-icon-search"></el-button>
                     </el-input>
                 </div>
-
+                <el-dialog title="创建市级用户" :visible.sync="dialogFormVisibleCreateCity">
+                    <el-form :model="cityUser">
+                        <el-form-item label="用户个数" :label-width="formLabelWidth">
+                            <el-input v-model="cityUser.count" placeholder="请输入用户个数"></el-input>
+                        </el-form-item>
+                        <el-form-item label="用户名前缀" :label-width="formLabelWidth">
+                            <el-input v-model="cityUser.prefix" placeholder="请输入用户名前缀"></el-input>
+                        </el-form-item>
+                        <el-form-item label="用户全称前缀" :label-width="formLabelWidth">
+                            <el-input v-model="cityUser.name" placeholder="请输入用户全称前缀"></el-input>
+                        </el-form-item>
+                        <el-form-item label="起始下标" :label-width="formLabelWidth">
+                            <el-input v-model="cityUser.startCount" placeholder="请输入起始下标"></el-input>
+                        </el-form-item>
+                        <el-form-item label="父级用户" :label-width="formLabelWidth">
+                            <el-input v-model="cityUser.parent" placeholder="请输入父级用户id"></el-input>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="dialogFormVisibleCreateCity = false">关 闭</el-button>
+                        <el-button type="primary" @click="createCity(cityUser)">创 建</el-button>
+                    </div>
+                </el-dialog>
+                <el-dialog title="创建监测点用户" :visible.sync="dialogFormVisibleCreatePoint">
+                    <el-form :model="pointUser">
+                        <el-form-item label="用户个数" :label-width="formLabelWidth">
+                            <el-input v-model="pointUser.count" placeholder="请输入用户个数"></el-input>
+                        </el-form-item>
+                        <el-form-item label="用户名前缀" :label-width="formLabelWidth">
+                            <el-input v-model="pointUser.prefix" placeholder="请输入用户名前缀"></el-input>
+                        </el-form-item>
+                        <el-form-item label="用户全称前缀" :label-width="formLabelWidth">
+                            <el-input v-model="pointUser.name" placeholder="请输入用户全称前缀"></el-input>
+                        </el-form-item>
+                        <el-form-item label="起始下标" :label-width="formLabelWidth">
+                            <el-input v-model="pointUser.startCount" placeholder="请输入起始下标"></el-input>
+                        </el-form-item>
+                        <el-form-item label="父级用户" :label-width="formLabelWidth">
+                            <el-input v-model="pointUser.parent" placeholder="请输入父级用户id"></el-input>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="dialogFormVisibleCreatePoint = false">关 闭</el-button>
+                        <el-button type="primary" @click="createPoint(pointUser)">创 建</el-button>
+                    </div>
+                </el-dialog>
 
                 <el-table
                         :data="userData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
@@ -102,235 +147,90 @@
     var vue3 = new Vue({
         el:'#provinceQueryUserApp',
         data: {
-            userData: [
-                {
-                  userId:1,
-                  fullName:1,
-                  userRole:1,
-                  superior:1,
-                  stateFlag:1,
-                  deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-                {
-                    userId:1,
-                    fullName:1,
-                    userRole:1,
-                    superior:1,
-                    stateFlag:1,
-                    deleteFlag:true
-                },
-            ],
+            userData: [],
             input:'',
             select: '',
             pageSize:10,
             currentPage:1,
-            total:1000
-
+            total:1000,
+            cityUser:{
+                count:1,
+                prefix:'city',
+                name:'city',
+                startCount:0,
+                userType:2,
+                parent:-1
+            },
+            pointUser:{
+                count:1,
+                prefix:'point',
+                name:'point',
+                startCount:0,
+                userType:3,
+                parent:-1
+            },
+            dialogFormVisibleCreateCity:false,
+            dialogFormVisibleCreatePoint:false,
+            formLabelWidth:'120px'
         },
         methods:{
-            createCity() {
-                this.$prompt('请输入您要创建的市级用户个数', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    //只能是非负整数
-                    inputPattern: /^[1-9]*[1-9][0-9]*$/,
-                    inputErrorMessage: '请输入正整数'
-                }).then(({ value }) => {
-                    $.ajax({
-                        url:'/user/addUsers',
-                        type:'post',
-                        data:{
-                            count:value,
-                            prefix:'city',
-                            label:'fullname',
-                            startCount:0,
-                        },
-                        success(res){
-
+            createCity(cityUser) {
+                $.ajax({
+                    url:'/user/addUsers',
+                    type:'post',
+                    data:{
+                        count:cityUser.count,
+                        prefix:cityUser.prefix,
+                        name:cityUser.name,
+                        startCount:cityUser.startCount,
+                        parent:cityUser.parent
+                    },
+                    success(res){
+                        if (res.code==0){
+                            vue3.userData.push(cityUser);
                             vue3.getList();
-                            console.log(res);
+                            vue3.$message({
+                                message: '创建成功',
+                                type: 'success'
+                            });
                         }
-                    });
-                    this.$message({
-                    type: 'success',
-                    message: '已创建' + value + '个市级用户'
+                        else {
+                            vue3.$message.error('用户名重复！');
+                        }
+                        console.log(res);
+                    },
                 });
-            }).catch(() => {
-                    this.$message({
-                    type: 'info',
-                    message: '取消输入'
-                });
-            });
+                this.dialogFormVisibleCreateCity = false;
+                console.log(cityUser);
             },
-            createPoint() {
-                this.$prompt('请输入您要创建的监测点用户个数', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    //只能是非负整数
-                    inputPattern: /^[1-9]*[1-9][0-9]*$/,
-                    inputErrorMessage: '请输入正整数'
-                }).then(({ value }) => {
-                    $.ajax({
-                        url:'/user/addUsers',
-                        type:'post',
-                        data:{
-                            count:value,
-                            prefix:'point',
-                            label:'fullname',
-                            startCount:0,
-
-                        },
-                        success(res){
+            createPoint(pointUser) {
+                $.ajax({
+                    url:'/user/addUsers',
+                    type:'post',
+                    data:{
+                        count:pointUser.count,
+                        prefix:pointUser.prefix,
+                        name:pointUser.name,
+                        startCount:pointUser.startCount,
+                        parent:pointUser.parent
+                    },
+                    success(res){
+                        if (res.code==0){
+                            vue3.userData.push(pointUser);
                             vue3.getList();
-                            console.log(res);
+                            vue3.$message({
+                                message: '创建成功',
+                                type: 'success'
+                            });
                         }
-                    });
-                    this.$message({
-                        type: 'success',
-                        message: '已创建' + value + '个监测点用户'
-                    });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '取消输入'
-                    });
+                        else {
+                            vue3.$message.error('用户名重复！');
+                        }
+                        console.log(res);
+                    }
                 });
+                this.dialogFormVisibleCreatePoint = false;
+                console.log(pointUser);
             },
             changeSwitch (data) {
                 this.$confirm('确定修改此用户的删除标记?', '提示', {
@@ -367,7 +267,7 @@
                         message: '操作成功!'
                     });
                 }).catch(() => {
-                    data.deleteFlag=!data.deleteFlag;
+                    data.deleteFlag=1-data.deleteFlag;
                     this.$message({
                         type: 'info',
                         message: '已取消操作'
