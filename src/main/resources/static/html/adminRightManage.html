@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>adminRightManage</title>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Vue -->
+    <script src="//vuejs.org/js/vue.min.js"></script>
+
+    <!--elementUI-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="../css/stylesheet.css">
+    <script src="../js/jump.js"></script>
+    <style>
+        .el-dialog{
+            margin-top: 7vh !important;
+        }
+        .el-select .el-input {
+            width: 130px;
+        }
+        .input-with-select .el-input-group__prepend {
+            background-color: #fff;
+        }
+        .custom-tree-node {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 14px;
+            padding-right: 8px;
+
+        }
+    </style>
+</head>
+<body>
+<div id="adminRightManageApp">
+    <el-container style="height: 100%;">
+        <el-main class="content">
+            <div class="contentDetail">
+                <div style="margin-bottom: 15px; margin-right: 15px; ">
+                    <el-button type="success" @click="dialogFormVisibleCreate = true;">创建权限</el-button>
+                    <!--<el-button type="danger" @click="deleteRights(scope.$index, scope.row)">删除权限</el-button>-->
+                    <!--<el-input placeholder="请输入权限名称" v-model="input" class="input-with-select" style="margin-top: 15px;">-->
+                        <!--<el-button slot="append" icon="el-icon-search"></el-button>-->
+                    <!--</el-input>-->
+                </div>
+                <div></div>
+                <el-dialog title="创建权限" :visible.sync="dialogFormVisibleCreate">
+                    <el-form :model="newRight">
+                        <el-form-item label="权限名称" :label-width="formLabelWidth">
+                            <el-input v-model="newRight.name" placeholder="请输入权限名称(纯英文大写，用下划线隔开单词)"></el-input>
+                        </el-form-item>
+                        <el-form-item label="权限描述" :label-width="formLabelWidth">
+                            <el-input type="textarea"
+                                      :rows="3"
+                                      v-model="newRight.description"
+                                      placeholder="请输入权限描述">
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="菜单名称" :label-width="formLabelWidth">
+                            <el-input v-model="newRight.menuName" placeholder="请输入菜单名称(中文)"></el-input>
+                        </el-form-item>
+                        <el-form-item label="菜单路径" :label-width="formLabelWidth">
+                            <el-input v-model="newRight.menuPath" placeholder="请输入菜单路径"></el-input>
+                        </el-form-item>
+                        <el-form-item label="父级权限" :label-width="formLabelWidth">
+                            <el-select v-model="newRight.father" clearable placeholder="父级权限" >
+                                <el-option
+                                        v-for="item in rightData"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id" >
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="dialogFormVisibleCreate = false">关 闭</el-button>
+                        <el-button type="primary" @click="createRight(newRight)">创 建</el-button>
+                    </div>
+                </el-dialog>
+                <!--<el-table-->
+                        <!--ref="multipleTable"-->
+                        <!--:data="rightData.slice((currentPage-1)*pageSize,currentPage*pageSize)"-->
+                        <!--stripe-->
+                        <!--style="width: 100%"-->
+                        <!--@selection-change="handleSelectionChange">-->
+                    <!--<el-table-column-->
+                            <!--type="selection"-->
+                            <!--width="150px">-->
+                    <!--</el-table-column>-->
+                    <!--<el-table-column-->
+                            <!--prop="rightName"-->
+                            <!--label="权限名称">-->
+                    <!--</el-table-column>-->
+                    <!--<el-table-column-->
+                            <!--prop="createTime"-->
+                            <!--label="创建时间">-->
+                        <!--<template slot-scope="scope">-->
+                            <!--<el-popover trigger="hover" placement="top">-->
+                                <!--<p>最近修改时间: {{ scope.row.reviseTime }}</p>-->
+                                <!--<p>最近修改者: {{ scope.row.reviser }}</p>-->
+                                <!--<div slot="reference" class="name-wrapper">-->
+                                    <!--<el-tag size="medium">{{ scope.row.createTime }}</el-tag>-->
+                                <!--</div>-->
+                            <!--</el-popover>-->
+                        <!--</template>-->
+                    <!--</el-table-column>-->
+                    <!--<el-table-column-->
+                            <!--prop="deleteFlag"-->
+                            <!--label="状态标记"-->
+                            <!--width="150px">-->
+                        <!--<template slot-scope="scope">-->
+                            <!--<el-switch-->
+                                    <!--v-model="scope.row.deleteFlag"-->
+                                    <!--active-color="#13ce66"-->
+                                    <!--inactive-color="#ff4949"-->
+                                    <!--@change="changeSwitch(scope.row)">-->
+                            <!--</el-switch>-->
+                        <!--</template>-->
+                    <!--</el-table-column>-->
+                    <!--<el-table-column label="操作">-->
+                        <!--<template slot-scope="scope">-->
+                            <!--<el-button-->
+                                    <!--size="mini"-->
+                                    <!--@click="handleEdit(scope.$index, scope.row)">查看并编辑</el-button>-->
+
+                            <!--<el-button-->
+                                    <!--size="mini"-->
+                                    <!--type="danger"-->
+                                    <!--@click="deleteRight(scope.$index, scope.row)">删除</el-button>-->
+                        <!--</template>-->
+                    <!--</el-table-column>-->
+                <!--</el-table>-->
+                <!--<el-dialog title="权限详情" :visible.sync="dialogFormVisibleEdit">-->
+                    <!--<el-form :model="right">-->
+                        <!--<el-form-item label="权限名称" :label-width="formLabelWidth">-->
+                            <!--<el-input v-model="right.rightName" placeholder="right.rightName"></el-input>-->
+                        <!--</el-form-item>-->
+                        <!--<el-form-item label="权限描述" :label-width="formLabelWidth">-->
+                            <!--<el-input type="textarea"-->
+                                      <!--:rows="3"-->
+                                      <!--v-model="right.rightDesc"-->
+                                      <!--placeholder="right.rightDesc">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-form>-->
+                    <!--<div slot="footer" class="dialog-footer">-->
+                        <!--<el-button @click="dialogFormVisibleEdit = false">关 闭</el-button>-->
+                        <!--<el-button type="primary" @click="updateRight(right)">保 存</el-button>-->
+                    <!--</div>-->
+                <!--</el-dialog>-->
+                <!--<div class="block" style="text-align: center; margin-top: 15px">-->
+                    <!--<el-pagination-->
+                            <!--layout="prev, pager, next"-->
+                            <!--@current-change="pageChange"-->
+                            <!--:page-size="pageSize"-->
+                            <!--:total="rightData.length"-->
+                            <!--background>-->
+                    <!--</el-pagination>-->
+                <!--</div>-->
+                <div class="custom-tree-container">
+                    <div class="block">
+                        <p>权限树</p>
+                        <el-tree
+                                :data="rightData"
+                                node-key="id"
+                                default-expand-all
+                                :expand-on-click-node="false"
+                                label="name">
+                                <span class="custom-tree-node" slot-scope="{ node, data }">
+                                <span>{{ node.label }}</span>
+                                <span>
+                                    <el-button
+                                            type="text"
+                                            size="mini"
+                                            @click="() => view(node, data)">
+                                        权限详情
+                                    </el-button>
+                                    <el-button
+                                            type="text"
+                                            size="mini"
+                                            @click="() => remove(node, data)">
+                                        删除权限
+                                    </el-button>
+                                </span>
+                              </span>
+                        </el-tree>
+                    </div>
+                </div>
+            </div>
+        </el-main>
+        <el-footer class="footer">2019 &copy; 第二组织</el-footer>
+
+    </el-container>
+</div>
+</body>
+<script>
+    let id = 1;
+    var vue = new Vue({
+        el:'#adminRightManageApp',
+        data: {
+            dialogFormVisibleCreate: false,
+            dialogFormVisibleEdit: false,
+            formLabelWidth:'120px',
+            rightData: [
+                {
+                    id:1,
+                    label:'1',
+                    description:'1',
+                    status:true,
+                    children: [
+                        {
+                            id:5,
+                            label:'5',
+                            description:'5',
+                            status:true
+                        },
+                        {
+                            id:6,
+                            label:'6',
+                            description:'6',
+                            status:false
+                        }
+                    ]
+                },
+                {
+                    id:2,
+                    label:'2',
+                    description:'2',
+                    status:true,
+                    children:[]
+                },
+                {
+                    id:3,
+                    label:'3',
+                    description:'3',
+                    status:false,
+                    children:[]
+                },
+                {
+                    id:4,
+                    label:'4',
+                    description:'4',
+                    status:true,
+                    children:[]
+                }
+            ],
+            input:'',
+            pageSize:10,
+            currentPage:1,
+            total:1000,
+            right:'',
+            newRight:{
+                id:0,
+                label:'',
+                description:'',
+                status:true,
+                father:0
+            },
+            tmpIndex:-1
+        },
+        methods:{
+            view(node, data){
+                console.log(node);
+                console.log(data);
+            },
+            append(data) {
+                const newChild = { id: id++, label: 'testtest', children: [] };
+                if (!data.children) {
+                    this.$set(data, 'children', []);
+                }
+                data.children.push(newChild);
+            },
+
+            remove(node, data) {
+                const parent = node.parent;
+                const children = parent.data.children || parent.data;
+                const index = children.findIndex(d => d.id === data.id);
+                children.splice(index, 1);
+            },
+
+            createRight:function(newRight){
+                $.ajax({
+                    url:'/right/add',
+                    type:'post',
+                    data:{
+                        name:this.newRight.name,
+                        description:this.newRight.description,
+                        menuName:this.newRight.menuName,
+                        menuPath:this.newRight.menuPath,
+                        father:this.newRight.father,
+                    },
+                    success(res){
+
+                        console.log(res);
+                    }
+                })
+                this.dialogFormVisibleCreate = false;
+                console.log(newRight);
+            },
+            // deleteRights(){
+            //     this.$confirm('确定修改这些用户的删除标记?', '提示', {
+            //         confirmButtonText: '确定',
+            //         cancelButtonText: '取消',
+            //         type: 'warning'
+            //     }).then(() => {
+            //         this.rightData.splice(index,1);
+            //         this.$message({
+            //             type: 'success',
+            //             message: '操作成功!'
+            //         });
+            //     }).catch(() => {
+            //
+            //         this.$message({
+            //             type: 'info',
+            //             message: '已取消操作'
+            //         });
+            //     });
+            //     console.log(data.deleteFlag)
+            // },
+            handleEdit(index, row) {
+                this.tmpIndex=index;
+                var tmp =JSON.stringify(this.rightData[index]);
+                this.right=JSON.parse(tmp);
+                this.dialogFormVisibleEdit = true;
+                console.log(index, row);
+            },
+            updateRight(right){
+                //插入ajax语句更新
+                this.rightData[this.tmpIndex]=right;
+                this.dialogFormVisibleEdit = false;
+                console.log(right);
+            },
+            deleteRight(index, row) {
+                this.$confirm('确定删除此用户?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.rightData.splice(index,1);
+                    this.$message({
+                        type: 'success',
+                        message: '操作成功!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消操作'
+                    });
+
+                });
+                console.log(index, row);
+            },
+            pageChange(page){
+
+                this.currentPage = page;
+            },
+            changeSwitch (data) {
+                this.$confirm('确定修改此用户的删除标记?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '操作成功!'
+                    });
+                }).catch(() => {
+                    data.deleteFlag=!data.deleteFlag;
+                    this.$message({
+                        type: 'info',
+                        message: '已取消操作'
+                    });
+
+                });
+                console.log(data.deleteFlag);
+            },
+            toggleSelection(rows) {
+                if (rows) {
+                    rows.forEach(row => {
+                        this.$refs.multipleTable.toggleRowSelection(row);
+                    });
+                } else {
+                    this.$refs.multipleTable.clearSelection();
+                }
+            },
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
+            getRightList(){
+                $.ajax({
+                    url:'/right/list',
+                    type:'post',
+                    success(res){
+                        vue.rightData=res;
+                        console.log(res);
+                    }
+                })
+            },
+
+        },
+        mounted:function () {
+            // this.getRightList()
+        }
+    })
+</script>
+</html>

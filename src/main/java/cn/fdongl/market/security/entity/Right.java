@@ -13,7 +13,7 @@ public class Right {
 
     @NotNull
     @Size(max=60)
-    String name;//权限名称
+    String label;//权限名称
 
     @Size(max=192)
     String description;//权限描述
@@ -26,6 +26,6 @@ public class Right {
 
     Integer status;//权限状态，0表示启用，1表示禁用
     Integer father;//父权限ID
-    Object child;//用于生成树
+    Object children;//用于生成树
 
 }

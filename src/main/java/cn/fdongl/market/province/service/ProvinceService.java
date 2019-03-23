@@ -1,8 +1,10 @@
 package cn.fdongl.market.province.service;
 
 import cn.fdongl.market.market.entity.Record;
+import cn.fdongl.market.market.entity.SimpleUploadPeriod;
+import cn.fdongl.market.market.service.MarketService;
 import cn.fdongl.market.province.entity.InnerUploadPeriod;
-import cn.fdongl.market.province.entity.uploadPeriod;
+import cn.fdongl.market.province.entity.UploadPeriod;
 import cn.fdongl.market.province.mapper.ProvinceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,111 +37,98 @@ public class ProvinceService {
         else if(state==2){
             return provinceMapper.recordRegionEmpContactQuery(condition);
         }
-        else return null;
+        else throw new Exception("状态参数错误");
     }
 
     //审核未通过，事务
     @Transactional
-    public Integer recordReject(Integer examineId,Integer aimId,String content) throws RuntimeException {
+    public void recordReject(Integer examineId,Integer aimId,String content) throws RuntimeException {
         int n=provinceMapper.recordSelectNum(aimId);
-        if(n>0){
+        if(n==1){
             n=provinceMapper.recordDeleteReject(aimId);
-            if(n<=0){
-                throw new RuntimeException();
-
+            if(n!=1){
+                throw new RuntimeException("删除备案信息失败");
             }
             n=provinceMapper.sendMessage(
                     "您的备案修改未通过审核",
                     content,
                     examineId,
                     aimId);
-            if(n<=0){
-                throw new RuntimeException();
+            if(n!=1){
+                throw new RuntimeException("通知发送失败");
             }
-            return 0;
         }
         else if(n==0){
             n=provinceMapper.recordUpdateReject(examineId,aimId);
-            if(n<=0){
-                throw new RuntimeException();
+            if(n!=1){
+                throw new RuntimeException("修改备案信息失败");
             }
             n=provinceMapper.sendMessage(
                     "您的备案未通过审核",
                     content,
                     examineId,
                     aimId);
-            if(n<=0){
-                throw new RuntimeException();
+            if(n!=1){
+                throw new RuntimeException("通知发送失败");
             }
-            return 0;
         }
-        else throw new RuntimeException();
+        else throw new RuntimeException("查询失败");
     }
 
     //审核通过，事务
     @Transactional
-    public Integer recordPass(Integer examineId, Integer aimId, String content) throws RuntimeException {
+    public void recordPass(Integer examineId, Integer aimId, String content) throws RuntimeException {
         int n=provinceMapper.recordSelectNum(aimId);
-        if(n>0){
+        if(n==1){
             n=provinceMapper.recordUpdateExpirePass(examineId,aimId);
-            if(n<=0){
-                throw new RuntimeException();
+            if(n!=0){
+                throw new RuntimeException("更新过期备案信息失败");
             }
             n=provinceMapper.recordUpdatePass(examineId, aimId);
-            if(n<=0){
-                throw new RuntimeException();
+            if(n!=0){
+                throw new RuntimeException("修改备案信息失败");
             }
             n=provinceMapper.sendMessage(
                     "您的备案修改已通过审核",
                     content,
                     examineId,
                     aimId);
-            if(n<=0){
-                throw new RuntimeException();
+            if(n!=0){
+                throw new RuntimeException("通知发送失败");
             }
-            return 0;
         }
         else if(n==0){
             n=provinceMapper.recordUpdateActivation(examineId,aimId);
-            if(n<=0){
-                throw new RuntimeException();
+            if(n!=0){
+                throw new RuntimeException("修改激活状态失败");
             }
             n=provinceMapper.recordUpdatePass(examineId,aimId);
-            if(n<=0){
-                throw new RuntimeException();
+            if(n!=0){
+                throw new RuntimeException("修改备案信息失败");
             }
             n=provinceMapper.sendMessage(
                     "您的备案已通过审核",
                     content,
                     examineId,
                     aimId);
-            if(n<=0){
-                throw new RuntimeException();
+            if(n!=0){
+                throw new RuntimeException("通知发送失败");
             }
-            return 0;
         }
-        else throw new RuntimeException();
+        else throw new RuntimeException("查询失败");
     }
 
-    //检查日期是否合法
-    public boolean timeCheck(Date startDate, Date endDate){
-        if(startDate!=null && endDate!=null){
-            if(startDate.compareTo(endDate)<0){
-                float f=endDate.getTime()-startDate.getTime();
-                f=f/86400000;
-                if(f>30){
-                    return true;
-                }
-                else{
-                    return false;
-                }
-            }
-            else{
-                return false;
-            }
+    //检查日期是否合法，不含数据库操作
+    public void timeCheck(java.sql.Date startDate,java.sql.Date endDate) throws Exception {
+        if(startDate==null||endDate==null){
+            throw new Exception("日期不能为空");
         }
-        else{
-            return false;
+        if(startDate.compareTo(new java.sql.Date(System.currentTimeMillis()-86400000))<0){
+            throw new Exception("日期至少要大于等于当前日期");
+        }
+        long difference=(endDate.getTime()-startDate.getTime())/86400000;
+        if(difference<7||difference>30){
+            throw new Exception("一个调查期应该在7到30天之间");
         }
     }
 
@@ -168,13 +158,28 @@ public class ProvinceService {
         return provinceMapper.selectByPeriod(startDate,endDate);
     }
 
+    //查询所有上报时限
+    public List<UploadPeriod> uploadPeriodsSelectAll() throws Exception{
+        List<InnerUploadPeriod> preOutput=provinceMapper.selectAllPeriod();
+        if(preOutput==null||preOutput.size()==0){
+            throw new Exception("No result");
+        }
+        else{
+            List<UploadPeriod> output = new ArrayList<UploadPeriod>();
+            for(int i=0;i<preOutput.size();i++){
+                output.add(InnerUploadPeriodTranform(preOutput.get(i)));
+            }
+            return  output;
+        }
+    }
+
     //将InnerUploadPeriod对象转化为uploadPeriod对象
-    public uploadPeriod InnerUploadPeriodTranform(InnerUploadPeriod input){
+    public UploadPeriod InnerUploadPeriodTranform(InnerUploadPeriod input){
         try {
             if(input==null){
                 return null;
             }
-            uploadPeriod output = new uploadPeriod();
+            UploadPeriod output = new UploadPeriod();
             output.setUploadPeriodId(input.getUploadPeriodId());
             output.setCreator(input.getCreator());
             output.setReviser(input.getReviser());

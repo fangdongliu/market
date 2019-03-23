@@ -14,7 +14,7 @@ public interface RightMapper {
 
     @Select("SELECT \n" +
             "\tright_id AS id,\n" +
-            "\tright_name AS `name`,\n" +
+            "\tright_name AS `label`,\n" +
             "\tright_desc AS description,\n" +
             "\tfather_id AS father,\n" +
             "\tdelete_flag AS `status`\n" +
@@ -23,17 +23,17 @@ public interface RightMapper {
     Map<Integer,Right> list();
 
     @Select("SELECT \n" +
-            "\tright_name AS `name`,\n" +
+            "\tright_name AS `label`,\n" +
             "\tright_desc AS description,\n" +
             "\tdelete_flag AS `status`\n" +
             "\t FROM t_right where right_id=#{param1} limit 1;")
     Right info(Integer rightId);
 
     @Insert("INSERT INTO t_right\n" +
-            "VALUES(NULL,#{name},#{description},#{father},#{menuName},#{menuPath},NOW(),1,NULL,NULL,0);")
+            "VALUES(NULL,#{label},#{description},#{father},#{menuName},#{menuPath},NOW(),1,NULL,NULL,0);")
     int add(Right right);
 
-    @Update("UPDATE t_right SET right_name = #{name},right_desc=#{description},menu_name = #{menuName}" +
+    @Update("UPDATE t_right SET right_name = #{label},right_desc=#{description},menu_name = #{menuName}" +
             ",menu_path = #{menuPath},revise_time=NOW(),reviser=1 WHERE right_id = #{id};")
     int modify(Right right);
 

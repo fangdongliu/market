@@ -5,12 +5,9 @@
     <title>checkPointRecord</title>
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <!-- Vue -->
-    <script src="//vuejs.org/js/vue.min.js"></script>
-    <link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">
-    <script src="//unpkg.com/iview/dist/iview.min.js"></script>
-    <!--elementUI-->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.6.9/vue.min.js"></script>
+    <link href="https://cdn.bootcss.com/element-ui/2.6.1/theme-chalk/index.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/element-ui/2.6.1/index.js"></script>
     <link rel="stylesheet" href="../css/stylesheet.css">
 </head>
 <body>
@@ -30,7 +27,14 @@
                                 <el-input v-model="marketDetailForm.name" :disabled="ifSubmitMarketDetail"></el-input>
                             </el-form-item>
                             <el-form-item label="所在地区" prop="location">
-                                <el-input v-model="marketDetailForm.location" :disabled="ifSubmitMarketDetail"></el-input>
+                                <el-cascader
+                                        :options="cityOptions"
+                                        v-model="marketDetailForm.location"
+                                        @change="handleChange"
+                                        :disabled="ifSubmitMarketDetail">
+                                </el-cascader>
+
+                                <!--<el-input v-model="marketDetailForm.location" :disabled="ifSubmitMarketDetail"></el-input>-->
                             </el-form-item>
                             <el-form-item label="联系人姓名" prop="people">
                                 <el-input v-model="marketDetailForm.people" :disabled="ifSubmitMarketDetail"></el-input>
@@ -182,7 +186,111 @@
                 fax:{validator:checkFax, trigger:'blur'}
             },
             phone:'',
-            fax:''
+            fax:'',
+            cityOptions:{
+                value:'anhui',
+                label:'安徽省',
+                children:[{
+                    value:'anqing',
+                    label:'安庆',
+                    children:[{
+                        value:'anqingshi',
+                        label:'安庆市'
+                    },{
+                        value:'huainingxian',
+                        label:'怀宁县'
+                    },{
+                        value:'qianshanxian',
+                        label:'潜山县'
+                    },{
+                        value:'susongxian',
+                        label:'宿松县'
+                    },{
+                        value:'taihuxian',
+                        label:'太湖县'
+                    },{
+                        value:'tongchengshi',
+                        label:'桐城市'
+                    },{
+                        value:'wangjiangxian',
+                        label:'望江县'
+                    },{
+                        value:'yuexixian',
+                        label:'岳西县'
+                    },{
+                        value:'zongyangxian',
+                        label:'枞阳县'
+                    },{
+                        value:'anqingshi',
+                        label:'安庆市'
+                    }]
+                },{
+                    value:'bengbu',
+                    label:'蚌埠',
+                    children:[],
+                },{
+                    value:'chaohu',
+                    label:'巢湖',
+                    children:[],
+                },{
+                    value:'chizhou',
+                    label:'池州',
+                    children:[],
+                },{
+                    value:'chuzhou',
+                    label:'滁州',
+                    children:[],
+                },{
+                    value:'fuyang',
+                    label:'阜阳',
+                    children:[],
+                },{
+                    value:'hefei',
+                    label:'合肥',
+                    children:[],
+                },{
+                    value:'huanbei',
+                    label:'淮北',
+                    children:[],
+                },{
+                    value:'huainan',
+                    label:'淮南',
+                    children:[],
+                },{
+                    value:'huangshan',
+                    label:'黄山',
+                    children:[],
+                },{
+                    value:'liuan',
+                    label:'六安',
+                    children:[],
+                },{
+                    value:'maanshan',
+                    label:'马鞍山',
+                    children:[],
+                },{
+                    value:'suzhou',
+                    label:'宿州',
+                    children:[],
+                },{
+                    value:'tongling',
+                    label:'铜陵',
+                    children:[],
+                },{
+                    value:'wuhu',
+                    label:'芜湖',
+                    children:[],
+                },{
+                    value:'xuancheng',
+                    label:'宣城',
+                    children:[],
+                },{
+                    value:'bozhou',
+                    label:'亳州',
+                    children:[],
+                }
+                ]
+            }
         },
         methods:{
             onSubmitMarketDetail: function(formName) {
@@ -191,7 +299,6 @@
                         if (valid) {
                             this.phone = this.marketDetailForm.phonePre.toString()+this.marketDetailForm.phone.toString();
                             this.fax = this.marketDetailForm.faxPre.toString() + this.marketDetailForm.fax.toString();
-                            alert(this.phone);
                             if(this.marketStateFlag === -1) {//新建备案
                                 $.ajax({
                                     url:'/market/record/insert',
@@ -258,6 +365,9 @@
             },
             resetMarketDetailForm:function(formName) {
                 this.$refs[formName].resetFields();
+            },
+            handleChange(value) {
+                console.log(value);
             }
         },
         mounted:function () {

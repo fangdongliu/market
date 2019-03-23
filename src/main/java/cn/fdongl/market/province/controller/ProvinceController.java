@@ -1,15 +1,15 @@
 package cn.fdongl.market.province.controller;
 
 import cn.fdongl.market.province.entity.InnerUploadPeriod;
-import cn.fdongl.market.province.entity.uploadPeriod;
+import cn.fdongl.market.province.entity.UploadPeriod;
 import cn.fdongl.market.province.service.ProvinceService;
 import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.util.ControllerBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import cn.fdongl.market.market.service.MarketService;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -23,66 +23,46 @@ public class ProvinceController extends ControllerBase {
     @Autowired
     ProvinceService provinceService;
 
+    @Autowired
+    MarketService marketService;
+
     //查询所有待审核的备案信息
     @PostMapping("/record/examineQuery")
-    public Object RecordExamineQuery(){
-        try {
-            Object data=provinceService.recordExamineQuery();
-            return success(data);
-        }catch (Exception e){
-            return fail();
-        }
+    public Object RecordExamineQuery() throws Exception {
+        return success(provinceService.recordExamineQuery());
     }
 
     //根据条件查询已通过的备案信息
     @PostMapping("/record/conditionalQuery")
-    public Object RecordConditionalQuery(Integer state,String condition){
-        try {
-            Object data=provinceService.recordConditionalQuery(state, condition);
-            return success(data);
-        }catch (Exception e){
-            return fail();
-        }
+    public Object RecordConditionalQuery(Integer state,String condition) throws Exception {
+        return success(provinceService.recordConditionalQuery(state, condition));
     }
 
     //审核拒绝通过
     @PostMapping("/record/reject")
-    public Object RecordReject(AppUserDetail appUserDetail,Integer aimId, String feedback){
-        try {
-            int n=provinceService.recordReject(appUserDetail.getId(),aimId,feedback);
-            if(n!=0){
-                return fail();
-            }
-            return success();
-        }catch (Exception e){
-            return fail();
-        }
+    public Object RecordReject(AppUserDetail appUserDetail,Integer aimId,String content) throws Exception {
+        provinceService.recordReject(appUserDetail.getId(),aimId,content);
+        return success();
     }
 
     //审核通过
     @PostMapping("/record/pass")
-    public Object RecordPass(AppUserDetail appUserDetail,Integer aimId,String feedback){
-        try {
-            int n=provinceService.recordPass(appUserDetail.getId(),aimId,feedback);
-            if(n!=0){
-                return fail();
-            }
-            return success();
-        }catch (Exception e){
-            return fail();
-        }
+    public Object RecordPass(AppUserDetail appUserDetail,Integer aimId,String content){
+        provinceService.recordPass(appUserDetail.getId(),aimId,content);
+        return success();
     }
+
     //新建上报时限
     @PostMapping("/investigatePeriod/insert")
-    public Object uploadPeriodInsert(AppUserDetail appUserDetail, uploadPeriod period){
+    public Object uploadPeriodInsert(AppUserDetail appUserDetail, UploadPeriod period){
         try{
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date start=new java.sql.Date(format.parse(period.getStartDate()).getTime());
             Date end=new java.sql.Date(format.parse(period.getEndDate()).getTime());//将日期从字符串转换为日期类
-            if(!provinceService.timeCheck(start,end)){
-                return fail(2);//日期不合法则返回fail
-            }
+            provinceService.timeCheck(start,end);
             InnerUploadPeriod innerPeriod=new InnerUploadPeriod();
+            innerPeriod.setReviser(appUserDetail.getId());
+            innerPeriod.setReviseTime(new java.util.Date());
             innerPeriod.setStartDate(start);
             innerPeriod.setEndDate(end);
             innerPeriod.setCreator(appUserDetail.getId());
@@ -102,14 +82,12 @@ public class ProvinceController extends ControllerBase {
 
     //修改上报时限
     @PostMapping("/investigatePeriod/update")
-    public Object uploadPeriodUpdate(AppUserDetail appUserDetail,uploadPeriod period){
+    public Object uploadPeriodUpdate(AppUserDetail appUserDetail, UploadPeriod period){
         try{
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date start=new java.sql.Date(format.parse(period.getStartDate()).getTime());
             Date end=new java.sql.Date(format.parse(period.getEndDate()).getTime());//将日期从字符串转换为日期类
-            if(!provinceService.timeCheck(start,end)){
-                return fail(2);//日期不合法则返回fail
-            }
+            provinceService.timeCheck(start,end);
             if(provinceService.periodUpdate(start,end,new java.util.Date(),appUserDetail.getId(),period.getUploadPeriodId())<=0){
                 return fail(1);//update影响条数小于0则返回fail
             }
@@ -131,7 +109,7 @@ public class ProvinceController extends ControllerBase {
                 return fail(null,"No result");
             }
             else{
-                uploadPeriod output=provinceService.InnerUploadPeriodTranform(innerUploadPeriod);
+                UploadPeriod output=provinceService.InnerUploadPeriodTranform(innerUploadPeriod);
                 if(output==null){
                     return fail("Unknown Error");
                 }
@@ -156,7 +134,7 @@ public class ProvinceController extends ControllerBase {
                 return fail(null,"No result");
             }
             else{
-                uploadPeriod output=provinceService.InnerUploadPeriodTranform(innerUploadPeriod);
+                UploadPeriod output=provinceService.InnerUploadPeriodTranform(innerUploadPeriod);
                 if(output==null){
                     return fail(null,"Unknown Error");
                 }
@@ -172,25 +150,37 @@ public class ProvinceController extends ControllerBase {
 
     //按时间段查询上报时限
     @PostMapping("/investigatePeriod/selectByPeriod")
-    public List<Object> uploadPeriodSelectByPeriod(AppUserDetail appUserDetail, uploadPeriod period){
+    public Object uploadPeriodSelectByPeriod(AppUserDetail appUserDetail, UploadPeriod period){
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             java.sql.Date startDate = new java.sql.Date(format.parse(period.getStartDate()).getTime());
             java.sql.Date endDate = new java.sql.Date(format.parse(period.getEndDate()).getTime());
             List<InnerUploadPeriod> outPutList=provinceService.uploadPeriodSelectByPeriod(startDate,endDate);
             if(outPutList==null){
-                return (List<Object>) fail(null,"No Result");
+                return fail(null,"No Result");
             }
             else{
-                List<uploadPeriod> output=new ArrayList<uploadPeriod>();
+                List<UploadPeriod> output=new ArrayList<UploadPeriod>();
                 for (InnerUploadPeriod innerUploadPeriod : outPutList) {
                     output.add(provinceService.InnerUploadPeriodTranform(innerUploadPeriod));
                 }
-                return (List<Object>) success(output);
+                return success(output);
             }
         }
         catch (Exception e){
-            return (List<Object>) fail(null,"Unknown Error");
+            return fail(null,"Unknown Error");
         }
+    }
+
+    //查询所有上报时限
+    @PostMapping("/investigatePeriod/selectAllPeriod")
+    public Object uploadPeriodSelectAll(AppUserDetail appUserDetail)throws Exception{
+        return success(provinceService.uploadPeriodsSelectAll());
+    }
+
+    //查询目标用户报表
+    @PostMapping("/data/selectMarketData")
+    public Object SelectNowUserUploadInfo(AppUserDetail appUserDetail,Integer aimUserId)throws Exception{
+        return success(marketService.UploadInfoSelectByUser(aimUserId));
     }
 }
