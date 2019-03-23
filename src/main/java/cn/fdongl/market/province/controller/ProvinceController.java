@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import cn.fdongl.market.market.service.MarketService;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -22,55 +23,35 @@ public class ProvinceController extends ControllerBase {
     @Autowired
     ProvinceService provinceService;
 
+    @Autowired
+    MarketService marketService;
+
     //查询所有待审核的备案信息
     @PostMapping("/record/examineQuery")
-    public Object RecordExamineQuery(){
-        try {
-            Object data=provinceService.recordExamineQuery();
-            return success(data);
-        }catch (Exception e){
-            return fail();
-        }
+    public Object RecordExamineQuery() throws Exception {
+        return success(provinceService.recordExamineQuery());
     }
 
     //根据条件查询已通过的备案信息
     @PostMapping("/record/conditionalQuery")
-    public Object RecordConditionalQuery(Integer state,String condition){
-        try {
-            Object data=provinceService.recordConditionalQuery(state, condition);
-            return success(data);
-        }catch (Exception e){
-            return fail();
-        }
+    public Object RecordConditionalQuery(Integer state,String condition) throws Exception {
+        return success(provinceService.recordConditionalQuery(state, condition));
     }
 
     //审核拒绝通过
     @PostMapping("/record/reject")
-    public Object RecordReject(AppUserDetail appUserDetail,Integer aimId, String feedback){
-        try {
-            int n=provinceService.recordReject(appUserDetail.getId(),aimId,feedback);
-            if(n!=0){
-                return fail();
-            }
-            return success();
-        }catch (Exception e){
-            return fail();
-        }
+    public Object RecordReject(AppUserDetail appUserDetail,Integer aimId,String content) throws Exception {
+        provinceService.recordReject(appUserDetail.getId(),aimId,content);
+        return success();
     }
 
     //审核通过
     @PostMapping("/record/pass")
-    public Object RecordPass(AppUserDetail appUserDetail,Integer aimId,String feedback){
-        try {
-            int n=provinceService.recordPass(appUserDetail.getId(),aimId,feedback);
-            if(n!=0){
-                return fail();
-            }
-            return success();
-        }catch (Exception e){
-            return fail();
-        }
+    public Object RecordPass(AppUserDetail appUserDetail,Integer aimId,String content){
+        provinceService.recordPass(appUserDetail.getId(),aimId,content);
+        return success();
     }
+
     //新建上报时限
     @PostMapping("/investigatePeriod/insert")
     public Object uploadPeriodInsert(AppUserDetail appUserDetail, UploadPeriod period){
@@ -78,9 +59,7 @@ public class ProvinceController extends ControllerBase {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date start=new java.sql.Date(format.parse(period.getStartDate()).getTime());
             Date end=new java.sql.Date(format.parse(period.getEndDate()).getTime());//将日期从字符串转换为日期类
-            if(!provinceService.timeCheck(start,end)){
-                return fail(2);//日期不合法则返回fail
-            }
+            provinceService.timeCheck(start,end);
             InnerUploadPeriod innerPeriod=new InnerUploadPeriod();
             innerPeriod.setReviser(appUserDetail.getId());
             innerPeriod.setReviseTime(new java.util.Date());
@@ -108,9 +87,7 @@ public class ProvinceController extends ControllerBase {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date start=new java.sql.Date(format.parse(period.getStartDate()).getTime());
             Date end=new java.sql.Date(format.parse(period.getEndDate()).getTime());//将日期从字符串转换为日期类
-            if(!provinceService.timeCheck(start,end)){
-                return fail(2);//日期不合法则返回fail
-            }
+            provinceService.timeCheck(start,end);
             if(provinceService.periodUpdate(start,end,new java.util.Date(),appUserDetail.getId(),period.getUploadPeriodId())<=0){
                 return fail(1);//update影响条数小于0则返回fail
             }
@@ -199,5 +176,11 @@ public class ProvinceController extends ControllerBase {
     @PostMapping("/investigatePeriod/selectAllPeriod")
     public Object uploadPeriodSelectAll(AppUserDetail appUserDetail)throws Exception{
         return success(provinceService.uploadPeriodsSelectAll());
+    }
+
+    //查询目标用户报表
+    @PostMapping("/data/selectMarketData")
+    public Object SelectNowUserUploadInfo(AppUserDetail appUserDetail,Integer aimUserId)throws Exception{
+        return success(marketService.UploadInfoSelectByUser(aimUserId));
     }
 }

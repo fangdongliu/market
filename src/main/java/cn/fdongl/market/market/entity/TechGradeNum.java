@@ -3,7 +3,7 @@ package cn.fdongl.market.market.entity;
 import lombok.Data;
 
 @Data
-public class TechGrageNum {//技术等级供求人数表，共19条数据
+public class TechGradeNum {//技术等级供求人数表，共19条数据
 
     Integer tableId;//数据表id
     Integer profLevel5Need;//职业资格五级（初级技能）需求人数

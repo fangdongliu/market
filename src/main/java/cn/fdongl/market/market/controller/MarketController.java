@@ -1,6 +1,5 @@
 package cn.fdongl.market.market.controller;
 
-
 import cn.fdongl.market.market.entity.*;
 import cn.fdongl.market.market.service.MarketService;
 import cn.fdongl.market.security.entity.AppUserDetail;
@@ -46,13 +45,6 @@ public class MarketController extends ControllerBase {
         return success(data);
     }
 
-    @PostMapping("/upload/selectUploadPeriod")
-    public SimpleUploadPeriod UploadSelectUploadPeriod(){
-        //TODO
-        //InnerUploadPeriod innerUploadPeriod=marketService.UploadSelectUploadPeriod(new Date());
-        return null;
-    }
-
     //新建数据上传
     @PostMapping("/upload/insert")
     public Object UploadInsert(
@@ -68,9 +60,13 @@ public class MarketController extends ControllerBase {
             SexNum sexNum,
             AgeNum ageNum,
             DegreeNum degreeNum,
-            TechGrageNum techGrageNum) throws Exception {
-
+            TechGradeNum techGradeNum) throws Exception {
+        SimpleUploadPeriod simpleUploadPeriod=marketService.UploadPeriodSelect(new Date());
+        if(simpleUploadPeriod==null){
+            throw new Exception("当前时间不在上传期内，无法上传数据");
+        }
         UploadInfo uploadInfo=new UploadInfo();
+        uploadInfo.setUploadPeriodId(simpleUploadPeriod.getUploadPeriodId());
         uploadInfo.setStateFlag(stateFlag);
         uploadInfo.setCreator(appUserDetail.getId());
         uploadInfo.setCreateTime(new Date());
@@ -86,7 +82,7 @@ public class MarketController extends ControllerBase {
                 sexNum,
                 ageNum,
                 degreeNum,
-                techGrageNum);
+                techGradeNum);
         return success();
     }
 
@@ -104,10 +100,14 @@ public class MarketController extends ControllerBase {
             SexNum sexNum,
             AgeNum ageNum,
             DegreeNum degreeNum,
-            TechGrageNum techGrageNum) throws Exception {
-
+            TechGradeNum techGradeNum) throws Exception {
+        SimpleUploadPeriod simpleUploadPeriod=marketService.UploadPeriodSelect(new Date());
+        if(uploadInfo.getUploadPeriodId()==null&&simpleUploadPeriod==null){
+            throw new Exception("当前时间不在上传期内，无法上传数据");
+        }
+        uploadInfo.setUploadPeriodId(simpleUploadPeriod.getUploadPeriodId());
         uploadInfo.setCreateTime(new Date());
-        marketService.uploadInsert(
+        marketService.uploadUpdate(
                 uploadInfo,
                 totalNum,
                 industryNum,
@@ -119,62 +119,93 @@ public class MarketController extends ControllerBase {
                 sexNum,
                 ageNum,
                 degreeNum,
-                techGrageNum);
+                techGradeNum);
         return success();
     }
-    //
-    @PostMapping("/data/ageNumSelect")
-    public Object AgeNumSelect(Integer tableId)throws Exception{
-        return success(marketService.AgeNumSelect(tableId));
+
+    //查询当前上传期
+    @PostMapping("/data/uploadPeriodSelect")
+    public SimpleUploadPeriod UploadPeriodSelect(){
+        return marketService.UploadPeriodSelect(new Date());
     }
-    //
-    @PostMapping("/data/degreeNumSelect")
-    public Object DegreeNumSelect(Integer tableId) throws Exception{
-        return success(marketService.DegreeNumSelect(tableId));
-    }
-    //
-    @PostMapping("/data/industryNumSelect")
-    public Object IndustryNumSelect(Integer tableId) throws Exception{
-        return success(marketService.IndustryNumSelect(tableId));
-    }
-    //
-    @PostMapping("/data/jobSeekerNumSelect")
-    public Object JobSeekerNumSelect(Integer tableId) throws Exception{
-        return success(marketService.JobSeekerNumSelect(tableId));
-    }
-    //
-    @PostMapping("/data/leastNeededSelect")
-    public Object LeastNeededSelect(Integer tableId) throws Exception{
-        return success(marketService.LeastNeededSelect(tableId));
-    }
-    //
-    @PostMapping("/data/mostNeededSelect")
-    public Object MostNeededSelect(Integer tableId) throws Exception{
-        return success(marketService.MostNeededSelect(tableId));
-    }
-    //
-    @PostMapping("/data/profNumSelect")
-    public Object ProfNumSelect(Integer tableId) throws Exception{
-        return success(marketService.ProfNumSelect(tableId));
-    }
-    //
-    @PostMapping("/data/sexNumSelect")
-    public Object SexNumSelect(Integer tableId) throws Exception{
-        return success(marketService.SexNumSelect(tableId));
-    }
-    //
-    @PostMapping("/data/techGrageNumSelect")
-    public Object TechGrageNumSelect(Integer tableId) throws Exception{
-        return success(marketService.TechGrageNumSelect(tableId));
-    }
-    //
-    @PostMapping("/data/totalNumSelect")
-    public Object TotalNumSelect(Integer tableId) throws Exception{
-        return success(marketService.TotalNumSelect(tableId));
-    }
-    //
-    @PostMapping("/data/uploadInfoSelect")
-    public Object UploadInfoNumSelect(Integer tableId) throws Exception{
+
+    //查询上传信息
+    @PostMapping("data/uploadInfoSelect")
+    public Object UploadInfoSelect(Integer tableId) throws Exception {
         return success(marketService.UploadInfoSelect(tableId));
     }
+
+    //查询供求总体人数
+    @PostMapping("/data/totalNumSelect")
+    public Object TotalNumSelect(Integer tableId) throws Exception {
+        return success(marketService.TotalNumSelect(tableId));
+    }
+
+    //查询产业需求人数
+    @PostMapping("/data/industryNumSelect")
+    public Object IndustryNumSelect(Integer tableId) throws Exception {
+        return success(marketService.IndustryNumSelect(tableId));
+    }
+
+    //查询用人单位性质需求人数
+    @PostMapping("/data/employerNum")
+    public Object EmployerNumSelect(Integer tableId) throws Exception {
+        return success(marketService.EmployerNumSelect(tableId));
+    }
+
+    //查询职业供求人数
+    @PostMapping("/data/profNumSelect")
+    public Object ProfNumSelect(Integer tableId) throws Exception {
+        return success(marketService.ProfNumSelect(tableId));
+    }
+
+    //查询需求前十职业
+    @PostMapping("/data/mostNeededSelect")
+    public Object MostNeededSelect(Integer tableId) throws Exception {
+        return success(marketService.MostNeededSelect(tableId));
+    }
+
+    //查询饱和前十职业
+    @PostMapping("/data/leastNeededSelect")
+    public Object LeastNeededSelect(Integer tableId) throws Exception {
+        return success(marketService.LeastNeededSelect(tableId));
+    }
+
+    //查询人员类别求职人数
+    @PostMapping("/data/jobSeekerNumSelect")
+    public Object JobSeekerNumSelect(Integer tableId) throws Exception {
+        return success(marketService.JobSeekerNumSelect(tableId));
+    }
+
+    //查询性别供求人数
+    @PostMapping("/data/sexNumSelect")
+    public Object SexNumSelect(Integer tableId) throws Exception {
+        return success(marketService.SexNumSelect(tableId));
+    }
+
+    //查询年龄供求人数
+    @PostMapping("/data/ageNumSelect")
+    public Object AgeNumSelect(Integer tableId)throws Exception {
+        return success(marketService.AgeNumSelect(tableId));
+    }
+
+    //查询文化程度供求人数
+    @PostMapping("/data/degreeNumSelect")
+    public Object DegreeNumSelect(Integer tableId) throws Exception {
+        return success(marketService.DegreeNumSelect(tableId));
+    }
+
+    //查询技术等级供求人数
+    @PostMapping("/data/techGradeNumSelect")
+    public Object TechGradeNumSelect(Integer tableId) throws Exception {
+        return success(marketService.TechGradeNumSelect(tableId));
+    }
+
+    //查询当前用户报表
+    @PostMapping("/data/select")
+    public Object SelectNowUserUploadInfo(AppUserDetail appUserDetail)throws Exception{
+        return success(marketService.UploadInfoSelectByUser(appUserDetail.getId()));
+    }
+
+
 }

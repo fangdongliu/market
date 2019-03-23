@@ -1,14 +1,13 @@
 package cn.fdongl.market.market.mapper;
 
 import cn.fdongl.market.market.entity.*;
-import cn.fdongl.market.province.entity.InnerUploadPeriod;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.core.annotation.Order;
 
-import java.sql.Date;
+import java.util.List;
 
 @Mapper
 @Order(1)
@@ -77,15 +76,10 @@ public interface MarketMapper {
     @Select("SELECT \n" +
             "upload_period_id AS uploadPeriodId, \n" +
             "start_date AS startDate, \n" +
-            "end_date AS endDate, \n" +
-            "create_time AS createTime, \n" +
-            "creator AS creator, \n" +
-            "revise_date AS reviseDate, \n" +
-            "reviser AS reviser, \n" +
-            "delete_flag AS deleteFlag \n" +
+            "end_date AS endDate \n" +
             "from t_upload_period \n" +
-            "where #{param1} between start_date and end_date limit 1;")
-    InnerUploadPeriod uploadSelectUploadPeriod(Date aimDate);
+            "where start_date<=#{param1} and #{param1}<end_date limit 1;")
+    SimpleUploadPeriod uploadSelectUploadPeriod(java.sql.Date aimDate);
 
     //查询upload_info的下一个自增id
     @Select("SELECT AUTO_INCREMENT \n" +
@@ -229,7 +223,7 @@ public interface MarketMapper {
             "#{profLevel5Need},#{profLevel5Jobseek},#{profLevel4Need},#{profLevel4Jobseek},#{profLevel3Need},#{profLevel3Jobseek}, \n" +
             "#{profLevel2Need},#{profLevel2Jobseek},#{profLevel1Need},#{profLevel1Jobseek},#{primProfNeed},#{primProfJobseek}, \n" +
             "#{mediProfNeed},#{mediProfJobseek},#{seniProfNeed},#{seniProfJobseek},#{noTechJobseek},#{noRequNeed});")
-    Integer uploadInsertTechGrageNum(TechGrageNum techGrageNum);
+    Integer uploadInsertTechGradeNum(TechGradeNum techGradeNum);
 
     //更新一条上传数据信息
     @Update("UPDATE t_upload_info SET \n" +
@@ -349,7 +343,7 @@ public interface MarketMapper {
             "medi_prof_need=#{mediProfNeed},medi_prof_jobseek=#{mediProfJobseek},seni_prof_need=#{seniProfNeed}, \n" +
             "seni_prof_jobseek=#{seniProfJobseek},no_tech_jobseek=#{noTechJobseek},no_requ_need=#{noRequNeed} \n" +
             "where table_id=#{tableId};")
-    Integer uploadUpdateTechGrageNum(TechGrageNum techGrageNum);
+    Integer uploadUpdateTechGradeNum(TechGradeNum techGradeNum);
     
     //查询上传数据信息
     @Select("SELECT \n" +
@@ -440,7 +434,6 @@ public interface MarketMapper {
             "from t_prof_num where table_id = #{param1};")
     ProfNum uploadSelectProfNum(Integer tableId);
 
-
     //查询需求前十职业表
     @Select("SELECT \n" +
             "table_id AS tableId,\n" +
@@ -486,7 +479,6 @@ public interface MarketMapper {
             "most_prof10_jobseek AS mostProf10Jobseek \n" +
             "from t_most_needed where table_id = #{param1};")
     MostNeeded uploadSelectMostNeeded(Integer tableId);
-
 
     //查询饱和前十职业表
     @Select("SELECT \n" +
@@ -550,7 +542,6 @@ public interface MarketMapper {
             "from t_job_seeker_num where table_id = #{param1};")
     JobSeekerNum uploadSelectJobSeekerNum(Integer tableId);
 
-
     //查询性别供求人数表
     @Select("SELECT \n" +
             "table_id AS tableId,\n" +
@@ -561,7 +552,6 @@ public interface MarketMapper {
             "no_requ_need AS noRequNeed \n" +
             "from t_sex_num where table_id = #{param1};")
     SexNum uploadSelectSexNum(Integer tableId);
-
 
     //查询文化程度供求人数表
     @Select("SELECT \n" +
@@ -580,7 +570,6 @@ public interface MarketMapper {
             "from t_degree_num where table_id = #{param1};")
     DegreeNum uploadSelectDegreeNum(Integer tableId);
 
-
     //查询年龄供求人数表
     @Select("SELECT \n" +
             "table_id AS tableId,\n" +
@@ -595,7 +584,6 @@ public interface MarketMapper {
             "no_requ_need AS noRequNeed \n" +
             "from t_age_num where table_id = #{param1};")
     AgeNum uploadSelectAgeNum(Integer tableId);
-
 
     //查询技术等级供求人数表
     @Select("SELECT \n" +
@@ -619,5 +607,17 @@ public interface MarketMapper {
             "no_tech_jobseek AS noTechJobseek,\n" +
             "no_requ_need AS noRequNeed \n" +
             "from t_tech_grade_num where table_id =#{param1};")
-    TechGrageNum uploadSelectTechGrageNum(Integer tableId);
+    TechGradeNum uploadSelectTechGradeNum(Integer tableId);
+
+    //查询目标用户报表信息
+    @Select("SELECT \n" +
+            "table_id AS tableId, \n" +
+            "upload_period_id AS uploadPeriodId,\n" +
+            "state_flag AS stateFlag,\n" +
+            "create_time AS createTime,\n" +
+            "creator AS creator,\n" +
+            "revise_time AS reviseTime,\n" +
+            "reviser AS reviser \n" +
+            "from t_upload_info where creator = #{param1};")
+    List<UploadInfo> uploadInfoSelectByUser(Integer userId);
 }
