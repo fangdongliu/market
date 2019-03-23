@@ -205,9 +205,27 @@ public class ProvinceController extends ControllerBase {
             throw new Exception("Authority Error");
         }
     }
+
     //查询目标市级用户下属的监测点
-    @PostMapping("selectCitySub")
+    @PostMapping("/selectCitySub")
     public Object SelectCitySub(AppUserDetail appUserDetail,Integer aimUserId)throws Exception{
         return success(provinceService.selectSub(aimUserId));
     }
+
+
+    //条件查询操作用户范围内的所有监测点,流程需要优化
+    @PostMapping("/userSearch")
+    public Object userSearch(AppUserDetail appUserDetail,String input)throws Exception{
+        Integer type = provinceService.selectUsertype(appUserDetail.getId());
+        if(type==1){
+            return success(provinceService.userSearch(input));
+        }
+        else if(type==2){
+            return success(provinceService.userSearchByuser(appUserDetail.getId(),input));
+        }
+        else {
+            throw new Exception("Authority Error");
+        }
+    }
+
 }

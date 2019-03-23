@@ -219,4 +219,22 @@ public interface ProvinceMapper {
             "from t_user \n" +
             "where user_id = #{param1};")
     Integer selectUsertype(Integer aimUserId);
+
+    //条件查询所有监测点
+    @Select("SELECT \n" +
+            "user_id AS userId,\n" +
+            "username AS username,\n" +
+            "fullname AS fullname \n" +
+            "from t_user \n" +
+            "where username like CONCAT('%',#{param1},'%') or fullname like CONCAT('%',#{param1},'%');")
+    List<UserInfoDisplay> userSearch(String input);
+
+    //条件查询某用户直接下属的用户
+    @Select("SELECT \n" +
+            "user_id AS userId,\n" +
+            "username AS username,\n" +
+            "fullname AS fullname \n" +
+            "from t_user \n" +
+            "where (superior = #{param1}) and (username like CONCAT('%',#{param2},'%') or fullname like CONCAT('%',#{param2},'%'));")
+    List<UserInfoDisplay> userSearchByuser(Integer userId,String input);
 }

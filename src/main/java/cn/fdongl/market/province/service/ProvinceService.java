@@ -242,4 +242,24 @@ public class ProvinceService {
         }
     }
 
+    //条件查询所有用户
+    public List<UserInfoDisplay> userSearch(String input) throws Exception{
+        List<UserInfoDisplay> output=provinceMapper.userSearch(input);
+        if(output==null){
+            throw new Exception("No Result");
+        }
+        else{
+            return output;
+        }
+    }
+    //条件查询当前用户下属的监测点
+    public List<UserInfoDisplay> userSearchByuser(Integer userId,String input) throws Exception{
+        List<UserInfoDisplay> output=provinceMapper.userSearchByuser(userId,input);
+        if(output==null){
+            throw new Exception("No Result");
+        }
+        else{
+            return output;
+        }
+    }
 }
