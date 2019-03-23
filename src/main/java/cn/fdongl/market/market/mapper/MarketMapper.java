@@ -218,7 +218,7 @@ public interface MarketMapper {
 
     //更新一条上传数据信息
     @Update("UPDATE t_upload_info SET \n" +
-            "upload_period_id=#{uploadPeriodId},state_flag={stateFlag},create_time={createTime}, \n" +
+            "upload_period_id=#{uploadPeriodId},state_flag=#{stateFlag},create_time=#{createTime}, \n" +
             "creator=#{creator},revise_time=#{reviseTime},reviser=#{reviser} \n" +
             "where table_id=#{tableId};")
     Integer uploadUpdateUploadInfo(UploadInfo uploadInfo);
