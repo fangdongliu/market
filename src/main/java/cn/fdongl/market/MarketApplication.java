@@ -1,6 +1,7 @@
 package cn.fdongl.market;
 
 import cn.fdongl.market.security.service.AppUserDetailArgumentResolver;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @EnableTransactionManagement
 @SpringBootApplication
+@MapperScan("cn.fdongl.market")
 public class MarketApplication implements WebMvcConfigurer {
 
     public static void main(String[] args) {
