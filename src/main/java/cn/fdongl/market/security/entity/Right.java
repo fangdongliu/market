@@ -15,6 +15,7 @@ public class Right {
     @Size(max=60)
     String label;//权限名称
 
+
     @Size(max=192)
     String description;//权限描述
 
