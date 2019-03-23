@@ -29,6 +29,12 @@ public class RightService {
                     }
                     ((List)r.getChildren()).add(item.getValue());
                 }
+            }
+        }
+
+        for (Iterator<Map.Entry<Integer, Right>> it = rights.entrySet().iterator(); it.hasNext();){
+            Map.Entry<Integer, Right> item = it.next();
+            if(item.getValue().getFather()!=null){
                 it.remove();
             }
         }

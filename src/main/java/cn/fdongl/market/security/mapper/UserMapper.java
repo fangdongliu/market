@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 @Mapper
-@Component
 @Order(1)
 public interface UserMapper {
 
