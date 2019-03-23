@@ -47,28 +47,28 @@ public class ProvinceController extends ControllerBase {
 
     //备案审核通过
     @PostMapping("/record/pass")
-    public Object RecordPass(AppUserDetail appUserDetail,Integer aimId,String content){
+    public Object RecordPass(AppUserDetail appUserDetail,Integer aimId,String content) throws Exception {
         provinceService.recordPass(appUserDetail.getId(),aimId,content);
         return success();
     }
 
-    //上传数据审核拒绝通过，为完成
+    //上传数据审核拒绝通过
     @PostMapping("/upload/reject")
     public Object UploadReject(AppUserDetail appUserDetail,Integer aimId,String content) throws Exception {
         provinceService.uploadReject(appUserDetail.getId(),aimId,content);
         return success();
     }
 
-//    //上传数据审核通过，未完成
-//    @PostMapping("/upload/pass")
-//    public Object UploadPass(AppUserDetail appUserDetail,Integer aimId,String content){
-//        provinceService.uploadPass(appUserDetail.getId(),aimId,content);
-//        return success();
-//    }
+    //上传数据审核通过
+    @PostMapping("/upload/pass")
+    public Object UploadPass(AppUserDetail appUserDetail,Integer aimId,String content) throws Exception {
+        provinceService.uploadPass(appUserDetail.getId(),aimId,content);
+        return success();
+    }
 
     //新建上报时限
     @PostMapping("/investigatePeriod/insert")
-    public Object uploadPeriodInsert(AppUserDetail appUserDetail, UploadPeriod period){
+    public Object uploadPeriodInsert(AppUserDetail appUserDetail, UploadPeriod period) throws Exception {
         try{
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date start=new java.sql.Date(format.parse(period.getStartDate()).getTime());
@@ -96,7 +96,7 @@ public class ProvinceController extends ControllerBase {
 
     //修改上报时限
     @PostMapping("/investigatePeriod/update")
-    public Object uploadPeriodUpdate(AppUserDetail appUserDetail, UploadPeriod period){
+    public Object uploadPeriodUpdate(AppUserDetail appUserDetail, UploadPeriod period) throws Exception {
         try{
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date start=new java.sql.Date(format.parse(period.getStartDate()).getTime());
@@ -116,7 +116,7 @@ public class ProvinceController extends ControllerBase {
 
     //按id查询上报时限
     @PostMapping("/investigatePeriod/selectById")
-    public Object uploadPeriodSelectById(AppUserDetail appUserDetail,Integer uploadPeriodId){
+    public Object uploadPeriodSelectById(AppUserDetail appUserDetail,Integer uploadPeriodId) throws Exception {
         try{
             InnerUploadPeriod innerUploadPeriod=provinceService.uploadPeriodSelectById(uploadPeriodId);
             if(innerUploadPeriod==null){
@@ -139,7 +139,7 @@ public class ProvinceController extends ControllerBase {
 
     //按时间点查询上报时限
     @PostMapping("/investigatePeriod/selectByTime")
-    public Object uploadPeriodSelectByTime(AppUserDetail appUserDetail,String inputDate){
+    public Object uploadPeriodSelectByTime(AppUserDetail appUserDetail,String inputDate) throws Exception {
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             java.sql.Date date = new java.sql.Date(format.parse(inputDate).getTime());
@@ -164,7 +164,7 @@ public class ProvinceController extends ControllerBase {
 
     //按时间段查询上报时限
     @PostMapping("/investigatePeriod/selectByPeriod")
-    public Object uploadPeriodSelectByPeriod(AppUserDetail appUserDetail, UploadPeriod period){
+    public Object uploadPeriodSelectByPeriod(AppUserDetail appUserDetail, UploadPeriod period) throws Exception {
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             java.sql.Date startDate = new java.sql.Date(format.parse(period.getStartDate()).getTime());
@@ -188,26 +188,26 @@ public class ProvinceController extends ControllerBase {
 
     //查询所有上报时限
     @PostMapping("/investigatePeriod/selectAllPeriod")
-    public Object uploadPeriodSelectAll(AppUserDetail appUserDetail)throws Exception{
+    public Object uploadPeriodSelectAll(AppUserDetail appUserDetail) throws Exception {
         return success(provinceService.uploadPeriodsSelectAll());
     }
 
     //查询目标用户报表
     @PostMapping("/data/selectMarketData")
-    public Object SelectNowUserUploadInfo(AppUserDetail appUserDetail,Integer aimUserId)throws Exception{
+    public Object SelectNowUserUploadInfo(AppUserDetail appUserDetail,Integer aimUserId) throws Exception {
         return success(marketService.UploadInfoSelectByUser(aimUserId));
     }
 
     //当前用户是省级用户时，查询用户下属的市级用户
     @PostMapping("/selectCityUser")
-    public Object SelectCityUser(AppUserDetail appUserDetail)throws Exception{
+    public Object SelectCityUser(AppUserDetail appUserDetail) throws Exception {
         return success(provinceService.selectSub(appUserDetail.getId()));
     }
 
     //当前用户是市级用户时，返回所有下级监测点用户信息；当前用户是省级用户时，返回所有监测点用户信息
     //权限部分有待更改
     @PostMapping("/selectAllSub")
-    public Object SelectAllSub(AppUserDetail appUserDetail)throws Exception{
+    public Object SelectAllSub(AppUserDetail appUserDetail) throws Exception {
         Integer type = provinceService.selectUsertype(appUserDetail.getId());
         if(type==1){
             return success(provinceService.selectAllMarket());
@@ -222,14 +222,14 @@ public class ProvinceController extends ControllerBase {
 
     //查询目标市级用户下属的监测点
     @PostMapping("/selectCitySub")
-    public Object SelectCitySub(AppUserDetail appUserDetail,Integer aimUserId)throws Exception{
+    public Object SelectCitySub(AppUserDetail appUserDetail,Integer aimUserId) throws Exception {
         return success(provinceService.selectSub(aimUserId));
     }
 
 
     //条件查询操作用户范围内的所有监测点,流程需要优化
     @PostMapping("/userSearch")
-    public Object userSearch(AppUserDetail appUserDetail,String input)throws Exception{
+    public Object userSearch(AppUserDetail appUserDetail,String input) throws Exception {
         Integer type = provinceService.selectUsertype(appUserDetail.getId());
         if(type==1){
             return success(provinceService.userSearch(input));

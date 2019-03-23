@@ -82,24 +82,24 @@ public interface ProvinceMapper {
             "from t_record_info where state_flag=2 and region_emp_contact like #{param1};")
     List<Record> recordRegionEmpContactQuery(String condition);
 
-    //备案未通过时更新数据
+    //省级备案未通过时更新数据
     @Update("UPDATE t_record_info \n" +
             "set state_flag=0,revise_time=now(),reviser=#{param1} \n" +
             "where region_emp_id=#{param2} and state_flag=1;")
     Integer recordUpdateReject(Integer examineId,Integer aimId);
 
-    //备案未通过时删除数据
+    //省级备案未通过时删除数据
     @Delete("DELETE FROM t_record_info \n" +
             "where region_emp_id=#{param1} and state_flag=1;")
     Integer recordDeleteReject(Integer aimId);
 
-    //备案通过时更新数据
+    //省级备案通过时更新数据
     @Update("UPDATE t_record_info \n" +
             "set state_flag=2,revise_time=now(),reviser=#{param1} \n" +
             "where region_emp_id=#{param2} and state_flag=1;")
     Integer recordUpdatePass(Integer examineId,Integer aimId);
 
-    //备案通过时更新过期数据
+    //省级备案通过时更新过期数据
     @Update("UPDATE t_record_info \n" +
             "set state_flag=3,revise_time=now(),reviser=#{param1} \n" +
             "where region_emp_id=#{param2} and state_flag=2;")
@@ -121,6 +121,18 @@ public interface ProvinceMapper {
             "(notice_title,notice_content,create_time,creator,receiver,delete_flag) \n" +
             "values(#{param1},#{param2},now(),#{param3},#{param4},0);")
     Integer sendMessage(String title,String content,Integer examineId,Integer aimId);
+
+    //省级上传数据未通过时更新数据
+    @Update("UPDATE t_upload_info \n" +
+            "set state_flag=0,revise_time=now(),reviser=#{param1} \n" +
+            "where creator=#{param2} and state_flag=2;")
+    Integer uploadUpdateReject(Integer examineId,Integer aimId);
+
+    //省级上传数据通过时更新数据
+    @Update("UPDATE t_upload_info \n" +
+            "set state_flag=3,revise_time=now(),reviser=#{param1} \n" +
+            "where creator=#{param2} and state_flag=2;")
+    Integer uploadUpdatePass(Integer examineId,Integer aimId);
 
     //新增调查期
     @Insert("INSERT INTO t_upload_period " +
