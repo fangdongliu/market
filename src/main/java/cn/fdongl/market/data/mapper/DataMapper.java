@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.core.annotation.Order;
 
+import java.util.List;
+
 @Mapper
 @Order(1)
 public interface DataMapper {
@@ -17,6 +19,18 @@ public interface DataMapper {
             "from t_upload_period \n" +
             "where start_date<=#{param1} and #{param1}<end_date limit 1;")
     SimpleUploadPeriod selectSimpleUploadPeriod(java.sql.Date aimDate);
+
+    //查询某用户的上传数据信息
+    @Select("SELECT \n" +
+            "table_id AS tableId, \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "state_flag AS stateFlag, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTime, \n" +
+            "reviser AS reviser \n" +
+            "from t_upload_info where state_flag=3 and creator=#{param1};")
+    List<UploadInfo> selectUploadInfoById(Integer userId);
 
     //查询上传数据信息
     @Select("SELECT \n" +

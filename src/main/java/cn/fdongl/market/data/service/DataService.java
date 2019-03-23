@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class DataService {
@@ -18,6 +19,10 @@ public class DataService {
     public SimpleUploadPeriod selectSimpleUploadPeriod(Date date) throws Exception {
         java.sql.Date sqlDate=new java.sql.Date(date.getTime());
         return dataMapper.selectSimpleUploadPeriod(sqlDate);
+    }
+
+    public List<UploadInfo> selectUploadInfoById(Integer userId) throws Exception {
+        return dataMapper.selectUploadInfoById(userId);
     }
 
     //上传数据信息表查询
