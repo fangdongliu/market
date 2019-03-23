@@ -26,47 +26,47 @@ public class ProvinceController extends ControllerBase {
     @Autowired
     MarketService marketService;
 
-    //查询所有待审核的备案信息
+    //省级查询待审核的备案信息
     @PostMapping("/record/examineQuery")
     public Object RecordExamineQuery() throws Exception {
         return success(provinceService.recordExamineQuery());
     }
 
-    //根据条件查询已通过的备案信息
+    //省级根据条件查询已通过的备案信息，待移动
     @PostMapping("/record/conditionalQuery")
     public Object RecordConditionalQuery(Integer state,String condition) throws Exception {
         return success(provinceService.recordConditionalQuery(state, condition));
     }
 
-    //备案审核拒绝通过
+    //省级备案审核拒绝通过
     @PostMapping("/record/reject")
     public Object RecordReject(AppUserDetail appUserDetail,Integer aimId,String content) throws Exception {
         provinceService.recordReject(appUserDetail.getId(),aimId,content);
         return success();
     }
 
-    //备案审核通过
+    //省级备案审核通过
     @PostMapping("/record/pass")
     public Object RecordPass(AppUserDetail appUserDetail,Integer aimId,String content) throws Exception {
         provinceService.recordPass(appUserDetail.getId(),aimId,content);
         return success();
     }
 
-    //上传数据审核拒绝通过
+    //省级上传数据审核拒绝通过
     @PostMapping("/upload/reject")
     public Object UploadReject(AppUserDetail appUserDetail,Integer aimId,String content) throws Exception {
         provinceService.uploadReject(appUserDetail.getId(),aimId,content);
         return success();
     }
 
-    //上传数据审核通过
+    //省级上传数据审核通过
     @PostMapping("/upload/pass")
     public Object UploadPass(AppUserDetail appUserDetail,Integer aimId,String content) throws Exception {
         provinceService.uploadPass(appUserDetail.getId(),aimId,content);
         return success();
     }
 
-    //新建上报时限
+    //省级新建上报时限
     @PostMapping("/investigatePeriod/insert")
     public Object uploadPeriodInsert(AppUserDetail appUserDetail, UploadPeriod period) throws Exception {
         try{
@@ -94,7 +94,7 @@ public class ProvinceController extends ControllerBase {
         }
     }
 
-    //修改上报时限
+    //省级修改上报时限
     @PostMapping("/investigatePeriod/update")
     public Object uploadPeriodUpdate(AppUserDetail appUserDetail, UploadPeriod period) throws Exception {
         try{
@@ -114,7 +114,7 @@ public class ProvinceController extends ControllerBase {
         }
     }
 
-    //按id查询上报时限
+    //按id查询上报时限，待移动
     @PostMapping("/investigatePeriod/selectById")
     public Object uploadPeriodSelectById(AppUserDetail appUserDetail,Integer uploadPeriodId) throws Exception {
         try{
@@ -137,7 +137,7 @@ public class ProvinceController extends ControllerBase {
         }
     }
 
-    //按时间点查询上报时限
+    //按时间点查询上报时限，待移动
     @PostMapping("/investigatePeriod/selectByTime")
     public Object uploadPeriodSelectByTime(AppUserDetail appUserDetail,String inputDate) throws Exception {
         try {
@@ -162,7 +162,7 @@ public class ProvinceController extends ControllerBase {
         }
     }
 
-    //按时间段查询上报时限
+    //按时间段查询上报时限，待移动
     @PostMapping("/investigatePeriod/selectByPeriod")
     public Object uploadPeriodSelectByPeriod(AppUserDetail appUserDetail, UploadPeriod period) throws Exception {
         try {
@@ -186,25 +186,25 @@ public class ProvinceController extends ControllerBase {
         }
     }
 
-    //查询所有上报时限
+    //查询所有上报时限，待移动
     @PostMapping("/investigatePeriod/selectAllPeriod")
     public Object uploadPeriodSelectAll(AppUserDetail appUserDetail) throws Exception {
         return success(provinceService.uploadPeriodsSelectAll());
     }
 
-    //查询目标用户报表
+    //查询目标用户报表，待移动
     @PostMapping("/data/selectMarketData")
     public Object SelectNowUserUploadInfo(AppUserDetail appUserDetail,Integer aimUserId) throws Exception {
         return success(marketService.UploadInfoSelectByUser(aimUserId));
     }
 
-    //当前用户是省级用户时，查询用户下属的市级用户
+    //当前用户是省级用户时，查询用户下属的市级用户，待移动
     @PostMapping("/selectCityUser")
     public Object SelectCityUser(AppUserDetail appUserDetail) throws Exception {
         return success(provinceService.selectSub(appUserDetail.getId()));
     }
 
-    //当前用户是市级用户时，返回所有下级监测点用户信息；当前用户是省级用户时，返回所有监测点用户信息
+    //当前用户是市级用户时，返回所有下级监测点用户信息；当前用户是省级用户时，返回所有监测点用户信息，待移动
     //权限部分有待更改
     @PostMapping("/selectAllSub")
     public Object SelectAllSub(AppUserDetail appUserDetail) throws Exception {
@@ -220,14 +220,14 @@ public class ProvinceController extends ControllerBase {
         }
     }
 
-    //查询目标市级用户下属的监测点
+    //查询目标市级用户下属的监测点，待移动
     @PostMapping("/selectCitySub")
     public Object SelectCitySub(AppUserDetail appUserDetail,Integer aimUserId) throws Exception {
         return success(provinceService.selectSub(aimUserId));
     }
 
 
-    //条件查询操作用户范围内的所有监测点,流程需要优化
+    //条件查询操作用户范围内的所有监测点,流程需要优化，待移动
     @PostMapping("/userSearch")
     public Object userSearch(AppUserDetail appUserDetail,String input) throws Exception {
         Integer type = provinceService.selectUsertype(appUserDetail.getId());
