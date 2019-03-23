@@ -18,8 +18,6 @@ public interface DataMapper {
             "where start_date<=#{param1} and #{param1}<end_date limit 1;")
     SimpleUploadPeriod selectSimpleUploadPeriod(java.sql.Date aimDate);
 
-    //TODO:底下所有的select都有问题，需要做子查询
-
     //查询上传数据信息
     @Select("SELECT \n" +
             "table_id AS tableId, \n" +
