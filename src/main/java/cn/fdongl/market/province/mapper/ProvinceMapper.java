@@ -212,4 +212,11 @@ public interface ProvinceMapper {
             "from t_user \n" +
             "where usertype = 3;")
     List<UserInfoDisplay> selectAllMarket();
+
+    //查询当前用户类型
+    @Select("SELECT \n" +
+            "usertype \n" +
+            "from t_user \n" +
+            "where user_id = #{param1};")
+    Integer selectUsertype(Integer aimUserId);
 }

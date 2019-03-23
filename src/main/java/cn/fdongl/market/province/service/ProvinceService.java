@@ -1,10 +1,9 @@
 package cn.fdongl.market.province.service;
 
 import cn.fdongl.market.market.entity.Record;
-import cn.fdongl.market.market.entity.SimpleUploadPeriod;
-import cn.fdongl.market.market.service.MarketService;
 import cn.fdongl.market.province.entity.InnerUploadPeriod;
 import cn.fdongl.market.province.entity.UploadPeriod;
+import cn.fdongl.market.province.entity.UserInfoDisplay;
 import cn.fdongl.market.province.mapper.ProvinceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -211,4 +210,36 @@ public class ProvinceService {
             return null;
         }
     }
+    //查询目标用户的直接下级
+    public List<UserInfoDisplay> selectSub (Integer userId) throws Exception{
+        List<UserInfoDisplay> output=provinceMapper.selectAllSubCity(userId);
+        if(output==null){
+            throw new Exception("No Result");
+        }
+        else{
+            return output;
+        }
+    }
+    //查询所有监测点用户信息
+    public List<UserInfoDisplay> selectAllMarket()throws Exception{
+        List<UserInfoDisplay> output=provinceMapper.selectAllMarket();
+        if(output==null){
+            throw new Exception("No Result");
+        }
+        else{
+            return output;
+        }
+    }
+
+    //查询目标用户类型，1省2市3监测点
+    public Integer selectUsertype(Integer userId) throws Exception{
+        Integer output=provinceMapper.selectUsertype(userId);
+        if(output==null){
+            throw new Exception("No usertype data");
+        }
+        else{
+            return output;
+        }
+    }
+
 }
