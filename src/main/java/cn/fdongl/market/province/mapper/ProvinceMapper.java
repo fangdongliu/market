@@ -127,7 +127,7 @@ public interface ProvinceMapper {
             "revise_time AS reviseTime, \n" +
             "reviser AS reviser \n" +
             "from t_upload_info where state_flag=2);")
-    List<UploadInfo> uploadExamineQuery(Integer cityId);
+    List<UploadInfo> uploadExamineQuery();
 
     //省级上传数据未通过时更新数据
     @Update("UPDATE t_upload_info \n" +
