@@ -22,10 +22,10 @@ public class MarketController extends ControllerBase {
     @Autowired
     CommonService commonService;
 
-    //监测点接受通知
+    //监测点接收通知
     @PostMapping("/message/receive")
     public Object MessageReceive(AppUserDetail appUserDetail) throws Exception {
-        return null;
+        return success(marketService.messageReceive(appUserDetail.getId()));
     }
 
     //监测点新建备案

@@ -1,16 +1,24 @@
 package cn.fdongl.market.market.service;
 
+import cn.fdongl.market.common.entity.Notice;
 import cn.fdongl.market.market.entity.*;
 import cn.fdongl.market.market.mapper.MarketMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class MarketService {
 
     @Autowired
     MarketMapper marketMapper;
+
+    //
+    public List<Notice> messageReceive(Integer userId) throws Exception {
+        return null;
+    }
 
     //监测点新建备案，非事务
     public void recordInsert(Record record) throws Exception {
