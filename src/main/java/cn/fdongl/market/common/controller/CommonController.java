@@ -127,4 +127,10 @@ public class CommonController extends ControllerBase {
     public Object selectTechGradeNum(Integer tableId) throws Exception {
         return success(commonService.selectTechGradeNum(tableId));
     }
+
+    //取样分析
+    @PostMapping("data/pieChart")
+    public Object pieChart(AppUserDetail appUserDetail,Integer aimUserId,Integer uploadPeriodId)throws Exception{
+        return success(commonService.pieChart(aimUserId,uploadPeriodId));
+    }
 }
