@@ -1,5 +1,6 @@
 package cn.fdongl.market.province.controller;
 
+import cn.fdongl.market.data.service.DataService;
 import cn.fdongl.market.province.entity.InnerUploadPeriod;
 import cn.fdongl.market.province.entity.UploadPeriod;
 import cn.fdongl.market.province.service.ProvinceService;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import cn.fdongl.market.market.service.MarketService;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -24,7 +24,7 @@ public class ProvinceController extends ControllerBase {
     ProvinceService provinceService;
 
     @Autowired
-    MarketService marketService;
+    DataService dataService;
 
     //省级查询待审核的备案信息
     @PostMapping("/record/examineQuery")
@@ -195,7 +195,7 @@ public class ProvinceController extends ControllerBase {
     //查询目标用户报表，待移动
     @PostMapping("/data/selectMarketData")
     public Object SelectNowUserUploadInfo(AppUserDetail appUserDetail,Integer aimUserId) throws Exception {
-        return success(marketService.UploadInfoSelectByUser(aimUserId));
+        return success(dataService.selectUploadInfoById(aimUserId));
     }
 
     //当前用户是省级用户时，查询用户下属的市级用户，待移动
