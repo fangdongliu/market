@@ -1,5 +1,6 @@
-package cn.fdongl.market.data.mapper;
+package cn.fdongl.market.common.mapper;
 
+import cn.fdongl.market.common.entity.Notice;
 import cn.fdongl.market.market.entity.*;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Mapper
 @Order(1)
-public interface DataMapper {
+public interface CommonMapper {
 
     //发送一条通知，单点发送
     @Insert("INSERT INTO t_notice \n" +
@@ -30,6 +31,19 @@ public interface DataMapper {
             "notice_title=#{param1},notice_content=#{param2},reviser=#{param3},revise_time=now() \n" +
             "where notice_id=#{param4};")
     Integer updateMessage(String title,String content,Integer userId,Integer notice_id);
+
+    //根据用户id查询他发送的通知
+    @Select("SELECT \n" +
+            "notice_id AS noticeId, \n" +
+            "notice_title AS noticeTitle, \n" +
+            "notice_content AS noticeContent, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTime, \n" +
+            "reviser AS reviser, \n" +
+            "receiver AS receiver \n" +
+            "from t_notice where creator=#{param1} and delete_flag=0;")
+    List<Notice> selectMessage(Integer userId);
 
     //删除一条通知
     @Update("UPDATE t_notice SET \n" +

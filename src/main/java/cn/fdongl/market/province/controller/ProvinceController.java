@@ -1,6 +1,6 @@
 package cn.fdongl.market.province.controller;
 
-import cn.fdongl.market.data.service.DataService;
+import cn.fdongl.market.common.service.CommonService;
 import cn.fdongl.market.province.entity.InnerUploadPeriod;
 import cn.fdongl.market.province.entity.UploadPeriod;
 import cn.fdongl.market.province.service.ProvinceService;
@@ -24,7 +24,7 @@ public class ProvinceController extends ControllerBase {
     ProvinceService provinceService;
 
     @Autowired
-    DataService dataService;
+    CommonService commonService;
 
     //省级查询待审核的备案信息
     @PostMapping("/record/examineQuery")
@@ -63,27 +63,6 @@ public class ProvinceController extends ControllerBase {
     @PostMapping("/upload/pass")
     public Object UploadPass(AppUserDetail appUserDetail,Integer aimId,String content) throws Exception {
         provinceService.uploadPass(appUserDetail.getId(),aimId,content);
-        return success();
-    }
-
-    //省级发送通知，全局发送
-    @PostMapping("/message/send")
-    public Object SendMessage(AppUserDetail appUserDetail,String title,String content) throws Exception {
-        dataService.sendMessageGlobal(title,content,appUserDetail.getId());
-        return success();
-    }
-
-    //省级修改通知
-    @PostMapping("/message/update")
-    public Object UpdateMessage(AppUserDetail appUserDetail,String title,String content,Integer noticeId) throws Exception {
-        dataService.updateMessage(title,content,appUserDetail.getId(),noticeId);
-        return success();
-    }
-
-    //省级删除通知
-    @PostMapping("/message/delete")
-    public Object UpdateMessage(AppUserDetail appUserDetail,Integer noticeId) throws Exception {
-        dataService.deleteMessage(appUserDetail.getId(),noticeId);
         return success();
     }
 
@@ -216,7 +195,7 @@ public class ProvinceController extends ControllerBase {
     //查询目标用户报表，待移动
     @PostMapping("/data/selectMarketData")
     public Object SelectNowUserUploadInfo(AppUserDetail appUserDetail,Integer aimUserId) throws Exception {
-        return success(dataService.selectUploadInfoById(aimUserId));
+        return success(commonService.selectUploadInfoById(aimUserId));
     }
 
     //当前用户是省级用户时，查询用户下属的市级用户，待移动

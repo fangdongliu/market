@@ -82,7 +82,7 @@
             //
             //     $.ajax({
             //         url:'/login',
-            //         data:{
+            //         common:{
             //             form:this.form,
             //         },
             //         method:'post',
