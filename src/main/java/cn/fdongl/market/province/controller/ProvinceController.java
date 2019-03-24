@@ -52,6 +52,12 @@ public class ProvinceController extends ControllerBase {
         return success();
     }
 
+    //省级查询待审核的上传数据
+    @PostMapping("/upload/examineQuery")
+    public Object UploadExamineQuery() throws Exception {
+        return success(provinceService.uploadExamineQuery());
+    }
+
     //省级上传数据审核拒绝通过
     @PostMapping("/upload/reject")
     public Object UploadReject(AppUserDetail appUserDetail,Integer aimId,String content) throws Exception {

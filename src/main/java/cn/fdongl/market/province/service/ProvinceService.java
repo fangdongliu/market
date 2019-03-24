@@ -2,6 +2,7 @@ package cn.fdongl.market.province.service;
 
 import cn.fdongl.market.common.mapper.CommonMapper;
 import cn.fdongl.market.market.entity.Record;
+import cn.fdongl.market.market.entity.UploadInfo;
 import cn.fdongl.market.province.entity.InnerUploadPeriod;
 import cn.fdongl.market.province.entity.UploadPeriod;
 import cn.fdongl.market.province.entity.UserInfoDisplay;
@@ -45,7 +46,7 @@ public class ProvinceService {
 
     //审核未通过，事务
     @Transactional
-    public void recordReject(Integer examineId,Integer aimId,String content) throws RuntimeException {
+    public void recordReject(Integer provinceId,Integer aimId,String content) throws RuntimeException {
         if(content==null){
             content="";
         }
@@ -58,21 +59,21 @@ public class ProvinceService {
             n= commonMapper.sendMessage(
                     "您的备案修改未通过审核",
                     content,
-                    examineId,
+                    provinceId,
                     aimId);
             if(n!=1){
                 throw new RuntimeException("通知发送失败");
             }
         }
         else if(n==0){
-            n=provinceMapper.recordUpdateReject(examineId,aimId);
+            n=provinceMapper.recordUpdateReject(provinceId,aimId);
             if(n!=1){
                 throw new RuntimeException("修改备案信息失败");
             }
             n= commonMapper.sendMessage(
                     "您的备案未通过审核",
                     content,
-                    examineId,
+                    provinceId,
                     aimId);
             if(n!=1){
                 throw new RuntimeException("通知发送失败");
@@ -83,42 +84,42 @@ public class ProvinceService {
 
     //审核通过，事务
     @Transactional
-    public void recordPass(Integer examineId, Integer aimId, String content) throws RuntimeException {
+    public void recordPass(Integer provinceId, Integer aimId, String content) throws RuntimeException {
         if(content==null){
             content="";
         }
         int n=provinceMapper.recordSelectNum(aimId);
         if(n==1){
-            n=provinceMapper.recordUpdateExpirePass(examineId,aimId);
+            n=provinceMapper.recordUpdateExpirePass(provinceId,aimId);
             if(n!=1){
                 throw new RuntimeException("更新过期备案信息失败");
             }
-            n=provinceMapper.recordUpdatePass(examineId, aimId);
+            n=provinceMapper.recordUpdatePass(provinceId, aimId);
             if(n!=1){
                 throw new RuntimeException("修改备案信息失败");
             }
             n= commonMapper.sendMessage(
                     "您的备案修改已通过审核",
                     content,
-                    examineId,
+                    provinceId,
                     aimId);
             if(n!=1){
                 throw new RuntimeException("通知发送失败");
             }
         }
         else if(n==0){
-            n=provinceMapper.recordUpdateActivation(examineId,aimId);
+            n=provinceMapper.recordUpdateActivation(provinceId,aimId);
             if(n!=1){
                 throw new RuntimeException("修改激活状态失败");
             }
-            n=provinceMapper.recordUpdatePass(examineId,aimId);
+            n=provinceMapper.recordUpdatePass(provinceId,aimId);
             if(n!=1){
                 throw new RuntimeException("修改备案信息失败");
             }
             n= commonMapper.sendMessage(
                     "您的备案已通过审核",
                     content,
-                    examineId,
+                    provinceId,
                     aimId);
             if(n!=1){
                 throw new RuntimeException("通知发送失败");
@@ -127,17 +128,22 @@ public class ProvinceService {
         else throw new RuntimeException("查询失败");
     }
 
+    //省级查询待审核的上传数据，非事务
+    public List<UploadInfo> uploadExamineQuery() throws Exception {
+        return provinceMapper.uploadExamineQuery();
+    }
+
     //上传数据审核未通过，事务
     @Transactional
-    public void uploadReject(Integer examineId,Integer aimId,String content) throws RuntimeException {
-        int n=provinceMapper.uploadUpdateReject(examineId,aimId);
+    public void uploadReject(Integer provinceId,Integer aimId,String content) throws RuntimeException {
+        int n=provinceMapper.uploadUpdateReject(provinceId,aimId);
         if(n!=1){
             throw new RuntimeException("修改上传数据失败");
         }
         n= commonMapper.sendMessage(
                 "您的上传数据未通过审核",
                 content,
-                examineId,
+                provinceId,
                 aimId);
         if(n!=1){
             throw new RuntimeException("通知发送失败");
@@ -146,15 +152,15 @@ public class ProvinceService {
 
     //上传数据审核通过，事务
     @Transactional
-    public void uploadPass(Integer examineId,Integer aimId,String content) throws RuntimeException {
-        int n=provinceMapper.uploadUpdatePass(examineId,aimId);
+    public void uploadPass(Integer provinceId,Integer aimId,String content) throws RuntimeException {
+        int n=provinceMapper.uploadUpdatePass(provinceId,aimId);
         if(n!=1){
             throw new RuntimeException("修改上传数据失败");
         }
         n= commonMapper.sendMessage(
                 "您的上传数据已通过审核",
                 content,
-                examineId,
+                provinceId,
                 aimId);
         if(n!=1){
             throw new RuntimeException("通知发送失败");

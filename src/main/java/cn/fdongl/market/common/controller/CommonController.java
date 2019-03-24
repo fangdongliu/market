@@ -50,8 +50,6 @@ public class CommonController extends ControllerBase {
         return success();
     }
 
-
-
     //查询当前简易上传期
     @PostMapping("data/selectSimpleUploadPeriod")
     public Object SelectSimpleUploadPeriod() throws Exception {
