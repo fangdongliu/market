@@ -15,10 +15,7 @@ public class MarketService {
     @Autowired
     MarketMapper marketMapper;
 
-    //
-    public List<Notice> messageReceive(Integer userId) throws Exception {
-        return null;
-    }
+
 
     //监测点新建备案，非事务
     public void recordInsert(Record record) throws Exception {

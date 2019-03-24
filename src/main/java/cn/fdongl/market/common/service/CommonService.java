@@ -15,7 +15,7 @@ public class CommonService {
     @Autowired
     CommonMapper commonMapper;
 
-    //发送一条通知，全局发送
+    //发送一条全局通知
     public void sendMessageGlobal(String title,String content,Integer userId) throws Exception {
         int n= commonMapper.sendMessageGlobal(title,content,userId);
         if(n!=1){
@@ -34,6 +34,11 @@ public class CommonService {
     //根据用户id查询他发送的通知
     public List<Notice> selectMessage(Integer userId) throws Exception {
         return commonMapper.selectMessage(userId);
+    }
+
+    //查询自己的通知
+    public List<Notice> receiveMessage(Integer userId) throws Exception {
+        return commonMapper.receiveMessage(userId);
     }
 
     //删除一条通知
