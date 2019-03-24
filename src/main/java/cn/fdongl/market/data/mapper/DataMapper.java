@@ -18,6 +18,14 @@ public interface DataMapper {
             "values(#{param1},#{param2},now(),#{param3},#{param4},0);")
     Integer sendMessage(String title,String content,Integer examineId,Integer aimId);
 
+    //发送一条通知，全局发送
+    @Insert("INSERT INTO t_notice \n" +
+            "(notice_title,notice_content,create_time,creator,delete_flag) \n" +
+            "values(#{param1},#{param2},now(),#{param3},0);")
+    Integer sendMessageGlobal(String title,String content,Integer userId);
+
+    //更新一条通知
+
     //根据时间点查询简易调查期
     @Select("SELECT \n" +
             "upload_period_id AS uploadPeriodId, \n" +
