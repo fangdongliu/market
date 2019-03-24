@@ -73,6 +73,20 @@ public class ProvinceController extends ControllerBase {
         return success();
     }
 
+    //省级修改通知
+    @PostMapping("/message/update")
+    public Object UpdateMessage(AppUserDetail appUserDetail,String title,String content,Integer noticeId) throws Exception {
+        dataService.updateMessage(title,content,appUserDetail.getId(),noticeId);
+        return success();
+    }
+
+    //省级删除通知
+    @PostMapping("/message/delete")
+    public Object UpdateMessage(AppUserDetail appUserDetail,Integer noticeId) throws Exception {
+        dataService.deleteMessage(appUserDetail.getId(),noticeId);
+        return success();
+    }
+
     //省级新建上报时限
     @PostMapping("/investigatePeriod/insert")
     public Object uploadPeriodInsert(AppUserDetail appUserDetail, UploadPeriod period) throws Exception {

@@ -2,6 +2,7 @@ package cn.fdongl.market.data.service;
 
 import cn.fdongl.market.data.mapper.DataMapper;
 import cn.fdongl.market.market.entity.*;
+import cn.fdongl.market.security.entity.AppUserDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +24,26 @@ public class DataService {
     }
 
     //发送一条通知，全局发送
-    public void sendMessageGlobal(String title,String content,Integer userID) throws Exception {
-        int n=dataMapper.sendMessageGlobal(title,content,userID);
+    public void sendMessageGlobal(String title,String content,Integer userId) throws Exception {
+        int n=dataMapper.sendMessageGlobal(title,content,userId);
         if(n!=1){
             throw new Exception("发送失败");
+        }
+    }
+
+    //更新一条通知
+    public void updateMessage(String title,String content,Integer userId,Integer noticeId) throws Exception {
+        int n=dataMapper.updateMessage(title,content,userId,noticeId);
+        if(n!=1){
+            throw new Exception("修改失败");
+        }
+    }
+
+    //删除一条通知
+    public void deleteMessage(Integer userId,Integer noticeId) throws Exception {
+        int n=dataMapper.deleteMessage(userId,noticeId);
+        if(n!=1){
+            throw new Exception("删除失败");
         }
     }
 

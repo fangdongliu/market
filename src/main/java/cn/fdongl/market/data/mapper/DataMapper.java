@@ -4,6 +4,7 @@ import cn.fdongl.market.market.entity.*;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.core.annotation.Order;
 
 import java.util.List;
@@ -25,6 +26,16 @@ public interface DataMapper {
     Integer sendMessageGlobal(String title,String content,Integer userId);
 
     //更新一条通知
+    @Update("UPDATE t_notice SET \n" +
+            "notice_title=#{param1},notice_content=#{param2},reviser=#{param3},revise_time=now() \n" +
+            "where notice_id=#{param4};")
+    Integer updateMessage(String title,String content,Integer userId,Integer notice_id);
+
+    //删除一条通知
+    @Update("UPDATE t_notice SET \n" +
+            "delete_flag=1,reviser=#{param1},revise_time=now() \n" +
+            "where notice_id=#{param2};")
+    Integer deleteMessage(Integer userId,Integer noticeId);
 
     //根据时间点查询简易调查期
     @Select("SELECT \n" +
