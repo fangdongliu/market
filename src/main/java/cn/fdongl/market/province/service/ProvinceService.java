@@ -46,6 +46,9 @@ public class ProvinceService {
     //审核未通过，事务
     @Transactional
     public void recordReject(Integer examineId,Integer aimId,String content) throws RuntimeException {
+        if(content==null){
+            content="";
+        }
         int n=provinceMapper.recordSelectNum(aimId);
         if(n==1){
             n=provinceMapper.recordDeleteReject(aimId);
@@ -81,6 +84,9 @@ public class ProvinceService {
     //审核通过，事务
     @Transactional
     public void recordPass(Integer examineId, Integer aimId, String content) throws RuntimeException {
+        if(content==null){
+            content="";
+        }
         int n=provinceMapper.recordSelectNum(aimId);
         if(n==1){
             n=provinceMapper.recordUpdateExpirePass(examineId,aimId);

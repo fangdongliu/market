@@ -1,6 +1,5 @@
 package cn.fdongl.market.common.controller;
 
-
 import cn.fdongl.market.common.service.CommonService;
 import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.util.ControllerBase;
@@ -46,79 +45,79 @@ public class CommonController extends ControllerBase {
     }
 
     //查询当前简易上传期
-    @PostMapping("selectSimpleUploadPeriod")
+    @PostMapping("data/selectSimpleUploadPeriod")
     public Object SelectSimpleUploadPeriod() throws Exception {
         return success(commonService.selectSimpleUploadPeriod(new Date()));
     }
 
     //查询单个监测点用户通过的上传信息
-    @PostMapping("selectUploadInfo")
+    @PostMapping("data/selectUploadInfo")
     public Object selectUploadInfo(Integer tableId) throws Exception {
         return success(commonService.selectUploadInfo(tableId));
     }
 
     //查询单个监测点用户通过的供求总体人数
-    @PostMapping("selectTotalNum")
+    @PostMapping("data/selectTotalNum")
     public Object selectTotalNum(Integer tableId) throws Exception {
         return success(commonService.selectTotalNum(tableId));
     }
 
     //查询单个监测点用户通过的产业需求人数
-    @PostMapping("selectIndustryNum")
+    @PostMapping("data/selectIndustryNum")
     public Object selectIndustryNum(Integer tableId) throws Exception {
         return success(commonService.selectIndustryNum(tableId));
     }
 
     //查询单个监测点用户通过的用人单位性质需求人数
-    @PostMapping("selectEmployerNum")
+    @PostMapping("data/selectEmployerNum")
     public Object selectEmployerNum(Integer tableId) throws Exception {
         return success(commonService.selectEmployerNum(tableId));
     }
 
     //查询单个监测点用户通过的职业供求人数
-    @PostMapping("selectProfNum")
+    @PostMapping("data/selectProfNum")
     public Object selectProfNum(Integer tableId) throws Exception {
         return success(commonService.selectProfNum(tableId));
     }
 
     //查询单个监测点用户通过的需求前十职业
-    @PostMapping("selectMostNeeded")
+    @PostMapping("data/selectMostNeeded")
     public Object selectMostNeeded(Integer tableId) throws Exception {
         return success(commonService.selectMostNeeded(tableId));
     }
 
     //查询单个监测点用户通过的饱和前十职业
-    @PostMapping("selectLeastNeeded")
+    @PostMapping("data/selectLeastNeeded")
     public Object selectLeastNeeded(Integer tableId) throws Exception {
         return success(commonService.selectLeastNeeded(tableId));
     }
 
     //查询单个监测点用户通过的人员类别求职人数
-    @PostMapping("selectJobSeekerNum")
+    @PostMapping("data/selectJobSeekerNum")
     public Object selectJobSeekerNum(Integer tableId) throws Exception {
         return success(commonService.selectJobSeekerNum(tableId));
     }
 
     //查询单个监测点用户通过的性别供求人数
-    @PostMapping("selectSexNum")
+    @PostMapping("data/selectSexNum")
     public Object selectSexNum(Integer tableId) throws Exception {
         return success(commonService.selectSexNum(tableId));
     }
 
     //查询单个监测点用户通过的年龄供求人数
-    @PostMapping("selectAgeNum")
+    @PostMapping("data/selectAgeNum")
     public Object selectAgeNum(Integer tableId)throws Exception {
         return success(commonService.selectAgeNum(tableId));
     }
 
     //查询单个监测点用户通过的文化程度供求人数
-    @PostMapping("selectDegreeNum")
+    @PostMapping("data/selectDegreeNum")
     public Object selectDegreeNum(Integer tableId) throws Exception {
         return success(commonService.selectDegreeNum(tableId));
     }
 
     //查询单个监测点用户通过的技术等级供求人数
-    @PostMapping("selectTechGradeNum")
+    @PostMapping("data/selectTechGradeNum")
     public Object selectTechGradeNum(Integer tableId) throws Exception {
         return success(commonService.selectTechGradeNum(tableId));
     }

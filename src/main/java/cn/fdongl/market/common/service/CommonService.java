@@ -15,14 +15,6 @@ public class CommonService {
     @Autowired
     CommonMapper commonMapper;
 
-    //发送一条通知，单点发送
-    public void sendMessage(String title,String content,Integer examineId,Integer aimId) throws Exception {
-        int n= commonMapper.sendMessage(title,content,examineId,aimId);
-        if(n!=1){
-            throw new Exception("发送失败");
-        }
-    }
-
     //发送一条通知，全局发送
     public void sendMessageGlobal(String title,String content,Integer userId) throws Exception {
         int n= commonMapper.sendMessageGlobal(title,content,userId);
