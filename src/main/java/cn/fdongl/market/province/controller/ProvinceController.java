@@ -66,6 +66,13 @@ public class ProvinceController extends ControllerBase {
         return success();
     }
 
+    //省级发送通知，全局发送
+    @PostMapping("/message/send")
+    public Object SendMessage(AppUserDetail appUserDetail,String title,String content) throws Exception {
+        dataService.sendMessageGlobal(title,content,appUserDetail.getId());
+        return success();
+    }
+
     //省级新建上报时限
     @PostMapping("/investigatePeriod/insert")
     public Object uploadPeriodInsert(AppUserDetail appUserDetail, UploadPeriod period) throws Exception {

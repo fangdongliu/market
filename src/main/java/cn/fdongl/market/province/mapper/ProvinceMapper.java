@@ -194,7 +194,7 @@ public interface ProvinceMapper {
             "start_date AS startDate, \n" +
             "end_date AS endDate, \n" +
             "create_time AS createTime, \n" +
-            "revise_time AS reviseTime" +
+            "revise_time AS reviseTime," +
             "creator AS creator, \n" +
             "reviser AS reviser, \n" +
             "delete_flag AS deleteFlag \n" +
@@ -206,8 +206,7 @@ public interface ProvinceMapper {
             "user_id AS userId,\n" +
             "username AS username,\n" +
             "fullname AS fullname \n" +
-            "from t_user \n" +
-            "where superior = #{param1};")
+            "from t_user where superior = #{param1};")
     List<UserInfoDisplay> selectAllSubCity(Integer aimUserId);
 
     //返回所有监测点用户信息

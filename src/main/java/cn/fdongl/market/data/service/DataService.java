@@ -1,6 +1,5 @@
 package cn.fdongl.market.data.service;
 
-
 import cn.fdongl.market.data.mapper.DataMapper;
 import cn.fdongl.market.market.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,15 @@ public class DataService {
 
     //发送一条通知，单点发送
     public void sendMessage(String title,String content,Integer examineId,Integer aimId) throws Exception {
-        int n=dataMapper.sendMessage(title, content, examineId, aimId);
+        int n=dataMapper.sendMessage(title,content,examineId,aimId);
+        if(n!=1){
+            throw new Exception("发送失败");
+        }
+    }
+
+    //发送一条通知，全局发送
+    public void sendMessageGlobal(String title,String content,Integer userID) throws Exception {
+        int n=dataMapper.sendMessageGlobal(title,content,userID);
         if(n!=1){
             throw new Exception("发送失败");
         }
