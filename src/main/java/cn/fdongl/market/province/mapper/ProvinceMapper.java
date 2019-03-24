@@ -116,12 +116,6 @@ public interface ProvinceMapper {
             "from t_record_info where region_emp_id=#{param1} and state_flag=2;")
     Integer recordSelectNum(Integer userId);
 
-    //发送一条通知
-    @Insert("INSERT INTO t_notice \n" +
-            "(notice_title,notice_content,create_time,creator,receiver,delete_flag) \n" +
-            "values(#{param1},#{param2},now(),#{param3},#{param4},0);")
-    Integer sendMessage(String title,String content,Integer examineId,Integer aimId);
-
     //省级上传数据未通过时更新数据
     @Update("UPDATE t_upload_info \n" +
             "set state_flag=0,revise_time=now(),reviser=#{param1} \n" +

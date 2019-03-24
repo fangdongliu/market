@@ -15,12 +15,21 @@ public class DataService {
     @Autowired
     DataMapper dataMapper;
 
+    //发送一条通知，单点发送
+    public void sendMessage(String title,String content,Integer examineId,Integer aimId) throws Exception {
+        int n=dataMapper.sendMessage(title, content, examineId, aimId);
+        if(n!=1){
+            throw new Exception("发送失败");
+        }
+    }
+
     //根据时间点查询简易上传期
     public SimpleUploadPeriod selectSimpleUploadPeriod(Date date) throws Exception {
         java.sql.Date sqlDate=new java.sql.Date(date.getTime());
         return dataMapper.selectSimpleUploadPeriod(sqlDate);
     }
 
+    //根据用户id查询上传数据信息
     public List<UploadInfo> selectUploadInfoById(Integer userId) throws Exception {
         return dataMapper.selectUploadInfoById(userId);
     }

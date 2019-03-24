@@ -1,6 +1,7 @@
 package cn.fdongl.market.data.mapper;
 
 import cn.fdongl.market.market.entity.*;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.core.annotation.Order;
@@ -10,6 +11,12 @@ import java.util.List;
 @Mapper
 @Order(1)
 public interface DataMapper {
+
+    //发送一条通知，单点发送
+    @Insert("INSERT INTO t_notice \n" +
+            "(notice_title,notice_content,create_time,creator,receiver,delete_flag) \n" +
+            "values(#{param1},#{param2},now(),#{param3},#{param4},0);")
+    Integer sendMessage(String title,String content,Integer examineId,Integer aimId);
 
     //根据时间点查询简易调查期
     @Select("SELECT \n" +
