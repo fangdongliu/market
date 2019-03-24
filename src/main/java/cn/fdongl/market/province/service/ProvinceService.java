@@ -1,5 +1,6 @@
 package cn.fdongl.market.province.service;
 
+import cn.fdongl.market.data.mapper.DataMapper;
 import cn.fdongl.market.market.entity.Record;
 import cn.fdongl.market.province.entity.InnerUploadPeriod;
 import cn.fdongl.market.province.entity.UploadPeriod;
@@ -19,6 +20,9 @@ public class ProvinceService {
 
     @Autowired
     ProvinceMapper provinceMapper;
+
+    @Autowired
+    DataMapper dataMapper;
 
     //查询所有待审核的备案,非事务
     public List<Record> recordExamineQuery() throws Exception {
@@ -48,7 +52,7 @@ public class ProvinceService {
             if(n!=1){
                 throw new RuntimeException("删除备案信息失败");
             }
-            n=provinceMapper.sendMessage(
+            n=dataMapper.sendMessage(
                     "您的备案修改未通过审核",
                     content,
                     examineId,
@@ -62,7 +66,7 @@ public class ProvinceService {
             if(n!=1){
                 throw new RuntimeException("修改备案信息失败");
             }
-            n=provinceMapper.sendMessage(
+            n=dataMapper.sendMessage(
                     "您的备案未通过审核",
                     content,
                     examineId,
@@ -87,7 +91,7 @@ public class ProvinceService {
             if(n!=1){
                 throw new RuntimeException("修改备案信息失败");
             }
-            n=provinceMapper.sendMessage(
+            n=dataMapper.sendMessage(
                     "您的备案修改已通过审核",
                     content,
                     examineId,
@@ -105,7 +109,7 @@ public class ProvinceService {
             if(n!=1){
                 throw new RuntimeException("修改备案信息失败");
             }
-            n=provinceMapper.sendMessage(
+            n=dataMapper.sendMessage(
                     "您的备案已通过审核",
                     content,
                     examineId,
@@ -124,7 +128,7 @@ public class ProvinceService {
         if(n!=1){
             throw new RuntimeException("修改上传数据失败");
         }
-        n=provinceMapper.sendMessage(
+        n=dataMapper.sendMessage(
                 "您的上传数据未通过审核",
                 content,
                 examineId,
@@ -141,7 +145,7 @@ public class ProvinceService {
         if(n!=1){
             throw new RuntimeException("修改上传数据失败");
         }
-        n=provinceMapper.sendMessage(
+        n=dataMapper.sendMessage(
                 "您的上传数据已通过审核",
                 content,
                 examineId,
