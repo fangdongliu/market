@@ -16,7 +16,8 @@
             <el-row type="flex" class="littleTitle">
                 <el-col :span="21">往期上报时限记录</el-col>
                 <el-col :span="3">
-                    <el-button size="small" icon="el-icon-edit" type="primary" @click="formVisible=true">添加上报时限</el-button>
+                    <el-button v-if="flag === -1" size="small" icon="el-icon-plus" type="primary" @click="formVisible=true">添加上报时限</el-button>
+                    <el-button v-else size="small" icon="el-icon-edit" type="primary" @click="formVisible=true">修改上报时限</el-button>
                 </el-col>
             </el-row>
             <el-table
@@ -87,7 +88,8 @@
                 endTime:''
             },
             formVisible:false,
-            flag:-1//记录最新的时间是否小于当前时间 如果小于当前时间则新建时限，否则修改这条最新时限
+            flag:-1//记录最新的时间是否小于当前时间
+                    // 如果小于当前时间则新建时限，否则修改这条最新时限 flag是这条时限的id
         },
         methods:{
             handleCancel(){
@@ -159,26 +161,53 @@
             handleConfirm(){
                 var stdStartDate = this.getStdDate(vue.form.startTime);
                 var stdEndDate = this.getStdDate(vue.form.endTime);
-                $.ajax({
-                    url:'/province/investigatePeriod/insert',
-                    type:'post',
-                    data:{
-                        startDate:stdStartDate,
-                        endDate:stdEndDate
-                    },
-                    success(res){
-                        vue.$message({
-                            message: '已成功！',
-                            type: 'success'
-                        });
-                    },
-                    error(res){
-                        vue.$message({
-                            message:'出错了！',
-                            type:'error'
+                console.log(vue.flag);
+                if(vue.flag===-1){
+                    $.ajax({
+                        url:'/province/investigatePeriod/insert',
+                        type:'post',
+                        data:{
+                            startDate:stdStartDate,
+                            endDate:stdEndDate
+                        },
+                        success(res){
+                            vue.$message({
+                                message: '添加成功！',
+                                type: 'success'
+                            });
+                        },
+                        error(res){
+                            vue.$message({
+                                message:'出错了！',
+                                type:'error'
+                            })
+                        }
+                    })
+                    }
+                    else {
+                        $.ajax({
+                            url:'/province/investigatePeriod/update',
+                            type:'post',
+                            data:{
+                                uploadPeriodId:vue.flag,
+                                startDate:stdStartDate,
+                                endDate:stdEndDate
+                            },
+                            success(res){
+                                vue.$message({
+                                    message: '修改成功！',
+                                    type: 'success'
+                                });
+                            },
+                            error(res){
+                                vue.$message({
+                                    message:'出错了！',
+                                    type:'error'
+                                })
+                            }
                         })
                     }
-                });
+                this.getList();
                 this.formVisible = false;
             },
             getList(){
@@ -193,7 +222,7 @@
                             var rec = new Date(obj.y, obj.m, obj.d);
                             if(rec > now){
                                 now = rec;
-                                vue.flag = i;
+                                vue.flag = res.data[i].uploadPeriodId;
                                 res.data[i].state = '生效中';
                             }
                             else{
