@@ -126,7 +126,8 @@
                         {name:'监测点数据填报', url:'pointData.html'},
                         {name:'权限授予', url:'adminRightManage.html'},
                         {name:'时限管理', url:'deadline.html'},
-                        {name:'通知中心', url:'messageCenter.html'}
+                        {name:'已发送的通知', url:'messageCenterSend.html'},
+                        {name:'已收到的通知', url:'messageCenterReceive.html'}
                     ]
                 },
                 {
@@ -178,7 +179,6 @@
         },
         methods:{
             handleSelect(index){
-                console.log(index)
                 this.loading=true;
                 if(index.toString().indexOf('-')===-1){
                     this.src='/html/'+this.menu[index].url;
@@ -186,13 +186,11 @@
                 }else{
                     var i = index.indexOf('-');
                     this.src='/html/'+this.menu[index.substring(0,i)].child[index.substring(i+1)].url;
-                    console.log(this.src);
                     this.setupWatcher();
                 }
             },
             setupWatcher(){
                 document.getElementById("menuFrame").addEventListener("load",function (ev) {
-                    console.log(1);
                     vue.loading=false;
                 })
             },

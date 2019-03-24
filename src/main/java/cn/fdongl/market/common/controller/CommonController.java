@@ -17,27 +17,33 @@ public class CommonController extends ControllerBase {
     @Autowired
     CommonService commonService;
 
-    //省级发送通知，全局发送
+    //发送全局通知
     @PostMapping("/message/send")
     public Object SendMessage(AppUserDetail appUserDetail, String title, String content) throws Exception {
         commonService.sendMessageGlobal(title,content,appUserDetail.getId());
         return success();
     }
 
-    //省级修改通知
+    //修改通知
     @PostMapping("/message/update")
     public Object UpdateMessage(AppUserDetail appUserDetail,String title,String content,Integer noticeId) throws Exception {
         commonService.updateMessage(title,content,appUserDetail.getId(),noticeId);
         return success();
     }
 
-    //省级查看自己发送的通知
-    @PostMapping("message/select")
+    //查看自己发送的通知
+    @PostMapping("/message/select")
     public Object SelectMessage(AppUserDetail appUserDetail) throws Exception {
         return success(commonService.selectMessage(appUserDetail.getId()));
     }
 
-    //省级删除通知
+    //接收通知（用户自己应该收到的通知）
+    @PostMapping("/message/receive")
+    public Object receiveMessage(AppUserDetail appUserDetail) throws Exception {
+        return success(commonService.receiveMessage(appUserDetail.getId()));
+    }
+
+    //删除通知
     @PostMapping("/message/delete")
     public Object UpdateMessage(AppUserDetail appUserDetail,Integer noticeId) throws Exception {
         commonService.deleteMessage(appUserDetail.getId(),noticeId);

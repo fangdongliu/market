@@ -45,6 +45,22 @@ public interface CommonMapper {
             "from t_notice where creator=#{param1} and delete_flag=0;")
     List<Notice> selectMessage(Integer userId);
 
+    //查询自己的通知
+    @Select("SELECT \n" +
+            "notice_id AS noticeId, \n" +
+            "notice_title AS noticeTitle, \n" +
+            "notice_content AS noticeContent, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTime, \n" +
+            "reviser AS reviser, \n" +
+            "receiver AS receiver \n" +
+            "from t_notice where delete_flag=0 and \n" +
+            "(receiver=#{param1} or \n" +
+            "creator=(select superior from t_user where user_id=#{param1}) or \n" +
+            "(select usertype from t_user where user_id=t_notice.creator)=1);")
+    List<Notice> receiveMessage(Integer userId);
+
     //删除一条通知
     @Update("UPDATE t_notice SET \n" +
             "delete_flag=1,reviser=#{param1},revise_time=now() \n" +

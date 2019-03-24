@@ -22,9 +22,15 @@ public class CityController extends ControllerBase {
         return success(cityService.recordConditionalQuery(6,state, condition));
     }
 
+    //市级查询待审核的上传数据（只能查到下属）
+    @PostMapping("/upload/examineQuery")
+    public Object UploadExamineQuery(AppUserDetail appUserDetail) throws Exception {
+        return success(cityService.uploadExamineQuery(appUserDetail.getId()));
+    }
+
     //市级上传数据审核拒绝通过
     @PostMapping("/upload/reject")
-    public Object UploadReject(AppUserDetail appUserDetail, Integer aimId, String content) throws Exception {
+    public Object UploadReject(AppUserDetail appUserDetail,Integer aimId,String content) throws Exception {
         cityService.uploadReject(appUserDetail.getId(),aimId,content);
         return success();
     }

@@ -52,6 +52,12 @@ public class ProvinceController extends ControllerBase {
         return success();
     }
 
+    //省级查询待审核的上传数据
+    @PostMapping("/upload/examineQuery")
+    public Object UploadExamineQuery() throws Exception {
+        return success(provinceService.uploadExamineQuery());
+    }
+
     //省级上传数据审核拒绝通过
     @PostMapping("/upload/reject")
     public Object UploadReject(AppUserDetail appUserDetail,Integer aimId,String content) throws Exception {
@@ -73,7 +79,7 @@ public class ProvinceController extends ControllerBase {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date start=new java.sql.Date(format.parse(period.getStartDate()).getTime());
             Date end=new java.sql.Date(format.parse(period.getEndDate()).getTime());//将日期从字符串转换为日期类
-
+//            provinceService.timeCheck(start,end);
             InnerUploadPeriod innerPeriod=new InnerUploadPeriod();
             innerPeriod.setReviser(appUserDetail.getId());
             innerPeriod.setReviseTime(new java.util.Date());
@@ -101,7 +107,7 @@ public class ProvinceController extends ControllerBase {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date start=new java.sql.Date(format.parse(period.getStartDate()).getTime());
             Date end=new java.sql.Date(format.parse(period.getEndDate()).getTime());//将日期从字符串转换为日期类
-
+//            provinceService.timeCheck(start,end);
             if(provinceService.periodUpdate(start,end,new java.util.Date(),appUserDetail.getId(),period.getUploadPeriodId())<=0){
                 return fail(1);//update影响条数小于0则返回fail
             }
