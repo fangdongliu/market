@@ -79,7 +79,7 @@
                 </el-dialog>
                 <!--<el-table-->
                         <!--ref="multipleTable"-->
-                        <!--:data="rightData.slice((currentPage-1)*pageSize,currentPage*pageSize)"-->
+                        <!--:common="rightData.slice((currentPage-1)*pageSize,currentPage*pageSize)"-->
                         <!--stripe-->
                         <!--style="width: 100%"-->
                         <!--@selection-change="handleSelectionChange">-->
@@ -190,14 +190,14 @@
                                     </el-button>
                                     <!--<el-switch-->
                                             <!--style="display: block"-->
-                                            <!--v-model="data.status"-->
+                                            <!--v-model="common.status"-->
                                             <!--active-color="#13ce66"-->
                                             <!--inactive-color="#ff4949"-->
                                             <!--:active-value="0"-->
                                             <!--:inactive-value="1"-->
                                             <!--active-text="启用"-->
                                             <!--inactive-text="禁用"-->
-                                            <!--@change="changeSwitch(data)">-->
+                                            <!--@change="changeSwitch(common)">-->
 
                                     <!--</el-switch>-->
                                 </span>
@@ -401,7 +401,7 @@
             //             message: '已取消操作'
             //         });
             //     });
-            //     console.log(data.deleteFlag)
+            //     console.log(common.deleteFlag)
             // },
 
             updateRight(right){

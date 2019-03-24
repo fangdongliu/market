@@ -1,22 +1,55 @@
-package cn.fdongl.market.data.mapper;
+package cn.fdongl.market.common.mapper;
 
+import cn.fdongl.market.common.entity.Notice;
 import cn.fdongl.market.market.entity.*;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.core.annotation.Order;
 
 import java.util.List;
 
 @Mapper
 @Order(1)
-public interface DataMapper {
+public interface CommonMapper {
 
     //发送一条通知，单点发送
     @Insert("INSERT INTO t_notice \n" +
             "(notice_title,notice_content,create_time,creator,receiver,delete_flag) \n" +
             "values(#{param1},#{param2},now(),#{param3},#{param4},0);")
     Integer sendMessage(String title,String content,Integer examineId,Integer aimId);
+
+    //发送一条通知，全局发送
+    @Insert("INSERT INTO t_notice \n" +
+            "(notice_title,notice_content,create_time,creator,delete_flag) \n" +
+            "values(#{param1},#{param2},now(),#{param3},0);")
+    Integer sendMessageGlobal(String title,String content,Integer userId);
+
+    //更新一条通知
+    @Update("UPDATE t_notice SET \n" +
+            "notice_title=#{param1},notice_content=#{param2},reviser=#{param3},revise_time=now() \n" +
+            "where notice_id=#{param4};")
+    Integer updateMessage(String title,String content,Integer userId,Integer notice_id);
+
+    //根据用户id查询他发送的通知
+    @Select("SELECT \n" +
+            "notice_id AS noticeId, \n" +
+            "notice_title AS noticeTitle, \n" +
+            "notice_content AS noticeContent, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTime, \n" +
+            "reviser AS reviser, \n" +
+            "receiver AS receiver \n" +
+            "from t_notice where creator=#{param1} and delete_flag=0;")
+    List<Notice> selectMessage(Integer userId);
+
+    //删除一条通知
+    @Update("UPDATE t_notice SET \n" +
+            "delete_flag=1,reviser=#{param1},revise_time=now() \n" +
+            "where notice_id=#{param2};")
+    Integer deleteMessage(Integer userId,Integer noticeId);
 
     //根据时间点查询简易调查期
     @Select("SELECT \n" +

@@ -2,7 +2,7 @@ package cn.fdongl.market.city.service;
 
 
 import cn.fdongl.market.city.mapper.CityMapper;
-import cn.fdongl.market.data.mapper.DataMapper;
+import cn.fdongl.market.common.mapper.CommonMapper;
 import cn.fdongl.market.market.entity.Record;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class CityService {
     CityMapper cityMapper;
 
     @Autowired
-    DataMapper dataMapper;
+    CommonMapper commonMapper;
 
     //市级根据条件查询已通过的备案信息（只能查到下属），非事务
     public List<Record> recordConditionalQuery(Integer cityId,Integer state,String condition) throws Exception {
@@ -40,7 +40,7 @@ public class CityService {
         if(n!=1){
             throw new RuntimeException("修改上传数据失败");
         }
-        n=dataMapper.sendMessage(
+        n= commonMapper.sendMessage(
                 "您的上传数据未通过审核",
                 content,
                 examineId,
@@ -57,7 +57,7 @@ public class CityService {
         if(n!=1){
             throw new RuntimeException("修改上传数据失败");
         }
-        n=dataMapper.sendMessage(
+        n= commonMapper.sendMessage(
                 "您的上传数据已通过审核",
                 content,
                 examineId,

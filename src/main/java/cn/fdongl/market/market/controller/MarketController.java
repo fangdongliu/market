@@ -1,6 +1,6 @@
 package cn.fdongl.market.market.controller;
 
-import cn.fdongl.market.data.service.DataService;
+import cn.fdongl.market.common.service.CommonService;
 import cn.fdongl.market.market.entity.*;
 import cn.fdongl.market.market.service.MarketService;
 import cn.fdongl.market.security.entity.AppUserDetail;
@@ -20,7 +20,13 @@ public class MarketController extends ControllerBase {
     MarketService marketService;
 
     @Autowired
-    DataService dataService;
+    CommonService commonService;
+
+    //监测点接受通知
+    @PostMapping("/message/receive")
+    public Object MessageReceive(AppUserDetail appUserDetail) throws Exception {
+        return null;
+    }
 
     //监测点新建备案
     @PostMapping("/record/insert")
@@ -65,7 +71,7 @@ public class MarketController extends ControllerBase {
             AgeNum ageNum,
             DegreeNum degreeNum,
             TechGradeNum techGradeNum) throws Exception {
-        SimpleUploadPeriod simpleUploadPeriod=dataService.selectSimpleUploadPeriod(new Date());
+        SimpleUploadPeriod simpleUploadPeriod= commonService.selectSimpleUploadPeriod(new Date());
         if(simpleUploadPeriod==null){
             throw new Exception("当前时间不在上传期内，无法上传数据");
         }
@@ -105,7 +111,7 @@ public class MarketController extends ControllerBase {
             AgeNum ageNum,
             DegreeNum degreeNum,
             TechGradeNum techGradeNum) throws Exception {
-        SimpleUploadPeriod simpleUploadPeriod=dataService.selectSimpleUploadPeriod(new Date());
+        SimpleUploadPeriod simpleUploadPeriod= commonService.selectSimpleUploadPeriod(new Date());
         if(uploadInfo.getUploadPeriodId()==null&&simpleUploadPeriod==null){
             throw new Exception("当前时间不在上传期内，无法上传数据");
         }

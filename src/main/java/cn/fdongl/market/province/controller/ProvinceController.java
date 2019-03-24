@@ -1,6 +1,6 @@
 package cn.fdongl.market.province.controller;
 
-import cn.fdongl.market.data.service.DataService;
+import cn.fdongl.market.common.service.CommonService;
 import cn.fdongl.market.province.entity.InnerUploadPeriod;
 import cn.fdongl.market.province.entity.UploadPeriod;
 import cn.fdongl.market.province.service.ProvinceService;
@@ -24,7 +24,7 @@ public class ProvinceController extends ControllerBase {
     ProvinceService provinceService;
 
     @Autowired
-    DataService dataService;
+    CommonService commonService;
 
     //省级查询待审核的备案信息
     @PostMapping("/record/examineQuery")
@@ -195,7 +195,7 @@ public class ProvinceController extends ControllerBase {
     //查询目标用户报表，待移动
     @PostMapping("/data/selectMarketData")
     public Object SelectNowUserUploadInfo(AppUserDetail appUserDetail,Integer aimUserId) throws Exception {
-        return success(dataService.selectUploadInfoById(aimUserId));
+        return success(commonService.selectUploadInfoById(aimUserId));
     }
 
     //当前用户是省级用户时，查询用户下属的市级用户，待移动
