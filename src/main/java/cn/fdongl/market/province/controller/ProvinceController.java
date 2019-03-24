@@ -32,7 +32,7 @@ public class ProvinceController extends ControllerBase {
         return success(provinceService.recordExamineQuery());
     }
 
-    //省级根据条件查询已通过的备案信息，待移动
+    //省级根据条件查询已通过的备案信息
     @PostMapping("/record/conditionalQuery")
     public Object RecordConditionalQuery(Integer state,String condition) throws Exception {
         return success(provinceService.recordConditionalQuery(state, condition));
