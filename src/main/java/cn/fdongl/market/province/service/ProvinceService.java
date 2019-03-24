@@ -162,18 +162,18 @@ public class ProvinceService {
     }
 
     //检查日期是否合法，不含数据库操作
-    public void timeCheck(java.sql.Date startDate,java.sql.Date endDate) throws Exception {
-        if(startDate==null||endDate==null){
-            throw new Exception("日期不能为空");
-        }
-        if(startDate.compareTo(new java.sql.Date(System.currentTimeMillis()-86400000))<0){
-            throw new Exception("日期至少要大于等于当前日期");
-        }
-        long difference=(endDate.getTime()-startDate.getTime())/86400000;
-        if(difference<7||difference>30){
-            throw new Exception("一个调查期应该在7到30天之间");
-        }
-    }
+//    public void timeCheck(java.sql.Date startDate,java.sql.Date endDate) throws Exception {
+//        if(startDate==null||endDate==null){
+//            throw new Exception("日期不能为空");
+//        }
+//        if(endDate.compareTo(new java.sql.Date(System.currentTimeMillis()-86400000))<0){
+//            throw new Exception("日期至少要大于等于当前日期");
+//        }
+//        long difference=(endDate.getTime()-startDate.getTime())/86400000;
+//        if(difference<7||difference>30){
+//            throw new Exception("一个调查期应该在7到30天之间");
+//        }
+//    }
 
     //创建新的上报时限
     public Integer periodInsert(InnerUploadPeriod innerUploadPeriod){
