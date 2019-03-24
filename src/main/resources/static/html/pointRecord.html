@@ -19,7 +19,7 @@
                 </el-row>
                 <el-row v-if="marketStateFlag===0" class="littleWarning">您当前的信息未通过审核，详情请见通知中心，请重新填报</el-row>
                 <el-row v-if="marketStateFlag===1" class="littleWarning">您当前的信息正在被审核，不可修改</el-row>
-                <el-row v-if="marketStateFlag===2" class="littleWarning">您当前的信息已经通过审核，若需修改请填写表格后点击“申报”按钮</el-row>
+                <el-row v-if="marketStateFlag===2" class="littleWarning">您当前的已有备案信息通过审核，若需修改请填写表格后点击“申报”按钮</el-row>
 
                 <el-row type="flex" justify="center">
                     <el-col :span="16">
@@ -533,15 +533,15 @@
                                     }
                                 })
                             }
-                            else{//更新备案
-                                if(vue3.marketStateFlag===2){
+                            else{
+                                if(vue3.marketStateFlag===2){//已经通过但更新备案
                                     this.$confirm('确定要更新备案?', '提示', {
                                         confirmButtonText: '确定',
                                         cancelButtonText: '取消',
                                         type: 'warning'
                                     }).then(() => {
                                         $.ajax({
-                                        url:'/market/record/update',
+                                        url:'/market/record/insert',
                                         type:'post',
                                         data:{
                                             regionEmpName:this.marketDetailForm.name,
@@ -572,8 +572,7 @@
                                         message: '已取消删除'
                                     });
                                 });
-                                }else{
-                                    alert(3)
+                                }else{//更新备案
                                     $.ajax({
                                         url:'/market/record/update',
                                         type:'post',
