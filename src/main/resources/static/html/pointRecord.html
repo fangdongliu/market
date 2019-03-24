@@ -17,8 +17,9 @@
                 <el-row type="flex" class="littleTitle">
                     <el-col :span="24">填报人力资源市场信息</el-col>
                 </el-row>
+                <el-row v-if="marketStateFlag===0" class="littleWarning">您当前的信息未通过审核，详情请见通知中心，请重新填报</el-row>
                 <el-row v-if="marketStateFlag===1" class="littleWarning">您当前的信息正在被审核，不可修改</el-row>
-                <el-row v-if="marketStateFlag===2" class="littleWarning">您当前的信息已经通过审核且未过期，不可修改</el-row>
+                <el-row v-if="marketStateFlag===2" class="littleWarning">您当前的信息已经通过审核，若需修改请填写表格后点击“申报”按钮</el-row>
 
                 <el-row type="flex" justify="center">
                     <el-col :span="16">
@@ -33,7 +34,6 @@
                                         @change="handleChange"
                                         :disabled="ifSubmitMarketDetail">
                                 </el-cascader>
-
                                 <!--<el-input v-model="marketDetailForm.location" :disabled="ifSubmitMarketDetail"></el-input>-->
                             </el-form-item>
                             <el-form-item label="联系人姓名" prop="people">
@@ -501,7 +501,6 @@
 
                 vue3.$refs[formName].validate((valid) => {
                         if (valid) {
-                            console.log(this.location)
                             var location='';
                             location = vue3.value[0]+'-'+vue3.value[1]+'-'+vue3.value[2]
                             this.phone = this.marketDetailForm.phonePre.toString()+this.marketDetailForm.phone.toString();
@@ -535,32 +534,73 @@
                                 })
                             }
                             else{//更新备案
-                                $.ajax({
-                                    url:'/market/record/update',
-                                    type:'post',
-                                    data:{
-                                        regionEmpName:this.marketDetailForm.name,
-                                        regionName:location,
-                                        regionEmpContact:this.marketDetailForm.people,
-                                        regionEmpContactMobi:this.marketDetailForm.mobile,
-                                        regionEmpContactNum:this.phone,
-                                        regionEmpFax:this.fax,
-                                        stateFlag:1
-                                    },
-                                    success(res){
-                                        vue3.$message({
-                                            type: 'success',
-                                            message: '已提交!'
-                                        });
-                                        vue3.ifSubmitMarketDetail = true;
-                                    },
-                                    error(res){
+                                if(vue3.marketStateFlag===2){
+                                    this.$confirm('确定要更新备案?', '提示', {
+                                        confirmButtonText: '确定',
+                                        cancelButtonText: '取消',
+                                        type: 'warning'
+                                    }).then(() => {
+                                        $.ajax({
+                                        url:'/market/record/update',
+                                        type:'post',
+                                        data:{
+                                            regionEmpName:this.marketDetailForm.name,
+                                            regionName:location,
+                                            regionEmpContact:this.marketDetailForm.people,
+                                            regionEmpContactMobi:this.marketDetailForm.mobile,
+                                            regionEmpContactNum:this.phone,
+                                            regionEmpFax:this.fax,
+                                            stateFlag:1
+                                        },
+                                        success(res){
+                                            vue3.$message({
+                                                type: 'success',
+                                                message: '已提交!'
+                                            });
+                                            vue3.ifSubmitMarketDetail = true;
+                                        },
+                                        error(res){
+                                            vue3.$message({
+                                                type: 'error',
+                                                message: '出错了哦!'
+                                            });
+                                        }
+                                    })
+                                }).catch(() => {
                                         this.$message({
-                                            type: 'error',
-                                            message: '出错了哦!'
-                                        });
-                                    }
-                                })
+                                        type: 'info',
+                                        message: '已取消删除'
+                                    });
+                                });
+                                }else{
+                                    alert(3)
+                                    $.ajax({
+                                        url:'/market/record/update',
+                                        type:'post',
+                                        data:{
+                                            regionEmpName:this.marketDetailForm.name,
+                                            regionName:location,
+                                            regionEmpContact:this.marketDetailForm.people,
+                                            regionEmpContactMobi:this.marketDetailForm.mobile,
+                                            regionEmpContactNum:this.phone,
+                                            regionEmpFax:this.fax,
+                                            stateFlag:1
+                                        },
+                                        success(res){
+                                            vue3.$message({
+                                                type: 'success',
+                                                message: '已提交!'
+                                            });
+                                            vue3.ifSubmitMarketDetail = true;
+                                        },
+                                        error(res){
+                                            vue3.$message({
+                                                type: 'error',
+                                                message: '出错了哦!'
+                                            });
+                                        }
+                                    })
+                                }
                             }
                             //
                             // alert('submit!');
@@ -590,7 +630,7 @@
                     else{
                         vue3.marketStateFlag = res.data.stateFlag;
                     }
-                    if(vue3.marketStateFlag===1 || vue3.marketStateFlag===2) {
+                    if(vue3.marketStateFlag===1) {
                         //待审核状态 已完成未过期状态 不可修改
                         vue3.marketDetailForm.faxPre = parseInt(res.data.regionEmpFax.substring(0,4));
                         vue3.marketDetailForm.fax = parseInt(res.data.regionEmpFax.substring(4,12));
@@ -598,11 +638,11 @@
                         vue3.marketDetailForm.phone = parseInt(res.data.regionEmpContactNum.substring(3,11));
                         vue3.marketDetailForm.mobile = parseInt(res.data.regionEmpContactMobi);
                         vue3.marketDetailForm.people = res.data.regionEmpContact;
-                        vue3.marketDetailForm.location = res.data.regionName;
+                        // vue3.marketDetailForm.location = res.data.regionName;
                         vue3.marketDetailForm.name = res.data.regionEmpName;
                         vue3.ifSubmitMarketDetail = true;
                     }
-                    else if(vue3.marketStateFlag===0){
+                    else if(vue3.marketStateFlag===0|| vue3.marketStateFlag===2){
                         //被拒绝了 重新修改
                         vue3.marketDetailForm.faxPre = parseInt(res.data.regionEmpFax.substring(0,4));
                         vue3.marketDetailForm.fax = parseInt(res.data.regionEmpFax.substring(4,12));
@@ -610,7 +650,7 @@
                         vue3.marketDetailForm.phone = parseInt(res.data.regionEmpContactNum.substring(3,11));
                         vue3.marketDetailForm.mobile = parseInt(res.data.regionEmpContactMobi);
                         vue3.marketDetailForm.people = res.data.regionEmpContact;
-                        vue3.marketDetailForm.location = res.data.regionName;
+                        // vue3.marketDetailForm.location = res.data.regionName;
                         vue3.marketDetailForm.name = res.data.regionEmpName;
                         vue3.ifSubmitMarketDetail = false;
                     }
