@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -170,7 +171,7 @@ public class CommonService {
             List<UserInfoDisplay> sub=provinceService.selectSub(aimUserId);
             IndustryNum output=new IndustryNum();
             for(int i=0;i<sub.size();i++){
-                List<UploadInfo> uploadInfos=selectUploadInfoById(aimUserId);
+                List<UploadInfo> uploadInfos=selectUploadInfoById(sub.get(i).getUserId());
                 for(int j=0;j<uploadInfos.size();j++){
                     if(uploadInfos.get(j).getUploadPeriodId()==uploadPeriodId){
                         int tableId=uploadInfos.get(j).getTableId();
@@ -185,6 +186,49 @@ public class CommonService {
         }
         else{
             throw new Exception("Can not create pieChart for province");
+        }
+    }
+
+    //对比分析，返回某张表在多个调查期的数据
+    public List<TotalNum> lineChart1(Integer aimUserId,java.sql.Date startDate,java.sql.Date endDate)throws Exception{
+        int a=provinceMapper.selectUsertype(aimUserId);
+        List<UploadPeriod> periods=commonMapper.selectUploadPeriodByPeriod(startDate,endDate);
+        List<TotalNum> output=new ArrayList<TotalNum>();
+        if(a==3){
+            List<UploadInfo> uploadInfos=selectUploadInfoById(aimUserId);
+            for(int i=0;i<periods.size();i++){
+                for(int j=0;j<uploadInfos.size();j++){
+                    if(uploadInfos.get(j).getUploadPeriodId()==periods.get(i).getUploadPeriodId()){
+                        int tableId=uploadInfos.get(j).getTableId();
+                        output.add(selectTotalNum(tableId));
+                        break;
+                    }
+                }
+            }
+            return output;
+        }
+        else if(a==2){
+            List<UserInfoDisplay> sub=provinceService.selectSub(aimUserId);//获取该用户的下级用户
+            for(int i=0;i<periods.size();i++){//遍历目标调查期
+                TotalNum totalNum=new TotalNum();
+                for(int j=0;j<sub.size();j++){//遍历下级用户
+                    List<UploadInfo> uploadInfos=selectUploadInfoById(sub.get(j).getUserId());//获取当前下级用户的元报表
+                    for(int k=0;k<uploadInfos.size();k++){//遍历所有的元报表
+                        if(uploadInfos.get(k).getUploadPeriodId()==periods.get(i).getUploadPeriodId()){//如果当前报表的调查期id可以匹配成功
+                            int tableId=uploadInfos.get(k).getTableId();//获取报表id
+                            TotalNum temp=selectTotalNum(tableId);//获取相应的报表
+                            totalNum=(TotalNum) objectadd(totalNum,temp);//将报表与预备加入list的报表相加
+                            break;//跳出当前循环，去处理下一个用户
+                        }
+                    }
+                }
+                totalNum.setTableId(0);
+                output.add(totalNum);
+            }
+            return output;
+        }
+        else{
+            throw new Exception("Can not create lineChart for province");
         }
     }
 
