@@ -183,7 +183,7 @@ public class CommonController extends ControllerBase {
 
     //取样分析
     @PostMapping("data/pieChart")
-    public Object PieChart(AppUserDetail appUserDetail,Integer aimUserId,Integer uploadPeriodId)throws Exception{
+    public Object pieChart(Integer aimUserId,Integer uploadPeriodId)throws Exception{
         return success(commonService.pieChart(aimUserId,uploadPeriodId));
     }
 }

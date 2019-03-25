@@ -5,6 +5,7 @@ import cn.fdongl.market.market.entity.Record;
 import cn.fdongl.market.market.entity.UploadInfo;
 import cn.fdongl.market.province.entity.UploadPeriod;
 import cn.fdongl.market.province.entity.UserInfoDisplay;
+import cn.fdongl.market.province.entity.AccountData;
 import cn.fdongl.market.province.mapper.ProvinceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -250,4 +251,10 @@ public class ProvinceService {
             return output;
         }
     }
+
+    //省级按条件查询账号信息
+    public List<AccountData> accountQuery(String username,String fullname) throws Exception {
+        return provinceMapper.accountQuery(username,fullname);
+    }
+
 }

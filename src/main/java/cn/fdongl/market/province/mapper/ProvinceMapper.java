@@ -3,6 +3,7 @@ package cn.fdongl.market.province.mapper;
 
 import cn.fdongl.market.market.entity.Record;
 import cn.fdongl.market.market.entity.UploadInfo;
+import cn.fdongl.market.province.entity.AccountData;
 import cn.fdongl.market.province.entity.UploadPeriod;
 import cn.fdongl.market.province.entity.UserInfoDisplay;
 import org.apache.ibatis.annotations.*;
@@ -199,4 +200,14 @@ public interface ProvinceMapper {
             "from t_user \n" +
             "where (superior = #{param1}) and (username like CONCAT('%',#{param2},'%') or fullname like CONCAT('%',#{param2},'%'));")
     List<UserInfoDisplay> userSearchByuser(Integer userId,String input);
+
+    //省级按条件查询账号信息
+    @Select("SELECT \n" +
+            "username AS username, \n" +
+            "fullname AS fullname, \n" +
+            "superior AS superior, \n" +
+            "create_time AS createTime, \n"  +
+            "creator AS creator \n" +
+            "from t_user where state_flag=1 and state_flag=1 and (username like CONCAT('%',#{param1},'%')) and (fullname like CONCAT('%',#{param2},'%'));")
+    List<AccountData> accountQuery(String uername, String fullname);
 }

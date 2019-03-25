@@ -10,6 +10,7 @@ import cn.fdongl.market.province.service.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
 
@@ -174,41 +175,33 @@ public class CommonService {
                     if(uploadInfos.get(j).getUploadPeriodId()==uploadPeriodId){
                         int tableId=uploadInfos.get(j).getTableId();
                         IndustryNum temp=selectIndustryNum(tableId);
-                        output=addIndustryNum(output,temp);
+                        output=(IndustryNum)objectadd(output,temp);
                         break;
                     }
                 }
             }
+            output.setTableId(0);
             return  output;
         }
         else{
             throw new Exception("Can not create pieChart for province");
         }
     }
-    //将两个industryNum类中的数据相加
-    public IndustryNum addIndustryNum(IndustryNum a,IndustryNum b)throws Exception{
-        a.setIndustry1Need(a.getIndustry1Need()+b.getIndustry1Need());
-        a.setIndustry2Need(a.getIndustry2Need()+b.getIndustry2Need());
-        a.setIndustry3Need(a.getIndustry3Need()+b.getIndustry3Need());
-        a.setMineNeed(a.getMineNeed()+b.getMineNeed());
-        a.setManuNeed(a.getManuNeed()+b.getManuNeed());
-        a.setElecGasWaterNeed(a.getElecGasWaterNeed()+b.getElecGasWaterNeed());
-        a.setArchNeed(a.getArchNeed()+b.getArchNeed());
-        a.setTranStorPostNeed(a.getTranStorPostNeed()+b.getTranStorPostNeed());
-        a.setInfoCompSoftNeed(a.getInfoCompSoftNeed()+b.getInfoCompSoftNeed());
-        a.setRetailNeed(a.getRetailNeed()+b.getRetailNeed());
-        a.setAccoCaterNeed(a.getAccoCaterNeed()+b.getAccoCaterNeed());
-        a.setFinanceNeed(a.getFinanceNeed()+b.getFinanceNeed());
-        a.setEstateNeed(a.getEstateNeed()+b.getEstateNeed());
-        a.setLeaseBusiServNeed(a.getLeaseBusiServNeed()+b.getLeaseBusiServNeed());
-        a.setReseTechAddrNeed(a.getReseTechAddrNeed()+b.getReseTechAddrNeed());
-        a.setWaterEnviFaciNeed(a.getWaterEnviFaciNeed()+b.getWaterEnviFaciNeed());
-        a.setResiServNeed(a.getResiServNeed()+b.getResiServNeed());
-        a.setEduNeed(a.getEduNeed()+b.getEduNeed());
-        a.setHealSecuWelfNeed(a.getHealSecuWelfNeed()+b.getHealSecuWelfNeed());
-        a.setCultSportEnteNeed(a.getCultSportEnteNeed()+b.getCultSportEnteNeed());
-        a.setManaOrgaNeed(a.getManaOrgaNeed()+b.getManaOrgaNeed());
-        a.setInteOrgaNeed(a.getInteOrgaNeed()+b.getInteOrgaNeed());
+
+    //对两个相同类中的int属性相加的函数,用于图表汇总
+    public Object objectadd(Object a,Object b)throws Exception{
+        Field[] fielda=a.getClass().getDeclaredFields();
+        Field[] fieldb=b.getClass().getDeclaredFields();
+        if(a.getClass()!=b.getClass()){
+            throw new Exception("Class type must be same");
+        }
+        for(int i=0;i<fielda.length;i++){
+            fielda[i].setAccessible(true);
+            fieldb[i].setAccessible(true);
+            Object valuea=fielda[i].get(a);
+            Object valueb=fieldb[i].get(b);
+            fielda[i].set(a,(Integer)valuea+(Integer)valueb);
+        }
         return a;
     }
 }

@@ -223,7 +223,7 @@ public interface MarketMapper {
 
     //更新一条供求总体人数信息
     @Update("UPDATE t_total_num SET \n" +
-            "need_popu=#{needPopu},jobseek_popu#{jobseekPopu} \n" +
+            "need_popu=#{needPopu},jobseek_popu=#{jobseekPopu} \n" +
             "where table_id=#{tableId};")
     Integer uploadUpdateTotalNum(TotalNum totalNum);
 
