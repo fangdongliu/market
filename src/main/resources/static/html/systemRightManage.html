@@ -37,29 +37,27 @@
         <el-main class="content">
             <div class="contentDetail">
                 <div style="margin-bottom: 15px; margin-right: 15px; ">
+                    <el-button type="success" @click="dialogFormVisibleCreateRight = true;">创建大类权限</el-button>
                 </div>
-                <el-dialog title="创建权限" :visible.sync="dialogFormVisibleCreate">
+                <el-dialog title="创建大类权限" :visible.sync="dialogFormVisibleCreateRight">
                     <el-form :model="newRight">
                         <el-form-item label="权限名称" :label-width="formLabelWidth">
-                            <el-input v-model="newRight.label" placeholder="请输入权限名称(纯英文大写，用下划线隔开单词)"></el-input>
+                            <el-input v-model="newRight.label" placeholder="权限名称(纯英文大写，用下划线隔开单词)"></el-input>
                         </el-form-item>
                         <el-form-item label="权限描述" :label-width="formLabelWidth">
                             <el-input type="textarea"
                                       :rows="3"
                                       v-model="newRight.description"
-                                      placeholder="请输入权限描述">
+                                      placeholder="权限描述">
                             </el-input>
                         </el-form-item>
                         <el-form-item label="菜单名称" :label-width="formLabelWidth">
-                            <el-input v-model="newRight.menuName" placeholder="请输入菜单名称(中文)"></el-input>
-                        </el-form-item>
-                        <el-form-item label="菜单路径" :label-width="formLabelWidth">
-                            <el-input v-model="newRight.menuPath" placeholder="请输入菜单路径"></el-input>
+                            <el-input v-model="newRight.menuName" placeholder="目录项名称"></el-input>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
                         <el-button @click="closeDialog(newRight)">关 闭</el-button>
-                        <el-button type="primary" @click="createRight(newRight)">创 建</el-button>
+                        <el-button type="primary" @click="createRightBig(newRight)">创 建</el-button>
                     </div>
                 </el-dialog>
                 <div class="custom-tree-container">
@@ -96,6 +94,30 @@
                                 </span>
                               </span>
                         </el-tree>
+                        <el-dialog title="创建权限" :visible.sync="dialogFormVisibleCreate">
+                            <el-form :model="newRight">
+                                <el-form-item label="权限名称" :label-width="formLabelWidth">
+                                    <el-input v-model="newRight.label" placeholder="权限名称(纯英文大写，用下划线隔开单词)"></el-input>
+                                </el-form-item>
+                                <el-form-item label="权限描述" :label-width="formLabelWidth">
+                                    <el-input type="textarea"
+                                              :rows="3"
+                                              v-model="newRight.description"
+                                              placeholder="权限描述">
+                                    </el-input>
+                                </el-form-item>
+                                <el-form-item label="菜单名称" :label-width="formLabelWidth">
+                                    <el-input v-model="newRight.menuName" placeholder="目录项名称"></el-input>
+                                </el-form-item>
+                                <el-form-item label="菜单路径" :label-width="formLabelWidth">
+                                    <el-input v-model="newRight.menuPath" placeholder="页面跳转url"></el-input>
+                                </el-form-item>
+                            </el-form>
+                            <div slot="footer" class="dialog-footer">
+                                <el-button @click="closeDialog(newRight)">关 闭</el-button>
+                                <el-button type="primary" @click="createRight(newRight)">创 建</el-button>
+                            </div>
+                        </el-dialog>
                         <el-dialog title="权限详情及修改" :visible.sync="dialogFormVisibleEdit">
                             <el-form :model="right">
                                 <el-form-item label="权限名称" :label-width="formLabelWidth">
@@ -145,6 +167,7 @@
         el:'#adminRightManageApp',
         data: {
             dialogFormVisibleCreate: false,
+            dialogFormVisibleCreateRight: false,
             dialogFormVisibleEdit: false,
             formLabelWidth:'120px',
             rightData: [],
@@ -209,6 +232,7 @@
                 var tmp =JSON.stringify(vue.nullRight);
                 vue.newRight=JSON.parse(tmp);
                 vue.dialogFormVisibleCreate = false;
+                vue.dialogFormVisibleCreateRight = false;
             },
             createRight(newRight){
                 $.ajax({
@@ -226,6 +250,24 @@
                     }
                 });
                 this.dialogFormVisibleCreate = false;
+                console.log(newRight);
+                location.reload();
+            },
+            createRightBig(newRight){
+                $.ajax({
+                    url:'/right/add',
+                    type:'post',
+                    data:{
+                        label:this.newRight.label,
+                        description:this.newRight.description,
+                        menuName:this.newRight.menuName,
+                        menuPath:'',
+                    },
+                    success(res){
+                        console.log(res);
+                    }
+                });
+                this.dialogFormVisibleCreateRight = false;
                 console.log(newRight);
                 location.reload();
             },

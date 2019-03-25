@@ -69,12 +69,12 @@
                     </el-row>
 
                     <template v-for = "(item, index) in menuData" >
-                        <el-submenu v-if = "item.child !== null" :index="index">
+                        <el-submenu v-if = "item.children !== null" :index="index">
                             <template slot="title">
                                 <!--<i :class="item.icon"></i>-->
                                 <span slot="title">{{item.menuName}}</span>
                             </template>
-                            <el-menu-item v-for="(i, index2) in item.child" :index="index+'-'+index2">{{i.menuName}}</el-menu-item>
+                            <el-menu-item v-for="(i, index2) in item.children" :index="index+'-'+index2">{{i.menuName}}</el-menu-item>
                         </el-submenu>
                         <el-menu-item v-else :index="index">
                             <!--<i :class="item.icon"></i>-->
@@ -114,36 +114,6 @@
     var vue = new Vue({
         el:'#app',
         data:{
-            menu:[
-                {
-                    icon:'el-icon-location',
-                    name:'导航一',
-                    child:[
-                        {name:'省审核备案', url:'provinceRecord.html'},
-                        {name:'监测点填报备案', url:'pointRecord.html'},
-                        {name:'用户查询', url:'provinceQueryUser.html'},
-                        {name:'角色管理', url:'adminRoleManage.html'},
-                        {name:'监测点数据填报', url:'pointData.html'},
-                        {name:'权限授予', url:'adminRightManage.html'},
-                        {name:'时限管理', url:'deadline.html'},
-                        {name:'已发送的通知', url:'messageCenterSend.html'},
-                        {name:'已收到的通知', url:'messageCenterReceive.html'}
-                    ]
-                },
-                {
-                    icon:'el-icon-menu',
-                    name:'导航二',
-                    url:''
-                },
-                {
-                    icon:'el-icon-location',
-                    name:'导航三',
-                    child:[
-                        {name:'省审核备案', url:'provinceRecord.html'},
-                        {name:'监测点填报备案', url:'pointRecord.html'}
-                    ]
-                }
-            ],
             menuData:[],
             isLogout:true,
             visible:'',
@@ -187,7 +157,7 @@
                     this.setupWatcher();
                 }else{
                     var i = index.indexOf('-');
-                    this.src='/html/'+this.menuData[index.substring(0,i)].child[index.substring(i+1)].menuPath;
+                    this.src='/html/'+this.menuData[index.substring(0,i)].children[index.substring(i+1)].menuPath;
                     this.setupWatcher();
                 }
             },
@@ -214,8 +184,8 @@
                     url:'/user/menu',
                     type:'post',
                     success(res){
-                        vue.menuData=res;
-                        console.log(res);
+                        vue.menuData=res.data;
+                        console.log(res.data);
                     }
                 })
             },
