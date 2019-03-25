@@ -151,6 +151,8 @@ public class CommonService {
 
 
 
+
+
     //取样分析
     public IndustryNum pieChart(Integer aimUserId,Integer uploadPeriodId)throws Exception{
         int a=provinceMapper.selectUsertype(aimUserId);

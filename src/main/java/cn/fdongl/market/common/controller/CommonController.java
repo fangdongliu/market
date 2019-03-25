@@ -1,6 +1,7 @@
 package cn.fdongl.market.common.controller;
 
 import cn.fdongl.market.common.service.CommonService;
+import cn.fdongl.market.province.entity.UploadPeriod;
 import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.util.ControllerBase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/common")//指定接口的一级路径
@@ -131,14 +133,20 @@ public class CommonController extends ControllerBase {
     //按id查询调查期
     @PostMapping("/data/selectUploadPeriod")
     public Object selectUploadPeriod(Integer uploadPeriodId) throws Exception {
-        return success(commonService.selectUploadPeriod(uploadPeriodId));
+        UploadPeriod uploadPeriod=commonService.selectUploadPeriod(uploadPeriodId);
+        uploadPeriod.setStartDateString(dateFormat.format(uploadPeriod.getStartDate()));
+        uploadPeriod.setEndDateString(dateFormat.format(uploadPeriod.getEndDate()));
+        return success(uploadPeriod);
     }
 
     //按时间点查询调查期
     @PostMapping("/data/selectUploadPeriodByTime")
     public Object selectUploadPeriodByTime(String dateString) throws Exception {
         java.sql.Date date = new java.sql.Date(dateFormat.parse(dateString).getTime());
-        return success(commonService.selectUploadPeriodByTime(date));
+        UploadPeriod uploadPeriod=commonService.selectUploadPeriodByTime(date);
+        uploadPeriod.setStartDateString(dateFormat.format(uploadPeriod.getStartDate()));
+        uploadPeriod.setEndDateString(dateFormat.format(uploadPeriod.getEndDate()));
+        return success(uploadPeriod);
     }
 
     //按时间段查询调查期
@@ -146,13 +154,23 @@ public class CommonController extends ControllerBase {
     public Object selectUploadPeriodByPeriod(String startDateString,String endDateString) throws Exception {
         java.sql.Date startDate = new java.sql.Date(dateFormat.parse(startDateString).getTime());
         java.sql.Date endDate = new java.sql.Date(dateFormat.parse(endDateString).getTime());
-        return success(commonService.selectUploadPeriodByPeriod(startDate,endDate));
+        List<UploadPeriod> uploadPeriodList=commonService.selectUploadPeriodByPeriod(startDate,endDate);
+        for(UploadPeriod uploadPeriod:uploadPeriodList) {
+            uploadPeriod.setStartDateString(dateFormat.format(uploadPeriod.getStartDate()));
+            uploadPeriod.setEndDateString(dateFormat.format(uploadPeriod.getEndDate()));
+        }
+        return success(uploadPeriodList);
     }
 
-    //查询所有上报时限，待移动
+    //查询所有上报时限
     @PostMapping("/data/selectAllUploadPeriod")
     public Object selectAllUploadPeriod() throws Exception {
-        return success(commonService.selectAllUploadPeriod());
+        List<UploadPeriod> uploadPeriodList=commonService.selectAllUploadPeriod();
+        for(UploadPeriod uploadPeriod:uploadPeriodList) {
+            uploadPeriod.setStartDateString(dateFormat.format(uploadPeriod.getStartDate()));
+            uploadPeriod.setEndDateString(dateFormat.format(uploadPeriod.getEndDate()));
+        }
+        return success(uploadPeriodList);
     }
 
     //取样分析
