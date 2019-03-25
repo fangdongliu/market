@@ -68,17 +68,17 @@
                         </el-col>
                     </el-row>
 
-                    <template v-for = "(item, index) in menu" >
-                        <el-submenu v-if = "item.children !== null" :index="index">
+                    <template v-for = "(item, index) in menuData" >
+                        <el-submenu v-if = "item.child !== null" :index="index">
                             <template slot="title">
-                                <i :class="item.icon"></i>
+                                <!--<i :class="item.icon"></i>-->
                                 <span slot="title">{{item.menuName}}</span>
                             </template>
-                            <el-menu-item v-for="(i, index2) in item.children" :index="index+'-'+index2">{{i.name}}</el-menu-item>
+                            <el-menu-item v-for="(i, index2) in item.child" :index="index+'-'+index2">{{i.menuName}}</el-menu-item>
                         </el-submenu>
                         <el-menu-item v-else :index="index">
-                            <i :class="item.icon"></i>
-                            <span slot="title">{{item.name}}</span>
+                            <!--<i :class="item.icon"></i>-->
+                            <span slot="title">{{item.menuName}}</span>
                         </el-menu-item>
                     </template>
                 </el-menu>
@@ -180,13 +180,14 @@
         },
         methods:{
             handleSelect(index){
+                console.log('handleSelect:'+this.menuData[index]);
                 this.loading=true;
                 if(index.toString().indexOf('-')===-1){
-                    this.src='/html/'+this.menu[index].url;
+                    this.src='/html/'+this.menuData[index].menuPath;
                     this.setupWatcher();
                 }else{
                     var i = index.indexOf('-');
-                    this.src='/html/'+this.menu[index.substring(0,i)].child[index.substring(i+1)].url;
+                    this.src='/html/'+this.menuData[index.substring(0,i)].child[index.substring(i+1)].menuPath;
                     this.setupWatcher();
                 }
             },
@@ -196,7 +197,7 @@
                 })
             },
             handleOpen(key, keyPath) {
-                console.log(key, keyPath);
+                console.log('handleOpen:'+ key, keyPath);
             },
             handleClose(key, keyPath) {
                 console.log(key, keyPath);
@@ -208,19 +209,19 @@
                 console.log(vue.inputName, vue.inputPswd);
                 vue.isLogout = false;
             },
-            getRightList(){
+            getMenu(){
                 $.ajax({
-                    url:'/right/list',
+                    url:'/user/menu',
                     type:'post',
                     success(res){
-                        vue.menuData=res.data;
-                        console.log(res.data);
+                        vue.menuData=res;
+                        console.log(res);
                     }
                 })
             },
         },
         mounted:function () {
-            this.getRightList();
+            this.getMenu();
         }
     })
 </script>
