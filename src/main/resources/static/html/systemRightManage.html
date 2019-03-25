@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>adminRightManage</title>
+    <title>systemRightManage</title>
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <!-- Vue -->
     <script src="https://cdn.bootcss.com/vue/2.6.9/vue.min.js"></script>
@@ -37,126 +37,29 @@
         <el-main class="content">
             <div class="contentDetail">
                 <div style="margin-bottom: 15px; margin-right: 15px; ">
-                    <!--<el-button type="success" @click="dialogFormVisibleCreate = true;">创建权限</el-button>-->
-                    <!--<el-button type="danger" @click="deleteRights(scope.$index, scope.row)">删除权限</el-button>-->
-                    <!--<el-input placeholder="请输入权限名称" v-model="input" class="input-with-select" style="margin-top: 15px;">-->
-                        <!--<el-button slot="append" icon="el-icon-search"></el-button>-->
-                    <!--</el-input>-->
+                    <el-button type="success" @click="dialogFormVisibleCreateRight = true;">创建大类权限</el-button>
                 </div>
-                <el-dialog title="创建权限" :visible.sync="dialogFormVisibleCreate">
+                <el-dialog title="创建大类权限" :visible.sync="dialogFormVisibleCreateRight">
                     <el-form :model="newRight">
                         <el-form-item label="权限名称" :label-width="formLabelWidth">
-                            <el-input v-model="newRight.label" placeholder="请输入权限名称(纯英文大写，用下划线隔开单词)"></el-input>
+                            <el-input v-model="newRight.label" placeholder="权限名称(纯英文大写，用下划线隔开单词)"></el-input>
                         </el-form-item>
                         <el-form-item label="权限描述" :label-width="formLabelWidth">
                             <el-input type="textarea"
                                       :rows="3"
                                       v-model="newRight.description"
-                                      placeholder="请输入权限描述">
+                                      placeholder="权限描述">
                             </el-input>
                         </el-form-item>
                         <el-form-item label="菜单名称" :label-width="formLabelWidth">
-                            <el-input v-model="newRight.menuName" placeholder="请输入菜单名称(中文)"></el-input>
+                            <el-input v-model="newRight.menuName" placeholder="目录项名称"></el-input>
                         </el-form-item>
-                        <el-form-item label="菜单路径" :label-width="formLabelWidth">
-                            <el-input v-model="newRight.menuPath" placeholder="请输入菜单路径"></el-input>
-                        </el-form-item>
-                        <!--<el-form-item label="父级权限" :label-width="formLabelWidth">-->
-                            <!--<el-select v-model="newRight.father" clearable placeholder="父级权限" >-->
-                                <!--<el-option-->
-                                        <!--v-for="item in rightData"-->
-                                        <!--:key="item.id"-->
-                                        <!--:label="item.label"-->
-                                        <!--:value="item.id" >-->
-                                <!--</el-option>-->
-                            <!--</el-select>-->
-                        <!--</el-form-item>-->
                     </el-form>
                     <div slot="footer" class="dialog-footer">
-                        <el-button @click="dialogFormVisibleCreate = false">关 闭</el-button>
-                        <el-button type="primary" @click="createRight(newRight)">创 建</el-button>
+                        <el-button @click="closeDialog(newRight)">关 闭</el-button>
+                        <el-button type="primary" @click="createRightBig(newRight)">创 建</el-button>
                     </div>
                 </el-dialog>
-                <!--<el-table-->
-                        <!--ref="multipleTable"-->
-                        <!--:common="rightData.slice((currentPage-1)*pageSize,currentPage*pageSize)"-->
-                        <!--stripe-->
-                        <!--style="width: 100%"-->
-                        <!--@selection-change="handleSelectionChange">-->
-                    <!--<el-table-column-->
-                            <!--type="selection"-->
-                            <!--width="150px">-->
-                    <!--</el-table-column>-->
-                    <!--<el-table-column-->
-                            <!--prop="rightName"-->
-                            <!--label="权限名称">-->
-                    <!--</el-table-column>-->
-                    <!--<el-table-column-->
-                            <!--prop="createTime"-->
-                            <!--label="创建时间">-->
-                        <!--<template slot-scope="scope">-->
-                            <!--<el-popover trigger="hover" placement="top">-->
-                                <!--<p>最近修改时间: {{ scope.row.reviseTime }}</p>-->
-                                <!--<p>最近修改者: {{ scope.row.reviser }}</p>-->
-                                <!--<div slot="reference" class="name-wrapper">-->
-                                    <!--<el-tag size="medium">{{ scope.row.createTime }}</el-tag>-->
-                                <!--</div>-->
-                            <!--</el-popover>-->
-                        <!--</template>-->
-                    <!--</el-table-column>-->
-                    <!--<el-table-column-->
-                            <!--prop="deleteFlag"-->
-                            <!--label="状态标记"-->
-                            <!--width="150px">-->
-                        <!--<template slot-scope="scope">-->
-                            <!--<el-switch-->
-                                    <!--v-model="scope.row.deleteFlag"-->
-                                    <!--active-color="#13ce66"-->
-                                    <!--inactive-color="#ff4949"-->
-                                    <!--@change="changeSwitch(scope.row)">-->
-                            <!--</el-switch>-->
-                        <!--</template>-->
-                    <!--</el-table-column>-->
-                    <!--<el-table-column label="操作">-->
-                        <!--<template slot-scope="scope">-->
-                            <!--<el-button-->
-                                    <!--size="mini"-->
-                                    <!--@click="handleEdit(scope.$index, scope.row)">查看并编辑</el-button>-->
-
-                            <!--<el-button-->
-                                    <!--size="mini"-->
-                                    <!--type="danger"-->
-                                    <!--@click="deleteRight(scope.$index, scope.row)">删除</el-button>-->
-                        <!--</template>-->
-                    <!--</el-table-column>-->
-                <!--</el-table>-->
-                <!--<el-dialog title="权限详情" :visible.sync="dialogFormVisibleEdit">-->
-                    <!--<el-form :model="right">-->
-                        <!--<el-form-item label="权限名称" :label-width="formLabelWidth">-->
-                            <!--<el-input v-model="right.rightName" placeholder="right.rightName"></el-input>-->
-                        <!--</el-form-item>-->
-                        <!--<el-form-item label="权限描述" :label-width="formLabelWidth">-->
-                            <!--<el-input type="textarea"-->
-                                      <!--:rows="3"-->
-                                      <!--v-model="right.rightDesc"-->
-                                      <!--placeholder="right.rightDesc">-->
-                            <!--</el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-form>-->
-                    <!--<div slot="footer" class="dialog-footer">-->
-                        <!--<el-button @click="dialogFormVisibleEdit = false">关 闭</el-button>-->
-                        <!--<el-button type="primary" @click="updateRight(right)">保 存</el-button>-->
-                    <!--</div>-->
-                <!--</el-dialog>-->
-                <!--<div class="block" style="text-align: center; margin-top: 15px">-->
-                    <!--<el-pagination-->
-                            <!--layout="prev, pager, next"-->
-                            <!--@current-change="pageChange"-->
-                            <!--:page-size="pageSize"-->
-                            <!--:total="rightData.length"-->
-                            <!--background>-->
-                    <!--</el-pagination>-->
-                <!--</div>-->
                 <div class="custom-tree-container">
                     <div class="block">
                         <p>权限树</p>
@@ -188,21 +91,33 @@
                                             @click="() => remove(node, data)">
                                         删除权限
                                     </el-button>
-                                    <!--<el-switch-->
-                                            <!--style="display: block"-->
-                                            <!--v-model="common.status"-->
-                                            <!--active-color="#13ce66"-->
-                                            <!--inactive-color="#ff4949"-->
-                                            <!--:active-value="0"-->
-                                            <!--:inactive-value="1"-->
-                                            <!--active-text="启用"-->
-                                            <!--inactive-text="禁用"-->
-                                            <!--@change="changeSwitch(common)">-->
-
-                                    <!--</el-switch>-->
                                 </span>
                               </span>
                         </el-tree>
+                        <el-dialog title="创建权限" :visible.sync="dialogFormVisibleCreate">
+                            <el-form :model="newRight">
+                                <el-form-item label="权限名称" :label-width="formLabelWidth">
+                                    <el-input v-model="newRight.label" placeholder="权限名称(纯英文大写，用下划线隔开单词)"></el-input>
+                                </el-form-item>
+                                <el-form-item label="权限描述" :label-width="formLabelWidth">
+                                    <el-input type="textarea"
+                                              :rows="3"
+                                              v-model="newRight.description"
+                                              placeholder="权限描述">
+                                    </el-input>
+                                </el-form-item>
+                                <el-form-item label="菜单名称" :label-width="formLabelWidth">
+                                    <el-input v-model="newRight.menuName" placeholder="目录项名称"></el-input>
+                                </el-form-item>
+                                <el-form-item label="菜单路径" :label-width="formLabelWidth">
+                                    <el-input v-model="newRight.menuPath" placeholder="页面跳转url"></el-input>
+                                </el-form-item>
+                            </el-form>
+                            <div slot="footer" class="dialog-footer">
+                                <el-button @click="closeDialog(newRight)">关 闭</el-button>
+                                <el-button type="primary" @click="createRight(newRight)">创 建</el-button>
+                            </div>
+                        </el-dialog>
                         <el-dialog title="权限详情及修改" :visible.sync="dialogFormVisibleEdit">
                             <el-form :model="right">
                                 <el-form-item label="权限名称" :label-width="formLabelWidth">
@@ -219,7 +134,7 @@
                                     <el-input v-model="right.menuName" placeholder="right.menuName"></el-input>
                                 </el-form-item>
                                 <el-form-item label="菜单路径" :label-width="formLabelWidth">
-                                    <el-input v-model="right.menuName" placeholder="right.menuName"></el-input>
+                                    <el-input v-model="right.menuPath" placeholder="right.menuPath"></el-input>
                                 </el-form-item>
                                 <el-form-item label="权限状态" :label-width="formLabelWidth">
                                     <el-switch
@@ -252,67 +167,10 @@
         el:'#adminRightManageApp',
         data: {
             dialogFormVisibleCreate: false,
+            dialogFormVisibleCreateRight: false,
             dialogFormVisibleEdit: false,
             formLabelWidth:'120px',
-            rightData: [
-                {
-                    id:1,
-                    label:'1',
-                    description:'1',
-                    status:0,
-                    children: [
-                        {
-                            id:5,
-                            label:'5',
-                            description:'5',
-                            status:0,
-                            children:[
-                                {
-                                    id:3,
-                                    label:'3',
-                                    description:'3',
-                                    status:1,
-                                    children:[]
-                                },
-                                {
-                                    id:4,
-                                    label:'4',
-                                    description:'4',
-                                    status:0,
-                                    children:[]
-                                }
-                            ]
-                        },
-                        {
-                            id:6,
-                            label:'6',
-                            description:'6',
-                            status:0
-                        }
-                    ]
-                },
-                {
-                    id:2,
-                    label:'2',
-                    description:'2',
-                    status:1,
-                    children:[]
-                },
-                {
-                    id:3,
-                    label:'3',
-                    description:'3',
-                    status:1,
-                    children:[]
-                },
-                {
-                    id:4,
-                    label:'4',
-                    description:'4',
-                    status:0,
-                    children:[]
-                }
-            ],
+            rightData: [],
             input:'',
             pageSize:10,
             currentPage:1,
@@ -320,6 +178,13 @@
             tmpData:{},
             right:{},
             newRight:{
+                id:0,
+                label:'',
+                description:'',
+                menuName:'',
+                menuPath:''
+            },
+            nullRight:{
                 id:0,
                 label:'',
                 description:'',
@@ -363,7 +228,12 @@
                 });
 
             },
-
+            closeDialog(newright){
+                var tmp =JSON.stringify(vue.nullRight);
+                vue.newRight=JSON.parse(tmp);
+                vue.dialogFormVisibleCreate = false;
+                vue.dialogFormVisibleCreateRight = false;
+            },
             createRight(newRight){
                 $.ajax({
                     url:'/right/add',
@@ -380,6 +250,24 @@
                     }
                 });
                 this.dialogFormVisibleCreate = false;
+                console.log(newRight);
+                location.reload();
+            },
+            createRightBig(newRight){
+                $.ajax({
+                    url:'/right/add',
+                    type:'post',
+                    data:{
+                        label:this.newRight.label,
+                        description:this.newRight.description,
+                        menuName:this.newRight.menuName,
+                        menuPath:'',
+                    },
+                    success(res){
+                        console.log(res);
+                    }
+                });
+                this.dialogFormVisibleCreateRight = false;
                 console.log(newRight);
                 location.reload();
             },
