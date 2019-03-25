@@ -3,9 +3,11 @@ package cn.fdongl.market.common.service;
 import cn.fdongl.market.common.entity.Notice;
 import cn.fdongl.market.common.mapper.CommonMapper;
 import cn.fdongl.market.market.entity.*;
+import cn.fdongl.market.province.entity.UploadPeriod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -47,12 +49,6 @@ public class CommonService {
         if(n!=1){
             throw new Exception("删除失败");
         }
-    }
-
-    //根据时间点查询简易上传期
-    public SimpleUploadPeriod selectSimpleUploadPeriod(Date date) throws Exception {
-        java.sql.Date sqlDate=new java.sql.Date(date.getTime());
-        return commonMapper.selectSimpleUploadPeriod(sqlDate);
     }
 
     //根据用户id查询上传数据信息
@@ -118,5 +114,31 @@ public class CommonService {
     //技术等级供求人数表查询
     public TechGradeNum selectTechGradeNum(Integer tableId) throws Exception {
         return commonMapper.selectTechGradeNum(tableId);
+    }
+
+    //根据时间点查询简易调查期
+    public SimpleUploadPeriod selectSimpleUploadPeriod(Date date) throws Exception {
+        java.sql.Date sqlDate=new java.sql.Date(date.getTime());
+        return commonMapper.selectSimpleUploadPeriod(sqlDate);
+    }
+
+    //按id查询调查期
+    public UploadPeriod selectUploadPeriod(Integer uploadPeriodId) throws Exception {
+        return commonMapper.selectUploadPeriod(uploadPeriodId);
+    }
+
+    //按时间点查询调查期
+    public UploadPeriod selectUploadPeriodByTime(java.sql.Date date) throws Exception {
+        return commonMapper.selectUploadPeriodByTime(date);
+    }
+
+    //按时间段查询调查期
+    public List<UploadPeriod> selectUploadPeriodByPeriod(java.sql.Date startDate, java.sql.Date endDate) throws Exception {
+        return commonMapper.selectUploadPeriodByPeriod(startDate,endDate);
+    }
+
+    //查询所有上报时限
+    public List<UploadPeriod> selectAllUploadPeriod() throws Exception {
+        return commonMapper.selectAllUploadPeriod();
     }
 }

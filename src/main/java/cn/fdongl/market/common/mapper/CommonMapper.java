@@ -2,12 +2,14 @@ package cn.fdongl.market.common.mapper;
 
 import cn.fdongl.market.common.entity.Notice;
 import cn.fdongl.market.market.entity.*;
+import cn.fdongl.market.province.entity.UploadPeriod;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.core.annotation.Order;
 
+import java.sql.Date;
 import java.util.List;
 
 @Mapper
@@ -66,15 +68,6 @@ public interface CommonMapper {
             "delete_flag=1,reviser=#{param1},revise_time=now() \n" +
             "where notice_id=#{param2};")
     Integer deleteMessage(Integer userId,Integer noticeId);
-
-    //根据时间点查询简易调查期
-    @Select("SELECT \n" +
-            "upload_period_id AS uploadPeriodId, \n" +
-            "start_date AS startDate, \n" +
-            "end_date AS endDate \n" +
-            "from t_upload_period \n" +
-            "where start_date<=#{param1} and #{param1}<end_date limit 1;")
-    SimpleUploadPeriod selectSimpleUploadPeriod(java.sql.Date aimDate);
 
     //查询某用户的上传数据信息
     @Select("SELECT \n" +
@@ -268,7 +261,6 @@ public interface CommonMapper {
             "from t_least_needed where table_id=#{param1} limit 1;")
     LeastNeeded selectLeastNeeded(Integer tableId);
 
-
     //查询人员类别求职人数表
     @Select("SELECT \n" +
             "table_id AS tableId, \n" +
@@ -351,4 +343,65 @@ public interface CommonMapper {
             "no_requ_need AS noRequNeed \n" +
             "from t_tech_grade_num where table_id=#{param1} limit 1;")
     TechGradeNum selectTechGradeNum(Integer tableId);
+
+    //根据时间点查询简易调查期
+    @Select("SELECT \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "start_date AS startDate, \n" +
+            "end_date AS endDate \n" +
+            "from t_upload_period \n" +
+            "where start_date<=#{param1} and #{param1}<end_date limit 1;")
+    SimpleUploadPeriod selectSimpleUploadPeriod(java.sql.Date aimDate);
+
+    //根据id查询调查期
+    @Select("SELECT \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "start_date AS startDate, \n" +
+            "end_date AS endDate, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTime, \n" +
+            "reviser AS reviser, \n" +
+            "from t_upload_period \n" +
+            "where upload_period_id=#{param1} limit 1;")
+    UploadPeriod selectUploadPeriod(Integer uploadPeriodID);
+
+    //根据时间点查询调查期
+    @Select("SELECT \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "start_date AS startDate, \n" +
+            "end_date AS endDate, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTime, \n" +
+            "reviser AS reviser, \n" +
+            "from t_upload_period \n" +
+            "where start_date<=#{param1} and #{param1}<end_date limit 1;")
+    UploadPeriod selectUploadPeriodByTime(java.sql.Date aimDate);
+
+    //根据时间段查询调查期（有任意一天在这个时间段的所有调查期）
+    @Select("SELECT \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "start_date AS startDate, \n" +
+            "end_date AS endDate, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTime, \n" +
+            "reviser AS reviser, \n" +
+            "delete_flag AS deleteFlag \n" +
+            "from t_upload_period \n" +
+            "where #{param1}<end_date and start_date<=#{param2};")
+    List<UploadPeriod> selectUploadPeriodByPeriod(java.sql.Date startDate,java.sql.Date endDate);
+
+    //查询所有调查期
+    @Select("SELECT \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "start_date AS startDate, \n" +
+            "end_date AS endDate, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTime," +
+            "reviser AS reviser, \n" +
+            "from t_upload_period;")
+    List<UploadPeriod> selectAllUploadPeriod();
 }

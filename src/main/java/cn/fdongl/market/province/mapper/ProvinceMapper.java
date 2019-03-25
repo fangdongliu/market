@@ -3,12 +3,11 @@ package cn.fdongl.market.province.mapper;
 
 import cn.fdongl.market.market.entity.Record;
 import cn.fdongl.market.market.entity.UploadInfo;
-import cn.fdongl.market.province.entity.InnerUploadPeriod;
+import cn.fdongl.market.province.entity.UploadPeriod;
 import cn.fdongl.market.province.entity.UserInfoDisplay;
 import org.apache.ibatis.annotations.*;
 import org.springframework.core.annotation.Order;
 
-import java.sql.Date;
 import java.util.List;
 
 @Mapper
@@ -141,78 +140,23 @@ public interface ProvinceMapper {
             "where creator=#{param2} and state_flag=2;")
     Integer uploadUpdatePass(Integer provinceId,Integer aimId);
 
-    //新增调查期
-    @Insert("INSERT INTO t_upload_period " +
-            "(start_date,end_date,create_time,creator,revise_time,reviser,delete_flag) \n" +
-            "values(#{startDate},#{endDate},#{creatTime},#{creator},#{reviseTime},#{reviser},#{deleteFlag});")
-    Integer periodInsert(InnerUploadPeriod period);
+    //省级新增调查期
+    @Insert("INSERT INTO t_upload_period \n" +
+            "(start_date,end_date,create_time,creator,delete_flag) \n" +
+            "values(#{startDate},#{endDate},#{creatTime},#{creator},0);")
+    Integer periodInsert(UploadPeriod uploadPeriod);
 
-    //修改调查期
+    //省级修改调查期
     @Update("UPDATE t_upload_period \n" +
-            "set start_date=#{param1},end_date=#{param2},revise_time=#{param3},reviser=#{param4} \n" +
-            "where upload_period_id=#{param5};")
-    Integer periodUpdate(java.sql.Date startDate, java.sql.Date endDate, java.util.Date reviseDate, Integer reviser, Integer uploadPeriodID);
+            "set start_date=#{startDate},end_date=#{endDate},revise_time=#{reviseTime},reviser=#{reviser} \n" +
+            "where upload_period_id=#{uploadPeriodId};")
+    Integer periodUpdate(UploadPeriod uploadPeriod);
 
-    //时间点查询调查期
-    @Select("SELECT \n" +
-            "upload_period_id AS uploadPeriodId, \n" +
-            "start_date AS startDate, \n" +
-            "end_date AS endDate, \n" +
-            "create_time AS createTime, \n" +
-            "creator AS creator, \n" +
-            "revise_time AS reviseTime, \n" +
-            "reviser AS reviser, \n" +
-            "delete_flag AS deleteFlag \n" +
-            "from t_upload_period \n" +
-            "where #{param1} >= start_date and #{param1} < end_date limit 1;")
-    InnerUploadPeriod selectByTime(Date aimDate);
 
-    //时间段查询调查期
-    @Select("SELECT \n" +
-            "upload_period_id AS uploadPeriodId, \n" +
-            "start_date AS startDate, \n" +
-            "end_date AS endDate, \n" +
-            "create_time AS createTime, \n" +
-            "creator AS creator, \n" +
-            "revise_time AS reviseTime, \n" +
-            "reviser AS reviser, \n" +
-            "delete_flag AS deleteFlag \n" +
-            "from t_upload_period \n" +
-            "where #{param1}<end_date and start_date<=#{param2};")
-    List<InnerUploadPeriod> selectByPeriod(java.sql.Date startDate,java.sql.Date endDate);
 
-    //按id查询调查期
-    @Select("SELECT \n" +
-            "upload_period_id AS uploadPeriodId, \n" +
-            "start_date AS startDate, \n" +
-            "end_date AS endDate, \n" +
-            "create_time AS createTime, \n" +
-            "creator AS creator, \n" +
-            "revise_time AS reviseTime, \n" +
-            "reviser AS reviser, \n" +
-            "delete_flag AS deleteFlag \n" +
-            "from t_upload_period \n" +
-            "where upload_period_id=#{param1} limit 1;")
-    InnerUploadPeriod selectById(Integer uploadPeriodID);
 
-    //获取目前调查期数据条数
-    @Select("SELECT \n" +
-            "count(upload_period_id) \n" +
-            "from t_upload_period limit 1;")
-    Integer getPeriodNumber();
 
-    //查询所有调查期
-    @Select("SELECT \n" +
-            "upload_period_id AS uploadPeriodId, \n" +
-            "start_date AS startDate, \n" +
-            "end_date AS endDate, \n" +
-            "create_time AS createTime, \n" +
-            "revise_time AS reviseTime," +
-            "creator AS creator, \n" +
-            "reviser AS reviser, \n" +
-            "delete_flag AS deleteFlag \n" +
-            "from t_upload_period;")
-    List<InnerUploadPeriod> selectAllPeriod();
+
 
     //查询某用户所有的下级用户
     @Select("SELECT \n" +
