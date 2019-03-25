@@ -37,6 +37,7 @@ public class CommonController extends ControllerBase {
     @PostMapping("/message/select")
     public Object SelectMessage(AppUserDetail appUserDetail) throws Exception {
         return success(commonService.selectMessage(appUserDetail.getId()));
+
     }
 
     //接收通知（用户自己应该收到的通知）
@@ -130,7 +131,12 @@ public class CommonController extends ControllerBase {
         return success(commonService.selectUploadInfoById(userId));
     }
 
-    //
+    //selectUploadInfoByCondition
+    //按用户id查询上传数据
+    @PostMapping("/data/selectUploadInfoByCondition")
+    public Object SelectUploadInfoByCondition(java.sql.Date startDate,java.sql.Date endDate,Integer userId,String condition) throws Exception {
+        return success(commonService.selectUploadInfoByCondition(startDate,endDate,userId,condition));
+    }
 
     //查询当前简易调查期
     @PostMapping("/data/selectSimpleUploadPeriod")
@@ -147,22 +153,12 @@ public class CommonController extends ControllerBase {
         return success(uploadPeriod);
     }
 
-    //按时间点查询调查期
-    @PostMapping("/data/selectUploadPeriodByTime")
-    public Object SelectUploadPeriodByTime(String dateString) throws Exception {
-        java.sql.Date date = new java.sql.Date(dateFormat.parse(dateString).getTime());
-        UploadPeriod uploadPeriod=commonService.selectUploadPeriodByTime(date);
-        uploadPeriod.setStartDateString(dateFormat.format(uploadPeriod.getStartDate()));
-        uploadPeriod.setEndDateString(dateFormat.format(uploadPeriod.getEndDate()));
-        return success(uploadPeriod);
-    }
-
     //按时间段查询调查期
-    @PostMapping("/data/selectUploadPeriodByPeriod")
-    public Object SelectUploadPeriodByPeriod(String startDateString,String endDateString) throws Exception {
+    @PostMapping("/data/selectUploadPeriodByTime")
+    public Object SelectUploadPeriodByTime(String startDateString,String endDateString) throws Exception {
         java.sql.Date startDate = new java.sql.Date(dateFormat.parse(startDateString).getTime());
         java.sql.Date endDate = new java.sql.Date(dateFormat.parse(endDateString).getTime());
-        List<UploadPeriod> uploadPeriodList=commonService.selectUploadPeriodByPeriod(startDate,endDate);
+        List<UploadPeriod> uploadPeriodList=commonService.selectUploadPeriodByTime(startDate,endDate);
         for(UploadPeriod uploadPeriod:uploadPeriodList) {
             uploadPeriod.setStartDateString(dateFormat.format(uploadPeriod.getStartDate()));
             uploadPeriod.setEndDateString(dateFormat.format(uploadPeriod.getEndDate()));
@@ -170,16 +166,8 @@ public class CommonController extends ControllerBase {
         return success(uploadPeriodList);
     }
 
-    //查询所有上报时限
-    @PostMapping("/data/selectAllUploadPeriod")
-    public Object SelectAllUploadPeriod() throws Exception {
-        List<UploadPeriod> uploadPeriodList=commonService.selectAllUploadPeriod();
-        for(UploadPeriod uploadPeriod:uploadPeriodList) {
-            uploadPeriod.setStartDateString(dateFormat.format(uploadPeriod.getStartDate()));
-            uploadPeriod.setEndDateString(dateFormat.format(uploadPeriod.getEndDate()));
-        }
-        return success(uploadPeriodList);
-    }
+
+
 
     //取样分析
     @PostMapping("data/pieChart")

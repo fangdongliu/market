@@ -118,6 +118,11 @@ public class CommonService {
         return commonMapper.selectTechGradeNum(tableId);
     }
 
+    //xxx
+    public List<UploadInfo> selectUploadInfoByCondition(java.sql.Date startDate,java.sql.Date endDate,Integer userId,String condition) throws Exception {
+        return commonMapper.selectUploadInfoByCondition(startDate,endDate,userId,condition);
+    }
+
     //根据用户id查询上传数据信息
     public List<UploadInfo> selectUploadInfoById(Integer userId) throws Exception {
         return commonMapper.selectUploadInfoById(userId);
@@ -134,20 +139,12 @@ public class CommonService {
         return commonMapper.selectUploadPeriod(uploadPeriodId);
     }
 
-    //按时间点查询调查期
-    public UploadPeriod selectUploadPeriodByTime(java.sql.Date date) throws Exception {
-        return commonMapper.selectUploadPeriodByTime(date);
-    }
-
     //按时间段查询调查期
-    public List<UploadPeriod> selectUploadPeriodByPeriod(java.sql.Date startDate, java.sql.Date endDate) throws Exception {
-        return commonMapper.selectUploadPeriodByPeriod(startDate,endDate);
+    public List<UploadPeriod> selectUploadPeriodByTime(java.sql.Date startDate, java.sql.Date endDate) throws Exception {
+        return commonMapper.selectUploadPeriodByTime(startDate,endDate);
     }
 
-    //查询所有上报时限
-    public List<UploadPeriod> selectAllUploadPeriod() throws Exception {
-        return commonMapper.selectAllUploadPeriod();
-    }
+
 
 
 
