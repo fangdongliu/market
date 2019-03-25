@@ -1,7 +1,6 @@
 package cn.fdongl.market.common.controller;
 
 import cn.fdongl.market.common.service.CommonService;
-import cn.fdongl.market.province.entity.UploadPeriod;
 import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.util.ControllerBase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping("/common")//指定接口的一级路径
@@ -157,5 +153,11 @@ public class CommonController extends ControllerBase {
     @PostMapping("/data/selectAllUploadPeriod")
     public Object selectAllUploadPeriod() throws Exception {
         return success(commonService.selectAllUploadPeriod());
+    }
+
+    //取样分析
+    @PostMapping("data/pieChart")
+    public Object pieChart(AppUserDetail appUserDetail,Integer aimUserId,Integer uploadPeriodId)throws Exception{
+        return success(commonService.pieChart(aimUserId,uploadPeriodId));
     }
 }

@@ -9,7 +9,6 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.core.annotation.Order;
 
-import java.sql.Date;
 import java.util.List;
 
 @Mapper
@@ -361,7 +360,7 @@ public interface CommonMapper {
             "create_time AS createTime, \n" +
             "creator AS creator, \n" +
             "revise_time AS reviseTime, \n" +
-            "reviser AS reviser, \n" +
+            "reviser AS reviser \n" +
             "from t_upload_period \n" +
             "where upload_period_id=#{param1} limit 1;")
     UploadPeriod selectUploadPeriod(Integer uploadPeriodID);
@@ -374,7 +373,7 @@ public interface CommonMapper {
             "create_time AS createTime, \n" +
             "creator AS creator, \n" +
             "revise_time AS reviseTime, \n" +
-            "reviser AS reviser, \n" +
+            "reviser AS reviser \n" +
             "from t_upload_period \n" +
             "where start_date<=#{param1} and #{param1}<end_date limit 1;")
     UploadPeriod selectUploadPeriodByTime(java.sql.Date aimDate);
@@ -387,8 +386,7 @@ public interface CommonMapper {
             "create_time AS createTime, \n" +
             "creator AS creator, \n" +
             "revise_time AS reviseTime, \n" +
-            "reviser AS reviser, \n" +
-            "delete_flag AS deleteFlag \n" +
+            "reviser AS reviser \n" +
             "from t_upload_period \n" +
             "where #{param1}<end_date and start_date<=#{param2};")
     List<UploadPeriod> selectUploadPeriodByPeriod(java.sql.Date startDate,java.sql.Date endDate);
@@ -401,7 +399,7 @@ public interface CommonMapper {
             "create_time AS createTime, \n" +
             "creator AS creator, \n" +
             "revise_time AS reviseTime," +
-            "reviser AS reviser, \n" +
+            "reviser AS reviser \n" +
             "from t_upload_period;")
     List<UploadPeriod> selectAllUploadPeriod();
 }
