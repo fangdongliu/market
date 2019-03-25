@@ -68,13 +68,13 @@
                         </el-col>
                     </el-row>
 
-                    <template v-for = "(item, index) in menu">
-                        <el-submenu v-if = "item.child !== null" :index="index">
+                    <template v-for = "(item, index) in menu" >
+                        <el-submenu v-if = "item.children !== null" :index="index">
                             <template slot="title">
                                 <i :class="item.icon"></i>
-                                <span slot="title">{{item.name}}</span>
+                                <span slot="title">{{item.menuName}}</span>
                             </template>
-                            <el-menu-item v-for="(i, index2) in item.child" :index="index+'-'+index2">{{i.name}}</el-menu-item>
+                            <el-menu-item v-for="(i, index2) in item.children" :index="index+'-'+index2">{{i.name}}</el-menu-item>
                         </el-submenu>
                         <el-menu-item v-else :index="index">
                             <i :class="item.icon"></i>
@@ -144,6 +144,7 @@
                     ]
                 }
             ],
+            menuData:[],
             isLogout:true,
             visible:'',
             inputName:'',
@@ -206,7 +207,20 @@
             login() {
                 console.log(vue.inputName, vue.inputPswd);
                 vue.isLogout = false;
-            }
+            },
+            getRightList(){
+                $.ajax({
+                    url:'/right/list',
+                    type:'post',
+                    success(res){
+                        vue.menuData=res.data;
+                        console.log(res.data);
+                    }
+                })
+            },
+        },
+        mounted:function () {
+            this.getRightList();
         }
     })
 </script>

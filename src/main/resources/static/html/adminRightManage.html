@@ -61,19 +61,9 @@
                         <el-form-item label="菜单路径" :label-width="formLabelWidth">
                             <el-input v-model="newRight.menuPath" placeholder="请输入菜单路径"></el-input>
                         </el-form-item>
-                        <!--<el-form-item label="父级权限" :label-width="formLabelWidth">-->
-                            <!--<el-select v-model="newRight.father" clearable placeholder="父级权限" >-->
-                                <!--<el-option-->
-                                        <!--v-for="item in rightData"-->
-                                        <!--:key="item.id"-->
-                                        <!--:label="item.label"-->
-                                        <!--:value="item.id" >-->
-                                <!--</el-option>-->
-                            <!--</el-select>-->
-                        <!--</el-form-item>-->
                     </el-form>
                     <div slot="footer" class="dialog-footer">
-                        <el-button @click="dialogFormVisibleCreate = false">关 闭</el-button>
+                        <el-button @click="closeDialog(newRight)">关 闭</el-button>
                         <el-button type="primary" @click="createRight(newRight)">创 建</el-button>
                     </div>
                 </el-dialog>
@@ -219,7 +209,7 @@
                                     <el-input v-model="right.menuName" placeholder="right.menuName"></el-input>
                                 </el-form-item>
                                 <el-form-item label="菜单路径" :label-width="formLabelWidth">
-                                    <el-input v-model="right.menuName" placeholder="right.menuName"></el-input>
+                                    <el-input v-model="right.menuPath" placeholder="right.menuPath"></el-input>
                                 </el-form-item>
                                 <el-form-item label="权限状态" :label-width="formLabelWidth">
                                     <el-switch
@@ -325,6 +315,13 @@
                 description:'',
                 menuName:'',
                 menuPath:''
+            },
+            nullRight:{
+                id:0,
+                label:'',
+                description:'',
+                menuName:'',
+                menuPath:''
             }
             },
         methods:{
@@ -363,7 +360,11 @@
                 });
 
             },
-
+            closeDialog(newright){
+                var tmp =JSON.stringify(vue.nullRight);
+                vue.newRight=JSON.parse(tmp);
+                vue.dialogFormVisibleCreate = false;
+            },
             createRight(newRight){
                 $.ajax({
                     url:'/right/add',

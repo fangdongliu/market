@@ -58,7 +58,7 @@
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
-                        <el-button @click="dialogFormVisibleCreateCity = false">关 闭</el-button>
+                        <el-button @click="closeDialog(cityUser)">关 闭</el-button>
                         <el-button type="primary" @click="createCity(cityUser)">创 建</el-button>
                     </div>
                 </el-dialog>
@@ -81,7 +81,7 @@
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
-                        <el-button @click="dialogFormVisibleCreatePoint = false">关 闭</el-button>
+                        <el-button @click="closeDialog(pointUser)">关 闭</el-button>
                         <el-button type="primary" @click="createPoint(pointUser)">创 建</el-button>
                     </div>
                 </el-dialog>
@@ -161,7 +161,23 @@
                 userType:2,
                 parent:-1
             },
+            nullCityUser:{
+                count:1,
+                prefix:'city',
+                name:'city',
+                startCount:0,
+                userType:2,
+                parent:-1
+            },
             pointUser:{
+                count:1,
+                prefix:'point',
+                name:'point',
+                startCount:0,
+                userType:3,
+                parent:-1
+            },
+            nullPointUser:{
                 count:1,
                 prefix:'point',
                 name:'point',
@@ -174,6 +190,19 @@
             formLabelWidth:'120px'
         },
         methods:{
+            closeDialog(user){
+                if (user.userType==2) {
+                    var tmp =JSON.stringify(vue3.nullCityUser);
+                    vue3.cityUser=JSON.parse(tmp);
+                    vue3.dialogFormVisibleCreateCity = false;
+                }
+                else if (user.userType==3){
+                    var tmp =JSON.stringify(vue3.nullPointUser);
+                    vue3.pointUser=JSON.parse(tmp);
+                    vue3.dialogFormVisibleCreatePoint = false;
+                }
+
+            },
             createCity(cityUser) {
                 $.ajax({
                     url:'/user/addUsers',

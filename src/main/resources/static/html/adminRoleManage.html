@@ -47,7 +47,7 @@
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
-                        <el-button @click="dialogFormVisibleCreate = false">关 闭</el-button>
+                        <el-button @click="closeDialog(newRole)">关 闭</el-button>
                         <el-button type="primary" @click="createRole(newRole)">创 建</el-button>
                     </div>
                 </el-dialog>
@@ -159,16 +159,25 @@
             currentPage:1,
             total:1000,
             role:{},
-            newRole:
-                {
+            newRole: {
                     name:'',
                     description:'',
                     status:0
-                },
+            },
+            nullRole: {
+                name:'',
+                description:'',
+                status:0
+            },
             tmpIndex:-1,
             newroleRight:[]
         },
         methods:{
+            closeDialog(newPole){
+                var tmp =JSON.stringify(vue4.nullRole);
+                vue4.newRole=JSON.parse(tmp);
+                vue4.dialogFormVisibleCreate = false;
+            },
             createRole(newRole){
                 $.ajax({
                     url:'/role/add',
@@ -185,6 +194,7 @@
                 });
                 this.dialogFormVisibleCreate = false;
                 console.log(newRole);
+                location.reload();
             },
             handleEdit(index, row) {
                 this.getRightList(index);
