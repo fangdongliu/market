@@ -207,6 +207,7 @@ public class ProvinceService {
             return output;
         }
     }
+
     //查询所有监测点用户信息
     public List<UserInfoDisplay> selectAllMarket()throws Exception{
         List<UserInfoDisplay> output=provinceMapper.selectAllMarket();

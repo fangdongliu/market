@@ -1,14 +1,11 @@
 package cn.fdongl.market.market.mapper;
 
-import cn.fdongl.market.common.entity.Notice;
 import cn.fdongl.market.market.entity.*;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.core.annotation.Order;
-
-import java.util.List;
 
 @Mapper
 @Order(1)

@@ -41,7 +41,7 @@ public class CommonController extends ControllerBase {
 
     //接收通知（用户自己应该收到的通知）
     @PostMapping("/message/receive")
-    public Object receiveMessage(AppUserDetail appUserDetail) throws Exception {
+    public Object ReceiveMessage(AppUserDetail appUserDetail) throws Exception {
         return success(commonService.receiveMessage(appUserDetail.getId()));
     }
 
@@ -54,85 +54,93 @@ public class CommonController extends ControllerBase {
 
     //查询单个监测点用户通过的上传信息
     @PostMapping("/data/selectUploadInfo")
-    public Object selectUploadInfo(Integer tableId) throws Exception {
+    public Object SelectUploadInfo(Integer tableId) throws Exception {
         return success(commonService.selectUploadInfo(tableId));
     }
 
     //查询单个监测点用户通过的供求总体人数
     @PostMapping("/data/selectTotalNum")
-    public Object selectTotalNum(Integer tableId) throws Exception {
+    public Object SelectTotalNum(Integer tableId) throws Exception {
         return success(commonService.selectTotalNum(tableId));
     }
 
     //查询单个监测点用户通过的产业需求人数
     @PostMapping("/data/selectIndustryNum")
-    public Object selectIndustryNum(Integer tableId) throws Exception {
+    public Object SelectIndustryNum(Integer tableId) throws Exception {
         return success(commonService.selectIndustryNum(tableId));
     }
 
     //查询单个监测点用户通过的用人单位性质需求人数
     @PostMapping("/data/selectEmployerNum")
-    public Object selectEmployerNum(Integer tableId) throws Exception {
+    public Object SelectEmployerNum(Integer tableId) throws Exception {
         return success(commonService.selectEmployerNum(tableId));
     }
 
     //查询单个监测点用户通过的职业供求人数
     @PostMapping("/data/selectProfNum")
-    public Object selectProfNum(Integer tableId) throws Exception {
+    public Object SelectProfNum(Integer tableId) throws Exception {
         return success(commonService.selectProfNum(tableId));
     }
 
     //查询单个监测点用户通过的需求前十职业
     @PostMapping("/data/selectMostNeeded")
-    public Object selectMostNeeded(Integer tableId) throws Exception {
+    public Object SelectMostNeeded(Integer tableId) throws Exception {
         return success(commonService.selectMostNeeded(tableId));
     }
 
     //查询单个监测点用户通过的饱和前十职业
     @PostMapping("/data/selectLeastNeeded")
-    public Object selectLeastNeeded(Integer tableId) throws Exception {
+    public Object SelectLeastNeeded(Integer tableId) throws Exception {
         return success(commonService.selectLeastNeeded(tableId));
     }
 
     //查询单个监测点用户通过的人员类别求职人数
     @PostMapping("/data/selectJobSeekerNum")
-    public Object selectJobSeekerNum(Integer tableId) throws Exception {
+    public Object SelectJobSeekerNum(Integer tableId) throws Exception {
         return success(commonService.selectJobSeekerNum(tableId));
     }
 
     //查询单个监测点用户通过的性别供求人数
     @PostMapping("/data/selectSexNum")
-    public Object selectSexNum(Integer tableId) throws Exception {
+    public Object SelectSexNum(Integer tableId) throws Exception {
         return success(commonService.selectSexNum(tableId));
     }
 
     //查询单个监测点用户通过的年龄供求人数
     @PostMapping("/data/selectAgeNum")
-    public Object selectAgeNum(Integer tableId)throws Exception {
+    public Object SelectAgeNum(Integer tableId)throws Exception {
         return success(commonService.selectAgeNum(tableId));
     }
 
     //查询单个监测点用户通过的文化程度供求人数
     @PostMapping("/data/selectDegreeNum")
-    public Object selectDegreeNum(Integer tableId) throws Exception {
+    public Object SelectDegreeNum(Integer tableId) throws Exception {
         return success(commonService.selectDegreeNum(tableId));
     }
 
     //查询单个监测点用户通过的技术等级供求人数
     @PostMapping("/data/selectTechGradeNum")
-    public Object selectTechGradeNum(Integer tableId) throws Exception {
+    public Object SelectTechGradeNum(Integer tableId) throws Exception {
         return success(commonService.selectTechGradeNum(tableId));
     }
 
+    //按用户id查询上传数据
+    @PostMapping("/data/selectUploadInfoById")
+    public Object SelectUploadInfoById(Integer userId) throws Exception {
+        return success(commonService.selectUploadInfoById(userId));
+    }
+
+    //
+
     //查询当前简易调查期
     @PostMapping("/data/selectSimpleUploadPeriod")
-    public Object selectSimpleUploadPeriod() throws Exception {
+    public Object SelectSimpleUploadPeriod() throws Exception {
         return success(commonService.selectSimpleUploadPeriod(new Date()));
     }
 
     //按id查询调查期
     @PostMapping("/data/selectUploadPeriod")
-    public Object selectUploadPeriod(Integer uploadPeriodId) throws Exception {
+    public Object SelectUploadPeriod(Integer uploadPeriodId) throws Exception {
         UploadPeriod uploadPeriod=commonService.selectUploadPeriod(uploadPeriodId);
         uploadPeriod.setStartDateString(dateFormat.format(uploadPeriod.getStartDate()));
         uploadPeriod.setEndDateString(dateFormat.format(uploadPeriod.getEndDate()));
@@ -141,7 +149,7 @@ public class CommonController extends ControllerBase {
 
     //按时间点查询调查期
     @PostMapping("/data/selectUploadPeriodByTime")
-    public Object selectUploadPeriodByTime(String dateString) throws Exception {
+    public Object SelectUploadPeriodByTime(String dateString) throws Exception {
         java.sql.Date date = new java.sql.Date(dateFormat.parse(dateString).getTime());
         UploadPeriod uploadPeriod=commonService.selectUploadPeriodByTime(date);
         uploadPeriod.setStartDateString(dateFormat.format(uploadPeriod.getStartDate()));
@@ -151,7 +159,7 @@ public class CommonController extends ControllerBase {
 
     //按时间段查询调查期
     @PostMapping("/data/selectUploadPeriodByPeriod")
-    public Object selectUploadPeriodByPeriod(String startDateString,String endDateString) throws Exception {
+    public Object SelectUploadPeriodByPeriod(String startDateString,String endDateString) throws Exception {
         java.sql.Date startDate = new java.sql.Date(dateFormat.parse(startDateString).getTime());
         java.sql.Date endDate = new java.sql.Date(dateFormat.parse(endDateString).getTime());
         List<UploadPeriod> uploadPeriodList=commonService.selectUploadPeriodByPeriod(startDate,endDate);
@@ -164,7 +172,7 @@ public class CommonController extends ControllerBase {
 
     //查询所有上报时限
     @PostMapping("/data/selectAllUploadPeriod")
-    public Object selectAllUploadPeriod() throws Exception {
+    public Object SelectAllUploadPeriod() throws Exception {
         List<UploadPeriod> uploadPeriodList=commonService.selectAllUploadPeriod();
         for(UploadPeriod uploadPeriod:uploadPeriodList) {
             uploadPeriod.setStartDateString(dateFormat.format(uploadPeriod.getStartDate()));
@@ -175,7 +183,7 @@ public class CommonController extends ControllerBase {
 
     //取样分析
     @PostMapping("data/pieChart")
-    public Object pieChart(AppUserDetail appUserDetail,Integer aimUserId,Integer uploadPeriodId)throws Exception{
+    public Object PieChart(AppUserDetail appUserDetail,Integer aimUserId,Integer uploadPeriodId)throws Exception{
         return success(commonService.pieChart(aimUserId,uploadPeriodId));
     }
 }

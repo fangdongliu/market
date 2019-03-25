@@ -68,7 +68,7 @@ public class ProvinceController extends ControllerBase {
 
     //省级新建上报时限
     @PostMapping("/uploadPeriod/insert")
-    public Object uploadPeriodInsert(AppUserDetail appUserDetail, UploadPeriod uploadPeriod) throws Exception {
+    public Object UploadPeriodInsert(AppUserDetail appUserDetail, UploadPeriod uploadPeriod) throws Exception {
         uploadPeriod.setStartDate(new java.sql.Date(dateFormat.parse(uploadPeriod.getStartDateString()).getTime()));
         uploadPeriod.setEndDate(new java.sql.Date(dateFormat.parse(uploadPeriod.getEndDateString()).getTime()));
 //        provinceService.timeCheck(start,end);//暂时弃用调查期合法性的判断
@@ -80,7 +80,7 @@ public class ProvinceController extends ControllerBase {
 
     //省级修改上报时限
     @PostMapping("/uploadPeriod/update")
-    public Object uploadPeriodUpdate(AppUserDetail appUserDetail, UploadPeriod uploadPeriod) throws Exception {
+    public Object UploadPeriodUpdate(AppUserDetail appUserDetail, UploadPeriod uploadPeriod) throws Exception {
         uploadPeriod.setStartDate(new java.sql.Date(dateFormat.parse(uploadPeriod.getStartDateString()).getTime()));
         uploadPeriod.setEndDate(new java.sql.Date(dateFormat.parse(uploadPeriod.getEndDateString()).getTime()));
 //        provinceService.timeCheck(start,end);//暂时弃用调查期合法性的判断
@@ -95,11 +95,7 @@ public class ProvinceController extends ControllerBase {
 
 
 
-    //查询目标用户报表，待移动
-    @PostMapping("/data/selectMarketData")
-    public Object SelectNowUserUploadInfo(AppUserDetail appUserDetail,Integer aimUserId) throws Exception {
-        return success(commonService.selectUploadInfoById(aimUserId));
-    }
+
 
     //当前用户是省级用户时，查询用户下属的市级用户，待移动
     @PostMapping("/selectCityUser")
@@ -131,7 +127,7 @@ public class ProvinceController extends ControllerBase {
 
     //条件查询操作用户范围内的所有监测点,流程需要优化，待移动
     @PostMapping("/userSearch")
-    public Object userSearch(AppUserDetail appUserDetail,String input) throws Exception {
+    public Object UserSearch(AppUserDetail appUserDetail,String input) throws Exception {
         Integer type = provinceService.selectUsertype(appUserDetail.getId());
         if(type==1){
             return success(provinceService.userSearch(input));
@@ -143,5 +139,4 @@ public class ProvinceController extends ControllerBase {
             throw new Exception("Authority Error");
         }
     }
-
 }

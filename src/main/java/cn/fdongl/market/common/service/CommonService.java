@@ -10,7 +10,6 @@ import cn.fdongl.market.province.service.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -56,11 +55,6 @@ public class CommonService {
         if(n!=1){
             throw new Exception("删除失败");
         }
-    }
-
-    //根据用户id查询上传数据信息
-    public List<UploadInfo> selectUploadInfoById(Integer userId) throws Exception {
-        return commonMapper.selectUploadInfoById(userId);
     }
 
     //上传数据信息表查询
@@ -121,6 +115,11 @@ public class CommonService {
     //技术等级供求人数表查询
     public TechGradeNum selectTechGradeNum(Integer tableId) throws Exception {
         return commonMapper.selectTechGradeNum(tableId);
+    }
+
+    //根据用户id查询上传数据信息
+    public List<UploadInfo> selectUploadInfoById(Integer userId) throws Exception {
+        return commonMapper.selectUploadInfoById(userId);
     }
 
     //根据时间点查询简易调查期

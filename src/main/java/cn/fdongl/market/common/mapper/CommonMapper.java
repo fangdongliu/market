@@ -68,18 +68,6 @@ public interface CommonMapper {
             "where notice_id=#{param2};")
     Integer deleteMessage(Integer userId,Integer noticeId);
 
-    //查询某用户的上传数据信息
-    @Select("SELECT \n" +
-            "table_id AS tableId, \n" +
-            "upload_period_id AS uploadPeriodId, \n" +
-            "state_flag AS stateFlag, \n" +
-            "create_time AS createTime, \n" +
-            "creator AS creator, \n" +
-            "revise_time AS reviseTime, \n" +
-            "reviser AS reviser \n" +
-            "from t_upload_info where state_flag=3 and creator=#{param1};")
-    List<UploadInfo> selectUploadInfoById(Integer userId);
-
     //查询上传数据信息
     @Select("SELECT \n" +
             "table_id AS tableId, \n" +
@@ -342,6 +330,18 @@ public interface CommonMapper {
             "no_requ_need AS noRequNeed \n" +
             "from t_tech_grade_num where table_id=#{param1} limit 1;")
     TechGradeNum selectTechGradeNum(Integer tableId);
+
+    //根据用户id查询上传数据信息
+    @Select("SELECT \n" +
+            "table_id AS tableId, \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "state_flag AS stateFlag, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTime, \n" +
+            "reviser AS reviser \n" +
+            "from t_upload_info where state_flag=3 and creator=#{param1};")
+    List<UploadInfo> selectUploadInfoById(Integer userId);
 
     //根据时间点查询简易调查期
     @Select("SELECT \n" +
