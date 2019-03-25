@@ -4,6 +4,9 @@ import cn.fdongl.market.common.entity.Notice;
 import cn.fdongl.market.common.mapper.CommonMapper;
 import cn.fdongl.market.market.entity.*;
 import cn.fdongl.market.province.entity.UploadPeriod;
+import cn.fdongl.market.province.entity.UserInfoDisplay;
+import cn.fdongl.market.province.mapper.ProvinceMapper;
+import cn.fdongl.market.province.service.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,10 @@ public class CommonService {
 
     @Autowired
     CommonMapper commonMapper;
+    @Autowired
+    ProvinceService provinceService;
+    @Autowired
+    ProvinceMapper provinceMapper;
 
     //发送一条全局通知
     public void sendMessageGlobal(String title,String content,Integer userId) throws Exception {
@@ -140,5 +147,67 @@ public class CommonService {
     //查询所有上报时限
     public List<UploadPeriod> selectAllUploadPeriod() throws Exception {
         return commonMapper.selectAllUploadPeriod();
+    }
+
+
+
+    //取样分析
+    public IndustryNum pieChart(Integer aimUserId,Integer uploadPeriodId)throws Exception{
+        int a=provinceMapper.selectUsertype(aimUserId);
+        if(a==3){
+            List<UploadInfo> uploadInfos=selectUploadInfoById(aimUserId);
+            for(int i=0;i<uploadInfos.size();i++){
+                if(uploadInfos.get(i).getUploadPeriodId()==uploadPeriodId){
+                    int tableId=uploadInfos.get(i).getTableId();
+                    return selectIndustryNum(tableId);
+                }
+            }
+            throw new Exception("PeriodId Errorr");
+        }
+        else if(a==2){
+            List<UserInfoDisplay> sub=provinceService.selectSub(aimUserId);
+            IndustryNum output=new IndustryNum();
+            for(int i=0;i<sub.size();i++){
+                List<UploadInfo> uploadInfos=selectUploadInfoById(aimUserId);
+                for(int j=0;j<uploadInfos.size();j++){
+                    if(uploadInfos.get(j).getUploadPeriodId()==uploadPeriodId){
+                        int tableId=uploadInfos.get(j).getTableId();
+                        IndustryNum temp=selectIndustryNum(tableId);
+                        output=addIndustryNum(output,temp);
+                        break;
+                    }
+                }
+            }
+            return  output;
+        }
+        else{
+            throw new Exception("Can not create pieChart for province");
+        }
+    }
+    //将两个industryNum类中的数据相加
+    public IndustryNum addIndustryNum(IndustryNum a,IndustryNum b)throws Exception{
+        a.setIndustry1Need(a.getIndustry1Need()+b.getIndustry1Need());
+        a.setIndustry2Need(a.getIndustry2Need()+b.getIndustry2Need());
+        a.setIndustry3Need(a.getIndustry3Need()+b.getIndustry3Need());
+        a.setMineNeed(a.getMineNeed()+b.getMineNeed());
+        a.setManuNeed(a.getManuNeed()+b.getManuNeed());
+        a.setElecGasWaterNeed(a.getElecGasWaterNeed()+b.getElecGasWaterNeed());
+        a.setArchNeed(a.getArchNeed()+b.getArchNeed());
+        a.setTranStorPostNeed(a.getTranStorPostNeed()+b.getTranStorPostNeed());
+        a.setInfoCompSoftNeed(a.getInfoCompSoftNeed()+b.getInfoCompSoftNeed());
+        a.setRetailNeed(a.getRetailNeed()+b.getRetailNeed());
+        a.setAccoCaterNeed(a.getAccoCaterNeed()+b.getAccoCaterNeed());
+        a.setFinanceNeed(a.getFinanceNeed()+b.getFinanceNeed());
+        a.setEstateNeed(a.getEstateNeed()+b.getEstateNeed());
+        a.setLeaseBusiServNeed(a.getLeaseBusiServNeed()+b.getLeaseBusiServNeed());
+        a.setReseTechAddrNeed(a.getReseTechAddrNeed()+b.getReseTechAddrNeed());
+        a.setWaterEnviFaciNeed(a.getWaterEnviFaciNeed()+b.getWaterEnviFaciNeed());
+        a.setResiServNeed(a.getResiServNeed()+b.getResiServNeed());
+        a.setEduNeed(a.getEduNeed()+b.getEduNeed());
+        a.setHealSecuWelfNeed(a.getHealSecuWelfNeed()+b.getHealSecuWelfNeed());
+        a.setCultSportEnteNeed(a.getCultSportEnteNeed()+b.getCultSportEnteNeed());
+        a.setManaOrgaNeed(a.getManaOrgaNeed()+b.getManaOrgaNeed());
+        a.setInteOrgaNeed(a.getInteOrgaNeed()+b.getInteOrgaNeed());
+        return a;
     }
 }
