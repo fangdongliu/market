@@ -144,4 +144,15 @@ public class ProvinceController extends ControllerBase {
         }
     }
 
+    //省级按条件查询创建的用户账号
+    @PostMapping("/account/accountQuery")
+    public Object AccountQuery(AppUserDetail appUserDetail,String username,String fullname) throws Exception {
+        Integer type = provinceService.selectUsertype(appUserDetail.getId());
+        if(type==2||type==3){
+            return fail();
+        }
+        return success(provinceService.accountQuery(username,fullname));
+    }
+
+
 }
