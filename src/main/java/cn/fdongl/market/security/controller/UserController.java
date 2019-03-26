@@ -47,6 +47,14 @@ public class UserController extends ControllerBase {
             AppUserDetail userDetail,
             @Valid AddUserInput input
             ) throws Exception {
+        if(userDetail.getId()==1){
+            input.setUserType(1);
+        }else if(input.getParent()==null){
+            input.setUserType(2);
+            input.setParent(userDetail.getId());
+        }else{
+            input.setUserType(3);
+        }
         userService.addUsers(userDetail.getId(),
                 input.getParent(),
                 input.getUserType(),

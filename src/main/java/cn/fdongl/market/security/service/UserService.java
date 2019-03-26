@@ -47,6 +47,7 @@ public class UserService {
                     it.remove();
                 }
             }
+
             return userDataMap.values().toArray();
         }
 

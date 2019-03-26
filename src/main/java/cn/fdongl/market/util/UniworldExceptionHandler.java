@@ -16,5 +16,4 @@ public class UniworldExceptionHandler {
         result.setCode(1);
         return result;
     }
-
 }

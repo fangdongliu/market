@@ -17,7 +17,7 @@ public class TestService {
 
         int i = userMapper.test2();
 
-        throw new RuntimeException();
+       // throw new RuntimeException();
 
     }
 

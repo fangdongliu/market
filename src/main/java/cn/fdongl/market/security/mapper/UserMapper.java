@@ -76,7 +76,7 @@ public interface UserMapper {
             "            ) AND t_right.delete_flag=0")
     List<String> getUserRights(String userId);
 
-    @Select("SELECT t_right.menu_name,menu_path,father_id,right_id\n" +
+    @Select("SELECT t_right.menu_name as menuName,menu_path as menuPath,father_id as father,right_id as id\n" +
             "from t_right\n" +
             "WHERE t_right.right_id\n" +
             "IN(\n" +
@@ -85,12 +85,12 @@ public interface UserMapper {
             "(SELECT t_role.role_id FROM t_role WHERE t_role.role_id IN \n" +
             "(SELECT t_user_role.role_id FROM t_user_role WHERE t_user_role.user_id = 1)\n" +
             "AND t_role.delete_flag = 0)\n" +
-            ") AND t_right.delete_flag=0 AND menu_name != null")
+            ") AND t_right.delete_flag=0 AND menu_name is not null")
     @MapKey("id")
     Map<Integer, Right>getMenu(Integer userId);
 
-    @Select("SELECT t_right.menu_name,menu_path,father_id,right_id\n" +
-            "from t_right where t_right.delete_flag=0 AND menu_name != null")
+    @Select("SELECT t_right.menu_name as menuName,menu_path as menuPath,father_id as father,right_id as id\n" +
+            "from t_right where t_right.delete_flag=0 AND menu_name is not null")
     @MapKey("id")
     Map<Integer, Right>getSysMenu();
 

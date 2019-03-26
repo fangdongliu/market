@@ -1,16 +1,19 @@
-package cn.fdongl.market.data.mapper;
+package cn.fdongl.market.common.mapper;
 
+import cn.fdongl.market.common.entity.Notice;
 import cn.fdongl.market.market.entity.*;
+import cn.fdongl.market.province.entity.UploadPeriod;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.core.annotation.Order;
 
 import java.util.List;
 
 @Mapper
 @Order(1)
-public interface DataMapper {
+public interface CommonMapper {
 
     //发送一条通知，单点发送
     @Insert("INSERT INTO t_notice \n" +
@@ -25,27 +28,45 @@ public interface DataMapper {
     Integer sendMessageGlobal(String title,String content,Integer userId);
 
     //更新一条通知
+    @Update("UPDATE t_notice SET \n" +
+            "notice_title=#{param1},notice_content=#{param2},reviser=#{param3},revise_time=now() \n" +
+            "where notice_id=#{param4};")
+    Integer updateMessage(String title,String content,Integer userId,Integer notice_id);
 
-    //根据时间点查询简易调查期
+    //根据用户id查询他发送的通知
     @Select("SELECT \n" +
-            "upload_period_id AS uploadPeriodId, \n" +
-            "start_date AS startDate, \n" +
-            "end_date AS endDate \n" +
-            "from t_upload_period \n" +
-            "where start_date<=#{param1} and #{param1}<end_date limit 1;")
-    SimpleUploadPeriod selectSimpleUploadPeriod(java.sql.Date aimDate);
-
-    //查询某用户的上传数据信息
-    @Select("SELECT \n" +
-            "table_id AS tableId, \n" +
-            "upload_period_id AS uploadPeriodId, \n" +
-            "state_flag AS stateFlag, \n" +
+            "notice_id AS noticeId, \n" +
+            "notice_title AS noticeTitle, \n" +
+            "notice_content AS noticeContent, \n" +
             "create_time AS createTime, \n" +
             "creator AS creator, \n" +
             "revise_time AS reviseTime, \n" +
-            "reviser AS reviser \n" +
-            "from t_upload_info where state_flag=3 and creator=#{param1};")
-    List<UploadInfo> selectUploadInfoById(Integer userId);
+            "reviser AS reviser, \n" +
+            "receiver AS receiver \n" +
+            "from t_notice where creator=#{param1} and delete_flag=0;")
+    List<Notice> selectMessage(Integer userId);
+
+    //查询自己的通知
+    @Select("SELECT \n" +
+            "notice_id AS noticeId, \n" +
+            "notice_title AS noticeTitle, \n" +
+            "notice_content AS noticeContent, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTime, \n" +
+            "reviser AS reviser, \n" +
+            "receiver AS receiver \n" +
+            "from t_notice where delete_flag=0 and \n" +
+            "(receiver=#{param1} or \n" +
+            "creator=(select superior from t_user where user_id=#{param1}) or \n" +
+            "(select usertype from t_user where user_id=t_notice.creator)=1);")
+    List<Notice> receiveMessage(Integer userId);
+
+    //删除一条通知
+    @Update("UPDATE t_notice SET \n" +
+            "delete_flag=1,reviser=#{param1},revise_time=now() \n" +
+            "where notice_id=#{param2};")
+    Integer deleteMessage(Integer userId,Integer noticeId);
 
     //查询上传数据信息
     @Select("SELECT \n" +
@@ -227,7 +248,6 @@ public interface DataMapper {
             "from t_least_needed where table_id=#{param1} limit 1;")
     LeastNeeded selectLeastNeeded(Integer tableId);
 
-
     //查询人员类别求职人数表
     @Select("SELECT \n" +
             "table_id AS tableId, \n" +
@@ -310,4 +330,83 @@ public interface DataMapper {
             "no_requ_need AS noRequNeed \n" +
             "from t_tech_grade_num where table_id=#{param1} limit 1;")
     TechGradeNum selectTechGradeNum(Integer tableId);
+
+    //上传数据条件查询，查时间段，用户id和条件
+    @Select("SELECT \n" +
+            "table_id AS tableId, \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "state_flag AS stateFlag, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTime, \n" +
+            "reviser AS reviser \n" +
+            "from t_upload_info where \n" +
+            "delete_flag=0 \n" +
+            "and state_flag=3 \n" +
+            "and ( \n" +
+            "(#{param1}<(select @tmp:=t_upload_period.start_date from t_upload_period where t_upload_period.upload_period_id=t_upload_info.upload_period_id limit 1) and @tmp<#{param2}) or \n" +
+            "(@tmp<=#{param1} and #{param1}<(select t_upload_period.end_date from t_upload_period where t_upload_period.upload_period_id=t_upload_info.upload_period_id limit 1)) \n" +
+            ") \n" +//时间段
+            "and ( \n" +
+            "(1=(case when #{param3} is not null then (select @tmp:=usertype from t_user where t_user.user_id=#{param3} limit 1) else 1 end)) or \n" +
+            "(2=(case when #{param3} is not null then @tmp else 2 end) and t_upload_info.creator in (select t_user.user_id from t_user where t_user.superior=(case when #{param3} is not null then #{param3} else t_user.superior end))) or \n" +
+            "(3=(case when #{param3} is not null then @tmp else 3 end) and t_upload_info.creator=(case when #{param3} is not null then #{param3} else t_upload_info.creator end)) \n" +
+            ") \n" +//用户id
+            "and ( \n" +
+            "((select @tmp:=fullname from t_user where t_user.user_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)) or \n" +
+            "((select @tmp:=region_emp_name from t_record_info where region_emp_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)) or \n" +
+            "((select @tmp:=region_name from t_record_info where region_emp_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)) or \n" +
+            "((select @tmp:=region_emp_contact from t_record_info where region_emp_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)) \n" +
+            ") \n" +//条件
+            ";")
+    List<UploadInfo> selectUploadInfoByCondition(java.sql.Date startDate,java.sql.Date endDate,Integer userId,String condition);
+
+    //根据用户id查询上传数据信息
+    @Select("SELECT \n" +
+            "table_id AS tableId, \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "state_flag AS stateFlag, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTime, \n" +
+            "reviser AS reviser \n" +
+            "from t_upload_info where state_flag=3 and creator=#{param1};")
+    List<UploadInfo> selectUploadInfoById(Integer userId);
+
+    //根据时间点查询简易调查期
+    @Select("SELECT \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "start_date AS startDate, \n" +
+            "end_date AS endDate \n" +
+            "from t_upload_period \n" +
+            "where start_date<=#{param1} and #{param1}<end_date limit 1;")
+    SimpleUploadPeriod selectSimpleUploadPeriod(java.sql.Date date);
+
+    //根据id查询调查期
+    @Select("SELECT \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "start_date AS startDate, \n" +
+            "end_date AS endDate, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTime, \n" +
+            "reviser AS reviser \n" +
+            "from t_upload_period \n" +
+            "where upload_period_id=#{param1} limit 1;")
+    UploadPeriod selectUploadPeriod(Integer uploadPeriodID);
+
+    //根据时间段查询调查期（有任意一天在这个时间段的所有调查期）
+    @Select("SELECT \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "start_date AS startDate, \n" +
+            "end_date AS endDate, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTime, \n" +
+            "reviser AS reviser \n" +
+            "from t_upload_period where \n" +
+            "delete_flag=0 and \n" +
+            "((#{param1}<start_date and start_date<#{param2}) or \n" +
+            "(start_date<=#{param1} and #{param1}<end_date));")
+    List<UploadPeriod> selectUploadPeriodByTime(java.sql.Date startDate,java.sql.Date endDate);
 }

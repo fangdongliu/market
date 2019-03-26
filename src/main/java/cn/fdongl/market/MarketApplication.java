@@ -13,7 +13,6 @@ import java.util.List;
 
 @EnableTransactionManagement
 @SpringBootApplication
-@MapperScan("cn.fdongl.market")
 public class MarketApplication implements WebMvcConfigurer {
 
     public static void main(String[] args) {

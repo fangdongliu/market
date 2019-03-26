@@ -1,6 +1,6 @@
 package cn.fdongl.market.market.controller;
 
-import cn.fdongl.market.data.service.DataService;
+import cn.fdongl.market.common.service.CommonService;
 import cn.fdongl.market.market.entity.*;
 import cn.fdongl.market.market.service.MarketService;
 import cn.fdongl.market.security.entity.AppUserDetail;
@@ -20,7 +20,7 @@ public class MarketController extends ControllerBase {
     MarketService marketService;
 
     @Autowired
-    DataService dataService;
+    CommonService commonService;
 
     //监测点新建备案
     @PostMapping("/record/insert")
@@ -45,8 +45,7 @@ public class MarketController extends ControllerBase {
     //监测点查询备案（默认查询流程）
     @PostMapping("/record/select")
     public Object RecordSelect(AppUserDetail appUserDetail) throws Exception {
-        Object data=marketService.recordSelect(appUserDetail.getId());
-        return success(data);
+        return success(marketService.recordSelect(appUserDetail.getId()));
     }
 
     //监测点新建数据上传
@@ -65,7 +64,11 @@ public class MarketController extends ControllerBase {
             AgeNum ageNum,
             DegreeNum degreeNum,
             TechGradeNum techGradeNum) throws Exception {
-        SimpleUploadPeriod simpleUploadPeriod=dataService.selectSimpleUploadPeriod(new Date());
+        Integer activation=marketService.selectActivation(appUserDetail.getId());
+        if(activation==0){
+            throw new Exception("账号未激活，不能上传数据");
+        }
+        SimpleUploadPeriod simpleUploadPeriod= commonService.selectSimpleUploadPeriod(new Date());
         if(simpleUploadPeriod==null){
             throw new Exception("当前时间不在上传期内，无法上传数据");
         }
@@ -105,7 +108,7 @@ public class MarketController extends ControllerBase {
             AgeNum ageNum,
             DegreeNum degreeNum,
             TechGradeNum techGradeNum) throws Exception {
-        SimpleUploadPeriod simpleUploadPeriod=dataService.selectSimpleUploadPeriod(new Date());
+        SimpleUploadPeriod simpleUploadPeriod= commonService.selectSimpleUploadPeriod(new Date());
         if(uploadInfo.getUploadPeriodId()==null&&simpleUploadPeriod==null){
             throw new Exception("当前时间不在上传期内，无法上传数据");
         }
@@ -125,5 +128,11 @@ public class MarketController extends ControllerBase {
                 degreeNum,
                 techGradeNum);
         return success();
+    }
+
+    //监测点查询上传数据（默认流程）,只能查到保存和待审核状态
+    @PostMapping("/upload/select")
+    public Object UploadSelect(AppUserDetail appUserDetail) throws Exception {
+        return success(marketService.uploadSelect(appUserDetail.getId()));
     }
 }

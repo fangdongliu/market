@@ -37,6 +37,11 @@ public class MarketService {
         else return record;
     }
 
+    //监测点用户查询激活状态
+    public Integer selectActivation(Integer userId) throws Exception {
+        return marketMapper.selectActivation(userId);
+    }
+
     //监测点新建上传数据，事务
     @Transactional
     public void uploadInsert(UploadInfo uploadInfo,
@@ -195,5 +200,10 @@ public class MarketService {
         if(n!=1){
             throw new RuntimeException("更新技术等级供求人数失败");
         }
+    }
+
+    //监测点查询上传数据（默认流程），非事务
+    public UploadInfo uploadSelect(Integer userId) throws Exception {
+        return marketMapper.uploadSelect(userId);
     }
 }

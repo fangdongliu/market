@@ -18,18 +18,22 @@ public class ExampleController extends ControllerBase {
     @Autowired
     TestService testService;
 
-
+    @RequestMapping("aaaa")
+    public Object aa() throws Exception {
+        return "asf";
+    }
 
     @GetMapping("/hh")//指定接口的下一级路径，最终路径为 '/example/hh'
     public Object hhh(String hh,Integer dd){
         try {
+            aa();
             testService.hh();
         } catch (Exception e) {
             System.out.println("1");
         }
         return success("1234");
     }
-    @RolesAllowed("READ_EX")    //描述访问接口所需权限
+    @RolesAllowed("USER")    //描述访问接口所需权限
     @RequestMapping("/ad")
     public Object hha(AppUserDetail userDetail){//通过在参数中加入AppUserDetail以获取用户信息
         return fail(userDetail.getUsername());
