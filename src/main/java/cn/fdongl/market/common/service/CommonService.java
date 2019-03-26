@@ -189,7 +189,7 @@ public class CommonService {
     //对比分析，返回某张表在多个调查期的数据
     public List<TotalNum> lineChart1(Integer aimUserId,java.sql.Date startDate,java.sql.Date endDate)throws Exception{
         int a=provinceMapper.selectUsertype(aimUserId);
-        List<UploadPeriod> periods=commonMapper.selectUploadPeriodByPeriod(startDate,endDate);
+        List<UploadPeriod> periods=commonMapper.selectUploadPeriodByTime(startDate,endDate);
         List<TotalNum> output=new ArrayList<TotalNum>();
         if(a==3){
             List<UploadInfo> uploadInfos=selectUploadInfoById(aimUserId);

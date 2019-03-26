@@ -331,7 +331,7 @@ public interface CommonMapper {
             "from t_tech_grade_num where table_id=#{param1} limit 1;")
     TechGradeNum selectTechGradeNum(Integer tableId);
 
-    //多条件查询
+    //上传数据条件查询，查时间段，用户id和条件
     @Select("SELECT \n" +
             "table_id AS tableId, \n" +
             "upload_period_id AS uploadPeriodId, \n" +
@@ -341,14 +341,24 @@ public interface CommonMapper {
             "revise_time AS reviseTime, \n" +
             "reviser AS reviser \n" +
             "from t_upload_info where \n" +
-            "delete_flag=0 and \n" +
-            "((#{param1}<=(select @tmp:=t_upload_period.start_date from t_upload_period where t_upload_period.upload_period_id=t_upload_info.upload_period_id) and @tmp<#{param2}) or \n" +
-            "(#{param1}<(select @tmp:=t_upload_period.end_date from t_upload_period where t_upload_period.upload_period_id=t_upload_info.upload_period_id) and @tmp<=#{param2})) and \n" +
-            "(t_upload_info.creator=case when #{param3} is not null then #{param3} else t_upload_info.creator end) and \n" +
-            "(((select @tmp:=fullname from t_user where t_user.user_id=t_upload_info.creator) like case when#{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end) or \n" +
-            "((select @tmp:=region_emp_name from t_record_info where region_emp_id=t_upload_info.creator) like case when#{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end) or \n" +
-            "((select @tmp:=region_name from t_record_info where region_emp_id=t_upload_info.creator) like case when#{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end) or \n" +
-            "((select @tmp:=region_emp_contact from t_record_info where region_emp_id=t_upload_info.creator) like case when#{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end));")
+            "delete_flag=0 \n" +
+            "and state_flag=3 \n" +
+            "and ( \n" +
+            "(#{param1}<(select @tmp:=t_upload_period.start_date from t_upload_period where t_upload_period.upload_period_id=t_upload_info.upload_period_id limit 1) and @tmp<#{param2}) or \n" +
+            "(@tmp<=#{param1} and #{param1}<(select t_upload_period.end_date from t_upload_period where t_upload_period.upload_period_id=t_upload_info.upload_period_id limit 1)) \n" +
+            ") \n" +//时间段
+            "and ( \n" +
+            "(1=(case when #{param3} is not null then (select @tmp:=usertype from t_user where t_user.user_id=#{param3} limit 1) else 1 end)) or \n" +
+            "(2=(case when #{param3} is not null then @tmp else 2 end) and t_upload_info.creator in (select t_user.user_id from t_user where t_user.superior=(case when #{param3} is not null then #{param3} else t_user.superior end))) or \n" +
+            "(3=(case when #{param3} is not null then @tmp else 3 end) and t_upload_info.creator=(case when #{param3} is not null then #{param3} else t_upload_info.creator end)) \n" +
+            ") \n" +//用户id
+            "and ( \n" +
+            "((select @tmp:=fullname from t_user where t_user.user_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)) or \n" +
+            "((select @tmp:=region_emp_name from t_record_info where region_emp_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)) or \n" +
+            "((select @tmp:=region_name from t_record_info where region_emp_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)) or \n" +
+            "((select @tmp:=region_emp_contact from t_record_info where region_emp_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)) \n" +
+            ") \n" +//条件
+            ";")
     List<UploadInfo> selectUploadInfoByCondition(java.sql.Date startDate,java.sql.Date endDate,Integer userId,String condition);
 
     //根据用户id查询上传数据信息
@@ -394,8 +404,9 @@ public interface CommonMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTime, \n" +
             "reviser AS reviser \n" +
-            "from t_upload_period where delete_flag=0 and \n" +
-            "(#{param1}<=start_date and start_date<#{param2}) or \n" +
-            "(#{param1}<end_date and end_date<=#{param2});")
+            "from t_upload_period where \n" +
+            "delete_flag=0 and \n" +
+            "((#{param1}<start_date and start_date<#{param2}) or \n" +
+            "(start_date<=#{param1} and #{param1}<end_date));")
     List<UploadPeriod> selectUploadPeriodByTime(java.sql.Date startDate,java.sql.Date endDate);
 }
