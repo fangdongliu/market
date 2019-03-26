@@ -45,8 +45,7 @@ public class MarketController extends ControllerBase {
     //监测点查询备案（默认查询流程）
     @PostMapping("/record/select")
     public Object RecordSelect(AppUserDetail appUserDetail) throws Exception {
-        Object data=marketService.recordSelect(appUserDetail.getId());
-        return success(data);
+        return success(marketService.recordSelect(appUserDetail.getId()));
     }
 
     //监测点新建数据上传
@@ -65,6 +64,10 @@ public class MarketController extends ControllerBase {
             AgeNum ageNum,
             DegreeNum degreeNum,
             TechGradeNum techGradeNum) throws Exception {
+        Integer activation=marketService.selectActivation(appUserDetail.getId());
+        if(activation==0){
+            throw new Exception("账号未激活，不能上传数据");
+        }
         SimpleUploadPeriod simpleUploadPeriod= commonService.selectSimpleUploadPeriod(new Date());
         if(simpleUploadPeriod==null){
             throw new Exception("当前时间不在上传期内，无法上传数据");
@@ -125,5 +128,11 @@ public class MarketController extends ControllerBase {
                 degreeNum,
                 techGradeNum);
         return success();
+    }
+
+    //监测点查询上传数据（默认流程）,只能查到保存和待审核状态
+    @PostMapping("/upload/select")
+    public Object UploadSelect(AppUserDetail appUserDetail) throws Exception {
+        return success(marketService.uploadSelect(appUserDetail.getId()));
     }
 }

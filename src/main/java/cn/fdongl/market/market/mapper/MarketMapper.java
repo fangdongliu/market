@@ -70,6 +70,14 @@ public interface MarketMapper {
             "from t_record_info where region_emp_id=#{param1} and (state_flag=0 or state_flag=1) limit 1;")
     Record recordSelectUnfinished(Integer userId);
 
+    //监测点查询激活状态
+    @Select("SELECT \n" +
+            "state_flag AS stateFlag \n" +
+            "from t_user \n" +
+            "where delete_flag=0 and \n" +
+            "user_id=#{param1} limit 1;")
+    Integer selectActivation(Integer userId);
+
     //查询upload_info的下一个自增id
     @Select("SELECT AUTO_INCREMENT \n" +
             "FROM INFORMATION_SCHEMA.TABLES \n" +
@@ -333,4 +341,18 @@ public interface MarketMapper {
             "seni_prof_jobseek=#{seniProfJobseek},no_tech_jobseek=#{noTechJobseek},no_requ_need=#{noRequNeed} \n" +
             "where table_id=#{tableId};")
     Integer uploadUpdateTechGradeNum(TechGradeNum techGradeNum);
+
+    //监测点查询上传数据（默认流程）
+    @Select("SELECT \n" +
+            "table_id AS tableId, \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "state_flag AS stateFlag, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTime, \n" +
+            "reviser AS reviser \n" +
+            "from t_upload_info where delete_flag=0 and \n" +
+            "creator=#{param1} and \n" +
+            "(state_flag=0 or state_flag=1 or state_flag=2) limit 1;")
+    UploadInfo uploadSelect(int userId);
 }
