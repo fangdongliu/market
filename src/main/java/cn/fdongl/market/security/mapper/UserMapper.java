@@ -69,7 +69,7 @@ public interface UserMapper {
             "            WHERE t_right.right_id\n" +
             "            IN(\n" +
             "            SELECT t_role_right.right_id from t_role_right \n" +
-            "            where t_role_right.right_id IN \n" +
+            "            where t_role_right.role_id IN \n" +
             "            (SELECT t_role.role_id FROM t_role WHERE t_role.role_id IN \n" +
             "            (SELECT t_user_role.role_id FROM t_user_role WHERE t_user_role.user_id = #{param1})\n" +
             "            AND t_role.delete_flag = 0)\n" +
@@ -81,7 +81,7 @@ public interface UserMapper {
             "WHERE t_right.right_id\n" +
             "IN(\n" +
             "SELECT t_role_right.right_id from t_role_right \n" +
-            "where t_role_right.right_id IN \n" +
+            "where t_role_right.role_id IN \n" +
             "(SELECT t_role.role_id FROM t_role WHERE t_role.role_id IN \n" +
             "(SELECT t_user_role.role_id FROM t_user_role WHERE t_user_role.user_id = 1)\n" +
             "AND t_role.delete_flag = 0)\n" +
@@ -99,8 +99,13 @@ public interface UserMapper {
             "values" +
             "<foreach collection=\"param1\" item=\"item\" index=\"index\" separator=\",\">" +
             "(#{item.username},#{param3},#{param5},#{item.fullname},#{param2},0,now(),#{param4},0)" +
-            "</foreach></script>")
-    int addUsers(List<UsernameAndFullname>array,Integer parent,String password,Integer currentUser,Integer userType);
+            "</foreach>;" +
+            "INSERT INTO t_user_role(role_id,user_id,creator,create_time,delete_flag) (\n" +
+            "\tSELECT #{param6},user_id,#{param4},NOW(),0 FROM t_user WHERE superior = #{param2}\n" +
+            ") ON DUPLICATE KEY UPDATE  creator=#{param4};" +
+
+            "</script>")
+    int addUsers(List<UsernameAndFullname>array,Integer parent,String password,Integer currentUser,Integer userType,Integer userRole);
 
     @Update("update t_user set password=#{param1} where user_id = #{param2}")
     int updatePassword(String password,int userId);
