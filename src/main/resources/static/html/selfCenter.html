@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>selfCenter</title>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.6.9/vue.min.js"></script>
+    <link href="https://cdn.bootcss.com/element-ui/2.6.1/theme-chalk/index.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/element-ui/2.6.1/index.js"></script>
+    <link rel="stylesheet" href="../css/stylesheet.css">
+</head>
+<body>
+<div id="selfCenter" style="height:100%;">
+    <el-main class="content" style="overflow: visible">
+        <div class="contentDetail">
+            <el-row>
+                <el-col :span="2" :offset="1">
+                    <img onerror="javascript:this.src='http://online.bit.edu.cn:80/eip/core/miniui/themes/2018-skin/2018-img/avatar.jpg';" src="http://online.bit.edu.cn:80/eip/user/photo.htm" style="width:150px; display: block;">
+                </el-col>
+                <el-col :span="16" :offset="3">
+                    <div style="height:30px;"></div>
+                    <el-row style="height:40px;">
+                        <el-col :span="3" class="userInfoTitle">
+                            用户名：
+                        </el-col>
+                        <el-col :span="12" :offset="1" class="userInfoDetail">
+                            123123
+                        </el-col>
+                    </el-row>
+                </el-col>
+            </el-row>
+
+        </div>
+    </el-main>
+    <el-footer class="footer">2019 &copy; 第二组织</el-footer>
+</div>
+</body>
+<script>
+    var vue = new Vue({
+        el:'#selfCenter',
+        data:{
+
+        },
+        methods:{
+
+        }
+    })
+</script>
+
+</html>
