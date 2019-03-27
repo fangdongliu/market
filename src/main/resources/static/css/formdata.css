@@ -16,7 +16,7 @@ body{
     /*background-color: #7a9cc9;*/
 }
 
-.formIndex button{
+.formIndex+button{
     background-color: rgb(243, 242, 241);
     margin:10px;
     width: 40px;

@@ -19,6 +19,7 @@
         <el-button v-for="form in forms" @click="turnForm(form.index)" circle>
             {{form.index}}
         </el-button>
+        <el-button id="submit" @click="submit" type="success">提交</el-button>
     </div>
     <hr/>
     <el-button id='last' @click="last" icon="el-icon-arrow-left" circle></el-button>
