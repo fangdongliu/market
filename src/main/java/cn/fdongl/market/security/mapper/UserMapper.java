@@ -83,7 +83,7 @@ public interface UserMapper {
             "SELECT t_role_right.right_id from t_role_right \n" +
             "where t_role_right.role_id IN \n" +
             "(SELECT t_role.role_id FROM t_role WHERE t_role.role_id IN \n" +
-            "(SELECT t_user_role.role_id FROM t_user_role WHERE t_user_role.user_id = 1)\n" +
+            "(SELECT t_user_role.role_id FROM t_user_role WHERE t_user_role.user_id = #{param1})\n" +
             "AND t_role.delete_flag = 0)\n" +
             ") AND t_right.delete_flag=0 AND menu_name is not null")
     @MapKey("id")
