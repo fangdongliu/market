@@ -16,11 +16,13 @@
 <body>
 <div id="app">
     <div class="formIndex">
-            <el-button v-for="form in forms" @click="turnForm(form.index)" circle>
-                {{form.index}}
-            </el-button>
+        <el-button v-for="form in forms" @click="turnForm(form.index)" circle>
+            {{form.index}}
+        </el-button>
     </div>
     <hr/>
+    <el-button id='last' @click="last" icon="el-icon-arrow-left" circle></el-button>
+    <el-button id='next' @click="next"  icon="el-icon-arrow-right" circle></el-button>
 
     <div class="table" v-if="this.index==1">
         <el-form :model="form1data">
@@ -32,14 +34,14 @@
                     <el-col :span="6" >求职倍率</el-col>
                 </el-row>
             </el-form-item>
-                <el-form-item class="tablecontent">
-                    <el-row>
-                        <el-col :span="2" offset="2">{{form1data.title}}</el-col>
-                        <el-col :span="6"><el-input v-model="form1data.need"></el-input></el-col>
-                        <el-col :span="6"><el-input v-model="form1data.seek"></el-input></el-col>
-                        <el-col :span="6"><el-input v-model="form1data.rate"></el-input></el-col>
-                    </el-row>
-                </el-form-item>
+            <el-form-item class="tablecontent">
+                <el-row>
+                    <el-col :span="2" offset="2">{{form1data.title}}</el-col>
+                    <el-col :span="6"><el-input v-model="form1data.need" :readonly="isReadOnly()"></el-input></el-col>
+                    <el-col :span="6"><el-input v-model="form1data.seek" :readonly="isReadOnly()"></el-input></el-col>
+                    <el-col :span="6"><el-input v-model="form1data.rate" :readonly="isReadOnly()"></el-input></el-col>
+                </el-row>
+            </el-form-item>
         </el-form>
     </div>
 
@@ -57,8 +59,8 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="2" offset="6">{{item.title}}</el-col>
-                        <el-col :span="5"><el-input v-model="item.need"></el-input></el-col>
-                        <el-col :span="5"><el-input v-model="item.needrate"></el-input></el-col>
+                        <el-col :span="5"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="5"><el-input v-model="item.needrate":readonly="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -79,8 +81,8 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="2" offset="6">{{item.title}}</el-col>
-                        <el-col :span="5"><el-input v-model="item.need"></el-input></el-col>
-                        <el-col :span="5"><el-input v-model="item.needrate"></el-input></el-col>
+                        <el-col :span="5"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="5"><el-input v-model="item.needrate" :readonly="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -103,8 +105,8 @@
                         <el-col :span="2" offset="4">{{item.title1}}</el-col>
                         <el-col :span="2">{{item.title2}}</el-col>
                         <el-col :span="2">{{item.title3}}</el-col>
-                        <el-col :span="5"><el-input v-model="item.need"></el-input></el-col>
-                        <el-col :span="5"><el-input v-model="item.needrate"></el-input></el-col>
+                        <el-col :span="5"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="5"><el-input v-model="item.needrate" :readonly="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -132,11 +134,11 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="2" offset="4">{{item.title}}</el-col>
-                        <el-col :span="3"><el-input v-model="item.need"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.needrate"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seekrate"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.needrate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seek" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seekrate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.rate" :readonly="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -165,11 +167,11 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="4" offset="2"><el-input v-model="item.job"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.jobcode"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.need"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.gap"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.jobcode" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seek" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.gap" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.rate" :readonly="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -198,11 +200,11 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="4" offset="2"><el-input v-model="item.job"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.jobcode"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.need"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.gap"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.jobcode" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seek" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.gap" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.rate" :readonly="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -223,8 +225,8 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="2" offset="6">{{item.title}}</el-col>
-                        <el-col :span="5"><el-input v-model="item.seek"></el-input></el-col>
-                        <el-col :span="5"><el-input v-model="item.seekrate"></el-input></el-col>
+                        <el-col :span="5"><el-input v-model="item.seek" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="5"><el-input v-model="item.seekrate" :readonly="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -252,11 +254,11 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="2" offset="4">{{item.title}}</el-col>
-                        <el-col :span="3"><el-input v-model="item.need"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.needrate"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seekrate"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.needrate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seek" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seekrate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.rate" :readonly="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -284,11 +286,11 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="2" offset="4">{{item.title}}</el-col>
-                        <el-col :span="3"><el-input v-model="item.need"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.needrate"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seekrate"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.needrate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seek" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seekrate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.rate" :readonly="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -316,11 +318,11 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="2" offset="4">{{item.title}}</el-col>
-                        <el-col :span="3"><el-input v-model="item.need"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.needrate"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seekrate"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.needrate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seek" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seekrate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.rate" :readonly="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -348,11 +350,11 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="2" offset="4">{{item.title}}</el-col>
-                        <el-col :span="3"><el-input v-model="item.need"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.needrate"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seekrate"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.needrate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seek" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seekrate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.rate" :readonly="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -360,8 +362,8 @@
     </div>
 
     <div>
-        <el-button id='last' @click="last" icon="el-icon-arrow-left"></el-button>
-        <el-button id='next' @click="next"  icon="el-icon-arrow-right"></el-button>
+        <el-button id='change' @click="change"  type="primary">修改</el-button>
+        <el-button id='save' @click="save"  type="primary">保存</el-button>
     </div>
 
 </div>
@@ -388,63 +390,10 @@
                 {index:12, title:'表12：按技能等级分组的供求人数'},
             ],
             finished:[false,false,false,false,false,false,false,false,false,false,false,false],
+            changeable:[false,false,false,false,false,false,false,false,false,false,false,false],
             // need:需求人数，needrate：需求人数所占比重，seek：求职人数，seekrate:求职人数所占比重
             // job:职业，jobcode:职业代码，rate:求人比率，缺口数：gap
 
-            // form1data:{
-            //     need:'',
-            //     seek:'',
-            //     rate:'',
-            // },
-            // form2data:{
-            //     ind:[
-            //         {need:'',rate:''}]
-            // },
-            // form3data:{
-            //     ind1_need:'',
-            //     ind1_rate:'',
-            //     ind2_need:'',
-            //     ind2_rate:'',
-            //     ind3_need:'',
-            //     ind3_rate:'',
-            //     ind4_need:'',
-            //     ind4_rate:'',
-            //     ind5_need:'',
-            //     ind5_rate:'',
-            //     ind6_need:'',
-            //     ind6_rate:'',
-            //     ind7_need:'',
-            //     ind7_rate:'',
-            //     ind8_need:'',
-            //     ind8_rate:'',
-            //     ind9_need:'',
-            //     ind9_rate:'',
-            //     ind10_need:'',
-            //     ind10_rate:'',
-            //     ind11_need:'',
-            //     ind11_rate:'',
-            //     ind12_need:'',
-            //     ind12_rate:'',
-            //     ind13_need:'',
-            //     ind13_rate:'',
-            //     ind14_need:'',
-            //     ind14_rate:'',
-            //     ind15_need:'',
-            //     ind15_rate:'',
-            //     ind16_need:'',
-            //     ind16_rate:'',
-            //     ind17_need:'',
-            //     ind17_rate:'',
-            //     ind18_need:'',
-            //     ind18_rate:'',
-            //     ind19_need:'',
-            //     ind19_rate:'',
-            //     ind20_need:'',
-            //     ind20_rate:'',
-            //     ind21_need:'',
-            //     ind21_rate:''
-            // }
-            //
 
             form1data:{
                 title: '本期有效数',
@@ -458,9 +407,9 @@
                 needrate:''
             },{
                 title:'第二产业',
-                    need:'',
-                    needrate:''
-                },{
+                need:'',
+                needrate:''
+            },{
                 title:'第三产业',
                 need:'',
                 needrate:''
@@ -1119,253 +1068,253 @@
             }],
         },
         methods:{
-          check:function(){
-              switch (this.index){
-                  case 1:this.check3(this.form1data);this.getRate(this.form1data);console.log(this.form1data);break;
-                  case 2:this.checkNeed2(this.form2data);this.getNeedSum2(this.form2data);this.getNeedRate(this.form2data);console.log(this.form2data);break;
-                  case 3:this.checkNeed2(this.form3data);this.getNeedSum2(this.form3data);this.getNeedRate(this.form3data);console.log(this.form3data);break;
-                  case 4:this.checkNeed2(this.form4data);this.getNeedSum2(this.form4data);this.getNeedRate(this.form4data);console.log(this.form4data);break;
-                  case 5:this.check5(this.form5data);this.getSum5(this.form5data);this.getRate(this.form5data);this.getNeedRate(this.form5data);this.getSeekRate(this.form5data);console.log(this.form5data);break;
-                  case 6:this.check4(this.form6data);this.getRate(this.form6data);this.getGap(this.form6data);console.log(this.form6data);break;
-                  case 7:this.check4(this.form7data);this.getRate(this.form7data);this.getGap(this.form7data);console.log(this.form7data);break;
-                  case 8:this.checkSeek2(this.form8data);this.getSeekSum2(this.form8data);this.getSeekRate(this.form8data);console.log(this.form8data);break;
-                  case 9:this.check5(this.form9data);this.getSum5(this.form9data);this.getRate(this.form9data);this.getNeedRate(this.form9data);this.getSeekRate(this.form9data);console.log(this.form9data);break;
-                  case 10:this.check5(this.form10data);this.getSum5(this.form10data);this.getRate(this.form10data);this.getNeedRate(this.form10data);this.getSeekRate(this.form10data);console.log(this.form10data);break;
-                  case 11:this.check5(this.form11data);this.getSum5(this.form11data);this.getRate(this.form11data);this.getNeedRate(this.form11data);this.getSeekRate(this.form11data);console.log(this.form11data);break;
-                  case 12:this.check5(this.form12data);this.getSum5(this.form12data);this.getRate(this.form12data);this.getNeedRate(this.form12data);this.getSeekRate(this.form12data);console.log(this.form12data);break;
-              }
-           },
+            check:function(){
+                switch (this.index){
+                    case 1:this.check3(this.form1data);this.getRate(this.form1data);console.log(this.form1data);break;
+                    case 2:this.checkNeed2(this.form2data);this.getNeedSum2(this.form2data);this.getNeedRate(this.form2data);console.log(this.form2data);break;
+                    case 3:this.checkNeed2(this.form3data);this.getNeedSum2(this.form3data);this.getNeedRate(this.form3data);console.log(this.form3data);break;
+                    case 4:this.checkNeed2(this.form4data);this.getNeedSum2(this.form4data);this.getNeedRate(this.form4data);console.log(this.form4data);break;
+                    case 5:this.check5(this.form5data);this.getSum5(this.form5data);this.getRate(this.form5data);this.getNeedRate(this.form5data);this.getSeekRate(this.form5data);console.log(this.form5data);break;
+                    case 6:this.check4(this.form6data);this.getRate(this.form6data);this.getGap(this.form6data);console.log(this.form6data);break;
+                    case 7:this.check4(this.form7data);this.getRate(this.form7data);this.getGap(this.form7data);console.log(this.form7data);break;
+                    case 8:this.checkSeek2(this.form8data);this.getSeekSum2(this.form8data);this.getSeekRate(this.form8data);console.log(this.form8data);break;
+                    case 9:this.check5(this.form9data);this.getSum5(this.form9data);this.getRate(this.form9data);this.getNeedRate(this.form9data);this.getSeekRate(this.form9data);console.log(this.form9data);break;
+                    case 10:this.check5(this.form10data);this.getSum5(this.form10data);this.getRate(this.form10data);this.getNeedRate(this.form10data);this.getSeekRate(this.form10data);console.log(this.form10data);break;
+                    case 11:this.check5(this.form11data);this.getSum5(this.form11data);this.getRate(this.form11data);this.getNeedRate(this.form11data);this.getSeekRate(this.form11data);console.log(this.form11data);break;
+                    case 12:this.check5(this.form12data);this.getSum5(this.form12data);this.getRate(this.form12data);this.getNeedRate(this.form12data);this.getSeekRate(this.form12data);console.log(this.form12data);break;
+                }
+            },
 
-          check3:function(param){
-              if(this.form1data.need==""||this.form1data.seek=="")
-                  alert("请完整填写数据");
-              else if(isNaN(this.form1data.need)||isNaN(this.form1data.seek))
-                  alert("请正确填写数据");
-              else
-                  this.finished[0]=true;
-          },
+            check3:function(param){
+                if(this.form1data.need==""||this.form1data.seek=="")
+                    alert("请完整填写数据");
+                else if(isNaN(this.form1data.need)||isNaN(this.form1data.seek))
+                    alert("请正确填写数据");
+                else
+                    this.finished[0]=true;
+            },
 
-          checkNeed2:function(param){
-              var formdata = param;
-              for(var i = 0;i<formdata.length-1;i++){
-                  if(formdata[i].need=="") {
-                      alert("请完整填写数据");
-                      break;
-                  }
-                  else if(isNaN(formdata[i].need)) {
-                      alert("请正确填写数据");
-                      break;
-                  }
-              }
-              if(i==formdata.length-1)
-                  this.finished[this.index-1]=true;
-          },
+            checkNeed2:function(param){
+                var formdata = param;
+                for(var i = 0;i<formdata.length-1;i++){
+                    if(formdata[i].need=="") {
+                        alert("请完整填写数据");
+                        break;
+                    }
+                    else if(isNaN(formdata[i].need)) {
+                        alert("请正确填写数据");
+                        break;
+                    }
+                }
+                if(i==formdata.length-1)
+                    this.finished[this.index-1]=true;
+            },
 
-          checkSeek2:function(param){
-              var formdata = param;
-              for(var i = 0;i<formdata.length-1;i++){
-                  if(formdata[i].seek=="") {
-                      alert("请完整填写数据");
-                      break;
-                  }
-                  else if(isNaN(formdata[i].seek)) {
-                      alert("请正确填写数据");
-                      break;
-                  }
-              }
-              if(i==formdata.length-1)
-                  this.finished[this.index-1]=true;
-          },
+            checkSeek2:function(param){
+                var formdata = param;
+                for(var i = 0;i<formdata.length-1;i++){
+                    if(formdata[i].seek=="") {
+                        alert("请完整填写数据");
+                        break;
+                    }
+                    else if(isNaN(formdata[i].seek)) {
+                        alert("请正确填写数据");
+                        break;
+                    }
+                }
+                if(i==formdata.length-1)
+                    this.finished[this.index-1]=true;
+            },
 
-          check4:function(param){
-              var formdata = param;
-              for(var i = 0;i<formdata.length-1;i++){
-                  if(formdata[i].seek==""||formdata[i].need==""){
-                      alert("请完整填写数据");
-                      break;
-                  }
-                  else if(isNaN(formdata[i].need)||isNaN(formdata[i].seek)) {
-                      alert("请正确填写数据");
-                      break;
-                  }
-              }
-              if(i==formdata.length-1)
-                  this.finished[this.index-1]=true;
-          },
+            check4:function(param){
+                var formdata = param;
+                for(var i = 0;i<formdata.length-1;i++){
+                    if(formdata[i].seek==""||formdata[i].need==""){
+                        alert("请完整填写数据");
+                        break;
+                    }
+                    else if(isNaN(formdata[i].need)||isNaN(formdata[i].seek)) {
+                        alert("请正确填写数据");
+                        break;
+                    }
+                }
+                if(i==formdata.length-1)
+                    this.finished[this.index-1]=true;
+            },
 
-          check5:function(param){
-              var formdata = param;
-              for(var i = 0;i<formdata.length-1;i++){
-                  if(!((this.index==5&&i==formdata.length-2)||(this.index==12&&i==formdata.length-3))){
-                      if(formdata[i].need=="") {
-                          alert("请完整填写数据");
-                          break;
-                      }
-                      else if(isNaN(formdata[i].need)){
-                          alert("请正确填写数据");
-                          break;
-                      }
-                  }
-                  if(!(i==formdata.length-2&&this.index>5)){
-                      if(formdata[i].seek=="") {
-                          alert("请完整填写数据");
-                          break;
-                      }
-                      else if(isNaN(formdata[i].seek)){
-                          alert("请正确填写数据");
-                          break;
-                      }
-                  }
-              }
-              if(i==formdata.length-1)
-                  this.finished[this.index-1]=true;
-          },
+            check5:function(param){
+                var formdata = param;
+                for(var i = 0;i<formdata.length-1;i++){
+                    if(!((this.index==5&&i==formdata.length-2)||(this.index==12&&i==formdata.length-3))){
+                        if(formdata[i].need=="") {
+                            alert("请完整填写数据");
+                            break;
+                        }
+                        else if(isNaN(formdata[i].need)){
+                            alert("请正确填写数据");
+                            break;
+                        }
+                    }
+                    if(!(i==formdata.length-2&&this.index>5)){
+                        if(formdata[i].seek=="") {
+                            alert("请完整填写数据");
+                            break;
+                        }
+                        else if(isNaN(formdata[i].seek)){
+                            alert("请正确填写数据");
+                            break;
+                        }
+                    }
+                }
+                if(i==formdata.length-1)
+                    this.finished[this.index-1]=true;
+            },
 
-          getNeedSum2:function(param){
-              if(this.finished[this.index-1]){
-                  var formdata = param;
-                  formdata[formdata.length-1].need=0;
-                  for(var i = 0;i<formdata.length-1;i++){
-                      formdata[formdata.length-1].need+=Number(formdata[i].need);
-                  }
-                  if(this.index==2)
-                      this.form2data=formdata;
-                  else if(this.index==3)
-                      this.form3data=formdata;
-                  else this.form4data=formdata;
-              }
-          },
+            getNeedSum2:function(param){
+                if(this.finished[this.index-1]){
+                    var formdata = param;
+                    formdata[formdata.length-1].need=0;
+                    for(var i = 0;i<formdata.length-1;i++){
+                        formdata[formdata.length-1].need+=Number(formdata[i].need);
+                    }
+                    if(this.index==2)
+                        this.form2data=formdata;
+                    else if(this.index==3)
+                        this.form3data=formdata;
+                    else this.form4data=formdata;
+                }
+            },
 
-          getSeekSum2:function(param){
-              if(this.finished[this.index-1]){
-                  var formdata = param;
-                  for(var i = 0;i<formdata.length-1;i++){
-                      formdata[formdata.length-1].seek+=Number(formdata[i].seek);
-                  }
-                  this.form8data=formdata;
-              }
-          },
+            getSeekSum2:function(param){
+                if(this.finished[this.index-1]){
+                    var formdata = param;
+                    for(var i = 0;i<formdata.length-1;i++){
+                        formdata[formdata.length-1].seek+=Number(formdata[i].seek);
+                    }
+                    this.form8data=formdata;
+                }
+            },
 
-          getSum5:function(param){
-              if(this.finished[this.index-1]){
-                  var formdata = param;
-                  formdata[formdata.length-1].seek=formdata[formdata.length-1].need=0;
-                  for(var i = 0;i<formdata.length-1;i++){
-                      if(!((this.index==5&&i==formdata.length-2)||(this.index==12&&i==formdata.length-3))) {
-                          formdata[formdata.length - 1].need += Number(formdata[i].need);
-                      }
-                      if(!(this.index>5&&i==formdata.length-2)) {
-                          formdata[formdata.length - 1].seek += Number(formdata[i].seek);
-                      }
-                  }
-                  if(this.index==5)
-                      this.form5data=formdata;
-                  else if(this.index==9)
-                      this.form9data=formdata;
-                  else if(this.index==10)
-                      this.form10data=formdata;
-                  else if(this.index==11)
-                      this.form11data=formdata;
-                  else this.form12data=formdata;
-              }
-          },
+            getSum5:function(param){
+                if(this.finished[this.index-1]){
+                    var formdata = param;
+                    formdata[formdata.length-1].seek=formdata[formdata.length-1].need=0;
+                    for(var i = 0;i<formdata.length-1;i++){
+                        if(!((this.index==5&&i==formdata.length-2)||(this.index==12&&i==formdata.length-3))) {
+                            formdata[formdata.length - 1].need += Number(formdata[i].need);
+                        }
+                        if(!(this.index>5&&i==formdata.length-2)) {
+                            formdata[formdata.length - 1].seek += Number(formdata[i].seek);
+                        }
+                    }
+                    if(this.index==5)
+                        this.form5data=formdata;
+                    else if(this.index==9)
+                        this.form9data=formdata;
+                    else if(this.index==10)
+                        this.form10data=formdata;
+                    else if(this.index==11)
+                        this.form11data=formdata;
+                    else this.form12data=formdata;
+                }
+            },
 
-          getRate:function(param){
-              console.log("finished:"+this.finished);
-              if(this.finished[this.index-1]) {
-                  if (this.index == 1) {
-                      this.form1data.rate = Number(this.form1data.need) / Number(this.form1data.seek);
-                      this.form1data.rate.toFixed(4);
-                      console.log(this.form1data.need);
-                      console.log(this.form1data.seek);
-                      console.log(this.form1data.rate);
-                  }
-                  else if(this.index==6||this.index==7){
-                      var formdata = param;
-                      for (var i = 0; i < formdata.length; i++){
-                          formdata[i].rate = Number(formdata[i].need) / Number(formdata[i].seek);
-                          formdata[i].rate.toFixed(4);
-                      }
-                      if(this.index==6)
-                          this.form6data = formdata;
-                      else
-                          this.form7data = formdata;
-                  }
-                  else{
-                      var formdata = param;
-                      var tmp;
-                      if(this.index==5)
-                          tmp=Number(formdata[formdata.length-1].seek)/(Number(formdata[formdata.length-1].seek)-Number(formdata[formdata.length-2].seek));
-                      else
-                          tmp=Number(formdata[formdata.length-1].need)/(Number(formdata[formdata.length-1].need)-Number(formdata[formdata.length-2].need));
-                      for (var i = 0; i < formdata.length - 2; i++) {
-                          if(this.index==5)
-                              formdata[i].rate=Number(formdata[i].need)/(tmp*Number(formdata[i].seek));
-                          else if(this.index==12&&i==formdata.length-3)
-                              formdata[i].rate=0;
-                          else
-                              formdata[i].rate=tmp*Number(formdata[i].need)/Number(formdata[i].seek);
-                          formdata[i].rate.toFixed(4);
-                      }
-                      if (this.index == 5)
-                          form5data = formdata;
-                      else if (this.index == 9)
-                          form9data = formdata;
-                      else if (this.index == 10)
-                          form10data = formdata;
-                      else if (this.index == 11)
-                          form11data = formdata;
-                      else form12data = formdata;
-                  }
-              }
-          },
+            getRate:function(param){
+                console.log("finished:"+this.finished);
+                if(this.finished[this.index-1]) {
+                    if (this.index == 1) {
+                        this.form1data.rate = (Number(this.form1data.need) / Number(this.form1data.seek)).toFixed(4);
+                        this.form1data.rate;
+                        console.log(this.form1data.need);
+                        console.log(this.form1data.seek);
+                        console.log(this.form1data.rate);
+                    }
+                    else if(this.index==6||this.index==7){
+                        var formdata = param;
+                        for (var i = 0; i < formdata.length; i++){
+                            formdata[i].rate = (Number(formdata[i].need) / Number(formdata[i].seek).toFixed(4));
+                            formdata[i].rate;
+                        }
+                        if(this.index==6)
+                            this.form6data = formdata;
+                        else
+                            this.form7data = formdata;
+                    }
+                    else{
+                        var formdata = param;
+                        var tmp;
+                        if(this.index==5)
+                            tmp=Number(formdata[formdata.length-1].seek)/(Number(formdata[formdata.length-1].seek)-Number(formdata[formdata.length-2].seek));
+                        else
+                            tmp=Number(formdata[formdata.length-1].need)/(Number(formdata[formdata.length-1].need)-Number(formdata[formdata.length-2].need));
+                        for (var i = 0; i < formdata.length - 2; i++) {
+                            if(this.index==5)
+                                formdata[i].rate=Number(formdata[i].need)/(tmp*Number(formdata[i].seek));
+                            else if(this.index==12&&i==formdata.length-3)
+                                formdata[i].rate=0;
+                            else
+                                formdata[i].rate=tmp*Number(formdata[i].need)/Number(formdata[i].seek);
+                            formdata[i].rate=Number(formdata[i].rate).toFixed(4);
+                        }
+                        if (this.index == 5)
+                            form5data = formdata;
+                        else if (this.index == 9)
+                            form9data = formdata;
+                        else if (this.index == 10)
+                            form10data = formdata;
+                        else if (this.index == 11)
+                            form11data = formdata;
+                        else form12data = formdata;
+                    }
+                }
+            },
 
-          getGap:function (param) {
-              if(this.finished[this.index-1]){
-                  var formdata = param;
-                  for(var i = 0;i<formdata.length;i++){
-                      formdata[i].gap=Number(formdata[i].need)-Number(formdata[i].seek);
-                  }
-                  if(this.index==6)
-                      this.form6data=formdata;
-                  else this.form7data=formdata;
-              }
-          },
+            getGap:function (param) {
+                if(this.finished[this.index-1]){
+                    var formdata = param;
+                    for(var i = 0;i<formdata.length;i++){
+                        formdata[i].gap=Number(formdata[i].need)-Number(formdata[i].seek);
+                    }
+                    if(this.index==6)
+                        this.form6data=formdata;
+                    else this.form7data=formdata;
+                }
+            },
 
-          getNeedRate:function(param){
-              if(this.finished[this.index-1]){
-                  var formdata = param;
-                  for(var i = 0;i<formdata.length;i++){
-                      if(!((this.index==5&&i==formdata.length-2)||(this.index==12&&i==formdata.length-3))) {
-                          formdata[i].needrate = Number(formdata[i].need) / Number(formdata[formdata.length - 1].need);
-                          formdata[i].needrate.toFixed(4);
-                      }
-                  }
-                  if(this.index==2)
-                      this.form2data=formdata;
-                  else if(this.index==3)
-                      this.form3data=formdata;
-                  else if(this.index==4)
-                      this.form4data=formdata;
-                  else if(this.index==5)
-                      this.form5data=formdata;
-                  else if(this.index==9)
-                      this.form9data=formdata;
-                  else if(this.index==10)
-                      this.form10data=formdata;
-                  else if(this.index==11)
-                      this.form11data=formdata;
-                  else this.form12data=formdata;
-              }
-          },
+            getNeedRate:function(param){
+                if(this.finished[this.index-1]){
+                    var formdata = param;
+                    for(var i = 0;i<formdata.length;i++){
+                        if(!((this.index==5&&i==formdata.length-2)||(this.index==12&&i==formdata.length-3))) {
+                            formdata[i].needrate = Number(formdata[i].need) / Number(formdata[formdata.length - 1].need);
+                            formdata[i].rate=Number(formdata[i].rate).toFixed(4);
+                        }
+                    }
+                    if(this.index==2)
+                        this.form2data=formdata;
+                    else if(this.index==3)
+                        this.form3data=formdata;
+                    else if(this.index==4)
+                        this.form4data=formdata;
+                    else if(this.index==5)
+                        this.form5data=formdata;
+                    else if(this.index==9)
+                        this.form9data=formdata;
+                    else if(this.index==10)
+                        this.form10data=formdata;
+                    else if(this.index==11)
+                        this.form11data=formdata;
+                    else this.form12data=formdata;
+                }
+            },
 
-          getSeekRate:function(param){
+            getSeekRate:function(param){
                 if(this.finished[this.index-1]){
                     var formdata = param;
                     for(var i = 0;i<formdata.length;i++){
                         if(this.index<9||i!=formdata.length-2) {
                             formdata[i].seekrate = Number(formdata[i].seek) / Number(formdata[formdata.length - 1].seek);
-                            formdata[i].seekrate.toFixed(4);
+                            formdata[i].rate=Number(formdata[i].rate).toFixed(4);
                         }
                     }
                     if(this.index==8)
@@ -1382,33 +1331,40 @@
                 }
             },
 
-          last:function(){
-              this.check();
-              if(this.finished[this.index-1]) {
-                  if (this.index > 1) {
-                      this.index--;
-                      this.finished[this.index]=false;
-                  }
-              }
-          },
+            isReadOnly:function(){
+                console.log(this.changeable[this.index-1]);
+                return this.changeable[this.index-1];
+            },
 
-          next:function() {
-              this.check();
-              if (this.finished[this.index - 1]) {
-                  if (this.index < 12) {
-                      this.index++;
-                      this.finished[this.index] = false;
-                  }
-                  else ;
-                  //提交;
-              }
-          },
+            change:function(){
+                /////////////////////////////////
+                this.changeable[this.index-1]=false;
+            },
 
-          turnForm:function (param) {
-             this.index=param;
-             console.log(this.index);
-             console.log(this.forms[this.index-1].title);
-          }
+            save:function(){
+                this.check();
+                if(this.finished[this.index-1]) {
+                    this.changeable[this.index-1]=true;
+                }
+
+            },
+
+            last:function(){
+                if (this.index > 1)
+                    this.index--;
+            },
+
+            next:function() {
+                if (this.index < 12)
+                    this.index++;
+            },
+
+            turnForm:function (param) {
+                this.index=param;
+                console.log(this.changeable[this.index-1]);
+                console.log(this.index);
+                console.log(this.forms[this.index-1].title);
+            }
         }
     })
 </script>

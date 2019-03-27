@@ -62,15 +62,16 @@
                 </el-dialog>
                 <div class="custom-tree-container">
                     <div class="block">
-                        <p>权限树</p>
+                        <!--<p>权限树</p>-->
                         <el-tree
                                 :data="rightData"
                                 node-key="id"
                                 default-expand-all
                                 :expand-on-click-node="false"
-                                label="label">
+                                label="label"
+                                style=".el-tree-node__content{height: 60px}">
                                 <span class="custom-tree-node" slot-scope="{ node, data }">
-                                <span>{{ node.label }}</span>
+                                <span>{{ data.label+"("+data.menuName+")"}}</span>
                                 <span>
                                     <el-button
                                             v-if="node.level==1||node.level==2"

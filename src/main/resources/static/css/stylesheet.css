@@ -140,3 +140,6 @@ html,body,#app{
 .el-message{
     top:40px !important;
 }
+.el-tree-node__content{
+    height: 40px;
+}

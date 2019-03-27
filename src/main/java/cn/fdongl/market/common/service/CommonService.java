@@ -151,7 +151,7 @@ public class CommonService {
 
 
 
-    //取样分析
+    //取样分析/趋势分析
     public IndustryNum pieChart(Integer aimUserId,Integer uploadPeriodId)throws Exception{
         int a=provinceMapper.selectUsertype(aimUserId);
         if(a==3){
@@ -167,6 +167,7 @@ public class CommonService {
         else if(a==2){
             List<UserInfoDisplay> sub=provinceService.selectSub(aimUserId);
             IndustryNum output=new IndustryNum();
+            output=(IndustryNum) tableObjectInit(output);
             for(int i=0;i<sub.size();i++){
                 List<UploadInfo> uploadInfos=selectUploadInfoById(sub.get(i).getUserId());
                 for(int j=0;j<uploadInfos.size();j++){
@@ -208,6 +209,7 @@ public class CommonService {
             List<UserInfoDisplay> sub=provinceService.selectSub(aimUserId);//获取该用户的下级用户
             for(int i=0;i<periods.size();i++){//遍历目标调查期
                 TotalNum totalNum=new TotalNum();
+                totalNum=(TotalNum)tableObjectInit(totalNum);
                 for(int j=0;j<sub.size();j++){//遍历下级用户
                     List<UploadInfo> uploadInfos=selectUploadInfoById(sub.get(j).getUserId());//获取当前下级用户的元报表
                     for(int k=0;k<uploadInfos.size();k++){//遍历所有的元报表
@@ -229,6 +231,15 @@ public class CommonService {
         }
     }
 
+    //将只有int属性的对象中的属性初始化为0
+    public Object tableObjectInit(Object a)throws Exception{
+        Field[] fielda=a.getClass().getDeclaredFields();
+        for(int i=0;i<fielda.length;i++){
+            fielda[i].setAccessible(true);
+            fielda[i].set(a,0);
+        }
+        return a;
+    }
     //对两个相同类中的int属性相加的函数,用于图表汇总
     public Object objectadd(Object a,Object b)throws Exception{
         Field[] fielda=a.getClass().getDeclaredFields();

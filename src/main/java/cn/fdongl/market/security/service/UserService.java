@@ -117,7 +117,7 @@ public class UserService {
         }
 
         try {
-            if (userMapper.addUsers(array, parent, password, currentUser,userType) != count) {
+            if (userMapper.addUsers(array, parent, password, currentUser,userType,userType) != count) {
                 throw new Exception("创建用户时出错");
             }
         }
