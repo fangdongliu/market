@@ -191,6 +191,6 @@ public class MarketService {
 
     //根据监测点id查询保存、上传数据，非事务
     public UploadInfo uploadSelect(Integer userId) throws Exception {
-        return marketMapper.uploadSelect(userId);
+        return marketMapper.uploadSelectUnfinished(userId);
     }
 }

@@ -348,7 +348,6 @@ public interface MarketMapper {
             "where table_id=#{tableId};")
     Integer uploadUpdateTechGradeNum(TechGradeNum techGradeNum);
 
-    //TODO:改名为uploadSelectUnfinished
     //根据监测点id查询保存、上传数据
     @Select("SELECT \n" +
             "table_id AS tableId, \n" +
@@ -362,5 +361,5 @@ public interface MarketMapper {
             "delete_flag=0 \n" +
             "and (state_flag=0 or state_flag=1 or state_flag=2) \n" +
             "and creator=#{param1} limit 1;")
-    UploadInfo uploadSelect(int userId);
+    UploadInfo uploadSelectUnfinished(int userId);
 }
