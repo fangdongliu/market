@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/common")//指定接口的一级路径
+@RequestMapping("/common")//通用接口
 public class CommonController extends ControllerBase {
 
     @Autowired
@@ -36,8 +36,8 @@ public class CommonController extends ControllerBase {
     //查看自己发送的通知
     @PostMapping("/message/select")
     public Object SelectMessage(AppUserDetail appUserDetail) throws Exception {
+        Object data = commonService.selectMessage(appUserDetail.getId());
         return success(commonService.selectMessage(appUserDetail.getId()));
-
     }
 
     //接收通知（用户自己应该收到的通知）
@@ -132,7 +132,8 @@ public class CommonController extends ControllerBase {
     }
 
     //selectUploadInfoByCondition
-    //按用户id查询上传数据
+    //按监测点及上报时限查询12张表
+    //上传数据条件查询
     @PostMapping("/data/selectUploadInfoByCondition")
     public Object SelectUploadInfoByCondition(java.sql.Date startDate,java.sql.Date endDate,Integer userId,String condition) throws Exception {
         return success(commonService.selectUploadInfoByCondition(startDate,endDate,userId,condition));

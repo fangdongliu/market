@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/market")//检测点接口
+@RequestMapping("/market")//监测点接口
 public class MarketController extends ControllerBase {
 
     @Autowired
@@ -50,20 +50,7 @@ public class MarketController extends ControllerBase {
 
     //监测点新建数据上传
     @PostMapping("/upload/insert")
-    public Object UploadInsert(
-            AppUserDetail appUserDetail,
-            Integer stateFlag,
-            TotalNum totalNum,
-            IndustryNum industryNum,
-            EmployerNum employerNum,
-            ProfNum profNum,
-            MostNeeded mostNeeded,
-            LeastNeeded leastNeeded,
-            JobSeekerNum jobSeekerNum,
-            SexNum sexNum,
-            AgeNum ageNum,
-            DegreeNum degreeNum,
-            TechGradeNum techGradeNum) throws Exception {
+    public Object UploadInsert(AppUserDetail appUserDetail,UploadDataSet uploadDataSet) throws Exception {
         Integer activation=marketService.selectActivation(appUserDetail.getId());
         if(activation==0){
             throw new Exception("账号未激活，不能上传数据");
@@ -72,61 +59,28 @@ public class MarketController extends ControllerBase {
         if(simpleUploadPeriod==null){
             throw new Exception("当前时间不在上传期内，无法上传数据");
         }
-        UploadInfo uploadInfo=new UploadInfo();
-        uploadInfo.setUploadPeriodId(simpleUploadPeriod.getUploadPeriodId());
-        uploadInfo.setStateFlag(stateFlag);
-        uploadInfo.setCreator(appUserDetail.getId());
-        uploadInfo.setCreateTime(new Date());
-        marketService.uploadInsert(
-                uploadInfo,
-                totalNum,
-                industryNum,
-                employerNum,
-                profNum,
-                mostNeeded,
-                leastNeeded,
-                jobSeekerNum,
-                sexNum,
-                ageNum,
-                degreeNum,
-                techGradeNum);
+        uploadDataSet.setUploadPeriodId(simpleUploadPeriod.getUploadPeriodId());
+        uploadDataSet.setCreateTime(new Date());
+        uploadDataSet.setCreator(appUserDetail.getId());
+        marketService.uploadInsert(uploadDataSet);
         return success();
     }
 
     //监测点更新数据上传
     @PostMapping("/upload/update")
-    public Object UploadUpdate(
-            UploadInfo uploadInfo,
-            TotalNum totalNum,
-            IndustryNum industryNum,
-            EmployerNum employerNum,
-            ProfNum profNum,
-            MostNeeded mostNeeded,
-            LeastNeeded leastNeeded,
-            JobSeekerNum jobSeekerNum,
-            SexNum sexNum,
-            AgeNum ageNum,
-            DegreeNum degreeNum,
-            TechGradeNum techGradeNum) throws Exception {
-        SimpleUploadPeriod simpleUploadPeriod= commonService.selectSimpleUploadPeriod(new Date());
-        if(uploadInfo.getUploadPeriodId()==null&&simpleUploadPeriod==null){
+    public Object UploadUpdate(AppUserDetail appUserDetail,UploadDataSet uploadDataSet) throws Exception {
+        Integer activation=marketService.selectActivation(appUserDetail.getId());
+        if(activation==0){
+            throw new Exception("账号未激活，不能上传数据");
+        }
+        SimpleUploadPeriod simpleUploadPeriod=commonService.selectSimpleUploadPeriod(new Date());
+        if(uploadDataSet.getUploadPeriodId()==null&&simpleUploadPeriod==null){
             throw new Exception("当前时间不在上传期内，无法上传数据");
         }
-        uploadInfo.setUploadPeriodId(simpleUploadPeriod.getUploadPeriodId());
-        uploadInfo.setCreateTime(new Date());
-        marketService.uploadUpdate(
-                uploadInfo,
-                totalNum,
-                industryNum,
-                employerNum,
-                profNum,
-                mostNeeded,
-                leastNeeded,
-                jobSeekerNum,
-                sexNum,
-                ageNum,
-                degreeNum,
-                techGradeNum);
+        uploadDataSet.setUploadPeriodId(simpleUploadPeriod.getUploadPeriodId());
+        uploadDataSet.setCreateTime(new Date());
+        uploadDataSet.setCreator(appUserDetail.getId());
+        marketService.uploadUpdate(uploadDataSet);
         return success();
     }
 

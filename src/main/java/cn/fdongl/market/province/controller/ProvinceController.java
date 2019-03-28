@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/province")
+@RequestMapping("/province")//省级接口
 public class ProvinceController extends ControllerBase {
 
     @Autowired
@@ -28,8 +28,8 @@ public class ProvinceController extends ControllerBase {
 
     //省级根据条件查询已通过的备案信息
     @PostMapping("/record/conditionalQuery")
-    public Object RecordConditionalQuery(Integer state,String condition) throws Exception {
-        return success(provinceService.recordConditionalQuery(state, condition));
+    public Object RecordConditionalQuery(String condition) throws Exception {
+        return success(provinceService.recordConditionalQuery(condition));
     }
 
     //省级备案审核拒绝通过

@@ -28,7 +28,7 @@ public class MarketService {
         }
     }
 
-    //监测点默认查询，非事务
+    //根据监测点id查询保存、上传的备案，非事务
     public Record recordSelect(Integer userId) throws Exception {
         Record record=marketMapper.recordSelectFinished(userId);
         if(record==null){
@@ -37,41 +37,37 @@ public class MarketService {
         else return record;
     }
 
-    //监测点用户查询激活状态
+    //监测点用户查询激活状态，非事务
     public Integer selectActivation(Integer userId) throws Exception {
-        return marketMapper.selectActivation(userId);
+        Integer activation=marketMapper.selectActivation(userId);
+        if(activation==null){
+            throw new Exception("查询失败");
+        }
+        return activation;
     }
 
     //监测点新建上传数据，事务
     @Transactional
-    public void uploadInsert(UploadInfo uploadInfo,
-                             TotalNum totalNum,
-                             IndustryNum industryNum,
-                             EmployerNum employerNum,
-                             ProfNum profNum,
-                             MostNeeded mostNeeded,
-                             LeastNeeded leastNeeded,
-                             JobSeekerNum jobSeekerNum,
-                             SexNum sexNum,
-                             AgeNum ageNum,
-                             DegreeNum degreeNum,
-                             TechGradeNum techGradeNum) throws RuntimeException {
+    public void uploadInsert(UploadDataSet uploadDataSet) throws RuntimeException {
         Integer tableId=marketMapper.uploadSelectNextTableId();//在事务中获取下一个id，失败则回滚
         if(tableId==null||tableId<=0){
             throw new RuntimeException("数据错误");
         }
-        uploadInfo.setTableId(tableId);
-        totalNum.setTableId(tableId);
-        industryNum.setTableId(tableId);
-        employerNum.setTableId(tableId);
-        profNum.setTableId(tableId);
-        mostNeeded.setTableId(tableId);
-        leastNeeded.setTableId(tableId);
-        jobSeekerNum.setTableId(tableId);
-        sexNum.setTableId(tableId);
-        ageNum.setTableId(tableId);
-        degreeNum.setTableId(tableId);
-        techGradeNum.setTableId(tableId);
+        uploadDataSet.setTableId(tableId);
+
+        UploadInfo uploadInfo=new UploadInfo(uploadDataSet);
+        TotalNum totalNum=new TotalNum(uploadDataSet);
+        IndustryNum industryNum=new IndustryNum(uploadDataSet);
+        EmployerNum employerNum=new EmployerNum(uploadDataSet);
+        ProfNum profNum=new ProfNum(uploadDataSet);
+        MostNeeded mostNeeded=new MostNeeded(uploadDataSet);
+        LeastNeeded leastNeeded=new LeastNeeded(uploadDataSet);
+        JobSeekerNum jobSeekerNum=new JobSeekerNum(uploadDataSet);
+        SexNum sexNum=new SexNum(uploadDataSet);
+        AgeNum ageNum=new AgeNum(uploadDataSet);
+        DegreeNum degreeNum=new DegreeNum(uploadDataSet);
+        TechGradeNum techGradeNum=new TechGradeNum(uploadDataSet);
+
         int n=marketMapper.uploadInsertUploadInfo(uploadInfo);
         if(n!=1){
             throw new RuntimeException("新建上传数据信息失败");
@@ -124,34 +120,25 @@ public class MarketService {
 
     //监测点更新上传数据，事务
     @Transactional
-    public void uploadUpdate(UploadInfo uploadInfo,
-                             TotalNum totalNum,
-                             IndustryNum industryNum,
-                             EmployerNum employerNum,
-                             ProfNum profNum,
-                             MostNeeded mostNeeded,
-                             LeastNeeded leastNeeded,
-                             JobSeekerNum jobSeekerNum,
-                             SexNum sexNum,
-                             AgeNum ageNum,
-                             DegreeNum degreeNum,
-                             TechGradeNum techGradeNum) throws RuntimeException {
-        Integer tableId=uploadInfo.getTableId();
+    public void uploadUpdate(UploadDataSet uploadDataSet) throws RuntimeException {
+        Integer tableId=uploadDataSet.getTableId();
         if(tableId==null||tableId<=0){
             throw new RuntimeException("数据错误");
         }
-        uploadInfo.setTableId(tableId);
-        totalNum.setTableId(tableId);
-        industryNum.setTableId(tableId);
-        employerNum.setTableId(tableId);
-        profNum.setTableId(tableId);
-        mostNeeded.setTableId(tableId);
-        leastNeeded.setTableId(tableId);
-        jobSeekerNum.setTableId(tableId);
-        sexNum.setTableId(tableId);
-        ageNum.setTableId(tableId);
-        degreeNum.setTableId(tableId);
-        techGradeNum.setTableId(tableId);
+
+        UploadInfo uploadInfo=new UploadInfo(uploadDataSet);
+        TotalNum totalNum=new TotalNum(uploadDataSet);
+        IndustryNum industryNum=new IndustryNum(uploadDataSet);
+        EmployerNum employerNum=new EmployerNum(uploadDataSet);
+        ProfNum profNum=new ProfNum(uploadDataSet);
+        MostNeeded mostNeeded=new MostNeeded(uploadDataSet);
+        LeastNeeded leastNeeded=new LeastNeeded(uploadDataSet);
+        JobSeekerNum jobSeekerNum=new JobSeekerNum(uploadDataSet);
+        SexNum sexNum=new SexNum(uploadDataSet);
+        AgeNum ageNum=new AgeNum(uploadDataSet);
+        DegreeNum degreeNum=new DegreeNum(uploadDataSet);
+        TechGradeNum techGradeNum=new TechGradeNum(uploadDataSet);
+
         int n=marketMapper.uploadUpdateUploadInfo(uploadInfo);
         if(n!=1){
             throw new RuntimeException("更新上传数据信息失败");
@@ -202,7 +189,7 @@ public class MarketService {
         }
     }
 
-    //监测点查询上传数据（默认流程），非事务
+    //根据监测点id查询保存、上传数据，非事务
     public UploadInfo uploadSelect(Integer userId) throws Exception {
         return marketMapper.uploadSelect(userId);
     }

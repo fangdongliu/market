@@ -24,4 +24,29 @@ public class TechGradeNum {//技术等级供求人数表，共19条数据
     Integer seniProfJobseek;//高级专业技术职务求职人数
     Integer noTechJobseek;//无技术等级或职务求职人数
     Integer noRequNeed;//无要求需求人数
+
+    public TechGradeNum(UploadDataSet uploadDataSet){
+        this.tableId = uploadDataSet.getTableId();
+        this.profLevel5Need = uploadDataSet.getProfLevel5Need();
+        this.profLevel5Jobseek = uploadDataSet.getProfLevel5Jobseek();
+        this.profLevel4Need = uploadDataSet.getProfLevel4Need();
+        this.profLevel4Jobseek = uploadDataSet.getProfLevel4Jobseek();
+        this.profLevel3Need = uploadDataSet.getProfLevel3Need();
+        this.profLevel3Jobseek = uploadDataSet.getProfLevel3Jobseek();
+        this.profLevel2Need = uploadDataSet.getProfLevel2Need();
+        this.profLevel2Jobseek = uploadDataSet.getProfLevel2Jobseek();
+        this.profLevel1Need = uploadDataSet.getProfLevel1Need();
+        this.profLevel1Jobseek = uploadDataSet.getProfLevel1Jobseek();
+        this.primProfNeed = uploadDataSet.getPrimProfNeed();
+        this.primProfJobseek = uploadDataSet.getPrimProfJobseek();
+        this.mediProfNeed = uploadDataSet.getMediProfNeed();
+        this.mediProfJobseek = uploadDataSet.getMediProfJobseek();
+        this.seniProfNeed = uploadDataSet.getSeniProfNeed();
+        this.seniProfJobseek = uploadDataSet.getSeniProfJobseek();
+        this.noTechJobseek = uploadDataSet.getNoTechJobseek();
+        this.noRequNeed = uploadDataSet.getNoRequNeedTechGradeNum();
+    }
+
+    public TechGradeNum() {
+    }
 }

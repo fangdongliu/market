@@ -28,17 +28,8 @@ public class ProvinceService {
     }
 
     //根据条件查询已通过的备案，非事务
-    public List<Record> recordConditionalQuery(Integer state,String condition) throws Exception {
-        if(state==0){
-            return provinceMapper.recordRegionEmpNameQuery(condition);
-        }
-        else if(state==1){
-            return provinceMapper.recordRegionNameQuery(condition);
-        }
-        else if(state==2){
-            return provinceMapper.recordRegionEmpContactQuery(condition);
-        }
-        else throw new Exception("状态参数错误");
+    public List<Record> recordConditionalQuery(String condition) throws Exception {
+        return provinceMapper.recordConditionalQuery(condition);
     }
 
     //审核未通过，事务
