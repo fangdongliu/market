@@ -37,7 +37,6 @@ public class CommonController extends ControllerBase {
     @PostMapping("/message/select")
     public Object SelectMessage(AppUserDetail appUserDetail) throws Exception {
         return success(commonService.selectMessage(appUserDetail.getId()));
-
     }
 
     //接收通知（用户自己应该收到的通知）
