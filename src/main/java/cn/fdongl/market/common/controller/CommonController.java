@@ -131,6 +131,8 @@ public class CommonController extends ControllerBase {
         return success(commonService.selectUploadInfoById(userId));
     }
 
+    //selectUploadInfoByCondition
+    //按监测点及上报时限查询12张表
     //上传数据条件查询
     @PostMapping("/data/selectUploadInfoByCondition")
     public Object SelectUploadInfoByCondition(java.sql.Date startDate,java.sql.Date endDate,Integer userId,String condition) throws Exception {

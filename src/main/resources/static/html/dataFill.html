@@ -16,7 +16,7 @@
 <body>
 <div id="app">
     <div class="formIndex">
-        <el-button v-for="form in forms" @click="turnForm(form.index)" circle>
+        <el-button class="indexes" v-for="form in forms" @click="turnForm(form.index)" circle>
             {{form.index}}
         </el-button>
         <el-button id="submit" @click="submit" type="success">提交</el-button>
@@ -38,9 +38,9 @@
             <el-form-item class="tablecontent">
                 <el-row>
                     <el-col :span="2" offset="2">{{form1data.title}}</el-col>
-                    <el-col :span="6"><el-input v-model="form1data.need" :readonly="isReadOnly()"></el-input></el-col>
-                    <el-col :span="6"><el-input v-model="form1data.seek" :readonly="isReadOnly()"></el-input></el-col>
-                    <el-col :span="6"><el-input v-model="form1data.rate" :readonly="isReadOnly()"></el-input></el-col>
+                    <el-col :span="6"><el-input v-model="form1data.need" :disabled="isReadOnly()"></el-input></el-col>
+                    <el-col :span="6"><el-input v-model="form1data.seek" :disabled="isReadOnly()"></el-input></el-col>
+                    <el-col :span="6"><el-input v-model="form1data.rate" :disabled="isReadOnly()"></el-input></el-col>
                 </el-row>
             </el-form-item>
         </el-form>
@@ -60,8 +60,8 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="2" offset="6">{{item.title}}</el-col>
-                        <el-col :span="5"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="5"><el-input v-model="item.needrate":readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="5"><el-input v-model="item.need" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="5"><el-input v-model="item.needrate":disabled="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -82,8 +82,8 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="2" offset="6">{{item.title}}</el-col>
-                        <el-col :span="5"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="5"><el-input v-model="item.needrate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="5"><el-input v-model="item.need" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="5"><el-input v-model="item.needrate" :disabled="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -106,8 +106,8 @@
                         <el-col :span="2" offset="4">{{item.title1}}</el-col>
                         <el-col :span="2">{{item.title2}}</el-col>
                         <el-col :span="2">{{item.title3}}</el-col>
-                        <el-col :span="5"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="5"><el-input v-model="item.needrate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="5"><el-input v-model="item.need" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="5"><el-input v-model="item.needrate" :disabled="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -135,11 +135,11 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="2" offset="4">{{item.title}}</el-col>
-                        <el-col :span="3"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.needrate" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seekrate" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.need" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.needrate" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seek" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seekrate" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.rate" :disabled="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -167,12 +167,12 @@
             <div  v-for="item in form6data">
                 <el-form-item class="tablecontent">
                     <el-row>
-                        <el-col :span="4" offset="2"><el-input v-model="item.job"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.jobcode" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.gap" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="4" offset="2"><el-input v-model="item.job" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.jobcode" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.need" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seek" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.gap" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.rate" :disabled="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -200,12 +200,12 @@
             <div  v-for="item in form7data">
                 <el-form-item class="tablecontent">
                     <el-row>
-                        <el-col :span="4" offset="2"><el-input v-model="item.job"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.jobcode" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.gap" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="4" offset="2"><el-input v-model="item.job" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.jobcode" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.need" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seek" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.gap" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.rate" :disabled="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -226,8 +226,8 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="2" offset="6">{{item.title}}</el-col>
-                        <el-col :span="5"><el-input v-model="item.seek" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="5"><el-input v-model="item.seekrate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="5"><el-input v-model="item.seek" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="5"><el-input v-model="item.seekrate" :disabled="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -255,11 +255,11 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="2" offset="4">{{item.title}}</el-col>
-                        <el-col :span="3"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.needrate" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seekrate" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.need" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.needrate" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seek" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seekrate" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.rate" :disabled="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -287,11 +287,11 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="2" offset="4">{{item.title}}</el-col>
-                        <el-col :span="3"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.needrate" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seekrate" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.need" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.needrate" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seek" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seekrate" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.rate" :disabled="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -319,11 +319,11 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="2" offset="4">{{item.title}}</el-col>
-                        <el-col :span="3"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.needrate" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seekrate" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.need" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.needrate" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seek" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seekrate" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.rate" :disabled="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -351,11 +351,11 @@
                 <el-form-item class="tablecontent">
                     <el-row>
                         <el-col :span="2" offset="4">{{item.title}}</el-col>
-                        <el-col :span="3"><el-input v-model="item.need" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.needrate" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seekrate" :readonly="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate" :readonly="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.need" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.needrate" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seek" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.seekrate" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="3"><el-input v-model="item.rate" :disabled="isReadOnly()"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -375,6 +375,7 @@
     var vue = new Vue({
         el:'#app',
         data:{
+            tableId:null,
             index:1,
             forms:[
                 {index:1, title:'表1：供求总体人数'},
@@ -933,21 +934,7 @@
                 seekrate:'',
                 rate:'',
             },{
-                title:'职高',
-                need:'',
-                needrate:'',
-                seek:'',
-                seekrate:'',
-                rate:'',
-            },{
-                title:'技校',
-                need:'',
-                needrate:'',
-                seek:'',
-                seekrate:'',
-                rate:'',
-            },{
-                title:'中专',
+                title:'职高、技校、中专',
                 need:'',
                 needrate:'',
                 seek:'',
@@ -1234,7 +1221,6 @@
                         var formdata = param;
                         for (var i = 0; i < formdata.length; i++){
                             formdata[i].rate = (Number(formdata[i].need) / Number(formdata[i].seek).toFixed(4));
-                            formdata[i].rate;
                         }
                         if(this.index==6)
                             this.form6data = formdata;
@@ -1333,21 +1319,504 @@
             },
 
             isReadOnly:function(){
-                console.log(this.changeable[this.index-1]);
+                // console.log(this.changeable[this.index-1]);
                 return this.changeable[this.index-1];
             },
 
             change:function(){
-                /////////////////////////////////
                 this.changeable[this.index-1]=false;
+                this.index++;
+                this.index--;
+            },
+
+            updateData:function(param) {
+                var that=this;
+                var words = "提交";
+                if (param == 0)
+                    words = "保存";
+                $.ajax({
+                    url: '/market/upload/update',
+                    type: 'post',
+                    data: {
+                        uploadInfo: {
+                            tableId: this.tableId,
+                            stateFlag: param,
+                        },
+                        totalNum: {
+                            needPopu: this.form1data.seek,//需求人数
+                            jobseekPopu: this.form1data.need,//求职人数
+                        },
+                        industryNum: {
+                            industry1Need: this.form2data[0].need,//第一产业需求人数
+                            industry2Need: this.form2data[1].need,//第二产业需求人数
+                            industry3Need: this.form2data[2].need,//第三产业需求人数
+                            // industry1Need:this.form3data[0].need,//第一产业需求人数
+                            // industry2Need:Number(this.form3data[1].need)+Number(this.form3data[2].need)+Number(this.form3data[3].need)+Number(this.form3data[4].need),//第二产业需求人数
+                            // industry3Need:Number(this.form3data[5].need)+Number(this.form3data[6].need)+Number(this.form3data[7].need)+Number(this.form3data[8].need)+Number(this.form3data[9].need)+Number(this.form3data[10].need)+Number(this.form3data[11].need)+Number(this.form3data[12].need)+Number(this.form3data[13].need)+Number(this.form3data[14].need)+Number(this.form3data[15].need)+Number(this.form3data[16].need)+Number(this.form3data[17].need)+Number(this.form3data[18].need)+Number(this.form3data[19].need),//第三产业需求人数
+                            mineNeed: this.form3data[1].need,//采矿业，第二产业
+                            manuNeed: this.form3data[2].need,//制造业，第二产业
+                            elecGasWaterNeed: this.form3data[3].need,//电力、燃气及水的生产和供应业，第二产业
+                            archNeed: this.form3data[4].need,//建筑业，第二产业
+                            tranStorPostNeed: this.form3data[5].need,//交通运输、仓储和邮政业，第三产业
+                            infoCompSoftNeed: this.form3data[6].need,//信息传输、计算机服务和软件业，第三产业
+                            retailNeed: this.form3data[7].need,//批发和零售业，第三产业
+                            accoCaterNeed: this.form3data[8].need,//住宿和餐饮业，第三产业
+                            financeNeed: this.form3data[9].need,//金融业，第三产业
+                            estateNeed: this.form3data[10].need,//房地产业，第三产业
+                            leaseBusiServNeed: this.form3data[11].need,//租赁和商务服务业，第三产业
+                            reseTechAddrNeed: this.form3data[12].need,//科学研究、技术服务和地址勘查业，第三产业
+                            waterEnviFaciNeed: this.form3data[13].need,//水利、环境和公共设施管理业，第三产业
+                            resiServNeed: this.form3data[14].need,//居民服务和其他服务业，第三产业
+                            eduNeed: this.form3data[15].need,//教育，第三产业
+                            healSecuWelfNeed: this.form3data[16].need,//卫生、社会保障和社会福利业，第三产业
+                            cultSportEnteNeed: this.form3data[17].need,//文化、体育和娱乐业，第三产业
+                            manaOrgaNeed: this.form3data[18].need,//公共管理与社会组织，第三产业
+                            inteOrgaNeed: this.form3data[19].need,//国际组织，第三产业
+                        },
+                        employerNum: {
+                            staOwnNeed: this.form4data[0].need,//国有企业，内资企业，企业
+                            collNeed: this.form4data[1].need,//集体企业，内资企业，企业
+                            coopStockNeed: this.form4data[2].need,//股份合作企业，内资企业，企业
+                            jointNeed: this.form4data[3].need,//联营企业，内资企业，企业
+                            limiLiabNeed: this.form4data[4].need,//有限责任公司，内资企业，企业
+                            limitedNeed: this.form4data[5].need,//股份有限公司，内资企业，企业
+                            privNeed: this.form4data[6].need,//私营企业，内资企业，企业
+                            otherEnteNeed: this.form4data[7].need,//其他企业，内资企业，企业
+                            hmtInveNeed: this.form4data[8].need,//港、澳、台投资企业，企业
+                            foreInveEnte: this.form4data[9].need,//外商投资企业，企业
+                            indiNeed: this.form4data[10].need,//个体经营，企业
+                            instNeed: this.form4data[11].need,//事业
+                            orgaNeed: this.form4data[12].need,//机关
+                            otherNeed: this.form4data[13].need,//其他
+                        },
+                        profNum: {
+                            leaderNeed: this.form5data[0].need,//单位负责人需求人数
+                            leaderJobseek: this.form5data[0].seek,//单位负责人求职人数
+                            profTechNeed: this.form5data[1].need,//专业技术人员需求人数
+                            profTechJobseek: this.form5data[2].seek,//专业技术人员求职人数
+                            staffRelaNeed: this.form5data[2].need,//办事人员和有关人员需求人数
+                            staffRelaJobseek: this.form5data[3].seek,//办事人员和有关人员求职人数
+                            busiServNeed: this.form5data[3].need,//商业和服务人员需求人数
+                            busiServJobseek: this.form5data[4].seek,//商业和服务人员求职人数
+                            prodNeed: this.form5data[4].need,//农林牧渔水利生产人员需求人数
+                            prodJobseek: this.form5data[4].seek,//农林牧渔水利生产人员求职人数
+                            operNeed: this.form5data[5].need,//生产运输设备操作工需求人数
+                            operJobseek: this.form5data[5].seek,//生产运输设备操作工求职人数
+                            otherNeed: this.form5data[6].need,//其他需求人数
+                            otherJobseek: this.form5data[6].seek,//其他求职人数
+                            noRequJobseek: this.form5data[7].seek,//无要求求职人数
+                        },
+                        mostNeeded: {
+                            mostProf1Name: this.form6data[0].job,//最需要排名第一的职业名称
+                            mostProf1Num: this.form6data[0].jobcode,//最需要排名第一的职业代码
+                            mostProf1Need: this.form6data[0].need,//最需要排名第一的职业需求人数
+                            mostProf1Jobseek: this.form6data[0].seek,//最需要排名第一的职业求职人数
+                            mostProf2Name: this.form6data[1].job,//最需要排名第二的职业名称
+                            mostProf2Num: this.form6data[1].jobcode,//最需要排名第二的职业代码
+                            mostProf2Need: this.form6data[1].need,//最需要排名第二的职业需求人数
+                            mostProf2Jobseek: this.form6data[1].seek,//最需要排名第二的职业求职人数
+                            mostProf3Name: this.form6data[2].job,//最需要排名第三的职业名称
+                            mostProf3Num: this.form6data[2].jobcode,//最需要排名第三的职业代码
+                            mostProf3Need: this.form6data[2].need,//最需要排名第三的职业需求人数
+                            mostProf3Jobseek: this.form6data[2].seek,//最需要排名第三的职业求职人数
+                            mostProf4Name: this.form6data[3].job,//最需要排名第四的职业名称
+                            mostProf4Num: this.form6data[3].jobcode,//最需要排名第四的职业代码
+                            mostProf4Need: this.form6data[3].need,//最需要排名第四的职业需求人数
+                            mostProf4Jobseek: this.form6data[3].seek,//最需要排名第四的职业求职人数
+                            mostProf5Name: this.form6data[4].job,//最需要排名第五的职业名称
+                            mostProf5Num: this.form6data[4].jobcode,//最需要排名第五的职业代码
+                            mostProf5Need: this.form6data[4].need,//最需要排名第五的职业需求人数
+                            mostProf5Jobseek: this.form6data[4].seek,//最需要排名第五的职业求职人数
+                            mostProf6Name: this.form6data[5].job,//最需要排名第六的职业名称
+                            mostProf6Num: this.form6data[5].jobcode,//最需要排名第六的职业代码
+                            mostProf6Need: this.form6data[5].need,//最需要排名第六的职业需求人数
+                            mostProf6Jobseek: this.form6data[5].seek,//最需要排名第六的职业求职人数
+                            mostProf7Name: this.form6data[6].job,//最需要排名第七的职业名称
+                            mostProf7Num: this.form6data[6].jobcode,//最需要排名第七的职业代码
+                            mostProf7Need: this.form6data[6].need,//最需要排名第七的职业需求人数
+                            mostProf7Jobseek: this.form6data[6].seek,//最需要排名第七的职业求职人数
+                            mostProf8Name: this.form6data[7].job,//最需要排名第八的职业名称
+                            mostProf8Num: this.form6data[7].jobcode,//最需要排名第八的职业代码
+                            mostProf8Need: this.form6data[7].need,//最需要排名第八的职业需求人数
+                            mostProf8Jobseek: this.form6data[7].seek,//最需要排名第八的职业求职人数
+                            mostProf9Name: this.form6data[8].job,//最需要排名第九的职业名称
+                            mostProf9Num: this.form6data[8].jobcode,//最需要排名第九的职业代码
+                            mostProf9Need: this.form6data[8].need,//最需要排名第九的职业需求人数
+                            mostProf9Jobseek: this.form6data[8].seek,//最需要排名第九的职业求职人数
+                            mostProf10Name: this.form6data[9].job,//最需要排名第十的职业名称
+                            mostProf10Num: this.form6data[9].jobcode,//最需要排名第十的职业代码
+                            mostProf10Need: this.form6data[9].need,//最需要排名第十的职业需求人数
+                            mostProf10Jobseek: this.form6data[9].seek,//最需要排名第十的职业求职人数
+                        },
+                        leastNeeded: {
+                            leastProf1Name: this.form7data[0].job,//最饱和排名第一的职业名称
+                            leastProf1Num: this.form7data[0].jobcode,//最饱和排名第一的职业代码
+                            leastProf1Need: this.form7data[0].need,//最饱和排名第一的职业需求人数
+                            leastProf1Jobseek: this.form7data[0].seek,//最饱和排名第一的职业求职人数
+                            leastProf2Name: this.form7data[1].job,//最饱和排名第二的职业名称
+                            leastProf2Num: this.form7data[1].jobcode,//最饱和排名第二的职业代码
+                            leastProf2Need: this.form7data[1].need,//最饱和排名第二的职业需求人数
+                            leastProf2Jobseek: this.form7data[1].seek,//最饱和排名第二的职业求职人数
+                            leastProf3Name: this.form7data[2].job,//最饱和排名第三的职业名称
+                            leastProf3Num: this.form7data[2].jobcode,//最饱和排名第三的职业代码
+                            leastProf3Need: this.form7data[2].need,//最饱和排名第三的职业需求人数
+                            leastProf3Jobseek: this.form7data[2].seek,//最饱和排名第三的职业求职人数
+                            leastProf4Name: this.form7data[3].job,//最饱和排名第四的职业名称
+                            leastProf4Num: this.form7data[3].jobcode,//最饱和排名第四的职业代码
+                            leastProf4Need: this.form7data[3].need,//最饱和排名第四的职业需求人数
+                            leastProf4Jobseek: this.form7data[3].seek,//最饱和排名第四的职业求职人数
+                            leastProf5Name: this.form7data[4].job,//最饱和排名第五的职业名称
+                            leastProf5Num: this.form7data[4].jobcode,//最饱和排名第五的职业代码
+                            leastProf5Need: this.form7data[4].need,//最饱和排名第五的职业需求人数
+                            leastProf5Jobseek: this.form7data[4].seek,//最饱和排名第五的职业求职人数
+                            leastProf6Name: this.form7data[5].job,//最饱和排名第六的职业名称
+                            leastProf6Num: this.form7data[5].jobcode,//最饱和排名第六的职业代码
+                            leastProf6Need: this.form7data[5].need,//最饱和排名第六的职业需求人数
+                            leastProf6Jobseek: this.form7data[5].seek,//最饱和排名第六的职业求职人数
+                            leastProf7Name: this.form7data[6].job,//最饱和排名第七的职业名称
+                            leastProf7Num: this.form7data[6].jobcode,//最饱和排名第七的职业代码
+                            leastProf7Need: this.form7data[6].need,//最饱和排名第七的职业需求人数
+                            leastProf7Jobseek: this.form7data[6].seek,//最饱和排名第七的职业求职人数
+                            leastProf8Name: this.form7data[7].job,//最饱和排名第八的职业名称
+                            leastProf8Num: this.form7data[7].jobcode,//最饱和排名第八的职业代码
+                            leastProf8Need: this.form7data[7].need,//最饱和排名第八的职业需求人数
+                            leastProf8Jobseek: this.form7data[7].seek,//最饱和排名第八的职业求职人数
+                            leastProf9Name: this.form7data[8].job,//最饱和排名第九的职业名称
+                            leastProf9Num: this.form7data[8].jobcode,//最饱和排名第九的职业代码
+                            leastProf9Need: this.form7data[8].need,//最饱和排名第九的职业需求人数
+                            leastProf9Jobseek: this.form7data[8].seek,//最饱和排名第九的职业求职人数
+                            leastProf10Name: this.form7data[9].job,//最饱和排名第十的职业名称
+                            leastProf10Num: this.form7data[9].jobcode,//最饱和排名第十的职业代码
+                            leastProf10Need: this.form7data[9].need,//最饱和排名第十的职业需求人数
+                            leastProf10Jobseek: this.form7data[9].seek,//最饱和排名第十的职业求职人数
+                        },
+                        jobSeekerNum: {
+                            unempYouth: this.form8data[0].seek,//新成长失业青年
+                            graduate: this.form8data[1].seek,//应届高校毕业生
+                            empToUnemp: this.form8data[2].seek,//就业转失业人员
+                            othUnemp: this.form8data[3].seek,//其他失业人员
+                            emped: this.form8data[4].seek,//在业人员
+                            laidOff: this.form8data[5].seek,//下岗职工
+                            retiree: this.form8data[6].seek,//退休人员
+                            student: this.form8data[7].seek,//在学人员
+                            cityRural: this.form8data[8].seek,//本市农村人员
+                            fore: this.form8data[9].seek,//外埠人员
+                        },
+                        sexNum: {
+                            maleNeed: this.form9data[0].need,//男性需求人数
+                            maleJobseek: this.form9data[0].seek,//男性求职人数
+                            femaleNeed: this.form9data[1].need,//女性需求人数
+                            femaleJobseek: this.form9data[1].seek,//女性求职人数
+                            noRequNeed: this.form9data[2].need,//无要求需求人数
+                        },
+                        ageNum: {
+                            sixteenTwentyfourNeed: this.form10data[0].need,//16-24岁需求人数
+                            sixteenTwentyfourJobseek: this.form10data[0].seek,//16-24岁求职人数
+                            twentyfiveThirtyfourNeed: this.form10data[1].need,//25-34岁需求人数
+                            twentyfiveThirtyfourJobseek: this.form10data[1].seek,//25-34岁求职人数
+                            thirtyfiveFortyfourNeed: this.form10data[2].need,//35-44岁需求人数
+                            thirtyfiveFortyfourJobseek: this.form10data[2].seek,//35-44岁求职人数
+                            overFortyfourNeed: this.form10data[3].need,//45岁以上需求人数
+                            overFortyfourJobseek: this.form10data[3].seek,//45岁以上求职人数
+                            noRequNeed: this.form10data[4].need,
+                        },
+                        degreeNum: {
+                            belowJuniHighSchoNeed: this.form11data[0].need,//初中及以下需求人数
+                            belowJuniHighSchoJobseek: this.form11data[0].seek,//初中及以下求职人数
+                            highSchoNeed: this.form11data[1].need,//高中需求人数
+                            highSchoJobseek: this.form11data[1].seek,//高中求职人数
+                            otherHighSchoNeed: this.form11data[2].need,//职高技校中专需求人数
+                            otherHighSchoJobseek: this.form11data[2].seek,//职高技校中专求职人数
+                            juniCollNeed: this.form11data[3].need,//大专需求人数
+                            juniCollJobseek: this.form11data[3].seek,//大专求职人数
+                            univNeed: this.form11data[4].need,//大学需求人数
+                            univJobseek: this.form11data[4].seek,//大学求职人数
+                            noRequNeed: this.form11data[5].need,//无要求需求人数
+                        },
+                        techGradeNum: {
+                            profLevel5Need: this.form12data[0].need,//职业资格五级（初级技能）需求人数
+                            profLevel5Jobseek: this.form12data[0].seek,//职业资格五级（初级技能）求职人数
+                            profLevel4Need: this.form12data[1].need,//职业资格四级（中级技能）需求人数
+                            profLevel4Jobseek: this.form12data[1].seek,//职业资格四级（中级技能）求职人数
+                            profLevel3Need: this.form12data[2].need,//职业资格三级（高级技能）需求人数
+                            profLevel3Jobseek: this.form12data[2].seek,//职业资格三级（高级技能）求职人数
+                            profLevel2Need: this.form12data[3].need,//职业资格二级（技师）需求人数
+                            profLevel2Jobsee: this.form12data[3].seek,//职业资格二级（技师）求职人数
+                            profLevel1Need: this.form12data[4].need,//职业资格一级（高级技师）需求人数
+                            profLevel1Jobseek: this.form12data[4].seek,//职业资格一级（高级技师）求职人数
+                            primProfNeed: this.form12data[5].need,//初级专业技术职务需求人数
+                            primProfJobseek: this.form12data[5].seek,//初级专业技术职务求职人数
+                            mediProfNeed: this.form12data[6].need,//中级专业技术职务需求人数
+                            mediProfJobseek: this.form12data[6].seek,//中级专业技术职务求职人数
+                            seniProfNeed: this.form12data[7].need,//高级专业技术职务需求人数
+                            seniProfJobseek: this.form12data[7].seek,//高级专业技术职务求职人数
+                            noTechJobseek: this.form12data[8].seek,//无技术等级或职务求职人数
+                            noRequNeed: this.form12data[9].need,//无技术等级或职务需求人数
+                        },
+                    },
+                    success(res) {
+                        if(res.code==0)
+                            console.log(res);
+                        alert(words + '成功！');
+                        that.changeable[that.index - 1] = true;
+                        that.index++;
+                        that.index--;
+                    },
+                    error(res) {
+                        console.log(res);
+                        alert(res.message);
+                    }
+                })
             },
 
             save:function(){
+                var that=this;
                 this.check();
                 if(this.finished[this.index-1]) {
-                    this.changeable[this.index-1]=true;
+                    if (this.tableId == null) {
+                        console.log('aa');
+                        $.ajax({
+                            url: '/market/upload/insert',
+                            type: 'post',
+                            data: {
+                                stateFlag: 0,
+                                totalNum: {
+                                    needPopu: this.form1data.seek,//需求人数
+                                    jobseekPopu: this.form1data.need,//求职人数
+                                },
+                                industryNum: {
+                                    industry1Need: this.form2data[0].need,//第一产业需求人数
+                                    industry2Need: this.form2data[1].need,//第二产业需求人数
+                                    industry3Need: this.form2data[2].need,//第三产业需求人数
+                                    // industry1Need:this.form3data[0].need,//第一产业需求人数
+                                    // industry2Need:Number(this.form3data[1].need)+Number(this.form3data[2].need)+Number(this.form3data[3].need)+Number(this.form3data[4].need),//第二产业需求人数
+                                    // industry3Need:Number(this.form3data[5].need)+Number(this.form3data[6].need)+Number(this.form3data[7].need)+Number(this.form3data[8].need)+Number(this.form3data[9].need)+Number(this.form3data[10].need)+Number(this.form3data[11].need)+Number(this.form3data[12].need)+Number(this.form3data[13].need)+Number(this.form3data[14].need)+Number(this.form3data[15].need)+Number(this.form3data[16].need)+Number(this.form3data[17].need)+Number(this.form3data[18].need)+Number(this.form3data[19].need),//第三产业需求人数
+                                    mineNeed: this.form3data[1].need,//采矿业，第二产业
+                                    manuNeed: this.form3data[2].need,//制造业，第二产业
+                                    elecGasWaterNeed: this.form3data[3].need,//电力、燃气及水的生产和供应业，第二产业
+                                    archNeed: this.form3data[4].need,//建筑业，第二产业
+                                    tranStorPostNeed: this.form3data[5].need,//交通运输、仓储和邮政业，第三产业
+                                    infoCompSoftNeed: this.form3data[6].need,//信息传输、计算机服务和软件业，第三产业
+                                    retailNeed: this.form3data[7].need,//批发和零售业，第三产业
+                                    accoCaterNeed: this.form3data[8].need,//住宿和餐饮业，第三产业
+                                    financeNeed: this.form3data[9].need,//金融业，第三产业
+                                    estateNeed: this.form3data[10].need,//房地产业，第三产业
+                                    leaseBusiServNeed: this.form3data[11].need,//租赁和商务服务业，第三产业
+                                    reseTechAddrNeed: this.form3data[12].need,//科学研究、技术服务和地址勘查业，第三产业
+                                    waterEnviFaciNeed: this.form3data[13].need,//水利、环境和公共设施管理业，第三产业
+                                    resiServNeed: this.form3data[14].need,//居民服务和其他服务业，第三产业
+                                    eduNeed: this.form3data[15].need,//教育，第三产业
+                                    healSecuWelfNeed: this.form3data[16].need,//卫生、社会保障和社会福利业，第三产业
+                                    cultSportEnteNeed: this.form3data[17].need,//文化、体育和娱乐业，第三产业
+                                    manaOrgaNeed: this.form3data[18].need,//公共管理与社会组织，第三产业
+                                    inteOrgaNeed: this.form3data[19].need,//国际组织，第三产业
+                                },
+                                employerNum: {
+                                    staOwnNeed: this.form4data[0].need,//国有企业，内资企业，企业
+                                    collNeed: this.form4data[1].need,//集体企业，内资企业，企业
+                                    coopStockNeed: this.form4data[2].need,//股份合作企业，内资企业，企业
+                                    jointNeed: this.form4data[3].need,//联营企业，内资企业，企业
+                                    limiLiabNeed: this.form4data[4].need,//有限责任公司，内资企业，企业
+                                    limitedNeed: this.form4data[5].need,//股份有限公司，内资企业，企业
+                                    privNeed: this.form4data[6].need,//私营企业，内资企业，企业
+                                    otherEnteNeed: this.form4data[7].need,//其他企业，内资企业，企业
+                                    hmtInveNeed: this.form4data[8].need,//港、澳、台投资企业，企业
+                                    foreInveEnte: this.form4data[9].need,//外商投资企业，企业
+                                    indiNeed: this.form4data[10].need,//个体经营，企业
+                                    instNeed: this.form4data[11].need,//事业
+                                    orgaNeed: this.form4data[12].need,//机关
+                                    otherNeed: this.form4data[13].need,//其他
+                                },
+                                profNum: {
+                                    leaderNeed: this.form5data[0].need,//单位负责人需求人数
+                                    leaderJobseek: this.form5data[0].seek,//单位负责人求职人数
+                                    profTechNeed: this.form5data[1].need,//专业技术人员需求人数
+                                    profTechJobseek: this.form5data[2].seek,//专业技术人员求职人数
+                                    staffRelaNeed: this.form5data[2].need,//办事人员和有关人员需求人数
+                                    staffRelaJobseek: this.form5data[3].seek,//办事人员和有关人员求职人数
+                                    busiServNeed: this.form5data[3].need,//商业和服务人员需求人数
+                                    busiServJobseek: this.form5data[4].seek,//商业和服务人员求职人数
+                                    prodNeed: this.form5data[4].need,//农林牧渔水利生产人员需求人数
+                                    prodJobseek: this.form5data[4].seek,//农林牧渔水利生产人员求职人数
+                                    operNeed: this.form5data[5].need,//生产运输设备操作工需求人数
+                                    operJobseek: this.form5data[5].seek,//生产运输设备操作工求职人数
+                                    otherNeed: this.form5data[6].need,//其他需求人数
+                                    otherJobseek: this.form5data[6].seek,//其他求职人数
+                                    noRequJobseek: this.form5data[7].seek,//无要求求职人数
+                                },
+                                mostNeeded: {
+                                    mostProf1Name: this.form6data[0].job,//最需要排名第一的职业名称
+                                    mostProf1Num: this.form6data[0].jobcode,//最需要排名第一的职业代码
+                                    mostProf1Need: this.form6data[0].need,//最需要排名第一的职业需求人数
+                                    mostProf1Jobseek: this.form6data[0].seek,//最需要排名第一的职业求职人数
+                                    mostProf2Name: this.form6data[1].job,//最需要排名第二的职业名称
+                                    mostProf2Num: this.form6data[1].jobcode,//最需要排名第二的职业代码
+                                    mostProf2Need: this.form6data[1].need,//最需要排名第二的职业需求人数
+                                    mostProf2Jobseek: this.form6data[1].seek,//最需要排名第二的职业求职人数
+                                    mostProf3Name: this.form6data[2].job,//最需要排名第三的职业名称
+                                    mostProf3Num: this.form6data[2].jobcode,//最需要排名第三的职业代码
+                                    mostProf3Need: this.form6data[2].need,//最需要排名第三的职业需求人数
+                                    mostProf3Jobseek: this.form6data[2].seek,//最需要排名第三的职业求职人数
+                                    mostProf4Name: this.form6data[3].job,//最需要排名第四的职业名称
+                                    mostProf4Num: this.form6data[3].jobcode,//最需要排名第四的职业代码
+                                    mostProf4Need: this.form6data[3].need,//最需要排名第四的职业需求人数
+                                    mostProf4Jobseek: this.form6data[3].seek,//最需要排名第四的职业求职人数
+                                    mostProf5Name: this.form6data[4].job,//最需要排名第五的职业名称
+                                    mostProf5Num: this.form6data[4].jobcode,//最需要排名第五的职业代码
+                                    mostProf5Need: this.form6data[4].need,//最需要排名第五的职业需求人数
+                                    mostProf5Jobseek: this.form6data[4].seek,//最需要排名第五的职业求职人数
+                                    mostProf6Name: this.form6data[5].job,//最需要排名第六的职业名称
+                                    mostProf6Num: this.form6data[5].jobcode,//最需要排名第六的职业代码
+                                    mostProf6Need: this.form6data[5].need,//最需要排名第六的职业需求人数
+                                    mostProf6Jobseek: this.form6data[5].seek,//最需要排名第六的职业求职人数
+                                    mostProf7Name: this.form6data[6].job,//最需要排名第七的职业名称
+                                    mostProf7Num: this.form6data[6].jobcode,//最需要排名第七的职业代码
+                                    mostProf7Need: this.form6data[6].need,//最需要排名第七的职业需求人数
+                                    mostProf7Jobseek: this.form6data[6].seek,//最需要排名第七的职业求职人数
+                                    mostProf8Name: this.form6data[7].job,//最需要排名第八的职业名称
+                                    mostProf8Num: this.form6data[7].jobcode,//最需要排名第八的职业代码
+                                    mostProf8Need: this.form6data[7].need,//最需要排名第八的职业需求人数
+                                    mostProf8Jobseek: this.form6data[7].seek,//最需要排名第八的职业求职人数
+                                    mostProf9Name: this.form6data[8].job,//最需要排名第九的职业名称
+                                    mostProf9Num: this.form6data[8].jobcode,//最需要排名第九的职业代码
+                                    mostProf9Need: this.form6data[8].need,//最需要排名第九的职业需求人数
+                                    mostProf9Jobseek: this.form6data[8].seek,//最需要排名第九的职业求职人数
+                                    mostProf10Name: this.form6data[9].job,//最需要排名第十的职业名称
+                                    mostProf10Num: this.form6data[9].jobcode,//最需要排名第十的职业代码
+                                    mostProf10Need: this.form6data[9].need,//最需要排名第十的职业需求人数
+                                    mostProf10Jobseek: this.form6data[9].seek,//最需要排名第十的职业求职人数
+                                },
+                                leastNeeded: {
+                                    leastProf1Name: this.form7data[0].job,//最饱和排名第一的职业名称
+                                    leastProf1Num: this.form7data[0].jobcode,//最饱和排名第一的职业代码
+                                    leastProf1Need: this.form7data[0].need,//最饱和排名第一的职业需求人数
+                                    leastProf1Jobseek: this.form7data[0].seek,//最饱和排名第一的职业求职人数
+                                    leastProf2Name: this.form7data[1].job,//最饱和排名第二的职业名称
+                                    leastProf2Num: this.form7data[1].jobcode,//最饱和排名第二的职业代码
+                                    leastProf2Need: this.form7data[1].need,//最饱和排名第二的职业需求人数
+                                    leastProf2Jobseek: this.form7data[1].seek,//最饱和排名第二的职业求职人数
+                                    leastProf3Name: this.form7data[2].job,//最饱和排名第三的职业名称
+                                    leastProf3Num: this.form7data[2].jobcode,//最饱和排名第三的职业代码
+                                    leastProf3Need: this.form7data[2].need,//最饱和排名第三的职业需求人数
+                                    leastProf3Jobseek: this.form7data[2].seek,//最饱和排名第三的职业求职人数
+                                    leastProf4Name: this.form7data[3].job,//最饱和排名第四的职业名称
+                                    leastProf4Num: this.form7data[3].jobcode,//最饱和排名第四的职业代码
+                                    leastProf4Need: this.form7data[3].need,//最饱和排名第四的职业需求人数
+                                    leastProf4Jobseek: this.form7data[3].seek,//最饱和排名第四的职业求职人数
+                                    leastProf5Name: this.form7data[4].job,//最饱和排名第五的职业名称
+                                    leastProf5Num: this.form7data[4].jobcode,//最饱和排名第五的职业代码
+                                    leastProf5Need: this.form7data[4].need,//最饱和排名第五的职业需求人数
+                                    leastProf5Jobseek: this.form7data[4].seek,//最饱和排名第五的职业求职人数
+                                    leastProf6Name: this.form7data[5].job,//最饱和排名第六的职业名称
+                                    leastProf6Num: this.form7data[5].jobcode,//最饱和排名第六的职业代码
+                                    leastProf6Need: this.form7data[5].need,//最饱和排名第六的职业需求人数
+                                    leastProf6Jobseek: this.form7data[5].seek,//最饱和排名第六的职业求职人数
+                                    leastProf7Name: this.form7data[6].job,//最饱和排名第七的职业名称
+                                    leastProf7Num: this.form7data[6].jobcode,//最饱和排名第七的职业代码
+                                    leastProf7Need: this.form7data[6].need,//最饱和排名第七的职业需求人数
+                                    leastProf7Jobseek: this.form7data[6].seek,//最饱和排名第七的职业求职人数
+                                    leastProf8Name: this.form7data[7].job,//最饱和排名第八的职业名称
+                                    leastProf8Num: this.form7data[7].jobcode,//最饱和排名第八的职业代码
+                                    leastProf8Need: this.form7data[7].need,//最饱和排名第八的职业需求人数
+                                    leastProf8Jobseek: this.form7data[7].seek,//最饱和排名第八的职业求职人数
+                                    leastProf9Name: this.form7data[8].job,//最饱和排名第九的职业名称
+                                    leastProf9Num: this.form7data[8].jobcode,//最饱和排名第九的职业代码
+                                    leastProf9Need: this.form7data[8].need,//最饱和排名第九的职业需求人数
+                                    leastProf9Jobseek: this.form7data[8].seek,//最饱和排名第九的职业求职人数
+                                    leastProf10Name: this.form7data[9].job,//最饱和排名第十的职业名称
+                                    leastProf10Num: this.form7data[9].jobcode,//最饱和排名第十的职业代码
+                                    leastProf10Need: this.form7data[9].need,//最饱和排名第十的职业需求人数
+                                    leastProf10Jobseek: this.form7data[9].seek,//最饱和排名第十的职业求职人数
+                                },
+                                jobSeekerNum: {
+                                    unempYouth: this.form8data[0].seek,//新成长失业青年
+                                    graduate: this.form8data[1].seek,//应届高校毕业生
+                                    empToUnemp: this.form8data[2].seek,//就业转失业人员
+                                    othUnemp: this.form8data[3].seek,//其他失业人员
+                                    emped: this.form8data[4].seek,//在业人员
+                                    laidOff: this.form8data[5].seek,//下岗职工
+                                    retiree: this.form8data[6].seek,//退休人员
+                                    student: this.form8data[7].seek,//在学人员
+                                    cityRural: this.form8data[8].seek,//本市农村人员
+                                    fore: this.form8data[9].seek,//外埠人员
+                                },
+                                sexNum: {
+                                    maleNeed: this.form9data[0].need,//男性需求人数
+                                    maleJobseek: this.form9data[0].seek,//男性求职人数
+                                    femaleNeed: this.form9data[1].need,//女性需求人数
+                                    femaleJobseek: this.form9data[1].seek,//女性求职人数
+                                    noRequNeed: this.form9data[2].need,//无要求需求人数
+                                },
+                                ageNum: {
+                                    sixteenTwentyfourNeed: this.form10data[0].need,//16-24岁需求人数
+                                    sixteenTwentyfourJobseek: this.form10data[0].seek,//16-24岁求职人数
+                                    twentyfiveThirtyfourNeed: this.form10data[1].need,//25-34岁需求人数
+                                    twentyfiveThirtyfourJobseek: this.form10data[1].seek,//25-34岁求职人数
+                                    thirtyfiveFortyfourNeed: this.form10data[2].need,//35-44岁需求人数
+                                    thirtyfiveFortyfourJobseek: this.form10data[2].seek,//35-44岁求职人数
+                                    overFortyfourNeed: this.form10data[3].need,//45岁以上需求人数
+                                    overFortyfourJobseek: this.form10data[3].seek,//45岁以上求职人数
+                                    noRequNeed: this.form10data[4].need,
+                                },
+                                degreeNum: {
+                                    belowJuniHighSchoNeed: this.form11data[0].need,//初中及以下需求人数
+                                    belowJuniHighSchoJobseek: this.form11data[0].seek,//初中及以下求职人数
+                                    highSchoNeed: this.form11data[1].need,//高中需求人数
+                                    highSchoJobseek: this.form11data[1].seek,//高中求职人数
+                                    otherHighSchoNeed: this.form11data[2].need,//职高技校中专需求人数
+                                    otherHighSchoJobseek: this.form11data[2].seek,//职高技校中专求职人数
+                                    juniCollNeed: this.form11data[3].need,//大专需求人数
+                                    juniCollJobseek: this.form11data[3].seek,//大专求职人数
+                                    univNeed: this.form11data[4].need,//大学需求人数
+                                    univJobseek: this.form11data[4].seek,//大学求职人数
+                                    noRequNeed: this.form11data[5].need,//无要求需求人数
+                                },
+                                techGradeNum: {
+                                    profLevel5Need: this.form12data[0].need,//职业资格五级（初级技能）需求人数
+                                    profLevel5Jobseek: this.form12data[0].seek,//职业资格五级（初级技能）求职人数
+                                    profLevel4Need: this.form12data[1].need,//职业资格四级（中级技能）需求人数
+                                    profLevel4Jobseek: this.form12data[1].seek,//职业资格四级（中级技能）求职人数
+                                    profLevel3Need: this.form12data[2].need,//职业资格三级（高级技能）需求人数
+                                    profLevel3Jobseek: this.form12data[2].seek,//职业资格三级（高级技能）求职人数
+                                    profLevel2Need: this.form12data[3].need,//职业资格二级（技师）需求人数
+                                    profLevel2Jobsee: this.form12data[3].seek,//职业资格二级（技师）求职人数
+                                    profLevel1Need: this.form12data[4].need,//职业资格一级（高级技师）需求人数
+                                    profLevel1Jobseek: this.form12data[4].seek,//职业资格一级（高级技师）求职人数
+                                    primProfNeed: this.form12data[5].need,//初级专业技术职务需求人数
+                                    primProfJobseek: this.form12data[5].seek,//初级专业技术职务求职人数
+                                    mediProfNeed: this.form12data[6].need,//中级专业技术职务需求人数
+                                    mediProfJobseek: this.form12data[6].seek,//中级专业技术职务求职人数
+                                    seniProfNeed: this.form12data[7].need,//高级专业技术职务需求人数
+                                    seniProfJobseek: this.form12data[7].seek,//高级专业技术职务求职人数
+                                    noTechJobseek: this.form12data[8].seek,//无技术等级或职务求职人数
+                                    noRequNeed: this.form12data[9].need,//无技术等级或职务需求人数
+                                },
+                            },
+                            success(res) {
+                                console.log(this.data);
+                                console.log(res);
+                                alert('保存成功！');
+                                that.changeable[that.index - 1] = true;
+                                that.index++;
+                                that.index--;
+                            },
+                            error(res) {
+                                console.log(res);
+                                alert('保存失败，请稍后重试');
+                            }
+                        })
+                    }
                 }
+                else
+                    this.updateData(0);
+            },
 
+            submit:function(){
+                this.updateData(1);
+                for(var i = 0; i<12;i++)
+                    this.changeable[i] = true;
+                this.index=0;
+                this.index=1;
             },
 
             last:function(){
@@ -1370,610 +1839,3 @@
     })
 </script>
 </html>
-<!--表1-->
-<!--<el-table-->
-<!--class="table"-->
-<!--v-if="this.index==0"-->
-<!--:common="form1data">-->
-<!--<el-table-column-->
-<!--prop="title"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="">-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="need"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="需求人数">-->
-<!--<template scope="scope">-->
-<!--<el-input v-model="form1data.need"></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="seek"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求职人数">-->
-<!--<template scope="scope">-->
-<!--<el-input v-model="form1data.seek"></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="rate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求人倍率">-->
-<!--<template scope="scope">-->
-<!--<el-input v-model="form1data.rate"></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--</el-table>-->
-<!--&lt;!&ndash;表2&ndash;&gt;-->
-<!--<el-table class="table"-->
-<!--v-else-if="this.index==1"-->
-<!--show-summary="true"-->
-<!--:common="form2data">-->
-<!--<el-table-column-->
-<!--prop="title"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="产业">-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--sortable-->
-<!--label="需求人数">-->
-<!--<template scope="scope"-->
-<!--v-for="item in form2data">-->
-<!--<el-input v-model="item.need"></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--sortable-->
-<!--label="所占比重">-->
-<!--<template scope="scope">-->
-<!--<el-input v-model="form2data.needrate"></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--</el-table>-->
-<!--&lt;!&ndash;表3&ndash;&gt;-->
-<!--<el-table class="table"-->
-<!--v-else-if="this.index==2"-->
-<!--show-summary="true"-->
-<!--:common="form3data">-->
-<!--<el-table-column-->
-<!--prop="title"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="行业">-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="need"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--sortable-->
-<!--label="需求人数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="needrate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--sortable-->
-<!--label="所占比重">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--</el-table>-->
-<!--&lt;!&ndash;表4&ndash;&gt;-->
-<!--<el-table class="table"-->
-<!--v-else-if="this.index==3"-->
-<!--show-summary="true"-->
-<!--:span-method="arraySpan"-->
-<!--:common="form4data">-->
-<!--<el-table-column-->
-<!--prop="title1"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="">-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="title2"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="">-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="need"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--sortable-->
-<!--label="需求人数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="needrate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--sortable-->
-<!--label="所占比重">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-
-<!--</el-table>-->
-<!--&lt;!&ndash;表5&ndash;&gt;-->
-<!--<el-table class="table"-->
-<!--v-else-if="this.index==4"-->
-<!--show-summary="true"-->
-<!--:summary-method="getSum"-->
-<!--:common="form5data">-->
-<!--<el-table-column-->
-<!--prop="title"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="职业类别">-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--label="劳动力供求人数比较">-->
-<!--<el-table-column-->
-<!--prop="need"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="需求人数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="needrate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="所占比重">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="seek"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求职人数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="seekrate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="所占比重">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="rate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求人倍率">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--</el-table-column>-->
-
-<!--</el-table>-->
-<!--&lt;!&ndash;表6&ndash;&gt;-->
-<!--<el-table class="table"-->
-<!--v-else-if="this.index==5"-->
-<!--show-summary="true"-->
-<!--:common="form6data">-->
-<!--<el-table-column-->
-<!--prop="job"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="职业">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="jobcode"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="职业类别">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--label="劳动力供求人数比较">-->
-<!--<el-table-column-->
-<!--prop="need"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="需求人数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="seek"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求职人数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="gap"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="缺口数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="rate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求人倍率">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--</el-table-column>-->
-<!--</el-table>-->
-<!--&lt;!&ndash;表7&ndash;&gt;-->
-<!--<el-table class="table"-->
-<!--v-else-if="this.index==6"-->
-<!--show-summary="true"-->
-<!--:common="form7data">-->
-<!--<el-table-column-->
-<!--prop="job"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="职业">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="jobcode"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="职业类别">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--label="劳动力供求人数比较">-->
-<!--<el-table-column-->
-<!--prop="need"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="需求人数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="seek"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求职人数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="gap"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="缺口数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="rate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求人倍率">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--</el-table-column>-->
-<!--</el-table>-->
-<!--&lt;!&ndash;表8&ndash;&gt;-->
-<!--<el-table class="table"-->
-<!--v-else-if="this.index==7"-->
-<!--show-summary="true"-->
-<!--:common="form8data">-->
-<!--<el-table-column-->
-<!--prop="title"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求职人员类别">-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="seek"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求职人数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="seekrate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="所占比重">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--</el-table>-->
-<!--&lt;!&ndash;表9&ndash;&gt;-->
-<!--<el-table class="table"-->
-<!--v-else-if="this.index==8"-->
-<!--show-summary="true"-->
-<!--:summary-method="getSum"-->
-<!--:common="form9data">-->
-<!--<el-table-column-->
-<!--prop="title"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="性别">-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="title"-->
-<!--label="劳动力供求人数比较">-->
-<!--<el-table-column-->
-<!--prop="need"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="需求人数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="needrate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="所占比重">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="seek"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求职人数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="seekrate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="所占比重">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="rate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求人倍率">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--</el-table-column>-->
-<!--</el-table>-->
-<!--&lt;!&ndash;表10&ndash;&gt;-->
-<!--<el-table class="table"-->
-<!--v-else-if="this.index==9"-->
-<!--show-summary="true"-->
-<!--:summary-method="getSum"-->
-<!--:common="form10data">-->
-<!--<el-table-column-->
-<!--prop="title"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="年龄">-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="title"-->
-<!--label="劳动力供求人数比较">-->
-<!--<el-table-column-->
-<!--prop="need"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="需求人数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="needrate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="所占比重">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="seek"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求职人数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="seekrate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="所占比重">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="rate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求人倍率">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--</el-table-column>-->
-<!--</el-table>-->
-<!--&lt;!&ndash;表11&ndash;&gt;-->
-<!--<el-table class="table"-->
-<!--v-else-if="this.index==10"-->
-<!--show-summary="true"-->
-<!--:summary-method="getSum"-->
-<!--:common="form11data">-->
-<!--<el-table-column-->
-<!--prop="title"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="文化程度">-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="title"-->
-<!--label="劳动力供求人数比较">-->
-<!--<el-table-column-->
-<!--prop="need"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="需求人数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="needrate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="所占比重">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="seek"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求职人数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="seekrate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="所占比重">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="rate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求人倍率">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--</el-table-column>-->
-<!--</el-table>-->
-<!--&lt;!&ndash;表12&ndash;&gt;-->
-<!--<el-table class="table"-->
-<!--v-else-if="this.index==11"-->
-<!--show-summary="true"-->
-<!--:summary-method="getSum"-->
-<!--:common="form12data">-->
-<!--<el-table-column-->
-<!--prop="title"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="技术等级">-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--label="劳动力供求人数比较">-->
-<!--<el-table-column-->
-<!--prop="need"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="需求人数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="needrate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="所占比重">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="seek"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求职人数">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="seekrate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="所占比重">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--<el-table-column-->
-<!--prop="rate"-->
-<!--width="180px"-->
-<!--fit="true"-->
-<!--label="求人倍率">-->
-<!--<template scope="scope">-->
-<!--<el-input></el-input>-->
-<!--</template>-->
-<!--</el-table-column>-->
-<!--</el-table-column>-->
-<!--</el-table>-->
