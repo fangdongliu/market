@@ -50,7 +50,10 @@ public interface MarketMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTIme, \n" +
             "reviser AS reviser \n" +
-            "from t_record_info where region_emp_id=#{param1} and state_flag=2 limit 1;")
+            "from t_record_info where \n" +
+            "delete_flag=0 \n" +
+            "and state_flag=2 \n" +
+            "and region_emp_id=#{param1} limit 1;")
     Record recordSelectFinished(Integer userId);
 
     //根据用户id查询保存或上传的备案信息
@@ -67,7 +70,10 @@ public interface MarketMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTIme, \n" +
             "reviser AS reviser \n" +
-            "from t_record_info where region_emp_id=#{param1} and (state_flag=0 or state_flag=1) limit 1;")
+            "from t_record_info where \n" +
+            "delete_flag=0 \n" +
+            "and (state_flag=0 or state_flag=1) \n" +
+            "and region_emp_id=#{param1} limit 1;")
     Record recordSelectUnfinished(Integer userId);
 
     //监测点查询激活状态
@@ -342,7 +348,8 @@ public interface MarketMapper {
             "where table_id=#{tableId};")
     Integer uploadUpdateTechGradeNum(TechGradeNum techGradeNum);
 
-    //监测点查询上传数据（默认流程）
+    //TODO:改名为uploadSelectUnfinished
+    //根据监测点id查询保存、上传数据
     @Select("SELECT \n" +
             "table_id AS tableId, \n" +
             "upload_period_id AS uploadPeriodId, \n" +
@@ -351,8 +358,9 @@ public interface MarketMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTime, \n" +
             "reviser AS reviser \n" +
-            "from t_upload_info where delete_flag=0 and \n" +
-            "creator=#{param1} and \n" +
-            "(state_flag=0 or state_flag=1 or state_flag=2) limit 1;")
+            "from t_upload_info where \n" +
+            "delete_flag=0 \n" +
+            "and (state_flag=0 or state_flag=1 or state_flag=2) \n" +
+            "and creator=#{param1} limit 1;")
     UploadInfo uploadSelect(int userId);
 }

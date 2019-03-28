@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/market")//检测点接口
+@RequestMapping("/market")//监测点接口
 public class MarketController extends ControllerBase {
 
     @Autowired

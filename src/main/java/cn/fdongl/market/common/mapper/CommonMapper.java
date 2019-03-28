@@ -358,6 +358,7 @@ public interface CommonMapper {
             "and table_id=#{param1} limit 1;")
     TechGradeNum selectTechGradeNum(Integer tableId);
 
+    //TODO:存在疑问
     //上传数据条件查询，查时间段，用户id和条件
     @Select("SELECT \n" +
             "table_id AS tableId, \n" +
@@ -397,7 +398,10 @@ public interface CommonMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTime, \n" +
             "reviser AS reviser \n" +
-            "from t_upload_info where state_flag=3 and creator=#{param1};")
+            "from t_upload_info where \n" +
+            "delete_flag=0 \n" +
+            "and state_flag=3 \n" +
+            "and creator=#{param1};")
     List<UploadInfo> selectUploadInfoById(Integer userId);
 
     //根据时间点查询简易调查期
@@ -405,8 +409,10 @@ public interface CommonMapper {
             "upload_period_id AS uploadPeriodId, \n" +
             "start_date AS startDate, \n" +
             "end_date AS endDate \n" +
-            "from t_upload_period \n" +
-            "where start_date<=#{param1} and #{param1}<end_date limit 1;")
+            "from t_upload_period where \n" +
+            "delete_flag=0 \n" +
+            "and start_date<=#{param1} \n" +
+            "and #{param1}<end_date limit 1;")
     SimpleUploadPeriod selectSimpleUploadPeriod(java.sql.Date date);
 
     //根据id查询调查期
@@ -418,9 +424,10 @@ public interface CommonMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTime, \n" +
             "reviser AS reviser \n" +
-            "from t_upload_period \n" +
-            "where upload_period_id=#{param1} limit 1;")
-    UploadPeriod selectUploadPeriod(Integer uploadPeriodID);
+            "from t_upload_period where \n" +
+            "delete_flag=0 \n" +
+            "and upload_period_id=#{param1} limit 1;")
+    UploadPeriod selectUploadPeriod(Integer uploadPeriodId);
 
     //根据时间段查询调查期（有任意一天在这个时间段的所有调查期）
     @Select("SELECT \n" +
@@ -433,7 +440,7 @@ public interface CommonMapper {
             "reviser AS reviser \n" +
             "from t_upload_period where \n" +
             "delete_flag=0 and \n" +
-            "((#{param1}<start_date and start_date<#{param2}) or \n" +
-            "(start_date<=#{param1} and #{param1}<end_date));")
+            "((#{param1}<start_date and start_date<#{param2}) \n" +
+            "or (start_date<=#{param1} and #{param1}<end_date));")
     List<UploadPeriod> selectUploadPeriodByTime(java.sql.Date startDate,java.sql.Date endDate);
 }

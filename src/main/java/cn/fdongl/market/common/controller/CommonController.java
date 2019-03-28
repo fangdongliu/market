@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/common")//指定接口的一级路径
+@RequestMapping("/common")//通用接口
 public class CommonController extends ControllerBase {
 
     @Autowired

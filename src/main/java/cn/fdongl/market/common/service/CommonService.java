@@ -162,7 +162,7 @@ public class CommonService {
                     return selectIndustryNum(tableId);
                 }
             }
-            throw new Exception("PeriodId Errorr");
+            throw new Exception("PeriodId Error");
         }
         else if(a==2){
             List<UserInfoDisplay> sub=provinceService.selectSub(aimUserId);
