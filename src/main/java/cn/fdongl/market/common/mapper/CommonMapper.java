@@ -15,7 +15,7 @@ import java.util.List;
 @Order(1)
 public interface CommonMapper {
 
-    //发送一条通知，单点发送
+    //省市审核时发送一条通知，单点发送
     @Insert("INSERT INTO t_notice \n" +
             "(notice_title,notice_content,create_time,creator,receiver,delete_flag) \n" +
             "values(#{param1},#{param2},now(),#{param3},#{param4},0);")
@@ -43,8 +43,12 @@ public interface CommonMapper {
             "revise_time AS reviseTime, \n" +
             "reviser AS reviser, \n" +
             "receiver AS receiver \n" +
-            "from t_notice where creator=#{param1} and delete_flag=0;")
+            "from t_notice where \n" +
+            "delete_flag=0 \n" +
+            "and creator=#{param1};")
     List<Notice> selectMessage(Integer userId);
+
+    //TODO:
 
     //查询自己的通知
     @Select("SELECT \n" +
@@ -56,10 +60,12 @@ public interface CommonMapper {
             "revise_time AS reviseTime, \n" +
             "reviser AS reviser, \n" +
             "receiver AS receiver \n" +
-            "from t_notice where delete_flag=0 and \n" +
-            "(receiver=#{param1} or \n" +
-            "creator=(select superior from t_user where user_id=#{param1}) or \n" +
-            "(select usertype from t_user where user_id=t_notice.creator)=1);")
+            "from t_notice where \n" +
+            "delete_flag=0 \n" +
+            "and ((select @tmp:=usertype from t_user where t_user.user_id=t_notice.creator limit 1)=1) \n" +
+            "or (@tmp=2 and  receiver=#{param1} or \n" +
+            "creator= or \n" +
+            ");")
     List<Notice> receiveMessage(Integer userId);
 
     //删除一条通知
