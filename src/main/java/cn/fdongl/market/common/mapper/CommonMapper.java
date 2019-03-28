@@ -104,7 +104,7 @@ public interface CommonMapper {
             "acco_cater_need AS accoCaterNeed, \n" +
             "finance_need AS financeNeed, \n" +
             "estate_need AS estateNeed, \n" +
-            "lease_busiserv_need AS leaseBusiservNeed, \n" +
+            "lease_busi_serv_need AS leaseBusiservNeed, \n" +
             "rese_tech_addr_need AS reseTechAddrNeed, \n" +
             "water_envi_faci_need AS waterEnviFaciNeed, \n" +
             "resi_serv_need AS resiServNeed, \n" +

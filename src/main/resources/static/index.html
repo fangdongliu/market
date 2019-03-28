@@ -151,12 +151,19 @@
         methods:{
             handleSelect(index){
                 console.log('handleSelect:'+this.menuData[index]);
-                this.loading=true;
+
                 if(index.toString().indexOf('-')===-1){
+                    if(this.src==='/html/'+this.menuData[index].menuPath){
+                        return;
+                    }
+                    this.loading=true;
                     this.src='/html/'+this.menuData[index].menuPath;
                     this.setupWatcher();
                 }else{
                     var i = index.indexOf('-');
+                    if(this.src==='/html/'+this.menuData[index.substring(0,i)].children[index.substring(i+1)].menuPath)
+                        return;
+                    this.loading=true;
                     this.src='/html/'+this.menuData[index.substring(0,i)].children[index.substring(i+1)].menuPath;
                     this.setupWatcher();
                 }
