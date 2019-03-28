@@ -1959,16 +1959,15 @@
                             noRequNeedTechGradeNum: that.form12data[9].need,//无技术等级或职务需求人数
                     },
                     success(res) {
+                        console.log(res);
                         if(res.code==0) {
                             console.log('data:'+this.data.uploadDataSet);
-                            console.log(res);
                             alert(words + '成功！');
                             that.changeable[that.index - 1] = true;
                             that.index++;
                             that.index--;
                         }
                         else
-                            console.log('dataa:'+that.tableId);
                             alert(res.message);
                     },
                     error(res) {
