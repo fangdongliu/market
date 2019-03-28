@@ -29,6 +29,16 @@ public interface UserMapper {
     @Select("SELECT user_id as id,username,fullname,usertype as userType,superior as father,state_flag as `status`,delete_flag as deleteFlag FROM t_user")
     List<ListUserData>list();
 
+    @Select("<script>" +
+            "select user_id as id,username,fullname,usertype as userType,superior as father,state_flag as `status`,delete_flag as deleteFlag " +
+            "from t_user where 1=1 " +
+            "<if test='param3!=null'>and usertype = #{param3} </if>" +
+            "<if test='param4!=null'>and username like #{param4} </if>" +
+            "<if test='param5!=null'>and fullname like #{param5} </if>"+
+            "limit #{param1},#{param2}"+
+            "</script>")
+    List<ListUserData>page(int begin,int count,Integer userType,String username,String fullname);
+
     @Update("UPDATE t_user\n" +
             "SET delete_flag = 0 WHERE user_id = #{param1};")
     int enable(Integer rightId);
@@ -106,6 +116,10 @@ public interface UserMapper {
 
             "</script>")
     int addUsers(List<UsernameAndFullname>array,Integer parent,String password,Integer currentUser,Integer userType,Integer userRole);
+
+
+
+
 
     @Update("update t_user set password=#{param1} where user_id = #{param2}")
     int updatePassword(String password,int userId);
