@@ -80,7 +80,9 @@ public interface CommonMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTime, \n" +
             "reviser AS reviser \n" +
-            "from t_upload_info where table_id=#{param1} limit 1;")
+            "from t_upload_info where \n" +
+            "delete_flag=0 \n" +
+            "and table_id=#{param1} limit 1;")
     UploadInfo selectUploadInfo(Integer tableId);
 
     //查询供求总体人数信息
@@ -88,7 +90,9 @@ public interface CommonMapper {
             "table_id AS tableId, \n" +
             "need_popu AS needPopu, \n" +
             "jobseek_popu AS jobseekPopu \n" +
-            "from t_total_num where table_id=#{param1} limit 1;")
+            "from t_total_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_total_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     TotalNum selectTotalNum(Integer tableId);
 
     //查询产业需求人数表
@@ -116,7 +120,9 @@ public interface CommonMapper {
             "cult_sport_ente_need AS cultSportEnteNeed, \n" +
             "mana_orga_need AS manaOrgaNeed, \n" +
             "inte_orga_need AS inteOrgaNeed \n" +
-            "from t_industry_num where table_id=#{param1} limit 1;")
+            "from t_industry_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     IndustryNum selectIndustryNum(Integer tableId);
 
     //查询用人单位单性质需求人数表
@@ -136,7 +142,9 @@ public interface CommonMapper {
             "inst_need AS instNeed, \n" +
             "orga_need AS orgaNeed, \n" +
             "other_need AS otherNeed \n" +
-            "from t_employer_num where table_id=#{param1} limit 1;")
+            "from t_employer_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_employer_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     EmployerNum selectEmployerNum(Integer tableId);
 
     //查询职业供求人数表
@@ -157,7 +165,9 @@ public interface CommonMapper {
             "other_need AS otherNeed, \n" +
             "other_jobseek AS otherJobseek, \n" +
             "no_requ_jobseek AS noRequJobseek \n" +
-            "from t_prof_num where table_id=#{param1} limit 1;")
+            "from t_prof_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_prof_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     ProfNum selectProfNum(Integer tableId);
 
     //查询需求前十职业表
@@ -203,7 +213,9 @@ public interface CommonMapper {
             "most_prof10_num AS mostProf10Num, \n" +
             "most_prof10_need AS mostProf10Need, \n" +
             "most_prof10_jobseek AS mostProf10Jobseek \n" +
-            "from t_most_needed where table_id=#{param1} limit 1;")
+            "from t_most_needed where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_most_needed.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     MostNeeded selectMostNeeded(Integer tableId);
 
     //查询饱和前十职业表
@@ -248,7 +260,9 @@ public interface CommonMapper {
             "least_prof10_num AS leastProf10Num, \n" +
             "least_prof10_need AS leastProf10Need, \n" +
             "least_prof10_jobseek AS leastProf10Jobseek \n" +
-            "from t_least_needed where table_id=#{param1} limit 1;")
+            "from t_least_needed where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_least_needed.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     LeastNeeded selectLeastNeeded(Integer tableId);
 
     //查询人员类别求职人数表
@@ -264,7 +278,9 @@ public interface CommonMapper {
             "student AS student, \n" +
             "city_rural AS cityRural, \n" +
             "fore AS fore \n" +
-            "from t_job_seeker_num where table_id=#{param1} limit 1;")
+            "from t_job_seeker_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_job_seeker_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     JobSeekerNum selectJobSeekerNum(Integer tableId);
 
     //查询性别供求人数表
@@ -275,7 +291,9 @@ public interface CommonMapper {
             "female_need AS femaleNeed, \n" +
             "female_jobseek AS femaleJobseek, \n" +
             "no_requ_need AS noRequNeed \n" +
-            "from t_sex_num where table_id=#{param1} limit 1;")
+            "from t_sex_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_sex_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     SexNum selectSexNum(Integer tableId);
 
     //查询文化程度供求人数表
@@ -292,7 +310,9 @@ public interface CommonMapper {
             "univ_need AS univNeed, \n" +
             "univ_jobseek AS univJobseek, \n" +
             "no_requ_need AS noRequNeed \n" +
-            "from t_degree_num where table_id=#{param1} limit 1;")
+            "from t_degree_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_degree_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     DegreeNum selectDegreeNum(Integer tableId);
 
     //查询年龄供求人数表
@@ -307,7 +327,9 @@ public interface CommonMapper {
             "over_45_need AS overFortyfourNeed, \n" +
             "over_45_jobseek AS overFortyfourJobseek, \n" +
             "no_requ_need AS noRequNeed \n" +
-            "from t_age_num where table_id=#{param1} limit 1;")
+            "from t_age_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_age_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     AgeNum selectAgeNum(Integer tableId);
 
     //查询技术等级供求人数表
@@ -331,7 +353,9 @@ public interface CommonMapper {
             "seni_prof_jobseek AS seniProfJobseek, \n" +
             "no_tech_jobseek AS noTechJobseek, \n" +
             "no_requ_need AS noRequNeed \n" +
-            "from t_tech_grade_num where table_id=#{param1} limit 1;")
+            "from t_tech_grade_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_tech_grade_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     TechGradeNum selectTechGradeNum(Integer tableId);
 
     //上传数据条件查询，查时间段，用户id和条件
