@@ -2,9 +2,11 @@ package cn.fdongl.market.security.controller;
 
 import cn.fdongl.market.security.entity.AddUserInput;
 import cn.fdongl.market.security.entity.AppUserDetail;
+import cn.fdongl.market.security.entity.UserPageQuery;
 import cn.fdongl.market.security.service.UserService;
 import cn.fdongl.market.util.ControllerBase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +36,16 @@ public class UserController extends ControllerBase {
     public Object enable(@RequestParam Integer userId) throws Exception {
         userService.enable(userId);
         return success();
+    }
+
+    @RequestMapping("query")
+    public Object query(@Valid UserPageQuery input) throws Exception {
+        return success(userService.query(
+                (input.getPage()-1)*input.getPageSize(),
+                input.getPageSize(),
+                input.getUserType(),
+                input.getUsername(),
+                input.getFullname()));
     }
 
     @RequestMapping("disable")
