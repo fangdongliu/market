@@ -373,8 +373,6 @@
 <script>
     var vue = new Vue({
         created(){
-            var div = document.getElementsByTagName('button')[0];
-            div.style.backgroundColor = "#e8f0fe";
             var that = this;
             $.ajax({
                 url: '/market/upload/select',
@@ -384,7 +382,7 @@
                     console.log(res);
                     if(res.code==0) {
                         that.tableId = res.data.tableId;
-                        console.log(that.tableId);
+                        console.log('tableId:'+that.tableId);
                         if(that.tableId!=null)
                             that.loadData();
                     }
@@ -398,6 +396,11 @@
                 },
             })
         },
+        mounted(){
+            var div = document.getElementsByTagName('button')[0];
+            div.style.backgroundColor = "#e8f0fe";
+        },
+
         el:'#app',
         data:{
             tableId:null,
@@ -1087,7 +1090,7 @@
                     url: '/common/data/selectTotalNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
                         console.log(res);
@@ -1956,16 +1959,15 @@
                             noRequNeedTechGradeNum: that.form12data[9].need,//无技术等级或职务需求人数
                     },
                     success(res) {
+                        console.log(res);
                         if(res.code==0) {
                             console.log('data:'+this.data.uploadDataSet);
-                            console.log(res);
                             alert(words + '成功！');
                             that.changeable[that.index - 1] = true;
                             that.index++;
                             that.index--;
                         }
                         else
-                            console.log('dataa:'+that.tableId);
                             alert(res.message);
                     },
                     error(res) {
@@ -2188,13 +2190,7 @@
                                 if(res.code==0) {
                                     alert('保存成功！');
                                     that.changeable[that.index - 1] = true;
-                                    if(that.index==12)
-                                        that.index--;
-                                    var div1 = document.getElementsByTagName('button')[this.index];
-                                    var div2 = document.getElementsByTagName('button')[this.index+1];
-                                    div1.style.backgroundColor = "#F3F2F1";
-                                    div2.style.backgroundColor = "#e8f0fe";
-                                    that.index++;
+                                    this.next();
                                 }
                                 else alert(res.message);
                             },
@@ -2220,8 +2216,7 @@
                     this.updateData(1);
                     for (var i = 0; i < 12; i++)
                         this.changeable[i] = true;
-                    this.index = 0;
-                    this.index = 1;
+                    this.turnForm(1);
                 }
             },
 
