@@ -22,21 +22,21 @@ public class EmployerNum {//用人单位性质需求人数表，共15条数据
     Integer otherNeed;//其他
 
     public EmployerNum(UploadDataSet uploadDataSet){
-        this.tableId=uploadDataSet.getTableId();
-        this.staOwnNeed=uploadDataSet.getStaOwnNeed();
-        this.collNeed=uploadDataSet.getCollNeed();
-        this.coopStockNeed=uploadDataSet.getCoopStockNeed();
-        this.jointNeed=uploadDataSet.getJointNeed();
-        this.limiLiabNeed=uploadDataSet.getLimiLiabNeed();
-        this.limitedNeed=uploadDataSet.getLimitedNeed();
-        this.privNeed=uploadDataSet.getPrivNeed();
-        this.otherEnteNeed=uploadDataSet.getOtherEnteNeed();
-        this.hmtInveNeed=uploadDataSet.getHmtInveNeed();
-        this.foreInveEnte=uploadDataSet.getForeInveEnte();
-        this.indiNeed=uploadDataSet.getIndiNeed();
-        this.instNeed=uploadDataSet.getInstNeed();
-        this.orgaNeed=uploadDataSet.getOrgaNeed();
-        this.otherNeed=uploadDataSet.getOtherNeedEmployerNum();
+        this.tableId = uploadDataSet.getTableId();
+        this.staOwnNeed = uploadDataSet.getStaOwnNeed();
+        this.collNeed = uploadDataSet.getCollNeed();
+        this.coopStockNeed = uploadDataSet.getCoopStockNeed();
+        this.jointNeed = uploadDataSet.getJointNeed();
+        this.limiLiabNeed = uploadDataSet.getLimiLiabNeed();
+        this.limitedNeed = uploadDataSet.getLimitedNeed();
+        this.privNeed = uploadDataSet.getPrivNeed();
+        this.otherEnteNeed = uploadDataSet.getOtherEnteNeed();
+        this.hmtInveNeed = uploadDataSet.getHmtInveNeed();
+        this.foreInveEnte = uploadDataSet.getForeInveEnte();
+        this.indiNeed = uploadDataSet.getIndiNeed();
+        this.instNeed = uploadDataSet.getInstNeed();
+        this.orgaNeed = uploadDataSet.getOrgaNeed();
+        this.otherNeed = uploadDataSet.getOtherNeedEmployerNum();
     }
 
     public EmployerNum() {

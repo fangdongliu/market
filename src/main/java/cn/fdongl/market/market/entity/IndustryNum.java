@@ -30,29 +30,29 @@ public class IndustryNum {//产业需求人数表，共23条数据
     Integer inteOrgaNeed;//国际组织，第三产业
 
     public IndustryNum(UploadDataSet uploadDataSet){
-        this.tableId=uploadDataSet.getTableId();
-        this.industry1Need=uploadDataSet.getIndustry1Need();
-        this.industry2Need=uploadDataSet.getIndustry2Need();
-        this.industry3Need=uploadDataSet.getIndustry3Need();
-        this.mineNeed=uploadDataSet.getMineNeed();
-        this.manuNeed=uploadDataSet.getManuNeed();
-        this.elecGasWaterNeed=uploadDataSet.getElecGasWaterNeed();
-        this.archNeed=uploadDataSet.getArchNeed();
-        this.tranStorPostNeed=uploadDataSet.getTranStorPostNeed();
-        this.infoCompSoftNeed=uploadDataSet.getInfoCompSoftNeed();
-        this.retailNeed=uploadDataSet.getRetailNeed();
-        this.accoCaterNeed=uploadDataSet.getAccoCaterNeed();
-        this.financeNeed=uploadDataSet.getFinanceNeed();
-        this.estateNeed=uploadDataSet.getEstateNeed();
-        this.leaseBusiServNeed=uploadDataSet.getLeaseBusiServNeed();
-        this.reseTechAddrNeed=uploadDataSet.getReseTechAddrNeed();
-        this.waterEnviFaciNeed=uploadDataSet.getWaterEnviFaciNeed();
-        this.resiServNeed=uploadDataSet.getResiServNeed();
-        this.eduNeed=uploadDataSet.getEduNeed();
-        this.healSecuWelfNeed=uploadDataSet.getHealSecuWelfNeed();
-        this.cultSportEnteNeed=uploadDataSet.getCultSportEnteNeed();
-        this.manaOrgaNeed=uploadDataSet.getManaOrgaNeed();
-        this.inteOrgaNeed=uploadDataSet.getInteOrgaNeed();
+        this.tableId = uploadDataSet.getTableId();
+        this.industry1Need = uploadDataSet.getIndustry1Need();
+        this.industry2Need = uploadDataSet.getIndustry2Need();
+        this.industry3Need = uploadDataSet.getIndustry3Need();
+        this.mineNeed = uploadDataSet.getMineNeed();
+        this.manuNeed = uploadDataSet.getManuNeed();
+        this.elecGasWaterNeed = uploadDataSet.getElecGasWaterNeed();
+        this.archNeed = uploadDataSet.getArchNeed();
+        this.tranStorPostNeed = uploadDataSet.getTranStorPostNeed();
+        this.infoCompSoftNeed = uploadDataSet.getInfoCompSoftNeed();
+        this.retailNeed = uploadDataSet.getRetailNeed();
+        this.accoCaterNeed = uploadDataSet.getAccoCaterNeed();
+        this.financeNeed = uploadDataSet.getFinanceNeed();
+        this.estateNeed = uploadDataSet.getEstateNeed();
+        this.leaseBusiServNeed = uploadDataSet.getLeaseBusiServNeed();
+        this.reseTechAddrNeed = uploadDataSet.getReseTechAddrNeed();
+        this.waterEnviFaciNeed = uploadDataSet.getWaterEnviFaciNeed();
+        this.resiServNeed = uploadDataSet.getResiServNeed();
+        this.eduNeed = uploadDataSet.getEduNeed();
+        this.healSecuWelfNeed = uploadDataSet.getHealSecuWelfNeed();
+        this.cultSportEnteNeed = uploadDataSet.getCultSportEnteNeed();
+        this.manaOrgaNeed = uploadDataSet.getManaOrgaNeed();
+        this.inteOrgaNeed = uploadDataSet.getInteOrgaNeed();
     }
 
     public IndustryNum() {
