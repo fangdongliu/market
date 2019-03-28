@@ -48,8 +48,6 @@ public interface CommonMapper {
             "and creator=#{param1};")
     List<Notice> selectMessage(Integer userId);
 
-    //TODO:
-
     //查询自己的通知
     @Select("SELECT \n" +
             "notice_id AS noticeId, \n" +
@@ -62,10 +60,9 @@ public interface CommonMapper {
             "receiver AS receiver \n" +
             "from t_notice where \n" +
             "delete_flag=0 \n" +
-            "and ((select @tmp:=usertype from t_user where t_user.user_id=t_notice.creator limit 1)=1) \n" +
-            "or (@tmp=2 and  receiver=#{param1} or \n" +
-            "creator= or \n" +
-            ");")
+            "and (((select @tmp:=usertype from t_user where t_user.user_id=t_notice.creator limit 1)=1) \n" +
+            "or (@tmp=2 and #{param1} in (select user_id from t_user where t_user.superior=t_notice.creator)) \n" +
+            "or (@tmp=3 and #{param1}=receiver));")
     List<Notice> receiveMessage(Integer userId);
 
     //删除一条通知
