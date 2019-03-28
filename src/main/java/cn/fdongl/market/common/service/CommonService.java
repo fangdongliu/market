@@ -119,7 +119,7 @@ public class CommonService {
         return commonMapper.selectTechGradeNum(tableId);
     }
 
-    //xxx
+    //上传数据条件查询
     public List<UploadInfo> selectUploadInfoByCondition(java.sql.Date startDate,java.sql.Date endDate,Integer userId,String condition) throws Exception {
         return commonMapper.selectUploadInfoByCondition(startDate,endDate,userId,condition);
     }

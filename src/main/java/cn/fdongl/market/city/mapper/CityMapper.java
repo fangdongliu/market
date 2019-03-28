@@ -27,7 +27,9 @@ public interface CityMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTIme, \n" +
             "reviser AS reviser \n" +
-            "from t_record_info where state_flag=2 and region_emp_name like CONCAT('%',#{param2},'%') and \n" +
+            "from t_record_info \n" +
+            "where delete_flag=0 \n" +
+            "and state_flag=2 and region_emp_name like CONCAT('%',#{param2},'%') and \n" +
             "region_emp_id in (select user_id from t_user where superior=#{param1});")
     List<Record> recordRegionEmpNameQuery(Integer cityId,String condition);
 
