@@ -16,4 +16,21 @@ public class JobSeekerNum {//人员类别求职人数表，共11条数据
     Integer student;//在学人员
     Integer cityRural;//本市农村人员
     Integer fore;//外埠人员
+
+    public JobSeekerNum(UploadDataSet uploadDataSet){
+        this.tableId = uploadDataSet.getTableId();
+        this.unempYouth = uploadDataSet.getUnempYouth();
+        this.graduate = uploadDataSet.getGraduate();
+        this.empToUnemp = uploadDataSet.getEmpToUnemp();
+        this.othUnemp = uploadDataSet.getOthUnemp();
+        this.emped = uploadDataSet.getEmped();
+        this.laidOff = uploadDataSet.getLaidOff();
+        this.retiree = uploadDataSet.getRetiree();
+        this.student = uploadDataSet.getStudent();
+        this.cityRural = uploadDataSet.getCityRural();
+        this.fore = uploadDataSet.getFore();
+    }
+
+    public JobSeekerNum() {
+    }
 }

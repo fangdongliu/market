@@ -17,4 +17,22 @@ public class DegreeNum {//文化程度供求人数表，共12条数据
     Integer univNeed;//大学需求人数
     Integer univJobseek;//大学求职人数
     Integer noRequNeed;//无要求需求人数
+
+    public DegreeNum(UploadDataSet uploadDataSet) {
+        this.tableId = uploadDataSet.getTableId();
+        this.belowJuniHighSchoNeed = uploadDataSet.getBelowJuniHighSchoNeed();
+        this.belowJuniHighSchoJobseek = uploadDataSet.getBelowJuniHighSchoJobseek();
+        this.highSchoNeed = uploadDataSet.getHighSchoNeed();
+        this.highSchoJobseek = uploadDataSet.getHighSchoJobseek();
+        this.otherHighSchoNeed = uploadDataSet.getOtherHighSchoNeed();
+        this.otherHighSchoJobseek = uploadDataSet.getOtherHighSchoJobseek();
+        this.juniCollNeed = uploadDataSet.getJuniCollNeed();
+        this.juniCollJobseek = uploadDataSet.getJuniCollJobseek();
+        this.univNeed = uploadDataSet.getUnivNeed();
+        this.univJobseek = uploadDataSet.getUnivJobseek();
+        this.noRequNeed = uploadDataSet.getNoRequNeedDegreeNum();
+    }
+
+    public DegreeNum() {
+    }
 }
