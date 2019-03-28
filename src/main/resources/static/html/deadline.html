@@ -212,11 +212,11 @@
                 //日期合格
                 if(vue.flag===-1){
                     $.ajax({
-                        url:'/province/investigatePeriod/insert',
+                        url:'/province/uploadPeriod/insert',
                         type:'post',
                         data:{
-                            startDate:stdStartDate,
-                            endDate:stdEndDate
+                            startDateString:stdStartDate,
+                            endDateString:stdEndDate
                         },
                         success(res){
                             if(res.code === 0) {
@@ -244,12 +244,12 @@
                 }
                 else {
                     $.ajax({
-                        url:'/province/investigatePeriod/update',
+                        url:'/province/uploadPeriod/update',
                         type:'post',
                         data:{
                             uploadPeriodId:vue.flag,
-                            startDate:stdStartDate,
-                            endDate:stdEndDate
+                            startDateString:stdStartDate,
+                            endDateString:stdEndDate
                         },
                         success(res){
                             if(res.code === 0){
@@ -262,7 +262,7 @@
                             }
                             else{
                                 vue.$message({
-                                    message:'出错了！',
+                                    message:'出错了!！',
                                     type:'error'
                                 });
                             }
@@ -278,8 +278,12 @@
             },
             getList(){
                 $.ajax({
-                    url:'/province/investigatePeriod/selectAllPeriod',
+                    url:'/common/data/selectUploadPeriodByTime',
                     type:'post',
+                    data:{
+                        startDateString:'1970-01-01',
+                        endDateString:'9999-12-31'
+                    },
                     success(res){
                         for(var i=0;i < res.data.length; i ++){
                             res.data[i].number = i+1;

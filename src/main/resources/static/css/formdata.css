@@ -61,6 +61,7 @@ body{
 .table input{
     width: 90%;
 }
+
 #last{
     position: fixed;
     left:20px;

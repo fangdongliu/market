@@ -14,7 +14,7 @@
 <div id="messageCenter" style="height:100%;">
     <el-main class="content"style="overflow: visible">
         <div class="contentDetail">
-            <el-button type="primary" icon="el-icon-plus" style="margin-bottom: 20px" size="mini" @click="newMessageVisible = true">发布新通知</el-button>
+            <el-button type="primary" icon="el-icon-plus" style="float:right; margin-right:20px" size="mini" @click="newMessageVisible = true">发布新通知</el-button>
             <el-table
                     :data="messageList.slice((currentPage-1)*pageSize,currentPage*pageSize)"
                     stripe
