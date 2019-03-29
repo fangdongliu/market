@@ -146,18 +146,14 @@ public class CommonService {
         return commonMapper.selectUploadPeriodByTime(startDate,endDate);
     }
 
+    //取样分析，生成产业需求人数信息饼图数据
+    public IndustryNum pieChartIndustryNum(Integer userId, Integer uploadPeriodId) throws Exception {
+        return commonMapper.pieChartIndustryNum(userId,uploadPeriodId);
+    }
 
 
 
-//
-//    public IndustryNum pieChartIndustryNum(Integer userId, Integer uploadPeriodId) throws Exception {
-//        List<IndustryNum> industryNumList=commonMapper.pieChartIndustryNum(userId,uploadPeriodId);
-//        IndustryNum result=(IndustryNum)tableObjectInit(new IndustryNum());
-//        for (IndustryNum industryNum:industryNumList) {
-//            objectadd(result,industryNum);
-//        }
-//        return result;
-//    }
+
 
 
 
@@ -242,28 +238,26 @@ public class CommonService {
 //    }
 //
 //    //将只有int属性的对象中的属性初始化为0
-//    public Object tableObjectInit(Object a)throws Exception{
-//        Field[] fielda=a.getClass().getDeclaredFields();
-//        for(int i=0;i<fielda.length;i++){
-//            fielda[i].setAccessible(true);
-//            fielda[i].set(a,0);
+//    private Object objectInit(Object object) throws Exception {
+//        Field[] fieldList=object.getClass().getDeclaredFields();
+//        for (Field field:fieldList) {
+//            field.setAccessible(true);
+//            field.set(object,0);
 //        }
-//        return a;
+//        return object;
 //    }
-//    //对两个相同类中的int属性相加的函数,用于图表汇总
-//    public Object objectadd(Object a,Object b)throws Exception{
-//        Field[] fielda=a.getClass().getDeclaredFields();
-//        Field[] fieldb=b.getClass().getDeclaredFields();
-//        if(a.getClass()!=b.getClass()){
-//            throw new Exception("Class type must be same");
+//    //将addition的数值加到result中，无返回值
+//    private void objectAdd(Object result,Object addition) throws Exception {
+//        if(result.getClass()!=addition.getClass()){
+//            throw new Exception("两个参数类型不同");
 //        }
-//        for(int i=0;i<fielda.length;i++){
-//            fielda[i].setAccessible(true);
-//            fieldb[i].setAccessible(true);
-//            Object valuea=fielda[i].get(a);
-//            Object valueb=fieldb[i].get(b);
-//            fielda[i].set(a,(Integer)valuea+(Integer)valueb);
+//        Field[] fieldResult=result.getClass().getDeclaredFields();
+//        Field[] fieldAddition=addition.getClass().getDeclaredFields();
+//        for(int i=0;i<fieldResult.length;i++){
+//            fieldResult[i].setAccessible(true);
+//            fieldAddition[i].setAccessible(true);
+//            fieldResult[i].set(result,(Integer)fieldResult[i].get(result)+(Integer)fieldAddition[i].get(addition));
 //        }
-//        return a;
 //    }
+
 }

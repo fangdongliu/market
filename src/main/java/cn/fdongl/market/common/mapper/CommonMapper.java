@@ -438,34 +438,35 @@ public interface CommonMapper {
 
     //图表分析，饼图，查询产业需求人数信息
     @Select("SELECT \n" +
-            "table_id AS tableId, \n" +
-            "industry1_need AS industry1Need, \n" +
-            "industry2_need AS industry2Need, \n" +
-            "industry3_need AS industry3Need, \n" +
-            "mine_need AS mineNeed, \n" +
-            "manu_need AS manuNeed, \n" +
-            "elec_gas_water_need AS elecGasWaterNeed, \n" +
-            "arch_need AS archNeed, \n" +
-            "tran_stor_post_need AS tranStorPostNeed, \n" +
-            "info_comp_soft_need AS infoCompSoftNeed, \n" +
-            "retail_need AS retailNeed, \n" +
-            "acco_cater_need AS accoCaterNeed, \n" +
-            "finance_need AS financeNeed, \n" +
-            "estate_need AS estateNeed, \n" +
-            "lease_busi_serv_need AS leaseBusiservNeed, \n" +
-            "rese_tech_addr_need AS reseTechAddrNeed, \n" +
-            "water_envi_faci_need AS waterEnviFaciNeed, \n" +
-            "resi_serv_need AS resiServNeed, \n" +
-            "edu_need AS eduNeed,\n" +
-            "heal_secu_welf_need AS healSecuWelfNeed, \n" +
-            "cult_sport_ente_need AS cultSportEnteNeed, \n" +
-            "mana_orga_need AS manaOrgaNeed, \n" +
-            "inte_orga_need AS inteOrgaNeed \n" +
+            "count(1) AS tableId, \n" +
+            "sum(industry1_need) AS industry1Need, \n" +
+            "sum(industry2_need) AS industry2Need, \n" +
+            "sum(industry3_need) AS industry3Need, \n" +
+            "sum(mine_need) AS mineNeed, \n" +
+            "sum(manu_need) AS manuNeed, \n" +
+            "sum(elec_gas_water_need) AS elecGasWaterNeed, \n" +
+            "sum(arch_need) AS archNeed, \n" +
+            "sum(tran_stor_post_need) AS tranStorPostNeed, \n" +
+            "sum(info_comp_soft_need) AS infoCompSoftNeed, \n" +
+            "sum(retail_need) AS retailNeed, \n" +
+            "sum(acco_cater_need) AS accoCaterNeed, \n" +
+            "sum(finance_need) AS financeNeed, \n" +
+            "sum(estate_need) AS estateNeed, \n" +
+            "sum(lease_busi_serv_need) AS leaseBusiservNeed, \n" +
+            "sum(rese_tech_addr_need) AS reseTechAddrNeed, \n" +
+            "sum(water_envi_faci_need) AS waterEnviFaciNeed, \n" +
+            "sum(resi_serv_need) AS resiServNeed, \n" +
+            "sum(edu_need) AS eduNeed,\n" +
+            "sum(heal_secu_welf_need) AS healSecuWelfNeed, \n" +
+            "sum(cult_sport_ente_need) AS cultSportEnteNeed, \n" +
+            "sum(mana_orga_need) AS manaOrgaNeed, \n" +
+            "sum(inte_orga_need) AS inteOrgaNeed \n" +
             "from t_industry_num where " +
-            "delete_flag=0 \n" +
-            "and ((@type:=(select @tmp:=t_upload_info.creator from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=1) \n" +
-            "or (@type=2 and #{param1} in (select user_id from t_user superior=@tmp)) \n" +
-            "or (@type=3 and #{param1}=@tmp)) \n" +
+            "((select delete_flag from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=0) \n" +
+            "and ((select state_flag from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=3) \n" +
+            "and (((select @type:=usertype from t_user where t_user.user_id=#{param1})=1) \n" +
+            "or (@type=2 and (select @tmp:=t_upload_info.creator from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1) in (select user_id from t_user where superior=#{param1})) \n" +
+            "or (@type=3 and @tmp=#{param1})) \n" +
             "and ((select upload_period_id from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=#{param2});")
-    List<IndustryNum> pieChartIndustryNum(Integer userId,Integer uploadPeriodId);
+    IndustryNum pieChartIndustryNum(Integer userId,Integer uploadPeriodId);
 }

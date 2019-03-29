@@ -165,14 +165,16 @@ public class CommonController extends ControllerBase {
         return success(uploadPeriodList);
     }
 
+    //取样分析
+    @PostMapping("/data/pieChart")
+    public Object PieChart(AppUserDetail appUserDetail,Integer uploadPeriodId) throws Exception {
+        return success(commonService.pieChartIndustryNum(appUserDetail.getId(),uploadPeriodId));
+    }
 
 
 
-//    //取样分析
-//    @PostMapping("/data/pieChart")
-//    public Object pieChart(Integer aimUserId,Integer uploadPeriodId)throws Exception{
-//        return success(commonService.pieChart(aimUserId,uploadPeriodId));
-//    }
+
+
 //    @PostMapping("/data/lineChart1")
 //    public Object lineChart1(Integer aimUserId,String startDate,String endDate) throws Exception{
 //        java.sql.Date _startDate=new java.sql.Date(dateFormat.parse(startDate).getTime());
