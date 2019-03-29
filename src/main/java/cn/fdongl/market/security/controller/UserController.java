@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,18 +29,18 @@ public class UserController extends ControllerBase {
     @Autowired
     public PasswordEncoder passwordEncoder;
 
-    @RequestMapping("list")
+    @PostMapping("list")
     public Object list(AppUserDetail userDetail) throws Exception {
         return success(userService.list(userDetail.getId()));
     }
 
-    @RequestMapping("enable")
+    @PostMapping("enable")
     public Object enable(@RequestParam Integer userId) throws Exception {
         userService.enable(userId);
         return success();
     }
 
-    @RequestMapping("query")
+    @PostMapping("query")
     public Object query(@Valid UserPageQuery input) throws Exception {
         return success(userService.query(
                 (input.getPage()-1)*input.getPageSize(),
@@ -49,19 +50,19 @@ public class UserController extends ControllerBase {
                 input.getFullname()));
     }
 
-    @RequestMapping("disable")
+    @PostMapping("disable")
     public Object disable(@RequestParam Integer userId) throws Exception {
         userService.disable(userId);
         return success();
     }
 
     @RolesAllowed("USER")
-    @RequestMapping("userType")
+    @PostMapping("userType")
     public Object userType(AppUserDetail appUserDetail) throws Exception {
         return appUserDetail.getUserType();
     }
 
-    @RequestMapping("addUsers")
+    @PostMapping("addUsers")
     public Object addUsers(
             AppUserDetail userDetail,
             @Valid AddUserInput input
@@ -84,12 +85,12 @@ public class UserController extends ControllerBase {
         return success();
     }
 
-    @RequestMapping("role/info")
+    @PostMapping("role/info")
     public Object roleInfo(@RequestParam Integer userId) throws Exception {
         return success(userService.userInfo(userId));
     }
 
-    @RequestMapping("role/change")
+    @PostMapping("role/change")
     public Object roleChange(
             @RequestParam Integer userId,
             @RequestParam("roles[]")Integer[]roles,
@@ -99,12 +100,12 @@ public class UserController extends ControllerBase {
         return success();
     }
 
-    @RequestMapping("menu")
+    @PostMapping("menu")
     public Object menu(AppUserDetail userDetail) throws Exception {
         return success(userService.getMenu(userDetail.getId()));
     }
 
-    @RequestMapping("updatePassword")
+    @PostMapping("updatePassword")
     public Object updatePassword(AppUserDetail userDetail,@RequestParam String oldPassword,@RequestParam String newPassword) throws Exception {
         if(passwordEncoder.encode(oldPassword).equals(userDetail.getPassword())) {
             userService.updatePassword(newPassword, userDetail.getId());
