@@ -143,8 +143,9 @@
                                             active-color="#13ce66"
                                             inactive-color="#ff4949"
                                             :active-value="0"
-                                            :inactive-value="1"
-                                            @change="changeSwitch(right)"></el-switch>
+                                            :inactive-value="1"></el-switch>
+                                            <!--@change="changeSwitch(right)"-->
+
                                 </el-form-item>
                             </el-form>
                             <div slot="footer" class="dialog-footer">
@@ -311,6 +312,30 @@
                         console.log(res);
                     }
                 });
+                if (right.status==1)
+                    $.ajax({
+                        url:'/right/disable',
+                        type:'post',
+                        data:{
+                            rightId:right.id
+                        },
+                        success(res){
+                            vue.rightData=res.data;
+                            console.log(res.data);
+                        }
+                    });
+                else
+                    $.ajax({
+                        url:'/right/enable',
+                        type:'post',
+                        data:{
+                            rightId:right.id
+                        },
+                        success(res){
+                            vue.rightData=res.data;
+                            console.log(res.data);
+                        }
+                    });
                 this.dialogFormVisibleEdit = false;
                 console.log(right);
                 location.reload();
@@ -340,26 +365,50 @@
 
                 this.currentPage = page;
             },
-            changeSwitch (data) {
-                this.$confirm('确定修改此权限的状态?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.$message({
-                        type: 'success',
-                        message: '操作成功!'
-                    });
-                }).catch(() => {
-                    data.status=1-data.status;
-                    this.$message({
-                        type: 'info',
-                        message: '已取消操作'
-                    });
-
-                });
-                console.log(data.status);
-            },
+            // changeSwitch (data) {
+            //     this.$confirm('确定修改此权限的状态?', '提示', {
+            //         confirmButtonText: '确定',
+            //         cancelButtonText: '取消',
+            //         type: 'warning'
+            //     }).then(() => {
+            //         if (data.status==1)
+            //             $.ajax({
+            //                 url:'/right/disable',
+            //                 type:'post',
+            //                 data:{
+            //                     rightId:data.id
+            //                 },
+            //                 success(res){
+            //                     vue.rightData=res.data;
+            //                     console.log(res.data);
+            //                 }
+            //             });
+            //         else
+            //             $.ajax({
+            //                 url:'/right/enable',
+            //                 type:'post',
+            //                 data:{
+            //                     rightId:data.id
+            //                 },
+            //                 success(res){
+            //                     vue.rightData=res.data;
+            //                     console.log(res.data);
+            //                 }
+            //             });
+            //         this.$message({
+            //             type: 'success',
+            //             message: '操作成功!'
+            //         });
+            //     }).catch(() => {
+            //         data.status=1-data.status;
+            //         this.$message({
+            //             type: 'info',
+            //             message: '已取消操作'
+            //         });
+            //
+            //     });
+            //     console.log(data.status);
+            // },
             toggleSelection(rows) {
                 if (rows) {
                     rows.forEach(row => {

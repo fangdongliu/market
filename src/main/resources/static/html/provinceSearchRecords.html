@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查看全部备案</title>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.6.9/vue.min.js"></script>
+    <link href="https://cdn.bootcss.com/element-ui/2.6.1/theme-chalk/index.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/element-ui/2.6.1/index.js"></script>
+    <link rel="stylesheet" href="../css/stylesheet.css">
+</head>
+<body>
+<div id="searchRecord" style="height:100%;">
+    <el-main class="content" style="overflow: visible">
+        <div class="contentDetail">
+            <el-row type="flex" align="middle" justify="center" style="margin-bottom: 20px;">
+                <el-col :span="4" style="color: #545c64; font-weight: bold;text-align: center">
+                    请输入搜索关键词：
+                </el-col>
+                <el-col :span="20">
+                    <el-input placeholder="请输入内容" v-model="searchName" class="input-with-select">
+                        <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
+                    </el-input>
+                </el-col>
+            </el-row>
+            <el-table
+                    :data="marketData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+                    stripe
+                    style="width: 100%">
+                <el-table-column
+                        prop="number"
+                        label="序号"
+                        width="100px">
+                </el-table-column>
+                <el-table-column
+                        prop="regionName"
+                        label="人力资源市场名">
+                </el-table-column>
+                <el-table-column
+                        prop="createTime"
+                        label="最后修改时间">
+                </el-table-column>
+                <el-table-column
+                        prop="stateInChinese"
+                        label="审核状态">
+                </el-table-column>
+                <el-table-column
+                        label="操作"
+                        width="150px">
+                    <template slot-scope="scope">
+                        <el-button @click="handleClick(scope.row)" type="primary" size="small">查看</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="block" style="text-align: center; margin-top: 15px">
+                <el-pagination
+                        layout="prev, pager, next"
+                        @current-change="pageChange"
+                        :page-size="pageSize"
+                        :total="marketData.length"
+                        background>
+                </el-pagination>
+            </div>
+
+            <el-dialog
+                    title="详细信息"
+                    :visible.sync="dialogVisible"
+                    width="60%"
+                    :before-close="handleClose"
+                    lock-scroll
+            >
+                <el-row type="flex" justify="center" class="info" align="middle" style="margin-top: 20px">
+                    <el-col :span="6" class="infoTitle">
+                        人力资源市场名：
+                    </el-col>
+                    <el-col :span="6" class="infoContent">
+                        {{detailData.name}}
+                    </el-col>
+                </el-row>
+                <el-row type="flex" justify="center" class="info" align="middle">
+                    <el-col :span="6" class="infoTitle">
+                        所属地区：
+                    </el-col>
+                    <el-col :span="6" class="infoContent">
+                        {{detailData.location}}
+                    </el-col>
+                </el-row>
+                <el-row type="flex" justify="center" class="info" align="middle">
+                    <el-col :span="6" class="infoTitle">
+                        联系人：
+                    </el-col>
+                    <el-col :span="6" class="infoContent">
+                        {{detailData.people}}
+                    </el-col>
+                </el-row>
+                <el-row type="flex" justify="center" class="info" align="middle">
+                    <el-col :span="6" class="infoTitle">
+                        联系人手机：
+                    </el-col>
+                    <el-col :span="6" class="infoContent">
+                        {{detailData.mobile}}
+                    </el-col>
+                </el-row>
+                <el-row type="flex" justify="center" class="info" align="middle">
+                    <el-col :span="6" class="infoTitle">
+                        联系电话：
+                    </el-col>
+                    <el-col :span="6" class="infoContent">
+                        {{detailData.phone.substring(0,3) + ' - ' + detailData.phone.substring(3)}}
+                    </el-col>
+                </el-row>
+                <el-row type="flex" justify="center" class="info" align="middle">
+                    <el-col :span="6" class="infoTitle">
+                        传真：
+                    </el-col>
+                    <el-col :span="6" class="infoContent">
+                        {{detailData.fax.substring(0,4) + ' - ' + detailData.fax.substring(4)}}
+                    </el-col>
+                </el-row>
+
+                <span slot="footer" class="dialog-footer">
+                        <el-button @click="dialogVisible=false" type="primary" size="small">确定</el-button>
+                </span>
+            </el-dialog>
+        </div>
+    </el-main>
+    <el-footer class="footer">2019 &copy; 第二组织</el-footer>
+</div>
+</body>
+<script>
+    var vue = new Vue({
+        el:'#searchRecord',
+        data:{
+            marketData:[],
+            searchName:'',
+            detailData:{
+                name:'',
+                location:'',
+                people:'',
+                mobile:'',
+                phone:'',
+                fax:'',
+                marketId:0,
+                feedback:''
+            },
+            dialogVisible:false,
+            currentPage:1,
+            pageSize:10
+        },
+        methods:{
+            handleClose(done) {
+                done();
+            },
+            handleSearch(){
+              vue.getList(vue.searchName);
+            },
+            pageChange(page){
+                this.currentPage = page;
+            },
+            getList(str){
+
+                $.ajax({
+                    url:'/user/userType',
+                    type:'post',
+                    success(r){
+                        if(r === 1 || r === 0){
+                            $.ajax({
+                                url:'/province/record/conditionalQuery',
+                                type:'post',
+                                data:{
+                                    condition:str
+                                },
+                                success(res){
+                                    if(res.code === 0){
+                                        for(var i = 0; i < res.data.length;i ++){
+                                            res.data[i].createTime=res.data[i].createTime.substring(0,10) + ' '
+                                                + res.data[i].createTime.substring(11,19);
+                                            res.data[i].stateInChinese='已通过';
+                                            res.data[i].number=i+1;
+                                        }
+                                        vue.marketData=res.data;
+                                    }
+                                    else{
+                                        vue.$message({
+                                            type: 'error',
+                                            message: '出错了!'
+                                        });
+                                    }
+                                },
+                                error(res){
+                                    vue.$message({
+                                        type: 'error',
+                                        message: '出错了哦!'
+                                    });
+                                }
+                            })
+                        }
+                        else if(r === 2){
+                            $.ajax({
+                                url:'/city/record/conditionalQuery',
+                                type:'post',
+                                data:{
+                                    condition:str
+                                },
+                                success(res){
+                                    if(res.code === 0){
+                                        for(var i = 0; i < res.data.length;i ++){
+                                            res.data[i].createTime=res.data[i].createTime.substring(0,10) + ' '
+                                                + res.data[i].createTime.substring(11,19);
+                                            res.data[i].stateInChinese='已通过';
+                                            res.data[i].number=i+1;
+                                        }
+                                        vue.marketData=res.data;
+                                        console.log(vue.marketData)
+                                    }
+                                    else{
+                                        vue.$message({
+                                            type: 'error',
+                                            message: '出错了!'
+                                        });
+                                    }
+                                },
+                                error(res){
+                                    vue.$message({
+                                        type: 'error',
+                                        message: '出错了哦!'
+                                    });
+                                }
+                            })
+                        }
+                    },
+                    error(res){
+                        vue.$message({
+                            type: 'error',
+                            message: '出错了哦!'
+                        });
+                    }
+                });
+            },
+            handleClick: function(obj) {
+                // console.log(obj);
+                this.detailData.name = obj.regionEmpName;
+                this.detailData.fax = obj.regionEmpFax;
+                this.detailData.location = obj.regionName;
+                this.detailData.mobile = obj.regionEmpContactMobi;
+                this.detailData.phone = obj.regionEmpContactNum;
+                this.detailData.people = obj.regionEmpContact;
+                this.detailData.marketId = obj.regionEmpId;
+                vue.dialogVisible = true;
+            }
+        },
+        mounted(){
+            this.getList('')
+        }
+    })
+</script>
+
+</html>
