@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 @RestController
@@ -52,6 +53,12 @@ public class UserController extends ControllerBase {
     public Object disable(@RequestParam Integer userId) throws Exception {
         userService.disable(userId);
         return success();
+    }
+
+    @RolesAllowed("USER")
+    @RequestMapping("userType")
+    public Object userType(AppUserDetail appUserDetail) throws Exception {
+        return appUserDetail.getUserType();
     }
 
     @RequestMapping("addUsers")
