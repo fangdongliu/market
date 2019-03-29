@@ -46,4 +46,51 @@ public class MostNeeded {//需求前十职业表，共41条数据
     Integer mostProf10Num;//最需要排名第十的职业代码
     Integer mostProf10Need;//最需要排名第十的职业需求人数
     Integer mostProf10Jobseek;//最需要排名第十的职业求职人数
+
+    public MostNeeded(UploadDataSet uploadDataSet){
+        this.tableId = uploadDataSet.getTableId();
+        this.mostProf1Name = uploadDataSet.getMostProf1Name();
+        this.mostProf1Num = uploadDataSet.getMostProf1Num();
+        this.mostProf1Need = uploadDataSet.getMostProf1Need();
+        this.mostProf1Jobseek = uploadDataSet.getMostProf1Jobseek();
+        this.mostProf2Name = uploadDataSet.getMostProf2Name();
+        this.mostProf2Num = uploadDataSet.getMostProf2Num();
+        this.mostProf2Need = uploadDataSet.getMostProf2Need();
+        this.mostProf2Jobseek = uploadDataSet.getMostProf2Jobseek();
+        this.mostProf3Name = uploadDataSet.getMostProf3Name();
+        this.mostProf3Num = uploadDataSet.getMostProf3Num();
+        this.mostProf3Need = uploadDataSet.getMostProf3Need();
+        this.mostProf3Jobseek = uploadDataSet.getMostProf3Jobseek();
+        this.mostProf4Name = uploadDataSet.getMostProf4Name();
+        this.mostProf4Num = uploadDataSet.getMostProf4Num();
+        this.mostProf4Need = uploadDataSet.getMostProf4Need();
+        this.mostProf4Jobseek = uploadDataSet.getMostProf4Jobseek();
+        this.mostProf5Name = uploadDataSet.getMostProf5Name();
+        this.mostProf5Num = uploadDataSet.getMostProf5Num();
+        this.mostProf5Need = uploadDataSet.getMostProf5Need();
+        this.mostProf5Jobseek = uploadDataSet.getMostProf5Jobseek();
+        this.mostProf6Name = uploadDataSet.getMostProf6Name();
+        this.mostProf6Num = uploadDataSet.getMostProf6Num();
+        this.mostProf6Need = uploadDataSet.getMostProf6Need();
+        this.mostProf6Jobseek = uploadDataSet.getMostProf6Jobseek();
+        this.mostProf7Name = uploadDataSet.getMostProf7Name();
+        this.mostProf7Num = uploadDataSet.getMostProf7Num();
+        this.mostProf7Need = uploadDataSet.getMostProf7Need();
+        this.mostProf7Jobseek = uploadDataSet.getMostProf7Jobseek();
+        this.mostProf8Name = uploadDataSet.getMostProf8Name();
+        this.mostProf8Num = uploadDataSet.getMostProf8Num();
+        this.mostProf8Need = uploadDataSet.getMostProf8Need();
+        this.mostProf8Jobseek = uploadDataSet.getMostProf8Jobseek();
+        this.mostProf9Name = uploadDataSet.getMostProf9Name();
+        this.mostProf9Num = uploadDataSet.getMostProf9Num();
+        this.mostProf9Need = uploadDataSet.getMostProf9Need();
+        this.mostProf9Jobseek = uploadDataSet.getMostProf9Jobseek();
+        this.mostProf10Name = uploadDataSet.getMostProf10Name();
+        this.mostProf10Num = uploadDataSet.getMostProf10Num();
+        this.mostProf10Need = uploadDataSet.getMostProf10Need();
+        this.mostProf10Jobseek = uploadDataSet.getMostProf10Jobseek();
+    }
+
+    public MostNeeded() {
+    }
 }

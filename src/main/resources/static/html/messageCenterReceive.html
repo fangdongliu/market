@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>messageCenter</title>
+    <title>Send</title>
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <!-- Vue -->
     <script src="https://cdn.bootcss.com/vue/2.6.9/vue.min.js"></script>
@@ -14,40 +14,54 @@
     <div id="messageCenter" style="height:100%;">
         <el-main class="content"style="overflow: visible">
             <div class="contentDetail">
-                <el-button type="primary" icon="el-icon-plus" style="margin-bottom: 20px" size="mini">发布新通知</el-button>
                 <el-table
-                        :data="messageList"
+                        :data="messageList.slice((currentPage-1)*pageSize,currentPage*pageSize)"
                         stripe
                         style="width: 100%">
                     <el-table-column
                             prop="number"
                             label="序号"
-                            width="100px">
+                            width="80px">
                     </el-table-column>
                     <el-table-column
-                            prop="title"
+                            prop="noticeTitle"
                             label="通知标题">
                     </el-table-column>
                     <el-table-column
-                            prop="sender"
+                            prop="creator"
                             label="发布者">
                     </el-table-column>
                     <el-table-column
-                            prop="time"
+                            prop="createTime"
                             label="发布时间">
                     </el-table-column>
                     <el-table-column
+                            prop="reviser"
+                            label="最后修改者">
+                    </el-table-column>
+                    <el-table-column
                             label="操作"
-                            width="150px">
+                            width="100px">
                         <template slot-scope="scope">
-                            <el-button @click="clickMessage(scope.row)" type="primary" size="small">查看</el-button>
+                            <el-button @click="seeMessage(scope.row)" type="primary" size="mini">查看</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
 
+                <div class="block" style="text-align: center; margin-top: 15px">
+                    <el-pagination
+                            layout="prev, pager, next"
+                            @current-change="pageChange"
+                            :page-size="pageSize"
+                            :total="messageList.length"
+                            background>
+                    </el-pagination>
+                </div>
+
+
                 <el-dialog
                         title="详细信息"
-                        :visible.sync="messageVisibe"
+                        :visible.sync="messageVisible"
                         width="60%"
                         lock-scroll
                 >
@@ -79,25 +93,48 @@
     var vue = new Vue({
         el:'#messageCenter',
         data:{
-            messageList:[{
-                number:1,
-                title:'test',
-                sender:'test',
-                time:'emmm',
-                content:'1231'
-            }],
+            messageList:[],
             messageData:{
                 title:'',
                 content:''
             },
-            messageVisibe:false
+            messageVisible:false,
+            currentPage:1,
+            pageSize:10
         },
         methods:{
-            clickMessage(obj){
-                this.messageData.title = obj.title;
-                this.messageData.content = obj.content;
-                this.messageVisibe = true;
+            seeMessage(obj){
+                this.messageData.title = obj.noticeTitle;
+                this.messageData.content = obj.noticeContent;
+                this.messageVisible = true;
+            },
+            getList(){
+                $.ajax({
+                    url:'/common/message/receive',
+                    type:'post',
+                    success(res){
+                        console.log(res);
+                        if(res.code === 0){
+                            for(var i = 0; i < res.data.length; i ++){
+                                res.data[i].number = i + 1;
+                            }
+                            vue.messageList = res.data;
+                            }
+                        else{
+                            alert('error1!');
+                        }
+                    },
+                    error(res){
+                        alert('error2!');
+                    }
+                })
+            },
+            pageChange(page){
+                this.currentPage = page;
             }
+        },
+        mounted(){
+            this.getList();
         }
     })
 </script>

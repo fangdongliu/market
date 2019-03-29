@@ -17,8 +17,9 @@
                 <el-row type="flex" class="littleTitle">
                     <el-col :span="24">填报人力资源市场信息</el-col>
                 </el-row>
+                <el-row v-if="marketStateFlag===0" class="littleWarning">您当前的信息未通过审核，详情请见通知中心，请重新填报</el-row>
                 <el-row v-if="marketStateFlag===1" class="littleWarning">您当前的信息正在被审核，不可修改</el-row>
-                <el-row v-if="marketStateFlag===2" class="littleWarning">您当前的信息已经通过审核且未过期，不可修改</el-row>
+                <el-row v-if="marketStateFlag===2" class="littleWarning">您当前的已有备案信息通过审核，若需修改请填写表格后点击“申报”按钮</el-row>
 
                 <el-row type="flex" justify="center">
                     <el-col :span="16">
@@ -33,7 +34,6 @@
                                         @change="handleChange"
                                         :disabled="ifSubmitMarketDetail">
                                 </el-cascader>
-
                                 <!--<el-input v-model="marketDetailForm.location" :disabled="ifSubmitMarketDetail"></el-input>-->
                             </el-form-item>
                             <el-form-item label="联系人姓名" prop="people">
@@ -177,7 +177,7 @@
             marketStateFlag:-1,
             formRules:{
                 name:{required:true, min:3, max:60, message:'长度在3~60字符之间！', trigger:'blur'},
-                location:{required:true, min:3, max:60, message:'长度在3~60字符之间！', trigger:'blur'},
+                location:{required:true, trigger:'blur'},
                 people:{required:true, max:30, message:'请填写姓名，至多30字符！', trigger:'blur'},
                 mobile:{required:true, validator:checkMobile, trigger:'blur'},
                 phonePre:{validator:checkPhonePre, trigger:'blur'},
@@ -187,116 +187,322 @@
             },
             phone:'',
             fax:'',
-            cityOptions:{
-                value:'anhui',
+            value:[],
+            cityOptions:[{
+                value:'安徽省',
                 label:'安徽省',
                 children:[{
-                    value:'anqing',
+                    value:'安庆',
                     label:'安庆',
                     children:[{
-                        value:'anqingshi',
+                        value:'安庆市',
                         label:'安庆市'
                     },{
-                        value:'huainingxian',
+                        value:'怀宁县',
                         label:'怀宁县'
                     },{
-                        value:'qianshanxian',
+                        value:'潜山县',
                         label:'潜山县'
                     },{
-                        value:'susongxian',
+                        value:'宿松县',
                         label:'宿松县'
                     },{
-                        value:'taihuxian',
+                        value:'太湖县',
                         label:'太湖县'
                     },{
-                        value:'tongchengshi',
+                        value:'桐城市',
                         label:'桐城市'
                     },{
-                        value:'wangjiangxian',
+                        value:'望江县',
                         label:'望江县'
                     },{
-                        value:'yuexixian',
+                        value:'岳西县',
                         label:'岳西县'
                     },{
-                        value:'zongyangxian',
+                        value:'枞阳县',
                         label:'枞阳县'
                     },{
-                        value:'anqingshi',
+                        value:'安庆市',
                         label:'安庆市'
                     }]
-                },{
-                    value:'bengbu',
+                 },{
+                    value:'蚌埠',
                     label:'蚌埠',
-                    children:[],
+                    children:[{
+                        value:'蚌埠市',
+                        label:'蚌埠市'
+                    },{
+                        value:'固镇县',
+                        label:'固镇县'
+                    },{
+                        value:'怀远县',
+                        label:'怀远县'
+                    },{
+                        value:'五河县',
+                        label:'五河县'
+                    }]
                 },{
-                    value:'chaohu',
+                    value:'巢湖',
                     label:'巢湖',
-                    children:[],
+                    children:[{
+                        value:'巢湖市',
+                        label:'巢湖市'
+                    },{
+                        value:'含山县',
+                        label:'含山县'
+                    },{
+                        value:'和县',
+                        label:'和县'
+                    },{
+                        value:'庐江县',
+                        label:'庐江县'
+                    },{
+                        value:'无为县',
+                        label:'无为县'
+                    }]
                 },{
-                    value:'chizhou',
+                    value:'池州',
                     label:'池州',
-                    children:[],
+                    children:[{
+                        value:'池州市',
+                        label:'池州市'
+                    },{
+                        value:'东至县',
+                        label:'东至县'
+                    },{
+                        value:'青阳县',
+                        label:'青阳县'
+                    },{
+                        value:'石台县',
+                        label:'石台县'
+                    }]
                 },{
-                    value:'chuzhou',
+                    value:'滁州',
                     label:'滁州',
-                    children:[],
+                    children:[{
+                        value:'滁州市',
+                        label:'滁州市'
+                    },{
+                        value:'定远县',
+                        label:'定远县'
+                    },{
+                        value:'凤阳县',
+                        label:'凤阳县'
+                    },{
+                        value:'来安县',
+                        label:'来安县'
+                    },{
+                        value:'明光市',
+                        label:'明光市'
+                    },{
+                        value:'全椒县',
+                        label:'全椒县'
+                    },{
+                        value:'天长市',
+                        label:'天长市'
+                    }]
                 },{
-                    value:'fuyang',
+                    value:'阜阳',
                     label:'阜阳',
-                    children:[],
+                    children:[{
+                        value:'阜南县',
+                        label:'阜南县'
+                    },{
+                        value:'阜阳市',
+                        label:'阜阳市'
+                    },{
+                        value:'界首市',
+                        label:'界首市'
+                    },{
+                        value:'临泉县',
+                        label:'临泉县'
+                    },{
+                        value:'太和县',
+                        label:'太和县'
+                    },{
+                        value:'颖上县',
+                        label:'颖上县'
+                    }]
                 },{
-                    value:'hefei',
+                    value:'合肥',
                     label:'合肥',
-                    children:[],
+                    children:[{
+                        value:'长丰县',
+                        label:'长丰县'
+                    },{
+                        value:'肥东县',
+                        label:'肥东县'
+                    },{
+                        value:'肥西县',
+                        label:'肥西县'
+                    }]
                 },{
-                    value:'huanbei',
+                    value:'淮北',
                     label:'淮北',
-                    children:[],
+                    children:[{
+                        value:'淮北市',
+                        label:'淮北市'
+                    },{
+                        value:'濉溪县',
+                        label:'濉溪县'
+                    }]
                 },{
-                    value:'huainan',
+                    value:'淮南',
                     label:'淮南',
-                    children:[],
+                    children:[{
+                        value:'凤台县',
+                        label:'凤台县'
+                    },{
+                        value:'淮南市',
+                        label:'淮南市'
+                    }]
                 },{
-                    value:'huangshan',
+                    value:'黄山',
                     label:'黄山',
-                    children:[],
+                    children:[{
+                        value:'黄山市',
+                        label:'黄山市'
+                    },{
+                        value:'祁门县',
+                        label:'祁门县'
+                    },{
+                        value:'休宁县',
+                        label:'休宁县'
+                    },{
+                        value:'歙县',
+                        label:'歙县'
+                    },{
+                        value:'黟县',
+                        label:'黟县'
+                    }]
                 },{
-                    value:'liuan',
+                    value:'六安',
                     label:'六安',
-                    children:[],
+                    children:[{
+                        value:'霍邱县',
+                        label:'霍邱县'
+                    },{
+                        value:'霍山县',
+                        label:'霍山县'
+                    },{
+                        value:'金寨县',
+                        label:'金寨县'
+                    },{
+                        value:'六安市',
+                        label:'六安市'
+                    },{
+                        value:'寿县',
+                        label:'寿县'
+                    },{
+                        value:'舒城县',
+                        label:'舒城县'
+                    }]
                 },{
-                    value:'maanshan',
+                    value:'马鞍山',
                     label:'马鞍山',
-                    children:[],
+                    children:[{
+                        value:'当涂县',
+                        label:'当涂县'
+                    },{
+                        value:'马鞍山市',
+                        label:'马鞍山市'
+                    }]
                 },{
-                    value:'suzhou',
+                    value:'宿州',
                     label:'宿州',
-                    children:[],
+                    children:[{
+                        value:'灵璧县',
+                        label:'灵璧县'
+                    },{
+                        value:'宿州市',
+                        label:'宿州市'
+                    },{
+                        value:'萧县',
+                        label:'萧县'
+                    },{
+                        value:'泗县',
+                        label:'泗县'
+                    },{
+                        value:'砀山县',
+                        label:'砀山县'
+                    }]
                 },{
-                    value:'tongling',
+                    value:'铜陵',
                     label:'铜陵',
-                    children:[],
+                    children:[{
+                        value:'铜陵市',
+                        label:'铜陵市'
+                    },{
+                        value:'铜陵县',
+                        label:'铜陵县'
+                    }]
                 },{
-                    value:'wuhu',
+                    value:'芜湖',
                     label:'芜湖',
-                    children:[],
+                    children:[{
+                        value:'繁昌县',
+                        label:'繁昌县'
+                    },{
+                        value:'南陵县',
+                        label:'南陵县'
+                    },{
+                        value:'芜湖市',
+                        label:'芜湖市'
+                    },{
+                        value:'芜湖县',
+                        label:'芜湖县'
+                    }]
                 },{
-                    value:'xuancheng',
+                    value:'宣城',
                     label:'宣城',
-                    children:[],
+                    children:[{
+                        value:'广德县',
+                        label:'广德县'
+                    },{
+                        value:'绩溪县',
+                        label:'绩溪县'
+                    },{
+                        value:'郎溪县',
+                        label:'郎溪县'
+                    },{
+                        value:'宁国市',
+                        label:'宁国市'
+                    },{
+                        value:'宣城市',
+                        label:'宣城市'
+                    },{
+                        value:'泾县',
+                        label:'泾县'
+                    },{
+                        value:'旌德县',
+                        label:'旌德县'
+                    }]
                 },{
-                    value:'bozhou',
+                    value:'亳州',
                     label:'亳州',
-                    children:[],
-                }
-                ]
-            }
+                    children:[{
+                        value:'利辛县',
+                        label:'利辛县'
+                    },{
+                        value:'蒙城县',
+                        label:'蒙城县'
+                    },{
+                        value:'涡阳县',
+                        label:'涡阳县'
+                    },{
+                        value:'亳州市',
+                        label:'亳州市'
+                    }]
+                }]
+            }]
         },
         methods:{
             onSubmitMarketDetail: function(formName) {
 
                 vue3.$refs[formName].validate((valid) => {
                         if (valid) {
+                            var location='';
+                            location = vue3.value[0]+'-'+vue3.value[1]+'-'+vue3.value[2]
                             this.phone = this.marketDetailForm.phonePre.toString()+this.marketDetailForm.phone.toString();
                             this.fax = this.marketDetailForm.faxPre.toString() + this.marketDetailForm.fax.toString();
                             if(this.marketStateFlag === -1) {//新建备案
@@ -305,7 +511,7 @@
                                     type:'post',
                                     data:{
                                         regionEmpName:this.marketDetailForm.name,
-                                        regionName:this.marketDetailForm.location,
+                                        regionName:location,
                                         regionEmpContact:this.marketDetailForm.people,
                                         regionEmpContactMobi:this.marketDetailForm.mobile,
                                         regionEmpContactNum:this.phone,
@@ -327,33 +533,73 @@
                                     }
                                 })
                             }
-                            else{//更新备案
-                                $.ajax({
-                                    url:'/market/record/update',
-                                    type:'post',
-                                    data:{
-                                        regionEmpName:this.marketDetailForm.name,
-                                        regionName:this.marketDetailForm.location,
-                                        regionEmpContact:this.marketDetailForm.people,
-                                        regionEmpContactMobi:this.marketDetailForm.mobile,
-                                        regionEmpContactNum:this.phone,
-                                        regionEmpFax:this.fax,
-                                        stateFlag:1
-                                    },
-                                    success(res){
-                                        vue3.$message({
-                                            type: 'success',
-                                            message: '已提交!'
-                                        });
-                                        vue3.ifSubmitMarketDetail = true;
-                                    },
-                                    error(res){
+                            else{
+                                if(vue3.marketStateFlag===2){//已经通过但更新备案
+                                    this.$confirm('确定要更新备案?', '提示', {
+                                        confirmButtonText: '确定',
+                                        cancelButtonText: '取消',
+                                        type: 'warning'
+                                    }).then(() => {
+                                        $.ajax({
+                                        url:'/market/record/insert',
+                                        type:'post',
+                                        data:{
+                                            regionEmpName:this.marketDetailForm.name,
+                                            regionName:location,
+                                            regionEmpContact:this.marketDetailForm.people,
+                                            regionEmpContactMobi:this.marketDetailForm.mobile,
+                                            regionEmpContactNum:this.phone,
+                                            regionEmpFax:this.fax,
+                                            stateFlag:1
+                                        },
+                                        success(res){
+                                            vue3.$message({
+                                                type: 'success',
+                                                message: '已提交!'
+                                            });
+                                            vue3.ifSubmitMarketDetail = true;
+                                        },
+                                        error(res){
+                                            vue3.$message({
+                                                type: 'error',
+                                                message: '出错了哦!'
+                                            });
+                                        }
+                                    })
+                                }).catch(() => {
                                         this.$message({
-                                            type: 'error',
-                                            message: '出错了哦!'
-                                        });
-                                    }
-                                })
+                                        type: 'info',
+                                        message: '已取消删除'
+                                    });
+                                });
+                                }else{//更新备案
+                                    $.ajax({
+                                        url:'/market/record/update',
+                                        type:'post',
+                                        data:{
+                                            regionEmpName:this.marketDetailForm.name,
+                                            regionName:location,
+                                            regionEmpContact:this.marketDetailForm.people,
+                                            regionEmpContactMobi:this.marketDetailForm.mobile,
+                                            regionEmpContactNum:this.phone,
+                                            regionEmpFax:this.fax,
+                                            stateFlag:1
+                                        },
+                                        success(res){
+                                            vue3.$message({
+                                                type: 'success',
+                                                message: '已提交!'
+                                            });
+                                            vue3.ifSubmitMarketDetail = true;
+                                        },
+                                        error(res){
+                                            vue3.$message({
+                                                type: 'error',
+                                                message: '出错了哦!'
+                                            });
+                                        }
+                                    })
+                                }
                             }
                             //
                             // alert('submit!');
@@ -366,8 +612,9 @@
             resetMarketDetailForm:function(formName) {
                 this.$refs[formName].resetFields();
             },
-            handleChange(value) {
-                console.log(value);
+            handleChange(v) {
+                vue3.value = v;
+                // console.log(vue3.value);
             }
         },
         mounted:function () {
@@ -375,14 +622,14 @@
                 url:'/market/record/select',
                 type:'post',
                 success(res){
-                    console.log(res);
+                    // console.log(res);
                     if(res.data === null){
                         vue3.marketStateFlag = -1;//没有创建过备案
                     }
                     else{
                         vue3.marketStateFlag = res.data.stateFlag;
                     }
-                    if(vue3.marketStateFlag===1 || vue3.marketStateFlag===2) {
+                    if(vue3.marketStateFlag===1) {
                         //待审核状态 已完成未过期状态 不可修改
                         vue3.marketDetailForm.faxPre = parseInt(res.data.regionEmpFax.substring(0,4));
                         vue3.marketDetailForm.fax = parseInt(res.data.regionEmpFax.substring(4,12));
@@ -390,11 +637,11 @@
                         vue3.marketDetailForm.phone = parseInt(res.data.regionEmpContactNum.substring(3,11));
                         vue3.marketDetailForm.mobile = parseInt(res.data.regionEmpContactMobi);
                         vue3.marketDetailForm.people = res.data.regionEmpContact;
-                        vue3.marketDetailForm.location = res.data.regionName;
+                        // vue3.marketDetailForm.location = res.data.regionName;
                         vue3.marketDetailForm.name = res.data.regionEmpName;
                         vue3.ifSubmitMarketDetail = true;
                     }
-                    else if(vue3.marketStateFlag===0){
+                    else if(vue3.marketStateFlag===0|| vue3.marketStateFlag===2){
                         //被拒绝了 重新修改
                         vue3.marketDetailForm.faxPre = parseInt(res.data.regionEmpFax.substring(0,4));
                         vue3.marketDetailForm.fax = parseInt(res.data.regionEmpFax.substring(4,12));
@@ -402,7 +649,7 @@
                         vue3.marketDetailForm.phone = parseInt(res.data.regionEmpContactNum.substring(3,11));
                         vue3.marketDetailForm.mobile = parseInt(res.data.regionEmpContactMobi);
                         vue3.marketDetailForm.people = res.data.regionEmpContact;
-                        vue3.marketDetailForm.location = res.data.regionName;
+                        // vue3.marketDetailForm.location = res.data.regionName;
                         vue3.marketDetailForm.name = res.data.regionEmpName;
                         vue3.ifSubmitMarketDetail = false;
                     }

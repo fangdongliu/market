@@ -17,6 +17,8 @@ public interface RightMapper {
             "\tright_name AS `label`,\n" +
             "\tright_desc AS description,\n" +
             "\tfather_id AS father,\n" +
+            "\tmenu_name AS menuName,\n" +
+            "\tmenu_path AS menuPath,\n" +
             "\tdelete_flag AS `status`\n" +
             "\t FROM t_right;")
     @MapKey("id")

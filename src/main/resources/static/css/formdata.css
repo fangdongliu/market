@@ -1,22 +1,32 @@
+body{
+    background-color: #eeeeee;
+}
 #app{
     width:100%;
-    /*background-color: #adacac;*/
+    /*background-color: #ba9b66;*/
+    background-color: #FFFFFF;
+    padding:25px;
+    border-radius: 10px;
 }
 
 .formIndex{
     margin-top: 0;
     width: 100%;
-    /*position: fixed;*/
     /*background-color: #7a9cc9;*/
 }
 
-.formIndex button{
+.indexes{
     background-color: rgb(243, 242, 241);
     margin:10px;
     width: 40px;
     height:40px;
 }
 
+#submit{
+    float:right;
+    margin:10px;
+    margin-right:30px;
+}
 
 .table{
     width:100%;
@@ -29,11 +39,12 @@
 .table .tabletitle{
     font-size: 20px;
     text-align: center;
+    margin-bottom:20px;
 }
 
 .table .tableheader .el-col{
     text-align: center;
-    /*background-color: #ab880b;*/
+    font-weight: bold;
 }
 
 
@@ -55,12 +66,15 @@
 }
 
 #last{
-    float: left;
-    margin-left:10%;
-    margin-bottom:10px;
+    margin-left:40%;
+    margin-top:30px;
 }
-#next{
-    float: right;
-    margin-right:10%;
-    margin-bottom:10px;
+
+#change{
+    margin-left:20px;
+    margin-top:30px;
+}
+#save{
+    margin-left:20px;
+    margin-top:30px;
 }

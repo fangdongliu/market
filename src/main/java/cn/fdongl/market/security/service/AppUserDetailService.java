@@ -36,6 +36,7 @@ public class AppUserDetailService implements UserDetailsService {
         detail.setUsername(username);
         detail.setPassword(userData.getPassword());
         detail.setStatus(0);
+        detail.setUserType(userData.getUserType());
 
         List<GrantedAuthority> authorities = new ArrayList<>();
 

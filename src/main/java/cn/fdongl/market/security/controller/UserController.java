@@ -2,9 +2,11 @@ package cn.fdongl.market.security.controller;
 
 import cn.fdongl.market.security.entity.AddUserInput;
 import cn.fdongl.market.security.entity.AppUserDetail;
+import cn.fdongl.market.security.entity.UserPageQuery;
 import cn.fdongl.market.security.service.UserService;
 import cn.fdongl.market.util.ControllerBase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 @RestController
@@ -36,10 +39,26 @@ public class UserController extends ControllerBase {
         return success();
     }
 
+    @RequestMapping("query")
+    public Object query(@Valid UserPageQuery input) throws Exception {
+        return success(userService.query(
+                (input.getPage()-1)*input.getPageSize(),
+                input.getPageSize(),
+                input.getUserType(),
+                input.getUsername(),
+                input.getFullname()));
+    }
+
     @RequestMapping("disable")
     public Object disable(@RequestParam Integer userId) throws Exception {
         userService.disable(userId);
         return success();
+    }
+
+    @RolesAllowed("USER")
+    @RequestMapping("userType")
+    public Object userType(AppUserDetail appUserDetail) throws Exception {
+        return appUserDetail.getUserType();
     }
 
     @RequestMapping("addUsers")
@@ -47,6 +66,14 @@ public class UserController extends ControllerBase {
             AppUserDetail userDetail,
             @Valid AddUserInput input
             ) throws Exception {
+        if(userDetail.getId()==1){
+            input.setUserType(1);
+        }else if(input.getParent()==null){
+            input.setUserType(2);
+            input.setParent(userDetail.getId());
+        }else{
+            input.setUserType(3);
+        }
         userService.addUsers(userDetail.getId(),
                 input.getParent(),
                 input.getUserType(),

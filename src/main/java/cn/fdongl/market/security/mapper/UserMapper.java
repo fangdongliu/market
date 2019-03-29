@@ -29,6 +29,16 @@ public interface UserMapper {
     @Select("SELECT user_id as id,username,fullname,usertype as userType,superior as father,state_flag as `status`,delete_flag as deleteFlag FROM t_user")
     List<ListUserData>list();
 
+    @Select("<script>" +
+            "select user_id as id,username,fullname,usertype as userType,superior as father,state_flag as `status`,delete_flag as deleteFlag " +
+            "from t_user where 1=1 " +
+            "<if test='param3!=null'>and usertype = #{param3} </if>" +
+            "<if test='param4!=null'>and username like #{param4} </if>" +
+            "<if test='param5!=null'>and fullname like #{param5} </if>"+
+            "limit #{param1},#{param2}"+
+            "</script>")
+    List<ListUserData>page(int begin,int count,Integer userType,String username,String fullname);
+
     @Update("UPDATE t_user\n" +
             "SET delete_flag = 0 WHERE user_id = #{param1};")
     int enable(Integer rightId);
@@ -54,6 +64,7 @@ public interface UserMapper {
     @Select("SELECT \n" +
             "\tuser_id AS id,\n" +
             "\tusername,\n" +
+            "\tusertype as userType,\n" +
             "\t`password`,\n" +
             "\tstate_flag AS `status`,\n" +
             "delete_flag as deleteFlag "+
@@ -69,28 +80,28 @@ public interface UserMapper {
             "            WHERE t_right.right_id\n" +
             "            IN(\n" +
             "            SELECT t_role_right.right_id from t_role_right \n" +
-            "            where t_role_right.right_id IN \n" +
+            "            where t_role_right.role_id IN \n" +
             "            (SELECT t_role.role_id FROM t_role WHERE t_role.role_id IN \n" +
             "            (SELECT t_user_role.role_id FROM t_user_role WHERE t_user_role.user_id = #{param1})\n" +
             "            AND t_role.delete_flag = 0)\n" +
             "            ) AND t_right.delete_flag=0")
     List<String> getUserRights(String userId);
 
-    @Select("SELECT t_right.menu_name,menu_path,father_id,right_id\n" +
+    @Select("SELECT t_right.menu_name as menuName,menu_path as menuPath,father_id as father,right_id as id\n" +
             "from t_right\n" +
             "WHERE t_right.right_id\n" +
             "IN(\n" +
             "SELECT t_role_right.right_id from t_role_right \n" +
-            "where t_role_right.right_id IN \n" +
+            "where t_role_right.role_id IN \n" +
             "(SELECT t_role.role_id FROM t_role WHERE t_role.role_id IN \n" +
-            "(SELECT t_user_role.role_id FROM t_user_role WHERE t_user_role.user_id = 1)\n" +
+            "(SELECT t_user_role.role_id FROM t_user_role WHERE t_user_role.user_id = #{param1})\n" +
             "AND t_role.delete_flag = 0)\n" +
-            ") AND t_right.delete_flag=0 AND menu_name != null")
+            ") AND t_right.delete_flag=0 AND menu_name is not null")
     @MapKey("id")
     Map<Integer, Right>getMenu(Integer userId);
 
-    @Select("SELECT t_right.menu_name,menu_path,father_id,right_id\n" +
-            "from t_right where t_right.delete_flag=0 AND menu_name != null")
+    @Select("SELECT t_right.menu_name as menuName,menu_path as menuPath,father_id as father,right_id as id\n" +
+            "from t_right where t_right.delete_flag=0 AND menu_name is not null")
     @MapKey("id")
     Map<Integer, Right>getSysMenu();
 
@@ -99,8 +110,17 @@ public interface UserMapper {
             "values" +
             "<foreach collection=\"param1\" item=\"item\" index=\"index\" separator=\",\">" +
             "(#{item.username},#{param3},#{param5},#{item.fullname},#{param2},0,now(),#{param4},0)" +
-            "</foreach></script>")
-    int addUsers(List<UsernameAndFullname>array,Integer parent,String password,Integer currentUser,Integer userType);
+            "</foreach>;" +
+            "INSERT INTO t_user_role(role_id,user_id,creator,create_time,delete_flag) (\n" +
+            "\tSELECT #{param6},user_id,#{param4},NOW(),0 FROM t_user WHERE superior = #{param2}\n" +
+            ") ON DUPLICATE KEY UPDATE  creator=#{param4};" +
+
+            "</script>")
+    int addUsers(List<UsernameAndFullname>array,Integer parent,String password,Integer currentUser,Integer userType,Integer userRole);
+
+
+
+
 
     @Update("update t_user set password=#{param1} where user_id = #{param2}")
     int updatePassword(String password,int userId);

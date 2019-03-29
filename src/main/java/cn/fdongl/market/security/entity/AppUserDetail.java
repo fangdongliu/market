@@ -18,6 +18,7 @@ public class AppUserDetail implements UserDetails {
     private Integer id;
     private String username;
     private String password;
+    private Integer userType;
     private Integer status;
 
     private Collection<? extends GrantedAuthority>authorities;

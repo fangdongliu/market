@@ -13,6 +13,8 @@ import java.util.Map;
 @Service
 public class RightService {
 
+
+
     @Autowired
     RightMapper rightMapper;
 

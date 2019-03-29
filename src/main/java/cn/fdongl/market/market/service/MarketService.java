@@ -6,9 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-
 @Service
 public class MarketService {
 
@@ -31,7 +28,7 @@ public class MarketService {
         }
     }
 
-    //监测点默认查询，非事务
+    //根据监测点id查询保存、上传的备案，非事务
     public Record recordSelect(Integer userId) throws Exception {
         Record record=marketMapper.recordSelectFinished(userId);
         if(record==null){
@@ -40,36 +37,37 @@ public class MarketService {
         else return record;
     }
 
+    //监测点用户查询激活状态，非事务
+    public Integer selectActivation(Integer userId) throws Exception {
+        Integer activation=marketMapper.selectActivation(userId);
+        if(activation==null){
+            throw new Exception("查询失败");
+        }
+        return activation;
+    }
+
     //监测点新建上传数据，事务
     @Transactional
-    public void uploadInsert(UploadInfo uploadInfo,
-                             TotalNum totalNum,
-                             IndustryNum industryNum,
-                             EmployerNum employerNum,
-                             ProfNum profNum,
-                             MostNeeded mostNeeded,
-                             LeastNeeded leastNeeded,
-                             JobSeekerNum jobSeekerNum,
-                             SexNum sexNum,
-                             AgeNum ageNum,
-                             DegreeNum degreeNum,
-                             TechGradeNum techGradeNum) throws RuntimeException {
+    public void uploadInsert(UploadDataSet uploadDataSet) throws RuntimeException {
         Integer tableId=marketMapper.uploadSelectNextTableId();//在事务中获取下一个id，失败则回滚
         if(tableId==null||tableId<=0){
             throw new RuntimeException("数据错误");
         }
-        uploadInfo.setTableId(tableId);
-        totalNum.setTableId(tableId);
-        industryNum.setTableId(tableId);
-        employerNum.setTableId(tableId);
-        profNum.setTableId(tableId);
-        mostNeeded.setTableId(tableId);
-        leastNeeded.setTableId(tableId);
-        jobSeekerNum.setTableId(tableId);
-        sexNum.setTableId(tableId);
-        ageNum.setTableId(tableId);
-        degreeNum.setTableId(tableId);
-        techGradeNum.setTableId(tableId);
+        uploadDataSet.setTableId(tableId);
+
+        UploadInfo uploadInfo=new UploadInfo(uploadDataSet);
+        TotalNum totalNum=new TotalNum(uploadDataSet);
+        IndustryNum industryNum=new IndustryNum(uploadDataSet);
+        EmployerNum employerNum=new EmployerNum(uploadDataSet);
+        ProfNum profNum=new ProfNum(uploadDataSet);
+        MostNeeded mostNeeded=new MostNeeded(uploadDataSet);
+        LeastNeeded leastNeeded=new LeastNeeded(uploadDataSet);
+        JobSeekerNum jobSeekerNum=new JobSeekerNum(uploadDataSet);
+        SexNum sexNum=new SexNum(uploadDataSet);
+        AgeNum ageNum=new AgeNum(uploadDataSet);
+        DegreeNum degreeNum=new DegreeNum(uploadDataSet);
+        TechGradeNum techGradeNum=new TechGradeNum(uploadDataSet);
+
         int n=marketMapper.uploadInsertUploadInfo(uploadInfo);
         if(n!=1){
             throw new RuntimeException("新建上传数据信息失败");
@@ -122,34 +120,25 @@ public class MarketService {
 
     //监测点更新上传数据，事务
     @Transactional
-    public void uploadUpdate(UploadInfo uploadInfo,
-                             TotalNum totalNum,
-                             IndustryNum industryNum,
-                             EmployerNum employerNum,
-                             ProfNum profNum,
-                             MostNeeded mostNeeded,
-                             LeastNeeded leastNeeded,
-                             JobSeekerNum jobSeekerNum,
-                             SexNum sexNum,
-                             AgeNum ageNum,
-                             DegreeNum degreeNum,
-                             TechGradeNum techGradeNum) throws RuntimeException {
-        Integer tableId=uploadInfo.getTableId();
+    public void uploadUpdate(UploadDataSet uploadDataSet) throws RuntimeException {
+        Integer tableId=uploadDataSet.getTableId();
         if(tableId==null||tableId<=0){
             throw new RuntimeException("数据错误");
         }
-        uploadInfo.setTableId(tableId);
-        totalNum.setTableId(tableId);
-        industryNum.setTableId(tableId);
-        employerNum.setTableId(tableId);
-        profNum.setTableId(tableId);
-        mostNeeded.setTableId(tableId);
-        leastNeeded.setTableId(tableId);
-        jobSeekerNum.setTableId(tableId);
-        sexNum.setTableId(tableId);
-        ageNum.setTableId(tableId);
-        degreeNum.setTableId(tableId);
-        techGradeNum.setTableId(tableId);
+
+        UploadInfo uploadInfo=new UploadInfo(uploadDataSet);
+        TotalNum totalNum=new TotalNum(uploadDataSet);
+        IndustryNum industryNum=new IndustryNum(uploadDataSet);
+        EmployerNum employerNum=new EmployerNum(uploadDataSet);
+        ProfNum profNum=new ProfNum(uploadDataSet);
+        MostNeeded mostNeeded=new MostNeeded(uploadDataSet);
+        LeastNeeded leastNeeded=new LeastNeeded(uploadDataSet);
+        JobSeekerNum jobSeekerNum=new JobSeekerNum(uploadDataSet);
+        SexNum sexNum=new SexNum(uploadDataSet);
+        AgeNum ageNum=new AgeNum(uploadDataSet);
+        DegreeNum degreeNum=new DegreeNum(uploadDataSet);
+        TechGradeNum techGradeNum=new TechGradeNum(uploadDataSet);
+
         int n=marketMapper.uploadUpdateUploadInfo(uploadInfo);
         if(n!=1){
             throw new RuntimeException("更新上传数据信息失败");
@@ -200,152 +189,8 @@ public class MarketService {
         }
     }
 
-    //按时间点查询上报时限，非事务
-    public SimpleUploadPeriod UploadPeriodSelect(Date date){
-        java.sql.Date sqlDate=new java.sql.Date(date.getTime());
-        return marketMapper.uploadSelectUploadPeriod(sqlDate);
+    //根据监测点id查询保存、上传数据，非事务
+    public UploadInfo uploadSelect(Integer userId) throws Exception {
+        return marketMapper.uploadSelectUnfinished(userId);
     }
-
-    //上传数据信息表查询
-    public UploadInfo UploadInfoSelect(Integer tableId) throws Exception {
-        UploadInfo output=marketMapper.uploadSelectUploadInfo(tableId);
-        if(output==null){
-            throw new Exception("No result");
-        }
-        else{
-            return output;
-        }
-    }
-
-    //供求总体人数表查询
-    public TotalNum TotalNumSelect(Integer tableId) throws Exception {
-        TotalNum output=marketMapper.uploadSelectTotalNum(tableId);
-        if(output==null){
-            throw new Exception("No result");
-        }
-        else{
-            return output;
-        }
-    }
-
-    //产业需求人数表查询
-    public IndustryNum IndustryNumSelect(Integer tableId) throws Exception {
-        IndustryNum output=marketMapper.uploadSelectIndustryNum(tableId);
-        if(output==null){
-            throw new Exception("No result");
-        }
-        else{
-            return output;
-        }
-    }
-
-    //用人单位性质需求人数表查询
-    public EmployerNum EmployerNumSelect(Integer tableId) throws Exception {
-        EmployerNum output=marketMapper.uploadSelectEmployNum(tableId);
-        if(output==null){
-            throw new Exception("No result");
-        }
-        else{
-            return output;
-        }
-    }
-
-    //职业供求人数表查询
-    public ProfNum ProfNumSelect(Integer tableId) throws Exception {
-        ProfNum output = marketMapper.uploadSelectProfNum(tableId);
-        if(output==null){
-            throw new Exception("No result");
-        }
-        else{
-            return output;
-        }
-    }
-
-    //需求前十职业表查询
-    public MostNeeded MostNeededSelect(Integer tableId) throws Exception {
-        MostNeeded output = marketMapper.uploadSelectMostNeeded(tableId);
-        if(output==null){
-            throw new Exception("No result");
-        }
-        else{
-            return output;
-        }
-    }
-
-    //饱和前十职业表查询
-    public LeastNeeded LeastNeededSelect(Integer tableId) throws Exception {
-        LeastNeeded output = marketMapper.uploadSelectLeastNeeded(tableId);
-        if(output==null){
-            throw new Exception("No result");
-        }
-        else{
-            return output;
-        }
-    }
-
-    //人员类别求职人数表查询
-    public JobSeekerNum JobSeekerNumSelect(Integer tableId) throws Exception {
-        JobSeekerNum output = marketMapper.uploadSelectJobSeekerNum(tableId);
-        if(output==null){
-            throw new Exception("No result");
-        }
-        else{
-            return output;
-        }
-    }
-
-    //性别供求人数表查询
-    public SexNum SexNumSelect(Integer tableId) throws Exception {
-        SexNum output = marketMapper.uploadSelectSexNum(tableId);
-        if(output==null){
-            throw new Exception("No result");
-        }
-        else{
-            return output;
-        }
-    }
-
-    //年龄供求人数表查询
-    public AgeNum AgeNumSelect(Integer tableId) throws Exception {
-        AgeNum output = marketMapper.uploadSelectAgeNum(tableId);
-        if(output==null){
-            throw new Exception("No result");
-        }
-        else{
-            return output;
-        }
-    }
-
-    //文化程度供求人数表查询
-    public DegreeNum DegreeNumSelect(Integer tableId) throws Exception {
-        DegreeNum output=marketMapper.uploadSelectDegreeNum(tableId);
-        if(output==null){
-            throw new Exception("No result");
-        }
-        else{
-            return output;
-        }
-    }
-
-    //技术等级供求人数表查询
-    public TechGradeNum TechGradeNumSelect(Integer tableId) throws Exception {
-        TechGradeNum output=marketMapper.uploadSelectTechGradeNum(tableId);
-        if(output==null){
-            throw new Exception("No result");
-        }
-        else{
-            return output;
-        }
-    }
-    //查询目标用户的报表
-    public List<UploadInfo> UploadInfoSelectByUser(Integer userId) throws Exception{
-        List<UploadInfo> output=marketMapper.uploadInfoSelectByUser(userId);
-        if(output==null){
-            throw new Exception("No result");
-        }
-        else {
-            return output;
-        }
-    }
-
 }

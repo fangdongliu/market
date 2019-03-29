@@ -2,12 +2,13 @@ package cn.fdongl.market.province.mapper;
 
 
 import cn.fdongl.market.market.entity.Record;
-import cn.fdongl.market.province.entity.InnerUploadPeriod;
+import cn.fdongl.market.market.entity.UploadInfo;
+import cn.fdongl.market.province.entity.AccountData;
+import cn.fdongl.market.province.entity.UploadPeriod;
 import cn.fdongl.market.province.entity.UserInfoDisplay;
 import org.apache.ibatis.annotations.*;
 import org.springframework.core.annotation.Order;
 
-import java.sql.Date;
 import java.util.List;
 
 @Mapper
@@ -28,10 +29,12 @@ public interface ProvinceMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTIme, \n" +
             "reviser AS reviser \n" +
-            "from t_record_info where state_flag=1;")
+            "from t_record_info where \n" +
+            "delete_flag=0 \n" +
+            "and state_flag=1;")
     List<Record> recordExamineQuery();
 
-    //查询备案，根据监测点名称
+    //省级根据条件查询备案，监测点名称，地区名称，联系人名称
     @Select("SELECT \n" +
             "region_emp_id AS regionEmpId, \n" +
             "region_emp_name AS regionEmpName, \n" +
@@ -45,175 +48,100 @@ public interface ProvinceMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTIme, \n" +
             "reviser AS reviser \n" +
-            "from t_record_info where state_flag=2 and region_emp_name like #{param1};")
-    List<Record> recordRegionEmpNameQuery(String condition);
-
-    //查询备案，根据地区名称
-    @Select("SELECT \n" +
-            "region_emp_id AS regionEmpId, \n" +
-            "region_emp_name AS regionEmpName, \n" +
-            "region_name AS regionName, \n" +
-            "region_emp_contact AS regionEmpContact, \n" +
-            "region_emp_contact_mobi AS regionEmpContactMobi, \n" +
-            "region_emp_contact_num AS regionEmpContactNum, \n" +
-            "region_emp_fax AS regionEmpFax, \n" +
-            "state_flag AS stateFlag, \n" +
-            "create_time AS createTime, \n" +
-            "creator AS creator, \n" +
-            "revise_time AS reviseTIme, \n" +
-            "reviser AS reviser \n" +
-            "from t_record_info where state_flag=2 and region_name like #{param1};")
-    List<Record> recordRegionNameQuery(String condition);
-
-    //查询备案，根据联系人名称
-    @Select("SELECT \n" +
-            "region_emp_id AS regionEmpId, \n" +
-            "region_emp_name AS regionEmpName, \n" +
-            "region_name AS regionName, \n" +
-            "region_emp_contact AS regionEmpContact, \n" +
-            "region_emp_contact_mobi AS regionEmpContactMobi, \n" +
-            "region_emp_contact_num AS regionEmpContactNum, \n" +
-            "region_emp_fax AS regionEmpFax, \n" +
-            "state_flag AS stateFlag, \n" +
-            "create_time AS createTime, \n" +
-            "creator AS creator, \n" +
-            "revise_time AS reviseTIme, \n" +
-            "reviser AS reviser \n" +
-            "from t_record_info where state_flag=2 and region_emp_contact like #{param1};")
-    List<Record> recordRegionEmpContactQuery(String condition);
+            "from t_record_info where \n" +
+            "delete_flag=0 \n" +
+            "and state_flag=2 \n" +
+            "and ((region_emp_name like CONCAT('%',#{param1},'%')) \n" +
+            "or (region_name like CONCAT('%',#{param1},'%')) \n" +
+            "or (region_emp_contact like CONCAT('%',#{param1},'%')));")
+    List<Record> recordConditionalQuery(String condition);
 
     //省级备案未通过时更新数据
     @Update("UPDATE t_record_info \n" +
             "set state_flag=0,revise_time=now(),reviser=#{param1} \n" +
-            "where region_emp_id=#{param2} and state_flag=1;")
-    Integer recordUpdateReject(Integer examineId,Integer aimId);
+            "where state_flag=1 and region_emp_id=#{param2};")
+    Integer recordUpdateReject(Integer provinceId,Integer aimId);
 
     //省级备案未通过时删除数据
     @Delete("DELETE FROM t_record_info \n" +
-            "where region_emp_id=#{param1} and state_flag=1;")
+            "where state_flag=1 and region_emp_id=#{param1};")
     Integer recordDeleteReject(Integer aimId);
 
     //省级备案通过时更新数据
     @Update("UPDATE t_record_info \n" +
             "set state_flag=2,revise_time=now(),reviser=#{param1} \n" +
-            "where region_emp_id=#{param2} and state_flag=1;")
-    Integer recordUpdatePass(Integer examineId,Integer aimId);
+            "where state_flag=1 region_emp_id=#{param2};")
+    Integer recordUpdatePass(Integer provinceId,Integer aimId);
 
     //省级备案通过时更新过期数据
     @Update("UPDATE t_record_info \n" +
             "set state_flag=3,revise_time=now(),reviser=#{param1} \n" +
-            "where region_emp_id=#{param2} and state_flag=2;")
-    Integer recordUpdateExpirePass(Integer examineId,Integer aimId);
+            "where state_flag=2 region_emp_id=#{param2};")
+    Integer recordUpdateExpirePass(Integer provinceId,Integer aimId);
 
     //激活账号
     @Update("UPDATE t_user \n" +
-            "set state_flag=1 \n" +
-            "where user_id=#{param1};")
-    Integer recordUpdateActivation(Integer examineId,Integer aimId);
+            "set state_flag=1,revise_time=now(),reviser=#{param1} \n" +
+            "where user_id=#{param2};")
+    Integer recordUpdateActivation(Integer provinceId,Integer aimId);
 
-    //根据id查询已通过备案的个数
+    //根据id查询已通过备案的个数，结果为0或1
     @Select("SELECT count(1) \n" +
-            "from t_record_info where region_emp_id=#{param1} and state_flag=2;")
+            "from t_record_info where \n" +
+            "delete_flag=0 \n" +
+            "and state_flag=2 and region_emp_id=#{param1};")
     Integer recordSelectNum(Integer userId);
 
-    //发送一条通知
-    @Insert("INSERT INTO t_notice \n" +
-            "(notice_title,notice_content,create_time,creator,receiver,delete_flag) \n" +
-            "values(#{param1},#{param2},now(),#{param3},#{param4},0);")
-    Integer sendMessage(String title,String content,Integer examineId,Integer aimId);
+    //省级查询待审核上传数据
+    @Select("SELECT \n" +
+            "table_id AS tableId, \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "state_flag AS stateFlag, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTime, \n" +
+            "reviser AS reviser \n" +
+            "from t_upload_info where \n" +
+            "delete_flag=0 \n" +
+            "and state_flag=2;")
+    List<UploadInfo> uploadExamineQuery();
 
     //省级上传数据未通过时更新数据
     @Update("UPDATE t_upload_info \n" +
             "set state_flag=0,revise_time=now(),reviser=#{param1} \n" +
-            "where creator=#{param2} and state_flag=2;")
-    Integer uploadUpdateReject(Integer examineId,Integer aimId);
+            "where state_flag=2 and creator=#{param2};")
+    Integer uploadUpdateReject(Integer provinceId,Integer aimId);
 
     //省级上传数据通过时更新数据
     @Update("UPDATE t_upload_info \n" +
             "set state_flag=3,revise_time=now(),reviser=#{param1} \n" +
-            "where creator=#{param2} and state_flag=2;")
-    Integer uploadUpdatePass(Integer examineId,Integer aimId);
+            "where state_flag=2 and creator=#{param2};")
+    Integer uploadUpdatePass(Integer provinceId,Integer aimId);
 
-    //新增调查期
-    @Insert("INSERT INTO t_upload_period " +
-            "(start_date,end_date,create_time,creator,revise_time,reviser,delete_flag) \n" +
-            "values(#{startDate},#{endDate},#{creatTime},#{creator},#{reviseTime},#{reviser},#{deleteFlag});")
-    Integer periodInsert(InnerUploadPeriod period);
+    //省级新增调查期
+    @Insert("INSERT INTO t_upload_period \n" +
+            "(start_date,end_date,create_time,creator,delete_flag) \n" +
+            "values(#{startDate},#{endDate},#{creatTime},#{creator},0);")
+    Integer periodInsert(UploadPeriod uploadPeriod);
 
-    //修改调查期
+    //省级修改调查期
     @Update("UPDATE t_upload_period \n" +
-            "set start_date=#{param1},end_date=#{param2},revise_time=#{param3},reviser=#{param4} \n" +
-            "where upload_period_id=#{param5};")
-    Integer periodUpdate(java.sql.Date startDate, java.sql.Date endDate, java.util.Date reviseDate, Integer reviser, Integer uploadPeriodID);
+            "set start_date=#{startDate},end_date=#{endDate},revise_time=#{reviseTime},reviser=#{reviser} \n" +
+            "where upload_period_id=#{uploadPeriodId};")
+    Integer periodUpdate(UploadPeriod uploadPeriod);
 
-    //时间点查询调查期
-    @Select("SELECT \n" +
-            "upload_period_id AS uploadPeriodId, \n" +
-            "start_date AS startDate, \n" +
-            "end_date AS endDate, \n" +
-            "create_time AS createTime, \n" +
-            "creator AS creator, \n" +
-            "revise_time AS reviseTime, \n" +
-            "reviser AS reviser, \n" +
-            "delete_flag AS deleteFlag \n" +
-            "from t_upload_period \n" +
-            "where #{param1} >= start_date and #{param1} < end_date limit 1;")
-    InnerUploadPeriod selectByTime(Date aimDate);
 
-    //时间段查询调查期
-    @Select("SELECT \n" +
-            "upload_period_id AS uploadPeriodId, \n" +
-            "start_date AS startDate, \n" +
-            "end_date AS endDate, \n" +
-            "create_time AS createTime, \n" +
-            "creator AS creator, \n" +
-            "revise_time AS reviseTime, \n" +
-            "reviser AS reviser, \n" +
-            "delete_flag AS deleteFlag \n" +
-            "from t_upload_period \n" +
-            "where #{param1}<end_date and start_date<=#{param2};")
-    List<InnerUploadPeriod> selectByPeriod(java.sql.Date startDate,java.sql.Date endDate);
 
-    //按id查询调查期
-    @Select("SELECT \n" +
-            "upload_period_id AS uploadPeriodId, \n" +
-            "start_date AS startDate, \n" +
-            "end_date AS endDate, \n" +
-            "create_time AS createTime, \n" +
-            "creator AS creator, \n" +
-            "revise_time AS reviseTime, \n" +
-            "reviser AS reviser, \n" +
-            "delete_flag AS deleteFlag \n" +
-            "from t_upload_period \n" +
-            "where upload_period_id=#{param1} limit 1;")
-    InnerUploadPeriod selectById(Integer uploadPeriodID);
 
-    //获取目前调查期数据条数
-    @Select("SELECT \n" +
-            "count(upload_period_id) \n" +
-            "from t_upload_period limit 1;")
-    Integer getPeriodNumber();
 
-    //查询所有调查期
-    @Select("SELECT \n" +
-            "upload_period_id AS uploadPeriodId, \n" +
-            "start_date AS startDate, \n" +
-            "end_date AS endDate, \n" +
-            "create_time AS createTime, \n" +
-            "revise_time AS reviseTime" +
-            "creator AS creator, \n" +
-            "reviser AS reviser, \n" +
-            "delete_flag AS deleteFlag \n" +
-            "from t_upload_period;")
-    List<InnerUploadPeriod> selectAllPeriod();
+
 
     //查询某用户所有的下级用户
     @Select("SELECT \n" +
             "user_id AS userId,\n" +
             "username AS username,\n" +
             "fullname AS fullname \n" +
-            "from t_user \n" +
-            "where superior = #{param1};")
+            "from t_user where superior = #{param1};")
     List<UserInfoDisplay> selectAllSubCity(Integer aimUserId);
 
     //返回所有监测点用户信息
@@ -249,4 +177,14 @@ public interface ProvinceMapper {
             "from t_user \n" +
             "where (superior = #{param1}) and (username like CONCAT('%',#{param2},'%') or fullname like CONCAT('%',#{param2},'%'));")
     List<UserInfoDisplay> userSearchByuser(Integer userId,String input);
+
+    //省级按条件查询账号信息
+    @Select("SELECT \n" +
+            "username AS username, \n" +
+            "fullname AS fullname, \n" +
+            "superior AS superior, \n" +
+            "create_time AS createTime, \n"  +
+            "creator AS creator \n" +
+            "from t_user where state_flag=1 and state_flag=1 and (username like CONCAT('%',#{param1},'%')) and (fullname like CONCAT('%',#{param2},'%'));")
+    List<AccountData> accountQuery(String uername, String fullname);
 }

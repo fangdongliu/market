@@ -5,10 +5,10 @@
     <title>人力资源管理系统</title>
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <!-- Vue -->
-    <script src="//vuejs.org/js/vue.min.js"></script>
-    <link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">
-    <script src="//unpkg.com/iview/dist/iview.min.js"></script>
+    <#--<link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">-->
+    <#--<script src="//unpkg.com/iview/dist/iview.min.js"></script>-->
     <!--elementUI-->
+    <script src="//vuejs.org/js/vue.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <link rel="stylesheet" href="/css/index.css">
@@ -82,7 +82,7 @@
             //
             //     $.ajax({
             //         url:'/login',
-            //         data:{
+            //         common:{
             //             form:this.form,
             //         },
             //         method:'post',

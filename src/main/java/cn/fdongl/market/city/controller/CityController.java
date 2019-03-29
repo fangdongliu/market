@@ -16,9 +16,21 @@ public class CityController extends ControllerBase {
     @Autowired
     CityService cityService;
 
+    //市级根据条件查询已通过的备案信息（只能查到下属）
+    @PostMapping("/record/conditionalQuery")
+    public Object RecordConditionalQuery(AppUserDetail appUserDetail,String condition) throws Exception {
+        return success(cityService.recordConditionalQuery(appUserDetail.getId(), condition));
+    }
+
+    //市级查询待审核的上传数据（只能查到下属）
+    @PostMapping("/upload/examineQuery")
+    public Object UploadExamineQuery(AppUserDetail appUserDetail) throws Exception {
+        return success(cityService.uploadExamineQuery(appUserDetail.getId()));
+    }
+
     //市级上传数据审核拒绝通过
     @PostMapping("/upload/reject")
-    public Object UploadReject(AppUserDetail appUserDetail, Integer aimId, String content) throws Exception {
+    public Object UploadReject(AppUserDetail appUserDetail,Integer aimId,String content) throws Exception {
         cityService.uploadReject(appUserDetail.getId(),aimId,content);
         return success();
     }

@@ -47,6 +47,7 @@ public class UserService {
                     it.remove();
                 }
             }
+
             return userDataMap.values().toArray();
         }
 
@@ -77,6 +78,22 @@ public class UserService {
 
     public void changeRoles(Integer currentUser,Integer userId,Integer[]roles)throws Exception{
         userMapper.setRoles(roles, currentUser, userId);
+    }
+
+    public Object query(int begin,int count,Integer userType,String username,String fullname){
+        if(username!=null&&username.trim().length()==0){
+            username=null;
+        }
+        if(fullname!=null&&fullname.trim().length()==0){
+            fullname=null;
+        }
+        if(username!=null){
+            username = username+'%';
+        }
+        if(fullname!=null){
+            fullname = fullname+'%';
+        }
+        return userMapper.page(begin,count,userType,username,fullname);
     }
 
     public Object getMenu(Integer userId){
@@ -116,7 +133,7 @@ public class UserService {
         }
 
         try {
-            if (userMapper.addUsers(array, parent, password, currentUser,userType) != count) {
+            if (userMapper.addUsers(array, parent, password, currentUser,userType,userType) != count) {
                 throw new Exception("创建用户时出错");
             }
         }

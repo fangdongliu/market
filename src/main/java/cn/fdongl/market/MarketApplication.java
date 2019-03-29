@@ -8,12 +8,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.List;
 
 @EnableTransactionManagement
 @SpringBootApplication
-@MapperScan("cn.fdongl.market")
 public class MarketApplication implements WebMvcConfigurer {
 
     public static void main(String[] args) {
