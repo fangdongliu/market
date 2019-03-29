@@ -435,4 +435,37 @@ public interface CommonMapper {
             "and ((#{param1}<start_date and start_date<#{param2}) \n" +
             "or (start_date<=#{param1} and #{param1}<end_date));")
     List<UploadPeriod> selectUploadPeriodByTime(java.sql.Date startDate,java.sql.Date endDate);
+
+    //图表分析，饼图，查询产业需求人数信息
+    @Select("SELECT \n" +
+            "table_id AS tableId, \n" +
+            "industry1_need AS industry1Need, \n" +
+            "industry2_need AS industry2Need, \n" +
+            "industry3_need AS industry3Need, \n" +
+            "mine_need AS mineNeed, \n" +
+            "manu_need AS manuNeed, \n" +
+            "elec_gas_water_need AS elecGasWaterNeed, \n" +
+            "arch_need AS archNeed, \n" +
+            "tran_stor_post_need AS tranStorPostNeed, \n" +
+            "info_comp_soft_need AS infoCompSoftNeed, \n" +
+            "retail_need AS retailNeed, \n" +
+            "acco_cater_need AS accoCaterNeed, \n" +
+            "finance_need AS financeNeed, \n" +
+            "estate_need AS estateNeed, \n" +
+            "lease_busi_serv_need AS leaseBusiservNeed, \n" +
+            "rese_tech_addr_need AS reseTechAddrNeed, \n" +
+            "water_envi_faci_need AS waterEnviFaciNeed, \n" +
+            "resi_serv_need AS resiServNeed, \n" +
+            "edu_need AS eduNeed,\n" +
+            "heal_secu_welf_need AS healSecuWelfNeed, \n" +
+            "cult_sport_ente_need AS cultSportEnteNeed, \n" +
+            "mana_orga_need AS manaOrgaNeed, \n" +
+            "inte_orga_need AS inteOrgaNeed \n" +
+            "from t_industry_num where " +
+            "delete_flag=0 \n" +
+            "and ((@type:=(select @tmp:=t_upload_info.creator from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=1) \n" +
+            "or (@type=2 and #{param1} in (select user_id from t_user superior=@tmp)) \n" +
+            "or (@type=3 and #{param1}=@tmp)) \n" +
+            "and ((select upload_period_id from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=#{param2});")
+    List<IndustryNum> pieChartIndustryNum(Integer userId,Integer uploadPeriodId);
 }

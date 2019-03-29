@@ -189,63 +189,63 @@ public class ProvinceService {
 
 
 
-    //查询目标用户的直接下级
-    public List<UserInfoDisplay> selectSub (Integer userId) throws Exception{
-        List<UserInfoDisplay> output=provinceMapper.selectAllSubCity(userId);
-        if(output==null){
-            throw new Exception("No Result");
-        }
-        else{
-            return output;
-        }
-    }
-
-    //查询所有监测点用户信息
-    public List<UserInfoDisplay> selectAllMarket()throws Exception{
-        List<UserInfoDisplay> output=provinceMapper.selectAllMarket();
-        if(output==null){
-            throw new Exception("No Result");
-        }
-        else{
-            return output;
-        }
-    }
-
-    //查询目标用户类型，1省2市3监测点
-    public Integer selectUsertype(Integer userId) throws Exception{
-        Integer output=provinceMapper.selectUsertype(userId);
-        if(output==null){
-            throw new Exception("No usertype common");
-        }
-        else{
-            return output;
-        }
-    }
-
-    //条件查询所有用户
-    public List<UserInfoDisplay> userSearch(String input) throws Exception{
-        List<UserInfoDisplay> output=provinceMapper.userSearch(input);
-        if(output==null){
-            throw new Exception("No Result");
-        }
-        else{
-            return output;
-        }
-    }
-    //条件查询当前用户下属的监测点
-    public List<UserInfoDisplay> userSearchByuser(Integer userId,String input) throws Exception{
-        List<UserInfoDisplay> output=provinceMapper.userSearchByuser(userId,input);
-        if(output==null){
-            throw new Exception("No Result");
-        }
-        else{
-            return output;
-        }
-    }
-
-    //省级按条件查询账号信息
-    public List<AccountData> accountQuery(String username,String fullname) throws Exception {
-        return provinceMapper.accountQuery(username,fullname);
-    }
+//    //查询目标用户的直接下级
+//    public List<UserInfoDisplay> selectSub (Integer userId) throws Exception{
+//        List<UserInfoDisplay> output=provinceMapper.selectAllSubCity(userId);
+//        if(output==null){
+//            throw new Exception("No Result");
+//        }
+//        else{
+//            return output;
+//        }
+//    }
+//
+//    //查询所有监测点用户信息
+//    public List<UserInfoDisplay> selectAllMarket()throws Exception{
+//        List<UserInfoDisplay> output=provinceMapper.selectAllMarket();
+//        if(output==null){
+//            throw new Exception("No Result");
+//        }
+//        else{
+//            return output;
+//        }
+//    }
+//
+//    //查询目标用户类型，1省2市3监测点
+//    public Integer selectUsertype(Integer userId) throws Exception{
+//        Integer output=provinceMapper.selectUsertype(userId);
+//        if(output==null){
+//            throw new Exception("No usertype common");
+//        }
+//        else{
+//            return output;
+//        }
+//    }
+//
+//    //条件查询所有用户
+//    public List<UserInfoDisplay> userSearch(String input) throws Exception{
+//        List<UserInfoDisplay> output=provinceMapper.userSearch(input);
+//        if(output==null){
+//            throw new Exception("No Result");
+//        }
+//        else{
+//            return output;
+//        }
+//    }
+//    //条件查询当前用户下属的监测点
+//    public List<UserInfoDisplay> userSearchByuser(Integer userId,String input) throws Exception{
+//        List<UserInfoDisplay> output=provinceMapper.userSearchByuser(userId,input);
+//        if(output==null){
+//            throw new Exception("No Result");
+//        }
+//        else{
+//            return output;
+//        }
+//    }
+//
+//    //省级按条件查询账号信息
+//    public List<AccountData> accountQuery(String username,String fullname) throws Exception {
+//        return provinceMapper.accountQuery(username,fullname);
+//    }
 
 }

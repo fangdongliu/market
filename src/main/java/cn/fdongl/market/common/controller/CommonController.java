@@ -168,19 +168,19 @@ public class CommonController extends ControllerBase {
 
 
 
-    //取样分析
-    @PostMapping("/data/pieChart")
-    public Object pieChart(Integer aimUserId,Integer uploadPeriodId)throws Exception{
-        return success(commonService.pieChart(aimUserId,uploadPeriodId));
-    }
-    @PostMapping("/data/lineChart1")
-    public Object lineChart1(Integer aimUserId,String startDate,String endDate) throws Exception{
-        java.sql.Date _startDate=new java.sql.Date(dateFormat.parse(startDate).getTime());
-        java.sql.Date _endDate=new java.sql.Date(dateFormat.parse(endDate).getTime());
-        return success(commonService.lineChart1(aimUserId,_startDate,_endDate));
-    }
-    @PostMapping("/data/lineChart2")
-    public Object lineChart2(Integer aimUserId,Integer uploadPeriodId)throws Exception{
-        return success(commonService.pieChart(aimUserId,uploadPeriodId));
-    }
+//    //取样分析
+//    @PostMapping("/data/pieChart")
+//    public Object pieChart(Integer aimUserId,Integer uploadPeriodId)throws Exception{
+//        return success(commonService.pieChart(aimUserId,uploadPeriodId));
+//    }
+//    @PostMapping("/data/lineChart1")
+//    public Object lineChart1(Integer aimUserId,String startDate,String endDate) throws Exception{
+//        java.sql.Date _startDate=new java.sql.Date(dateFormat.parse(startDate).getTime());
+//        java.sql.Date _endDate=new java.sql.Date(dateFormat.parse(endDate).getTime());
+//        return success(commonService.lineChart1(aimUserId,_startDate,_endDate));
+//    }
+//    @PostMapping("/data/lineChart2")
+//    public Object lineChart2(Integer aimUserId,Integer uploadPeriodId)throws Exception{
+//        return success(commonService.pieChart(aimUserId,uploadPeriodId));
+//    }
 }
