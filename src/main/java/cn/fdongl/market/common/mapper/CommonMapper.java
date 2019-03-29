@@ -48,8 +48,6 @@ public interface CommonMapper {
             "and creator=#{param1};")
     List<Notice> selectMessage(Integer userId);
 
-    //TODO:
-
     //查询自己的通知
     @Select("SELECT \n" +
             "notice_id AS noticeId, \n" +
@@ -62,10 +60,9 @@ public interface CommonMapper {
             "receiver AS receiver \n" +
             "from t_notice where \n" +
             "delete_flag=0 \n" +
-            "and ((select @tmp:=usertype from t_user where t_user.user_id=t_notice.creator limit 1)=1) \n" +
-            "or (@tmp=2 and  receiver=#{param1} or \n" +
-            "creator= or \n" +
-            ");")
+            "and (((select @tmp:=usertype from t_user where t_user.user_id=t_notice.creator limit 1)=1) \n" +
+            "or (@tmp=2 and #{param1} in (select user_id from t_user where t_user.superior=t_notice.creator)) \n" +
+            "or (@tmp=3 and #{param1}=receiver));")
     List<Notice> receiveMessage(Integer userId);
 
     //删除一条通知
@@ -83,7 +80,9 @@ public interface CommonMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTime, \n" +
             "reviser AS reviser \n" +
-            "from t_upload_info where table_id=#{param1} limit 1;")
+            "from t_upload_info where \n" +
+            "delete_flag=0 \n" +
+            "and table_id=#{param1} limit 1;")
     UploadInfo selectUploadInfo(Integer tableId);
 
     //查询供求总体人数信息
@@ -91,7 +90,9 @@ public interface CommonMapper {
             "table_id AS tableId, \n" +
             "need_popu AS needPopu, \n" +
             "jobseek_popu AS jobseekPopu \n" +
-            "from t_total_num where table_id=#{param1} limit 1;")
+            "from t_total_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_total_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     TotalNum selectTotalNum(Integer tableId);
 
     //查询产业需求人数表
@@ -119,7 +120,9 @@ public interface CommonMapper {
             "cult_sport_ente_need AS cultSportEnteNeed, \n" +
             "mana_orga_need AS manaOrgaNeed, \n" +
             "inte_orga_need AS inteOrgaNeed \n" +
-            "from t_industry_num where table_id=#{param1} limit 1;")
+            "from t_industry_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     IndustryNum selectIndustryNum(Integer tableId);
 
     //查询用人单位单性质需求人数表
@@ -139,7 +142,9 @@ public interface CommonMapper {
             "inst_need AS instNeed, \n" +
             "orga_need AS orgaNeed, \n" +
             "other_need AS otherNeed \n" +
-            "from t_employer_num where table_id=#{param1} limit 1;")
+            "from t_employer_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_employer_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     EmployerNum selectEmployerNum(Integer tableId);
 
     //查询职业供求人数表
@@ -160,7 +165,9 @@ public interface CommonMapper {
             "other_need AS otherNeed, \n" +
             "other_jobseek AS otherJobseek, \n" +
             "no_requ_jobseek AS noRequJobseek \n" +
-            "from t_prof_num where table_id=#{param1} limit 1;")
+            "from t_prof_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_prof_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     ProfNum selectProfNum(Integer tableId);
 
     //查询需求前十职业表
@@ -206,7 +213,9 @@ public interface CommonMapper {
             "most_prof10_num AS mostProf10Num, \n" +
             "most_prof10_need AS mostProf10Need, \n" +
             "most_prof10_jobseek AS mostProf10Jobseek \n" +
-            "from t_most_needed where table_id=#{param1} limit 1;")
+            "from t_most_needed where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_most_needed.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     MostNeeded selectMostNeeded(Integer tableId);
 
     //查询饱和前十职业表
@@ -251,7 +260,9 @@ public interface CommonMapper {
             "least_prof10_num AS leastProf10Num, \n" +
             "least_prof10_need AS leastProf10Need, \n" +
             "least_prof10_jobseek AS leastProf10Jobseek \n" +
-            "from t_least_needed where table_id=#{param1} limit 1;")
+            "from t_least_needed where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_least_needed.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     LeastNeeded selectLeastNeeded(Integer tableId);
 
     //查询人员类别求职人数表
@@ -267,7 +278,9 @@ public interface CommonMapper {
             "student AS student, \n" +
             "city_rural AS cityRural, \n" +
             "fore AS fore \n" +
-            "from t_job_seeker_num where table_id=#{param1} limit 1;")
+            "from t_job_seeker_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_job_seeker_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     JobSeekerNum selectJobSeekerNum(Integer tableId);
 
     //查询性别供求人数表
@@ -278,7 +291,9 @@ public interface CommonMapper {
             "female_need AS femaleNeed, \n" +
             "female_jobseek AS femaleJobseek, \n" +
             "no_requ_need AS noRequNeed \n" +
-            "from t_sex_num where table_id=#{param1} limit 1;")
+            "from t_sex_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_sex_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     SexNum selectSexNum(Integer tableId);
 
     //查询文化程度供求人数表
@@ -295,7 +310,9 @@ public interface CommonMapper {
             "univ_need AS univNeed, \n" +
             "univ_jobseek AS univJobseek, \n" +
             "no_requ_need AS noRequNeed \n" +
-            "from t_degree_num where table_id=#{param1} limit 1;")
+            "from t_degree_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_degree_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     DegreeNum selectDegreeNum(Integer tableId);
 
     //查询年龄供求人数表
@@ -310,7 +327,9 @@ public interface CommonMapper {
             "over_45_need AS overFortyfourNeed, \n" +
             "over_45_jobseek AS overFortyfourJobseek, \n" +
             "no_requ_need AS noRequNeed \n" +
-            "from t_age_num where table_id=#{param1} limit 1;")
+            "from t_age_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_age_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     AgeNum selectAgeNum(Integer tableId);
 
     //查询技术等级供求人数表
@@ -334,10 +353,12 @@ public interface CommonMapper {
             "seni_prof_jobseek AS seniProfJobseek, \n" +
             "no_tech_jobseek AS noTechJobseek, \n" +
             "no_requ_need AS noRequNeed \n" +
-            "from t_tech_grade_num where table_id=#{param1} limit 1;")
+            "from t_tech_grade_num where \n" +
+            "(select delete_flag from t_upload_info where t_upload_info.table_id=t_tech_grade_num.table_id limit 1)=0 \n" +
+            "and table_id=#{param1} limit 1;")
     TechGradeNum selectTechGradeNum(Integer tableId);
 
-    //上传数据条件查询，查时间段，用户id和条件
+    //上传数据条件查询，查时间段和条件
     @Select("SELECT \n" +
             "table_id AS tableId, \n" +
             "upload_period_id AS uploadPeriodId, \n" +
@@ -349,23 +370,16 @@ public interface CommonMapper {
             "from t_upload_info where \n" +
             "delete_flag=0 \n" +
             "and state_flag=3 \n" +
-            "and ( \n" +
-            "(#{param1}<(select @tmp:=t_upload_period.start_date from t_upload_period where t_upload_period.upload_period_id=t_upload_info.upload_period_id limit 1) and @tmp<#{param2}) or \n" +
-            "(@tmp<=#{param1} and #{param1}<(select t_upload_period.end_date from t_upload_period where t_upload_period.upload_period_id=t_upload_info.upload_period_id limit 1)) \n" +
-            ") \n" +//时间段
-            "and ( \n" +
-            "(1=(case when #{param3} is not null then (select @tmp:=usertype from t_user where t_user.user_id=#{param3} limit 1) else 1 end)) or \n" +
-            "(2=(case when #{param3} is not null then @tmp else 2 end) and t_upload_info.creator in (select t_user.user_id from t_user where t_user.superior=(case when #{param3} is not null then #{param3} else t_user.superior end))) or \n" +
-            "(3=(case when #{param3} is not null then @tmp else 3 end) and t_upload_info.creator=(case when #{param3} is not null then #{param3} else t_upload_info.creator end)) \n" +
-            ") \n" +//用户id
-            "and ( \n" +
-            "((select @tmp:=fullname from t_user where t_user.user_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)) or \n" +
-            "((select @tmp:=region_emp_name from t_record_info where region_emp_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)) or \n" +
-            "((select @tmp:=region_name from t_record_info where region_emp_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)) or \n" +
-            "((select @tmp:=region_emp_contact from t_record_info where region_emp_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)) \n" +
-            ") \n" +//条件
-            ";")
-    List<UploadInfo> selectUploadInfoByCondition(java.sql.Date startDate,java.sql.Date endDate,Integer userId,String condition);
+            "and (((select @tmp:=usertype from t_user where t_user.user_id=#{param1} limit 1)=1) \n" +
+            "or (@tmp=2 and t_upload_info.creator in (select t_user.user_id from t_user where t_user.superior=#{param1})) \n" +
+            "or (@tmp=3 and t_upload_info.creator=#{param1})) \n" +
+            "and ((#{param2}<(select @tmp:=t_upload_period.start_date from t_upload_period where t_upload_period.upload_period_id=t_upload_info.upload_period_id limit 1) and @tmp<#{param3}) \n" +
+            "or (@tmp<=#{param2} and #{param2}<(select t_upload_period.end_date from t_upload_period where t_upload_period.upload_period_id=t_upload_info.upload_period_id limit 1))) \n" +
+            "and (((select @tmp:=fullname from t_user where t_user.user_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)) \n" +
+            "or ((select @tmp:=region_emp_name from t_record_info where region_emp_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)) \n" +
+            "or ((select @tmp:=region_name from t_record_info where region_emp_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)) \n" +
+            "or ((select @tmp:=region_emp_contact from t_record_info where region_emp_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)));")
+    List<UploadInfo> selectUploadInfoByCondition(Integer userId,java.sql.Date startDate,java.sql.Date endDate,String condition);
 
     //根据用户id查询上传数据信息
     @Select("SELECT \n" +
@@ -376,7 +390,10 @@ public interface CommonMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTime, \n" +
             "reviser AS reviser \n" +
-            "from t_upload_info where state_flag=3 and creator=#{param1};")
+            "from t_upload_info where \n" +
+            "delete_flag=0 \n" +
+            "and state_flag=3 \n" +
+            "and creator=#{param1};")
     List<UploadInfo> selectUploadInfoById(Integer userId);
 
     //根据时间点查询简易调查期
@@ -384,8 +401,10 @@ public interface CommonMapper {
             "upload_period_id AS uploadPeriodId, \n" +
             "start_date AS startDate, \n" +
             "end_date AS endDate \n" +
-            "from t_upload_period \n" +
-            "where start_date<=#{param1} and #{param1}<end_date limit 1;")
+            "from t_upload_period where \n" +
+            "delete_flag=0 \n" +
+            "and start_date<=#{param1} \n" +
+            "and #{param1}<end_date limit 1;")
     SimpleUploadPeriod selectSimpleUploadPeriod(java.sql.Date date);
 
     //根据id查询调查期
@@ -397,9 +416,10 @@ public interface CommonMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTime, \n" +
             "reviser AS reviser \n" +
-            "from t_upload_period \n" +
-            "where upload_period_id=#{param1} limit 1;")
-    UploadPeriod selectUploadPeriod(Integer uploadPeriodID);
+            "from t_upload_period where \n" +
+            "delete_flag=0 \n" +
+            "and upload_period_id=#{param1} limit 1;")
+    UploadPeriod selectUploadPeriod(Integer uploadPeriodId);
 
     //根据时间段查询调查期（有任意一天在这个时间段的所有调查期）
     @Select("SELECT \n" +
@@ -411,8 +431,8 @@ public interface CommonMapper {
             "revise_time AS reviseTime, \n" +
             "reviser AS reviser \n" +
             "from t_upload_period where \n" +
-            "delete_flag=0 and \n" +
-            "((#{param1}<start_date and start_date<#{param2}) or \n" +
-            "(start_date<=#{param1} and #{param1}<end_date));")
+            "delete_flag=0 \n" +
+            "and ((#{param1}<start_date and start_date<#{param2}) \n" +
+            "or (start_date<=#{param1} and #{param1}<end_date));")
     List<UploadPeriod> selectUploadPeriodByTime(java.sql.Date startDate,java.sql.Date endDate);
 }

@@ -3,6 +3,8 @@ package cn.fdongl.market.example.controller;
 import cn.fdongl.market.example.service.TestService;
 import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.util.ControllerBase;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.aspectj.weaver.ast.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +20,12 @@ public class ExampleController extends ControllerBase {
     @Autowired
     TestService testService;
 
+
     @RequestMapping("aaaa")
     public Object aa() throws Exception {
         return "asf";
     }
-
+    @ApiOperation(value = "获取aaa",notes = "")
     @GetMapping("/hh")//指定接口的下一级路径，最终路径为 '/example/hh'
     public Object hhh(String hh,Integer dd){
         try {

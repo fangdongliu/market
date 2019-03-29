@@ -28,7 +28,7 @@ public class MarketService {
         }
     }
 
-    //监测点默认查询，非事务
+    //根据监测点id查询保存、上传的备案，非事务
     public Record recordSelect(Integer userId) throws Exception {
         Record record=marketMapper.recordSelectFinished(userId);
         if(record==null){
@@ -37,9 +37,13 @@ public class MarketService {
         else return record;
     }
 
-    //监测点用户查询激活状态
+    //监测点用户查询激活状态，非事务
     public Integer selectActivation(Integer userId) throws Exception {
-        return marketMapper.selectActivation(userId);
+        Integer activation=marketMapper.selectActivation(userId);
+        if(activation==null){
+            throw new Exception("查询失败");
+        }
+        return activation;
     }
 
     //监测点新建上传数据，事务
@@ -185,8 +189,8 @@ public class MarketService {
         }
     }
 
-    //监测点查询上传数据（默认流程），非事务
+    //根据监测点id查询保存、上传数据，非事务
     public UploadInfo uploadSelect(Integer userId) throws Exception {
-        return marketMapper.uploadSelect(userId);
+        return marketMapper.uploadSelectUnfinished(userId);
     }
 }

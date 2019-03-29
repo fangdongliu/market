@@ -120,8 +120,8 @@ public class CommonService {
     }
 
     //上传数据条件查询
-    public List<UploadInfo> selectUploadInfoByCondition(java.sql.Date startDate,java.sql.Date endDate,Integer userId,String condition) throws Exception {
-        return commonMapper.selectUploadInfoByCondition(startDate,endDate,userId,condition);
+    public List<UploadInfo> selectUploadInfoByCondition(Integer userId,java.sql.Date startDate,java.sql.Date endDate,String condition) throws Exception {
+        return commonMapper.selectUploadInfoByCondition(userId,startDate,endDate,condition);
     }
 
     //根据用户id查询上传数据信息
@@ -162,7 +162,7 @@ public class CommonService {
                     return selectIndustryNum(tableId);
                 }
             }
-            throw new Exception("PeriodId Errorr");
+            throw new Exception("PeriodId Error");
         }
         else if(a==2){
             List<UserInfoDisplay> sub=provinceService.selectSub(aimUserId);

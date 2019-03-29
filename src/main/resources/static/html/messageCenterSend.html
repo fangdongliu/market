@@ -73,7 +73,7 @@
                     <el-col :span="6" class="infoTitle">
                         通知标题：
                     </el-col>
-                    <el-col :span="6" class="infoContent">
+                    <el-col :span="12" class="infoContent">
                         {{messageData.title}}
                     </el-col>
                 </el-row>
@@ -81,8 +81,8 @@
                     <el-col :span="6" class="infoTitle">
                         通知内容：
                     </el-col>
-                    <el-col :span="6" class="infoContent">
-                        {{messageData.content}}
+                    <el-col :span="12" class="infoContent">
+                        <pre style="font-weight: bold;"> {{messageData.content}}</pre>
                     </el-col>
                 </el-row>
             </el-dialog>
@@ -286,7 +286,7 @@
             },
             getList(){
                 $.ajax({
-                    url:'/common/message/receive',
+                    url:'/common/message/select',
                     type:'post',
                     success(res){
                         console.log(res);

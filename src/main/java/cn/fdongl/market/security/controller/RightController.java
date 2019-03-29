@@ -18,17 +18,17 @@ public class RightController extends ControllerBase {
     @Autowired
     RightService rightService;
 
-    @RequestMapping("/list")
+    @PostMapping("/list")
     public Object list(){
         return success(rightService.getRights());
     }
 
-    @RequestMapping("info")
+    @PostMapping("info")
     public Object info(@Valid Integer rightId) throws Exception {
         return success(rightService.info(rightId));
     }
 
-    @RequestMapping("/add")
+    @PostMapping("/add")
     public Object add(@Valid Right right) throws Exception {
 
         rightService.addRight(right);
@@ -36,7 +36,7 @@ public class RightController extends ControllerBase {
 
     }
 
-    @RequestMapping("/enable")
+    @PostMapping("/enable")
     public Object enable(@RequestParam Integer rightId){
 
         rightService.enable(rightId);
@@ -44,7 +44,7 @@ public class RightController extends ControllerBase {
 
     }
 
-    @RequestMapping("/disable")
+    @PostMapping("/disable")
     public Object disable(@RequestParam Integer rightId){
 
         rightService.disable(rightId);
@@ -52,7 +52,7 @@ public class RightController extends ControllerBase {
 
     }
 
-    @RequestMapping("/modify")
+    @PostMapping("/modify")
     public Object modify(@Valid Right right){
         rightService.modify(right);
         return success();

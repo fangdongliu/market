@@ -29,10 +29,12 @@ public interface ProvinceMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTIme, \n" +
             "reviser AS reviser \n" +
-            "from t_record_info where state_flag=1;")
+            "from t_record_info where \n" +
+            "delete_flag=0 \n" +
+            "and state_flag=1;")
     List<Record> recordExamineQuery();
 
-    //查询备案，根据监测点名称
+    //省级根据条件查询备案，监测点名称，地区名称，联系人名称
     @Select("SELECT \n" +
             "region_emp_id AS regionEmpId, \n" +
             "region_emp_name AS regionEmpName, \n" +
@@ -46,78 +48,51 @@ public interface ProvinceMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTIme, \n" +
             "reviser AS reviser \n" +
-            "from t_record_info where state_flag=2 and region_emp_name like CONCAT('%',#{param1},'%');")
-    List<Record> recordRegionEmpNameQuery(String condition);
-
-    //查询备案，根据地区名称
-    @Select("SELECT \n" +
-            "region_emp_id AS regionEmpId, \n" +
-            "region_emp_name AS regionEmpName, \n" +
-            "region_name AS regionName, \n" +
-            "region_emp_contact AS regionEmpContact, \n" +
-            "region_emp_contact_mobi AS regionEmpContactMobi, \n" +
-            "region_emp_contact_num AS regionEmpContactNum, \n" +
-            "region_emp_fax AS regionEmpFax, \n" +
-            "state_flag AS stateFlag, \n" +
-            "create_time AS createTime, \n" +
-            "creator AS creator, \n" +
-            "revise_time AS reviseTIme, \n" +
-            "reviser AS reviser \n" +
-            "from t_record_info where state_flag=2 and region_name like CONCAT('%',#{param1},'%');")
-    List<Record> recordRegionNameQuery(String condition);
-
-    //查询备案，根据联系人名称
-    @Select("SELECT \n" +
-            "region_emp_id AS regionEmpId, \n" +
-            "region_emp_name AS regionEmpName, \n" +
-            "region_name AS regionName, \n" +
-            "region_emp_contact AS regionEmpContact, \n" +
-            "region_emp_contact_mobi AS regionEmpContactMobi, \n" +
-            "region_emp_contact_num AS regionEmpContactNum, \n" +
-            "region_emp_fax AS regionEmpFax, \n" +
-            "state_flag AS stateFlag, \n" +
-            "create_time AS createTime, \n" +
-            "creator AS creator, \n" +
-            "revise_time AS reviseTIme, \n" +
-            "reviser AS reviser \n" +
-            "from t_record_info where state_flag=2 and region_emp_contact like CONCAT('%',#{param1},'%');")
-    List<Record> recordRegionEmpContactQuery(String condition);
+            "from t_record_info where \n" +
+            "delete_flag=0 \n" +
+            "and state_flag=2 \n" +
+            "and ((region_emp_name like CONCAT('%',#{param1},'%')) \n" +
+            "or (region_name like CONCAT('%',#{param1},'%')) \n" +
+            "or (region_emp_contact like CONCAT('%',#{param1},'%')));")
+    List<Record> recordConditionalQuery(String condition);
 
     //省级备案未通过时更新数据
     @Update("UPDATE t_record_info \n" +
             "set state_flag=0,revise_time=now(),reviser=#{param1} \n" +
-            "where region_emp_id=#{param2} and state_flag=1;")
+            "where state_flag=1 and region_emp_id=#{param2};")
     Integer recordUpdateReject(Integer provinceId,Integer aimId);
 
     //省级备案未通过时删除数据
     @Delete("DELETE FROM t_record_info \n" +
-            "where region_emp_id=#{param1} and state_flag=1;")
+            "where state_flag=1 and region_emp_id=#{param1};")
     Integer recordDeleteReject(Integer aimId);
 
     //省级备案通过时更新数据
     @Update("UPDATE t_record_info \n" +
             "set state_flag=2,revise_time=now(),reviser=#{param1} \n" +
-            "where region_emp_id=#{param2} and state_flag=1;")
+            "where state_flag=1 region_emp_id=#{param2};")
     Integer recordUpdatePass(Integer provinceId,Integer aimId);
 
     //省级备案通过时更新过期数据
     @Update("UPDATE t_record_info \n" +
             "set state_flag=3,revise_time=now(),reviser=#{param1} \n" +
-            "where region_emp_id=#{param2} and state_flag=2;")
+            "where state_flag=2 region_emp_id=#{param2};")
     Integer recordUpdateExpirePass(Integer provinceId,Integer aimId);
 
     //激活账号
     @Update("UPDATE t_user \n" +
-            "set state_flag=1 \n" +
-            "where user_id=#{param1};")
+            "set state_flag=1,revise_time=now(),reviser=#{param1} \n" +
+            "where user_id=#{param2};")
     Integer recordUpdateActivation(Integer provinceId,Integer aimId);
 
-    //根据id查询已通过备案的个数
+    //根据id查询已通过备案的个数，结果为0或1
     @Select("SELECT count(1) \n" +
-            "from t_record_info where region_emp_id=#{param1} and state_flag=2;")
+            "from t_record_info where \n" +
+            "delete_flag=0 \n" +
+            "and state_flag=2 and region_emp_id=#{param1};")
     Integer recordSelectNum(Integer userId);
 
-    //省级待审核上传数据查询
+    //省级查询待审核上传数据
     @Select("SELECT \n" +
             "table_id AS tableId, \n" +
             "upload_period_id AS uploadPeriodId, \n" +
@@ -126,19 +101,21 @@ public interface ProvinceMapper {
             "creator AS creator, \n" +
             "revise_time AS reviseTime, \n" +
             "reviser AS reviser \n" +
-            "from t_upload_info where state_flag=2);")
+            "from t_upload_info where \n" +
+            "delete_flag=0 \n" +
+            "and state_flag=2;")
     List<UploadInfo> uploadExamineQuery();
 
     //省级上传数据未通过时更新数据
     @Update("UPDATE t_upload_info \n" +
             "set state_flag=0,revise_time=now(),reviser=#{param1} \n" +
-            "where creator=#{param2} and state_flag=2;")
+            "where state_flag=2 and creator=#{param2};")
     Integer uploadUpdateReject(Integer provinceId,Integer aimId);
 
     //省级上传数据通过时更新数据
     @Update("UPDATE t_upload_info \n" +
             "set state_flag=3,revise_time=now(),reviser=#{param1} \n" +
-            "where creator=#{param2} and state_flag=2;")
+            "where state_flag=2 and creator=#{param2};")
     Integer uploadUpdatePass(Integer provinceId,Integer aimId);
 
     //省级新增调查期

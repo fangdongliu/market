@@ -21,17 +21,8 @@ public class CityService {
     CommonMapper commonMapper;
 
     //市级根据条件查询已通过的备案信息（只能查到下属），非事务
-    public List<Record> recordConditionalQuery(Integer cityId,Integer state,String condition) throws Exception {
-        if(state==0){
-            return cityMapper.recordRegionEmpNameQuery(cityId,condition);
-        }
-        else if(state==1){
-            return cityMapper.recordRegionNameQuery(cityId,condition);
-        }
-        else if(state==2){
-            return cityMapper.recordRegionEmpContactQuery(cityId,condition);
-        }
-        else throw new Exception("状态参数错误");
+    public List<Record> recordConditionalQuery(Integer cityId,String condition) throws Exception {
+        return cityMapper.recordConditionalQuery(cityId,condition);
     }
 
     //市级查询待审核的上传数据（只能查到下属），非事务

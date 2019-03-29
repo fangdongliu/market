@@ -80,6 +80,22 @@ public class UserService {
         userMapper.setRoles(roles, currentUser, userId);
     }
 
+    public Object query(int begin,int count,Integer userType,String username,String fullname){
+        if(username!=null&&username.trim().length()==0){
+            username=null;
+        }
+        if(fullname!=null&&fullname.trim().length()==0){
+            fullname=null;
+        }
+        if(username!=null){
+            username = username+'%';
+        }
+        if(fullname!=null){
+            fullname = fullname+'%';
+        }
+        return userMapper.page(begin,count,userType,username,fullname);
+    }
+
     public Object getMenu(Integer userId){
 
         Map<Integer, Right>menu=null;

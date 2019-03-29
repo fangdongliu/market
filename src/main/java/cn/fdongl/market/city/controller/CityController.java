@@ -18,8 +18,8 @@ public class CityController extends ControllerBase {
 
     //市级根据条件查询已通过的备案信息（只能查到下属）
     @PostMapping("/record/conditionalQuery")
-    public Object RecordConditionalQuery(Integer state,String condition) throws Exception {
-        return success(cityService.recordConditionalQuery(6,state, condition));
+    public Object RecordConditionalQuery(AppUserDetail appUserDetail,String condition) throws Exception {
+        return success(cityService.recordConditionalQuery(appUserDetail.getId(), condition));
     }
 
     //市级查询待审核的上传数据（只能查到下属）

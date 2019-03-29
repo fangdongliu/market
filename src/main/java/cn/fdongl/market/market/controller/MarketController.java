@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/market")//检测点接口
+@RequestMapping("/market")//监测点接口
 public class MarketController extends ControllerBase {
 
     @Autowired
@@ -60,21 +60,26 @@ public class MarketController extends ControllerBase {
             throw new Exception("当前时间不在上传期内，无法上传数据");
         }
         uploadDataSet.setUploadPeriodId(simpleUploadPeriod.getUploadPeriodId());
-        uploadDataSet.setCreator(appUserDetail.getId());
         uploadDataSet.setCreateTime(new Date());
+        uploadDataSet.setCreator(appUserDetail.getId());
         marketService.uploadInsert(uploadDataSet);
         return success();
     }
 
     //监测点更新数据上传
     @PostMapping("/upload/update")
-    public Object UploadUpdate(UploadDataSet uploadDataSet) throws Exception {
-        SimpleUploadPeriod simpleUploadPeriod= commonService.selectSimpleUploadPeriod(new Date());
+    public Object UploadUpdate(AppUserDetail appUserDetail,UploadDataSet uploadDataSet) throws Exception {
+        Integer activation=marketService.selectActivation(appUserDetail.getId());
+        if(activation==0){
+            throw new Exception("账号未激活，不能上传数据");
+        }
+        SimpleUploadPeriod simpleUploadPeriod=commonService.selectSimpleUploadPeriod(new Date());
         if(uploadDataSet.getUploadPeriodId()==null&&simpleUploadPeriod==null){
             throw new Exception("当前时间不在上传期内，无法上传数据");
         }
         uploadDataSet.setUploadPeriodId(simpleUploadPeriod.getUploadPeriodId());
         uploadDataSet.setCreateTime(new Date());
+        uploadDataSet.setCreator(appUserDetail.getId());
         marketService.uploadUpdate(uploadDataSet);
         return success();
     }
