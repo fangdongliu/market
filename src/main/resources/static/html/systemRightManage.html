@@ -39,7 +39,7 @@
                 <div style="margin-bottom: 15px; margin-right: 15px; ">
                     <el-button type="success" @click="dialogFormVisibleCreateRight = true;">创建大类权限</el-button>
                 </div>
-                <el-dialog title="创建大类权限" :visible.sync="dialogFormVisibleCreateRight">
+                <el-dialog title="创建大类权限" :visible.sync="dialogFormVisibleCreateRight" @close="closeDialog()">
                     <el-form :model="newRight">
                         <el-form-item label="权限名称" :label-width="formLabelWidth">
                             <el-input v-model="newRight.label" placeholder="权限名称(纯英文大写，用下划线隔开单词)"></el-input>
@@ -230,7 +230,7 @@
                 });
 
             },
-            closeDialog(newright){
+            closeDialog(){
                 var tmp =JSON.stringify(vue.nullRight);
                 vue.newRight=JSON.parse(tmp);
                 vue.dialogFormVisibleCreate = false;

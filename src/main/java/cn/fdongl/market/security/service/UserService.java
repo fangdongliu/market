@@ -85,10 +85,10 @@ public class UserService {
             fullname=null;
         }
         if(username!=null){
-            username = username+'%';
+            username = '%'+username+'%';
         }
         if(fullname!=null){
-            fullname = fullname+'%';
+            fullname = '%'+fullname+'%';
         }
         Map<String,Object> map = new HashMap<>();
         map.put("count",userMapper.userCount(userType, username, fullname));
