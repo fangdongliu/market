@@ -33,7 +33,7 @@
                         <!--<el-button slot="append" icon="el-icon-search" @click="queryRole(input)"></el-button>-->
                     <!--</el-input>-->
                 </div>
-                <el-dialog title="创建角色" :visible.sync="dialogFormVisibleCreate">
+                <el-dialog title="创建角色" :visible.sync="dialogFormVisibleCreate" @close="closeDialog()">
                     <el-form :model="newRole">
                         <el-form-item label="角色名称" :label-width="formLabelWidth">
                             <el-input v-model="newRole.name" placeholder="请输入角色名称"></el-input>
@@ -177,7 +177,7 @@
             // queryRole(input) {
             //
             // },
-            closeDialog(newPole){
+            closeDialog(){
                 var tmp =JSON.stringify(vue4.nullRole);
                 vue4.newRole=JSON.parse(tmp);
                 vue4.dialogFormVisibleCreate = false;

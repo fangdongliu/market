@@ -474,5 +474,25 @@ public interface CommonMapper {
             "or (@tmp<=#{param2} and #{param2}<(select t_upload_period.end_date from t_upload_period where t_upload_period.upload_period_id=t_upload_info.upload_period_id limit 1))) \n" +
             "group by upload_period_id;")
     List<TotalNum> lineChartTotalNum(Integer userId,java.sql.Date startDate,java.sql.Date endDate);
-
+    //趋势分析
+    @Select("SELECT \n" +
+            "upload_period_id AS tableId,\n" +
+            "sum(16_24_need) AS sixteenTwentyfourNeed,\n" +
+            "sum(16_24_jobseek) AS sixteenTwentyfourJobseek,\n" +
+            "sum(25_34_need) AS twentyfiveThirtyfourNeed,\n" +
+            "sum(25_34_jobseek) AS twentyfiveThirtyfourJobseek,\n" +
+            "sum(35_44_need) AS thirtyfiveFortyfourNeed,\n" +
+            "sum(35_44_jobseek) AS thirtyfiveFortyfourJobseek,\n" +
+            "sum(over_45_need) AS overFortyfourNeed,\n" +
+            "sum(over_45_jobseek) AS overFortyfourJobseek,\n" +
+            "sum(no_requ_need) AS noRequNeed\n" +
+            "from t_age_num inner join t_upload_info on t_age_num.table_id=t_upload_info.table_id where\n" +
+            "delete_flag=0\n" +
+            "and state_flag=3 \n" +
+            "and (((select @tmp:=usertype from t_user where t_user.user_id=#{param1} limit 1)=1) \n" +
+            "or (@tmp=2 and t_upload_info.creator in (select t_user.user_id from t_user where t_user.superior=#{param1})) \n" +
+            "or (@tmp=3 and t_upload_info.creator=#{param1})) \n" +
+            "and ((#{param2}<(select @tmp:=t_upload_period.start_date from t_upload_period where t_upload_period.upload_period_id=t_upload_info.upload_period_id limit 1) and @tmp<#{param3}) \n" +
+            "or (@tmp<=#{param2} and #{param2}<(select t_upload_period.end_date from t_upload_period where t_upload_period.upload_period_id=t_upload_info.upload_period_id limit 1)));")
+    AgeNum lineChartAgeNum(Integer userId,java.sql.Date startDate,java.sql.Date endDate);
 }

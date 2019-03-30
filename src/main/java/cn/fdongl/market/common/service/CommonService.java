@@ -7,7 +7,6 @@ import cn.fdongl.market.province.entity.UploadPeriod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -138,6 +137,10 @@ public class CommonService {
     //取样分析，生成供求总体人数折线图数据
     public List<TotalNum> lineChartTotalNum(Integer userId,java.sql.Date startDate,java.sql.Date endDate) throws Exception {
         return commonMapper.lineChartTotalNum(userId,startDate,endDate);
+    }
+    //趋势分析，生成年龄供求人数折线图数据
+    public AgeNum lineChartAgeNum(Integer userId,java.sql.Date startDate,java.sql.Date endDate)throws Exception{
+        return commonMapper.lineChartAgeNum(userId,startDate,endDate);
     }
 
 }
