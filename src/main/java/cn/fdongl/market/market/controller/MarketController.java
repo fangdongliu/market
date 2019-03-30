@@ -3,6 +3,7 @@ package cn.fdongl.market.market.controller;
 import cn.fdongl.market.common.service.CommonService;
 import cn.fdongl.market.market.entity.*;
 import cn.fdongl.market.market.service.MarketService;
+import cn.fdongl.market.province.entity.UploadPeriod;
 import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.util.ControllerBase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/market")//监测点接口
@@ -55,11 +57,15 @@ public class MarketController extends ControllerBase {
         if(activation==0){
             throw new Exception("账号未激活，不能上传数据");
         }
-        SimpleUploadPeriod simpleUploadPeriod= commonService.selectSimpleUploadPeriod(new Date());
-        if(simpleUploadPeriod==null){
+        java.sql.Date sqlDate=new java.sql.Date(new Date().getTime());
+        List<UploadPeriod> uploadPeriodList=commonService.selectUploadPeriodByTime(sqlDate,sqlDate);
+        if(uploadPeriodList.size()==0){
             throw new Exception("当前时间不在上传期内，无法上传数据");
         }
-        uploadDataSet.setUploadPeriodId(simpleUploadPeriod.getUploadPeriodId());
+        else if(uploadPeriodList.size()!=1){
+            throw new Exception("当前调查期发生错误");
+        }
+        uploadDataSet.setUploadPeriodId(uploadPeriodList.get(0).getUploadPeriodId());
         uploadDataSet.setCreateTime(new Date());
         uploadDataSet.setCreator(appUserDetail.getId());
         marketService.uploadInsert(uploadDataSet);
@@ -73,11 +79,19 @@ public class MarketController extends ControllerBase {
         if(activation==0){
             throw new Exception("账号未激活，不能上传数据");
         }
-        SimpleUploadPeriod simpleUploadPeriod=commonService.selectSimpleUploadPeriod(new Date());
-        if(uploadDataSet.getUploadPeriodId()==null&&simpleUploadPeriod==null){
-            throw new Exception("当前时间不在上传期内，无法上传数据");
+        java.sql.Date sqlDate=new java.sql.Date(new Date().getTime());
+        List<UploadPeriod> uploadPeriodList=commonService.selectUploadPeriodByTime(sqlDate,sqlDate);
+        if(uploadPeriodList.size()==0){
+            if(uploadDataSet.getUploadPeriodId()==null){
+                throw new Exception("当前时间不在上传期内，无法上传数据");
+            }
         }
-        uploadDataSet.setUploadPeriodId(simpleUploadPeriod.getUploadPeriodId());
+        else if(uploadPeriodList.size()==1){
+            uploadDataSet.setUploadPeriodId(uploadPeriodList.get(0).getUploadPeriodId());
+        }
+        else{
+            throw new Exception("当前调查期发生错误");
+        }
         uploadDataSet.setCreateTime(new Date());
         uploadDataSet.setCreator(appUserDetail.getId());
         marketService.uploadUpdate(uploadDataSet);

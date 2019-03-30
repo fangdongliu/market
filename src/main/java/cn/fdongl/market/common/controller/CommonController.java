@@ -36,7 +36,6 @@ public class CommonController extends ControllerBase {
     //查看自己发送的通知
     @PostMapping("/message/select")
     public Object SelectMessage(AppUserDetail appUserDetail) throws Exception {
-        Object data = commonService.selectMessage(appUserDetail.getId());
         return success(commonService.selectMessage(appUserDetail.getId()));
     }
 
@@ -137,12 +136,6 @@ public class CommonController extends ControllerBase {
         return success(commonService.selectUploadInfoByCondition(appUserDetail.getId(),startDate,endDate,condition));
     }
 
-    //查询当前简易调查期
-    @PostMapping("/data/selectSimpleUploadPeriod")
-    public Object SelectSimpleUploadPeriod() throws Exception {
-        return success(commonService.selectSimpleUploadPeriod(new Date()));
-    }
-
     //按id查询调查期
     @PostMapping("/data/selectUploadPeriod")
     public Object SelectUploadPeriod(Integer uploadPeriodId) throws Exception {
@@ -150,6 +143,25 @@ public class CommonController extends ControllerBase {
         uploadPeriod.setStartDateString(dateFormat.format(uploadPeriod.getStartDate()));
         uploadPeriod.setEndDateString(dateFormat.format(uploadPeriod.getEndDate()));
         return success(uploadPeriod);
+    }
+
+    //查询当前调查期
+    @PostMapping("/data/selectNowUploadPeriod")
+    public Object SelectNowUploadPeriod() throws Exception {
+        java.sql.Date sqlDate=new java.sql.Date(new Date().getTime());
+        List<UploadPeriod> uploadPeriodList=commonService.selectUploadPeriodByTime(sqlDate,sqlDate);
+        if(uploadPeriodList.size()==0){
+            return success(null);
+        }
+        else if(uploadPeriodList.size()==1){
+            UploadPeriod uploadPeriod=uploadPeriodList.get(0);
+            uploadPeriod.setStartDateString(dateFormat.format(uploadPeriod.getStartDate()));
+            uploadPeriod.setEndDateString(dateFormat.format(uploadPeriod.getEndDate()));
+            return success(uploadPeriod);
+        }
+        else{
+            throw new Exception("查询当前调查期发生错误");
+        }
     }
 
     //按时间段查询调查期
@@ -165,22 +177,24 @@ public class CommonController extends ControllerBase {
         return success(uploadPeriodList);
     }
 
-    //取样分析
-    @PostMapping("/data/pieChart")
-    public Object PieChart(AppUserDetail appUserDetail,Integer uploadPeriodId) throws Exception {
+    //取样分析，生成产业需求人数信息饼图数据
+    @PostMapping("/data/pieChartIndustryNum")
+    public Object PieChartIndustryNum(AppUserDetail appUserDetail,Integer uploadPeriodId) throws Exception {
         return success(commonService.pieChartIndustryNum(appUserDetail.getId(),uploadPeriodId));
+    }
+
+    //取样分析，生成供求总体人数折线图数据
+    @PostMapping("/data/lineChartTotalNum")
+    public Object LineChartTotalNum(AppUserDetail appUserDetail,String startDateString,String endDateString) throws Exception{
+        java.sql.Date startDate = new java.sql.Date(dateFormat.parse(startDateString).getTime());
+        java.sql.Date endDate = new java.sql.Date(dateFormat.parse(endDateString).getTime());
+        return success(commonService.lineChartTotalNum(appUserDetail.getId(),startDate,endDate));
     }
 
 
 
 
 
-//    @PostMapping("/data/lineChart1")
-//    public Object lineChart1(Integer aimUserId,String startDate,String endDate) throws Exception{
-//        java.sql.Date _startDate=new java.sql.Date(dateFormat.parse(startDate).getTime());
-//        java.sql.Date _endDate=new java.sql.Date(dateFormat.parse(endDate).getTime());
-//        return success(commonService.lineChart1(aimUserId,_startDate,_endDate));
-//    }
 //    @PostMapping("/data/lineChart2")
 //    public Object lineChart2(Integer aimUserId,Integer uploadPeriodId)throws Exception{
 //        return success(commonService.pieChart(aimUserId,uploadPeriodId));
