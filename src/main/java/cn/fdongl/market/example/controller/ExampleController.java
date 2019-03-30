@@ -23,9 +23,9 @@ public class ExampleController extends ControllerBase {
     @Autowired
     TestService testService;
 
-
     @RequestMapping("aaaa")
     public Object aa(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
         return "asf";
     }
     @ApiOperation(value = "获取aaa",notes = "")

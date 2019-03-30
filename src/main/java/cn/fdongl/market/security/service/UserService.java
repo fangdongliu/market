@@ -9,10 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -93,7 +90,10 @@ public class UserService {
         if(fullname!=null){
             fullname = fullname+'%';
         }
-        return userMapper.page(begin,count,userType,username,fullname);
+        Map<String,Object> map = new HashMap<>();
+        map.put("count",userMapper.userCount(userType, username, fullname));
+        map.put("data",userMapper.page(begin,count,userType,username,fullname));
+        return map;
     }
 
     public Object getMenu(Integer userId){
