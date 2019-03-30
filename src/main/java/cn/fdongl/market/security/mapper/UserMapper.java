@@ -73,6 +73,7 @@ public interface UserMapper {
     @Select("SELECT \n" +
             "\tuser_id AS id,\n" +
             "\tusername,\n" +
+            "\tfullname,\n" +
             "\tusertype as userType,\n" +
             "\t`password`,\n" +
             "\tstate_flag AS `status`,\n" +
