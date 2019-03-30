@@ -24,7 +24,15 @@
                             用户名：
                         </el-col>
                         <el-col :span="12" :offset="1" class="userInfoDetail">
-                            123123
+                            {{username}}
+                        </el-col>
+                    </el-row>
+                    <el-row style="height:40px;">
+                        <el-col :span="3" class="userInfoTitle">
+                            用户身份：
+                        </el-col>
+                        <el-col :span="12" :offset="1" class="userInfoDetail">
+                            {{userType}}
                         </el-col>
                     </el-row>
                 </el-col>
@@ -39,10 +47,24 @@
     var vue = new Vue({
         el:'#selfCenter',
         data:{
-
+            username:'',
+            userType:''
         },
         methods:{
 
+        },
+        mounted(){
+            $.ajax({
+                url:'/user/userInfo',
+                type:'post',
+                success(res){
+                    vue.username = res.username;
+                    if(res.userType === 0) vue.userType ='管理员';
+                    else if(res.userType === 1) vue.userType = '省级用户';
+                    else if(res.userType === 2) vue.userType = '市级用户';
+                    else vue.userType = '监测点用户'
+                }
+            })
         }
     })
 </script>
