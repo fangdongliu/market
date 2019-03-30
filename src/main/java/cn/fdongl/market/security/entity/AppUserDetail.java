@@ -15,11 +15,11 @@ public class AppUserDetail implements UserDetails {
 
     public static final long serialVersionUID = 1L;
 
-    private Integer id;
-    private String username;
-    private String password;
-    private Integer userType;
-    private Integer status;
+    private Integer id;//用户id
+    private String username;//用户登录名
+    private String password;//密码
+    private Integer userType;//用户类型，1表示省，2表示市，3表示监测点
+    private Integer status;//用户激活状态
 
     private Collection<? extends GrantedAuthority>authorities;
 
@@ -48,13 +48,4 @@ public class AppUserDetail implements UserDetails {
         return status==0;
     }
 
-
-    public static AppUserDetail fromRequest(HttpServletRequest request) throws AuthenticationException {
-        HttpSession session = request.getSession();
-        AppUserDetail appUserDetail = (AppUserDetail) session.getAttribute("appUserDetail");
-        if(appUserDetail==null){
-            throw new AuthenticationException("need authorization");
-        }
-        return appUserDetail;
-    }
 }
