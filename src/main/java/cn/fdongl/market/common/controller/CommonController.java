@@ -191,12 +191,10 @@ public class CommonController extends ControllerBase {
         return success(commonService.lineChartTotalNum(appUserDetail.getId(),startDate,endDate));
     }
 
+    //取样分析，生成产业需求人数信息饼图数据
+    @PostMapping("/data/pieChartAgeNum")
+    public Object PieChartAgeNum(AppUserDetail appUserDetail,Integer uploadPeriodId) throws Exception {
+        return success(commonService.pieChartIndustryNum(appUserDetail.getId(),uploadPeriodId));
+    }
 
-
-
-
-//    @PostMapping("/data/lineChart2")
-//    public Object lineChart2(Integer aimUserId,Integer uploadPeriodId)throws Exception{
-//        return success(commonService.pieChart(aimUserId,uploadPeriodId));
-//    }
 }
