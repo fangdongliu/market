@@ -3,19 +3,35 @@ package cn.fdongl.market.upload.mapper.from;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.Map;
 
 @Mapper
 public interface SelectMapper {
 
+    @Select("select `status` from t_upload_period where upload_period_id = #{param1} and end_date<CURRENT_DATE()")
+    Integer isPeriodEnd(int periodId);
+
+    @Update("update t_upload_period set status = #{param2} where upload_period_id = #{param1}")
+    int updatePeriodStatus(int periodId,int status);
+
     @Insert("insert into middle.t_age_num (select * from human_resources_sys.t_age_num b " +
             "where b.table_id in (select table_id from human_resources_sys.t_upload_info c where c.upload_period_id=#{param1}))")
     int insertAgeNum(int periodId);
 
-    @Insert("insert into middle.t_career_dic (select * from human_resources_sys.t_career_dic b " +
-            "where b.table_id in (select table_id from t_upload_info c where c.upload_period_id=#{param1}))")
-    int insertCareerDic(int periodId);
+    @Insert("INSERT INTO middle.t_record_info \n" +
+            "\t(SELECT a.table_id,a.upload_period_id,c.* FROM \n" +
+            "\t\t(SELECT b.table_id,b.upload_period_id,b.creator FROM human_resources_sys.t_upload_info b WHERE b.upload_period_id = #{param1})a \n" +
+            "INner JOIN human_resources_sys.t_record_info c ON a.creator = c.region_emp_id AND c.state_flag = 3)")
+    int insertPeriodTables(int periodId);
+
+    @Insert("insert into middle.t_upload_period (select * from human_resources_sys.t_upload_period b where b.upload_period_id = #{param1})")
+    int insertUploadPeriod(int periodId);
+
+    @Insert("insert into middle.t_career_dic (select * from human_resources_sys.t_career_dic b) ON DUPLICATE KEY\n" +
+            " UPDATE career_name = b.career_name,delete_flag = b.delete_flag")
+    int updateDict();
 
     @Insert("insert into middle.t_degree_num (select * from human_resources_sys.t_degree_num " +
             "where human_resources_sys.t_degree_num.table_id in (select table_id from t_upload_info where upload_period_id=#{param1}))")
