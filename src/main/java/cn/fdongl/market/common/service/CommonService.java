@@ -4,15 +4,9 @@ import cn.fdongl.market.common.entity.Notice;
 import cn.fdongl.market.common.mapper.CommonMapper;
 import cn.fdongl.market.market.entity.*;
 import cn.fdongl.market.province.entity.UploadPeriod;
-import cn.fdongl.market.province.entity.UserInfoDisplay;
-import cn.fdongl.market.province.mapper.ProvinceMapper;
-import cn.fdongl.market.province.service.ProvinceService;
-import cn.fdongl.market.security.entity.AppUserDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,10 +15,6 @@ public class CommonService {
 
     @Autowired
     CommonMapper commonMapper;
-    @Autowired
-    ProvinceService provinceService;
-    @Autowired
-    ProvinceMapper provinceMapper;
 
     //发送一条全局通知
     public void sendMessageGlobal(String title,String content,Integer userId) throws Exception {
@@ -130,12 +120,6 @@ public class CommonService {
         return commonMapper.selectUploadInfoById(userId);
     }
 
-    //根据时间点查询简易调查期
-    public SimpleUploadPeriod selectSimpleUploadPeriod(Date date) throws Exception {
-        java.sql.Date sqlDate=new java.sql.Date(date.getTime());
-        return commonMapper.selectSimpleUploadPeriod(sqlDate);
-    }
-
     //按id查询调查期
     public UploadPeriod selectUploadPeriod(Integer uploadPeriodId) throws Exception {
         return commonMapper.selectUploadPeriod(uploadPeriodId);
@@ -157,42 +141,7 @@ public class CommonService {
 
 
 
-//    //取样分析/趋势分析
-//    public IndustryNum pieChart(Integer aimUserId,Integer uploadPeriodId)throws Exception{
-//        int a=provinceMapper.selectUsertype(aimUserId);
-//        if(a==3){
-//            List<UploadInfo> uploadInfos=selectUploadInfoById(aimUserId);
-//            for(int i=0;i<uploadInfos.size();i++){
-//                if(uploadInfos.get(i).getUploadPeriodId()==uploadPeriodId){
-//                    int tableId=uploadInfos.get(i).getTableId();
-//                    return selectIndustryNum(tableId);
-//                }
-//            }
-//            throw new Exception("PeriodId Error");
-//        }
-//        else if(a==2){
-//            List<UserInfoDisplay> sub=provinceService.selectSub(aimUserId);
-//            IndustryNum output=new IndustryNum();
-//            output=(IndustryNum) tableObjectInit(output);
-//            for(int i=0;i<sub.size();i++){
-//                List<UploadInfo> uploadInfos=selectUploadInfoById(sub.get(i).getUserId());
-//                for(int j=0;j<uploadInfos.size();j++){
-//                    if(uploadInfos.get(j).getUploadPeriodId()==uploadPeriodId){
-//                        int tableId=uploadInfos.get(j).getTableId();
-//                        IndustryNum temp=selectIndustryNum(tableId);
-//                        output=(IndustryNum)objectadd(output,temp);
-//                        break;
-//                    }
-//                }
-//            }
-//            output.setTableId(0);
-//            return  output;
-//        }
-//        else{
-//            throw new Exception("Can not create pieChart for province");
-//        }
-//    }
-//
+
 //    //对比分析，返回某张表在多个调查期的数据
 //    public List<TotalNum> lineChart1(Integer aimUserId,java.sql.Date startDate,java.sql.Date endDate)throws Exception{
 //        int a=provinceMapper.selectUsertype(aimUserId);

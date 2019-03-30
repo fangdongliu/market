@@ -396,17 +396,6 @@ public interface CommonMapper {
             "and creator=#{param1};")
     List<UploadInfo> selectUploadInfoById(Integer userId);
 
-    //根据时间点查询简易调查期
-    @Select("SELECT \n" +
-            "upload_period_id AS uploadPeriodId, \n" +
-            "start_date AS startDate, \n" +
-            "end_date AS endDate \n" +
-            "from t_upload_period where \n" +
-            "delete_flag=0 \n" +
-            "and start_date<=#{param1} \n" +
-            "and #{param1}<end_date limit 1;")
-    SimpleUploadPeriod selectSimpleUploadPeriod(java.sql.Date date);
-
     //根据id查询调查期
     @Select("SELECT \n" +
             "upload_period_id AS uploadPeriodId, \n" +
@@ -461,7 +450,7 @@ public interface CommonMapper {
             "sum(cult_sport_ente_need) AS cultSportEnteNeed, \n" +
             "sum(mana_orga_need) AS manaOrgaNeed, \n" +
             "sum(inte_orga_need) AS inteOrgaNeed \n" +
-            "from t_industry_num where " +
+            "from t_industry_num where \n" +
             "((select delete_flag from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=0) \n" +
             "and ((select state_flag from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=3) \n" +
             "and (((select @type:=usertype from t_user where t_user.user_id=#{param1})=1) \n" +
