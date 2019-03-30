@@ -28,17 +28,40 @@
         <el-main class="content">
             <div class="contentDetail">
                 <div style="float: left; margin-bottom: 15px; margin-right: 15px;">
-                    <el-button type="success" @click="dialogFormVisibleCreateCity = true;">创建市级用户</el-button>
-                    <el-button type="success" @click="dialogFormVisibleCreatePoint = true;">创建监测点用户</el-button>
+                    <el-button type="success" @click="dialogFormVisibleCreateProvince = true;" v-if="userType==0">创建省级用户</el-button>
+                    <el-button type="success" @click="dialogFormVisibleCreateCity = true;" v-if="userType!=0">创建市级用户</el-button>
+                    <el-button type="success" @click="getOptions(); dialogFormVisibleCreatePoint = true; "v-if="userType!=0">创建监测点用户</el-button>
                     <el-input placeholder="请输入用户名称" v-model="input" class="input-with-select"style="margin-top: 15px;">
-                        <el-select v-model="select" slot="prepend" placeholder="所有用户" change>
+                        <el-select v-model="select" slot="prepend" placeholder="所有用户">
+                            <el-option label="所有用户" value='0'></el-option>
+                            <el-option label="省级用户" value="1"></el-option>
                             <el-option label="市级用户" value="2"></el-option>
                             <el-option label="监测点用户" value="3"></el-option>
                         </el-select>
-                        <el-button slot="append" icon="el-icon-search"></el-button>
+                        <el-button slot="append" icon="el-icon-search" @click="getQueryUser()"></el-button>
                     </el-input>
                 </div>
-                <el-dialog title="创建市级用户" :visible.sync="dialogFormVisibleCreateCity">
+                <el-dialog title="创建省级用户" :visible.sync="dialogFormVisibleCreateProvince" @close='closeDialog(provinceUser)'>
+                    <el-form :model="provinceUser">
+                        <el-form-item label="用户个数" :label-width="formLabelWidth">
+                            <el-input v-model="provinceUser.count" placeholder="请输入用户个数"></el-input>
+                        </el-form-item>
+                        <el-form-item label="用户名前缀" :label-width="formLabelWidth">
+                            <el-input v-model="provinceUser.prefix" placeholder="请输入用户名前缀"></el-input>
+                        </el-form-item>
+                        <el-form-item label="用户全称前缀" :label-width="formLabelWidth">
+                            <el-input v-model="provinceUser.name" placeholder="请输入用户全称前缀"></el-input>
+                        </el-form-item>
+                        <el-form-item label="起始下标" :label-width="formLabelWidth">
+                            <el-input v-model="provinceUser.startCount" placeholder="请输入起始下标"></el-input>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="closeDialog(provinceUser)">关 闭</el-button>
+                        <el-button type="primary" @click="createProvince(provinceUser)">创 建</el-button>
+                    </div>
+                </el-dialog>
+                <el-dialog title="创建市级用户" :visible.sync="dialogFormVisibleCreateCity" @close='closeDialog(cityUser)'>
                     <el-form :model="cityUser">
                         <el-form-item label="用户个数" :label-width="formLabelWidth">
                             <el-input v-model="cityUser.count" placeholder="请输入用户个数"></el-input>
@@ -52,16 +75,13 @@
                         <el-form-item label="起始下标" :label-width="formLabelWidth">
                             <el-input v-model="cityUser.startCount" placeholder="请输入起始下标"></el-input>
                         </el-form-item>
-                        <el-form-item label="父级用户" :label-width="formLabelWidth">
-                            <el-input v-model="cityUser.parent" placeholder="请输入父级用户id"></el-input>
-                        </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
                         <el-button @click="closeDialog(cityUser)">关 闭</el-button>
                         <el-button type="primary" @click="createCity(cityUser)">创 建</el-button>
                     </div>
                 </el-dialog>
-                <el-dialog title="创建监测点用户" :visible.sync="dialogFormVisibleCreatePoint">
+                <el-dialog title="创建监测点用户" :visible.sync="dialogFormVisibleCreatePoint" @close='closeDialog(pointUser)'>
                     <el-form :model="pointUser">
                         <el-form-item label="用户个数" :label-width="formLabelWidth">
                             <el-input v-model="pointUser.count" placeholder="请输入用户个数"></el-input>
@@ -76,7 +96,14 @@
                             <el-input v-model="pointUser.startCount" placeholder="请输入起始下标"></el-input>
                         </el-form-item>
                         <el-form-item label="父级用户" :label-width="formLabelWidth">
-                            <el-input v-model="pointUser.parent" placeholder="请输入父级用户id"></el-input>
+                            <el-select v-model="pointUser.parent" placeholder="请选择">
+                                <el-option
+                                        v-for="item in options"
+                                        :key="item.id"
+                                        :label="item.fullname"
+                                        :value="item.id">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -86,7 +113,7 @@
                 </el-dialog>
 
                 <el-table
-                        :data="userData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+                        :data="userData"
                         stripe
                         style="width: 100%">
                     <el-table-column
@@ -131,7 +158,7 @@
                             layout="prev, pager, next"
                             @current-change="pageChange"
                             :page-size="pageSize"
-                            :total="userData.length"
+                            :total="total"
                             background>
                     </el-pagination>
                 </div>
@@ -146,19 +173,35 @@
     var vue3 = new Vue({
         el:'#provinceQueryUserApp',
         data: {
+            father: null,
+            options:[],
+            userType:'',
             userData: [],
-            input:'',
-            select: 1,
+            input: null,
+            select: null,
             pageSize:10,
             currentPage:1,
-            total:1000,
+            total: 100,
+            provinceUser:{
+                count:1,
+                prefix:'province',
+                name:'province',
+                startCount:0,
+                userType:1,
+            },
+            nullProvinceUser:{
+                count:1,
+                prefix:'province',
+                name:'province',
+                startCount:0,
+                userType:1,
+            },
             cityUser:{
                 count:1,
                 prefix:'city',
                 name:'city',
                 startCount:0,
                 userType:2,
-                parent:-1
             },
             nullCityUser:{
                 count:1,
@@ -166,7 +209,6 @@
                 name:'city',
                 startCount:0,
                 userType:2,
-                parent:-1
             },
             pointUser:{
                 count:1,
@@ -174,7 +216,7 @@
                 name:'point',
                 startCount:0,
                 userType:3,
-                parent:-1
+                parent:''
             },
             nullPointUser:{
                 count:1,
@@ -182,15 +224,21 @@
                 name:'point',
                 startCount:0,
                 userType:3,
-                parent:-1
+                parent:''
             },
+            dialogFormVisibleCreateProvince:false,
             dialogFormVisibleCreateCity:false,
             dialogFormVisibleCreatePoint:false,
             formLabelWidth:'120px'
         },
         methods:{
             closeDialog(user){
-                if (user.userType==2) {
+                if (user.userType==1) {
+                    var tmp =JSON.stringify(vue3.nullProvinceUser);
+                    vue3.provinceUser=JSON.parse(tmp);
+                    vue3.dialogFormVisibleCreateProvince = false;
+                }
+                else if (user.userType==2) {
                     var tmp =JSON.stringify(vue3.nullCityUser);
                     vue3.cityUser=JSON.parse(tmp);
                     vue3.dialogFormVisibleCreateCity = false;
@@ -200,7 +248,35 @@
                     vue3.pointUser=JSON.parse(tmp);
                     vue3.dialogFormVisibleCreatePoint = false;
                 }
-
+            },
+            createProvince(provinceUser) {
+                $.ajax({
+                    url:'/user/addUsers',
+                    type:'post',
+                    data:{
+                        count:provinceUser.count,
+                        prefix:provinceUser.prefix,
+                        name:provinceUser.name,
+                        startCount:provinceUser.startCount,
+                        parent:provinceUser.parent
+                    },
+                    success(res){
+                        if (res.code==0){
+                            vue3.userData.push(provinceUser);
+                            vue3.getList();
+                            vue3.$message({
+                                message: '创建成功',
+                                type: 'success'
+                            });
+                        }
+                        else {
+                            vue3.$message.error('用户名重复！');
+                        }
+                        console.log(res);
+                    },
+                });
+                this.dialogFormVisibleCreateProvinceUser = false;
+                console.log(provinceUser);
             },
             createCity(cityUser) {
                 $.ajax({
@@ -316,10 +392,85 @@
             },
             pageChange(page){
                 this.currentPage = page;
-            }
+                this.getQueryUser()
+            },
+            getOptions(){
+                $.ajax({
+                    url:'/user/query',
+                    type:'post',
+                    data:{
+                        page: 1,
+                        pageSize: 10000,
+                        userType: 2
+                    },
+                    success(res){
+                        vue3.options=res.data.data;
+                        console.log(res.data.data);
+                    }
+                });
+            },
+            getQueryUser(){
+                if (vue3.select==0) {
+                    $.ajax({
+                        url:'/user/query',
+                        type:'post',
+                        data:{
+                            page: vue3.currentPage,
+                            pageSize: vue3.pageSize,
+                            username: vue3.input,
+                            fullname: vue3.input
+                        },
+                        success(res){
+                            vue3.userData=res.data.data;
+                            vue3.total = res.data.count;
+                            console.log(res.data);
+                        }
+                    });
+                }
+                else {
+                    $.ajax({
+                        url:'/user/query',
+                        type:'post',
+                        data:{
+                            page: vue3.currentPage,
+                            pageSize: vue3.pageSize,
+                            userType: vue3.select,
+                            username: vue3.input,
+                            fullname: vue3.input
+                        },
+                        success(res){
+                            vue3.userData=res.data.data;
+                            vue3.total = res.data.count;
+                            console.log(res.data);
+                        }
+                    });
+                }
+            },
+
         },
         mounted:function () {
-            this.getList()
+            // this.getList();
+            $.ajax({
+                url:'/user/query',
+                type:'post',
+                data:{
+                    page: this.currentPage,
+                    pageSize: this.pageSize
+                },
+                success(res){
+                    vue3.userData=res.data.data;
+                    vue3.total = res.data.count;
+                    console.log(res.data);
+                }
+            });
+            $.ajax({
+                url:'/user/userType',
+                type:'post',
+                success(res){
+                    vue3.userType=res;
+                    console.log(res);
+                }
+            });
         }
     })
 </script>
