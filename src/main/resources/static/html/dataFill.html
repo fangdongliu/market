@@ -22,10 +22,11 @@
         <el-button id="submit" @click="submit" type="success">提交</el-button>
     </div>
     <hr/>
+    <div class="tabletitle">{{forms[this.index-1].title}}</div>
+    <div class="periodnote">{{uploadPeriod}}</div>
 
     <div class="table" v-if="this.index==1">
         <el-form :model="form1data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
                     <el-col :span="6" offset="4">需求人数</el-col>
@@ -46,7 +47,6 @@
 
     <div class="table" v-else-if="this.index==2">
         <el-form :model="form2data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
                     <el-col :span="2" offset="6">产业</el-col>
@@ -68,7 +68,6 @@
 
     <div class="table" v-else-if="this.index==3">
         <el-form :model="form3data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
                     <el-col :span="2" offset="6">行业</el-col>
@@ -90,7 +89,6 @@
 
     <div class="table" v-else-if="this.index==4">
         <el-form :model="form4data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
                     <el-col :span="6" offset="4">产业</el-col>
@@ -114,7 +112,6 @@
 
     <div class="table" v-else-if="this.index==5">
         <el-form :model="form5data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
                     <el-col :span="2" offset="4">就业</el-col>
@@ -146,7 +143,6 @@
 
     <div class="table" v-else-if="this.index==6">
         <el-form :model="form6data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
                     <el-col :span="4" offset="2">职</el-col>
@@ -179,7 +175,6 @@
 
     <div class="table" v-else-if="this.index==7">
         <el-form :model="form7data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
                     <el-col :span="4" offset="2">职</el-col>
@@ -212,7 +207,6 @@
 
     <div class="table" v-else-if="this.index==8">
         <el-form :model="form8data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
                     <el-col :span="2" offset="6">求职人员类别</el-col>
@@ -234,7 +228,6 @@
 
     <div class="table" v-else-if="this.index==9">
         <el-form :model="form9data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
                     <el-col :span="2" offset="4">性</el-col>
@@ -266,7 +259,6 @@
 
     <div class="table" v-else-if="this.index==10">
         <el-form :model="form10data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
                     <el-col :span="2" offset="4">年</el-col>
@@ -298,7 +290,6 @@
 
     <div class="table" v-else-if="this.index==11">
         <el-form :model="form11data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
                     <el-col :span="2" offset="4">文化</el-col>
@@ -330,7 +321,6 @@
 
     <div class="table" v-else-if="this.index==12">
         <el-form :model="form12data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
                     <el-col :span="2" offset="4">技术</el-col>
@@ -395,6 +385,30 @@
                     alert('初始化失败，请稍后刷新重试');
                 },
             })
+
+            $.ajax({
+                url: '/common/data/selectNowUploadPeriod',
+                type: 'post',
+                data: {},
+                success(res) {
+                    console.log(res);
+                    if(res.code==0) {
+                        if(res.data==null) {
+                            alert('调查期已结束');
+                            window.location.href='historyTables.html';
+                        }
+                        else
+                            that.uploadPeriod='第'+res.data.uploadPeriodId+'期截止时间：'+res.data.endDateString;
+                    }
+                    else {
+                        alert(res.message);
+                    }
+                },
+                error(res) {
+                    console.log(res);
+                    alert('初始化失败，请稍后刷新重试');
+                },
+            })
         },
         mounted(){
             var div = document.getElementsByTagName('button')[0];
@@ -403,21 +417,22 @@
 
         el:'#app',
         data:{
+            uploadPeriod:'已截止',
             tableId:null,
             index:1,
             forms:[
-                {index:1, id:'button1', title:'表1：供求总体人数'},
-                {index:2, id:'button2', title:'表2：按产业分组的需求人数'},
-                {index:3, id:'button3', title:'表3：按行业分组的需求人数'},
-                {index:4, id:'button4', title:'表4：按用人单位性质划分的需求人数'},
-                {index:5, id:'button5', title:'表5：按职业分组的需求人数'},
-                {index:6, id:'button6', title:'表6：需求大于求职的十个行业'},
-                {index:7, id:'button7', title:'表7：需求小于求职的十个行业'},
-                {index:8, id:'button8', title:'表8：按求职人员类别分组的需求人数'},
-                {index:9, id:'button9', title:'表9：按性别分组的供求人数'},
-                {index:10, id:'button10', title:'表10：按年龄分组的供求人数'},
-                {index:11, id:'button11', title:'表11：按文化程度的供求人数'},
-                {index:12, id:'button12', title:'表12：按技能等级分组的供求人数'},
+                {index:1, title:'表1：供求总体人数'},
+                {index:2, title:'表2：按产业分组的需求人数'},
+                {index:3, title:'表3：按行业分组的需求人数'},
+                {index:4, title:'表4：按用人单位性质划分的需求人数'},
+                {index:5, title:'表5：按职业分组的需求人数'},
+                {index:6, title:'表6：需求大于求职的十个行业'},
+                {index:7, title:'表7：需求小于求职的十个行业'},
+                {index:8, title:'表8：按求职人员类别分组的需求人数'},
+                {index:9, title:'表9：按性别分组的供求人数'},
+                {index:10, title:'表10：按年龄分组的供求人数'},
+                {index:11, title:'表11：按文化程度的供求人数'},
+                {index:12, title:'表12：按技能等级分组的供求人数'},
             ],
             finished:[false,false,false,false,false,false,false,false,false,false,false,false],
             changeable:[false,false,false,false,false,false,false,false,false,false,false,false],
@@ -1964,8 +1979,15 @@
                             console.log('data:'+this.data.uploadDataSet);
                             alert(words + '成功！');
                             that.changeable[that.index - 1] = true;
-                            that.index++;
-                            that.index--;
+                            console.log('param:'+param);
+                            if (param==0) {
+                                if (that.index < 12)
+                                    that.turnForm(that.index + 1);
+                                else {
+                                    that.index++;
+                                    that.index--;
+                                }
+                            }
                         }
                         else
                             alert(res.message);
@@ -2190,18 +2212,20 @@
                                 if(res.code==0) {
                                     alert('保存成功！');
                                     that.changeable[that.index - 1] = true;
-                                    this.next();
+                                    if (that.index < 12)
+                                        that.turnForm(that.index + 1);
                                 }
                                 else alert(res.message);
                             },
                             error(res) {
                                 console.log(res);
                                 alert('保存失败，请稍后重试');
+                                return;
                             }
                         })
                     }
                 else
-                    this.updateData(0);
+                        this.updateData(0);
                 }
             },
 
