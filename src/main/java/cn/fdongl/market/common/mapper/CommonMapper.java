@@ -396,17 +396,6 @@ public interface CommonMapper {
             "and creator=#{param1};")
     List<UploadInfo> selectUploadInfoById(Integer userId);
 
-    //根据时间点查询简易调查期
-    @Select("SELECT \n" +
-            "upload_period_id AS uploadPeriodId, \n" +
-            "start_date AS startDate, \n" +
-            "end_date AS endDate \n" +
-            "from t_upload_period where \n" +
-            "delete_flag=0 \n" +
-            "and start_date<=#{param1} \n" +
-            "and #{param1}<end_date limit 1;")
-    SimpleUploadPeriod selectSimpleUploadPeriod(java.sql.Date date);
-
     //根据id查询调查期
     @Select("SELECT \n" +
             "upload_period_id AS uploadPeriodId, \n" +
@@ -436,7 +425,7 @@ public interface CommonMapper {
             "or (start_date<=#{param1} and #{param1}<end_date));")
     List<UploadPeriod> selectUploadPeriodByTime(java.sql.Date startDate,java.sql.Date endDate);
 
-    //图表分析，饼图，查询产业需求人数信息
+    //取样分析，生成产业需求人数信息饼图数据，其中tableId中存的是所统计的个数
     @Select("SELECT \n" +
             "count(1) AS tableId, \n" +
             "sum(industry1_need) AS industry1Need, \n" +
@@ -461,7 +450,7 @@ public interface CommonMapper {
             "sum(cult_sport_ente_need) AS cultSportEnteNeed, \n" +
             "sum(mana_orga_need) AS manaOrgaNeed, \n" +
             "sum(inte_orga_need) AS inteOrgaNeed \n" +
-            "from t_industry_num where " +
+            "from t_industry_num where \n" +
             "((select delete_flag from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=0) \n" +
             "and ((select state_flag from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=3) \n" +
             "and (((select @type:=usertype from t_user where t_user.user_id=#{param1})=1) \n" +
@@ -469,4 +458,21 @@ public interface CommonMapper {
             "or (@type=3 and @tmp=#{param1})) \n" +
             "and ((select upload_period_id from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=#{param2});")
     IndustryNum pieChartIndustryNum(Integer userId,Integer uploadPeriodId);
+
+    //取样分析，生成供求总体人数折线图数据，其中tableId中存的是调查期的id
+    @Select("SELECT \n" +
+            "upload_period_id AS tableId, \n" +
+            "sum(need_popu) AS needPopu, \n" +
+            "sum(jobseek_popu) AS jobseekPopu \n" +
+            "from t_total_num inner join t_upload_info on t_total_num.table_id=t_upload_info.table_id where \n" +
+            "delete_flag=0 \n" +
+            "and state_flag=3 \n" +
+            "and (((select @tmp:=usertype from t_user where t_user.user_id=#{param1} limit 1)=1) \n" +
+            "or (@tmp=2 and t_upload_info.creator in (select t_user.user_id from t_user where t_user.superior=#{param1})) \n" +
+            "or (@tmp=3 and t_upload_info.creator=#{param1})) \n" +
+            "and ((#{param2}<(select @tmp:=t_upload_period.start_date from t_upload_period where t_upload_period.upload_period_id=t_upload_info.upload_period_id limit 1) and @tmp<#{param3}) \n" +
+            "or (@tmp<=#{param2} and #{param2}<(select t_upload_period.end_date from t_upload_period where t_upload_period.upload_period_id=t_upload_info.upload_period_id limit 1))) \n" +
+            "group by upload_period_id;")
+    List<TotalNum> lineChartTotalNum(Integer userId,java.sql.Date startDate,java.sql.Date endDate);
+
 }
