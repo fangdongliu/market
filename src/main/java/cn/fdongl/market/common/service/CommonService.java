@@ -7,6 +7,7 @@ import cn.fdongl.market.province.entity.UploadPeriod;
 import cn.fdongl.market.province.entity.UserInfoDisplay;
 import cn.fdongl.market.province.mapper.ProvinceMapper;
 import cn.fdongl.market.province.service.ProvinceService;
+import cn.fdongl.market.security.entity.AppUserDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -145,115 +146,118 @@ public class CommonService {
         return commonMapper.selectUploadPeriodByTime(startDate,endDate);
     }
 
-
-
-
-
-
-
-    //取样分析/趋势分析
-    public IndustryNum pieChart(Integer aimUserId,Integer uploadPeriodId)throws Exception{
-        int a=provinceMapper.selectUsertype(aimUserId);
-        if(a==3){
-            List<UploadInfo> uploadInfos=selectUploadInfoById(aimUserId);
-            for(int i=0;i<uploadInfos.size();i++){
-                if(uploadInfos.get(i).getUploadPeriodId()==uploadPeriodId){
-                    int tableId=uploadInfos.get(i).getTableId();
-                    return selectIndustryNum(tableId);
-                }
-            }
-            throw new Exception("PeriodId Error");
-        }
-        else if(a==2){
-            List<UserInfoDisplay> sub=provinceService.selectSub(aimUserId);
-            IndustryNum output=new IndustryNum();
-            output=(IndustryNum) tableObjectInit(output);
-            for(int i=0;i<sub.size();i++){
-                List<UploadInfo> uploadInfos=selectUploadInfoById(sub.get(i).getUserId());
-                for(int j=0;j<uploadInfos.size();j++){
-                    if(uploadInfos.get(j).getUploadPeriodId()==uploadPeriodId){
-                        int tableId=uploadInfos.get(j).getTableId();
-                        IndustryNum temp=selectIndustryNum(tableId);
-                        output=(IndustryNum)objectadd(output,temp);
-                        break;
-                    }
-                }
-            }
-            output.setTableId(0);
-            return  output;
-        }
-        else{
-            throw new Exception("Can not create pieChart for province");
-        }
+    //取样分析，生成产业需求人数信息饼图数据
+    public IndustryNum pieChartIndustryNum(Integer userId, Integer uploadPeriodId) throws Exception {
+        return commonMapper.pieChartIndustryNum(userId,uploadPeriodId);
     }
 
-    //对比分析，返回某张表在多个调查期的数据
-    public List<TotalNum> lineChart1(Integer aimUserId,java.sql.Date startDate,java.sql.Date endDate)throws Exception{
-        int a=provinceMapper.selectUsertype(aimUserId);
-        List<UploadPeriod> periods=commonMapper.selectUploadPeriodByTime(startDate,endDate);
-        List<TotalNum> output=new ArrayList<TotalNum>();
-        if(a==3){
-            List<UploadInfo> uploadInfos=selectUploadInfoById(aimUserId);
-            for(int i=0;i<periods.size();i++){
-                for(int j=0;j<uploadInfos.size();j++){
-                    if(uploadInfos.get(j).getUploadPeriodId()==periods.get(i).getUploadPeriodId()){
-                        int tableId=uploadInfos.get(j).getTableId();
-                        output.add(selectTotalNum(tableId));
-                        break;
-                    }
-                }
-            }
-            return output;
-        }
-        else if(a==2){
-            List<UserInfoDisplay> sub=provinceService.selectSub(aimUserId);//获取该用户的下级用户
-            for(int i=0;i<periods.size();i++){//遍历目标调查期
-                TotalNum totalNum=new TotalNum();
-                totalNum=(TotalNum)tableObjectInit(totalNum);
-                for(int j=0;j<sub.size();j++){//遍历下级用户
-                    List<UploadInfo> uploadInfos=selectUploadInfoById(sub.get(j).getUserId());//获取当前下级用户的元报表
-                    for(int k=0;k<uploadInfos.size();k++){//遍历所有的元报表
-                        if(uploadInfos.get(k).getUploadPeriodId()==periods.get(i).getUploadPeriodId()){//如果当前报表的调查期id可以匹配成功
-                            int tableId=uploadInfos.get(k).getTableId();//获取报表id
-                            TotalNum temp=selectTotalNum(tableId);//获取相应的报表
-                            totalNum=(TotalNum) objectadd(totalNum,temp);//将报表与预备加入list的报表相加
-                            break;//跳出当前循环，去处理下一个用户
-                        }
-                    }
-                }
-                totalNum.setTableId(0);
-                output.add(totalNum);
-            }
-            return output;
-        }
-        else{
-            throw new Exception("Can not create lineChart for province");
-        }
-    }
 
-    //将只有int属性的对象中的属性初始化为0
-    public Object tableObjectInit(Object a)throws Exception{
-        Field[] fielda=a.getClass().getDeclaredFields();
-        for(int i=0;i<fielda.length;i++){
-            fielda[i].setAccessible(true);
-            fielda[i].set(a,0);
-        }
-        return a;
-    }
-    //对两个相同类中的int属性相加的函数,用于图表汇总
-    public Object objectadd(Object a,Object b)throws Exception{
-        Field[] fielda=a.getClass().getDeclaredFields();
-        Field[] fieldb=b.getClass().getDeclaredFields();
-        if(a.getClass()!=b.getClass()){
-            throw new Exception("Class type must be same");
-        }
-        for(int i=0;i<fielda.length;i++){
-            fielda[i].setAccessible(true);
-            fieldb[i].setAccessible(true);
-            Object valuea=fielda[i].get(a);
-            Object valueb=fieldb[i].get(b);
-            fielda[i].set(a,(Integer)valuea+(Integer)valueb);
-        }
-        return a;
-    }
+
+
+
+
+
+//    //取样分析/趋势分析
+//    public IndustryNum pieChart(Integer aimUserId,Integer uploadPeriodId)throws Exception{
+//        int a=provinceMapper.selectUsertype(aimUserId);
+//        if(a==3){
+//            List<UploadInfo> uploadInfos=selectUploadInfoById(aimUserId);
+//            for(int i=0;i<uploadInfos.size();i++){
+//                if(uploadInfos.get(i).getUploadPeriodId()==uploadPeriodId){
+//                    int tableId=uploadInfos.get(i).getTableId();
+//                    return selectIndustryNum(tableId);
+//                }
+//            }
+//            throw new Exception("PeriodId Error");
+//        }
+//        else if(a==2){
+//            List<UserInfoDisplay> sub=provinceService.selectSub(aimUserId);
+//            IndustryNum output=new IndustryNum();
+//            output=(IndustryNum) tableObjectInit(output);
+//            for(int i=0;i<sub.size();i++){
+//                List<UploadInfo> uploadInfos=selectUploadInfoById(sub.get(i).getUserId());
+//                for(int j=0;j<uploadInfos.size();j++){
+//                    if(uploadInfos.get(j).getUploadPeriodId()==uploadPeriodId){
+//                        int tableId=uploadInfos.get(j).getTableId();
+//                        IndustryNum temp=selectIndustryNum(tableId);
+//                        output=(IndustryNum)objectadd(output,temp);
+//                        break;
+//                    }
+//                }
+//            }
+//            output.setTableId(0);
+//            return  output;
+//        }
+//        else{
+//            throw new Exception("Can not create pieChart for province");
+//        }
+//    }
+//
+//    //对比分析，返回某张表在多个调查期的数据
+//    public List<TotalNum> lineChart1(Integer aimUserId,java.sql.Date startDate,java.sql.Date endDate)throws Exception{
+//        int a=provinceMapper.selectUsertype(aimUserId);
+//        List<UploadPeriod> periods=commonMapper.selectUploadPeriodByTime(startDate,endDate);
+//        List<TotalNum> output=new ArrayList<TotalNum>();
+//        if(a==3){
+//            List<UploadInfo> uploadInfos=selectUploadInfoById(aimUserId);
+//            for(int i=0;i<periods.size();i++){
+//                for(int j=0;j<uploadInfos.size();j++){
+//                    if(uploadInfos.get(j).getUploadPeriodId()==periods.get(i).getUploadPeriodId()){
+//                        int tableId=uploadInfos.get(j).getTableId();
+//                        output.add(selectTotalNum(tableId));
+//                        break;
+//                    }
+//                }
+//            }
+//            return output;
+//        }
+//        else if(a==2){
+//            List<UserInfoDisplay> sub=provinceService.selectSub(aimUserId);//获取该用户的下级用户
+//            for(int i=0;i<periods.size();i++){//遍历目标调查期
+//                TotalNum totalNum=new TotalNum();
+//                totalNum=(TotalNum)tableObjectInit(totalNum);
+//                for(int j=0;j<sub.size();j++){//遍历下级用户
+//                    List<UploadInfo> uploadInfos=selectUploadInfoById(sub.get(j).getUserId());//获取当前下级用户的元报表
+//                    for(int k=0;k<uploadInfos.size();k++){//遍历所有的元报表
+//                        if(uploadInfos.get(k).getUploadPeriodId()==periods.get(i).getUploadPeriodId()){//如果当前报表的调查期id可以匹配成功
+//                            int tableId=uploadInfos.get(k).getTableId();//获取报表id
+//                            TotalNum temp=selectTotalNum(tableId);//获取相应的报表
+//                            totalNum=(TotalNum) objectadd(totalNum,temp);//将报表与预备加入list的报表相加
+//                            break;//跳出当前循环，去处理下一个用户
+//                        }
+//                    }
+//                }
+//                totalNum.setTableId(0);
+//                output.add(totalNum);
+//            }
+//            return output;
+//        }
+//        else{
+//            throw new Exception("Can not create lineChart for province");
+//        }
+//    }
+//
+//    //将只有int属性的对象中的属性初始化为0
+//    private Object objectInit(Object object) throws Exception {
+//        Field[] fieldList=object.getClass().getDeclaredFields();
+//        for (Field field:fieldList) {
+//            field.setAccessible(true);
+//            field.set(object,0);
+//        }
+//        return object;
+//    }
+//    //将addition的数值加到result中，无返回值
+//    private void objectAdd(Object result,Object addition) throws Exception {
+//        if(result.getClass()!=addition.getClass()){
+//            throw new Exception("两个参数类型不同");
+//        }
+//        Field[] fieldResult=result.getClass().getDeclaredFields();
+//        Field[] fieldAddition=addition.getClass().getDeclaredFields();
+//        for(int i=0;i<fieldResult.length;i++){
+//            fieldResult[i].setAccessible(true);
+//            fieldAddition[i].setAccessible(true);
+//            fieldResult[i].set(result,(Integer)fieldResult[i].get(result)+(Integer)fieldAddition[i].get(addition));
+//        }
+//    }
+
 }

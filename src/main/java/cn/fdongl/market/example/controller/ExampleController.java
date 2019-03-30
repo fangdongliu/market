@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,16 +23,16 @@ public class ExampleController extends ControllerBase {
     @Autowired
     TestService testService;
 
-
     @RequestMapping("aaaa")
-    public Object aa() throws Exception {
+    public Object aa(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
         return "asf";
     }
     @ApiOperation(value = "获取aaa",notes = "")
     @GetMapping("/hh")//指定接口的下一级路径，最终路径为 '/example/hh'
     public Object hhh(String hh,Integer dd){
         try {
-            aa();
+
             testService.hh();
         } catch (Exception e) {
             System.out.println("1");
