@@ -39,6 +39,15 @@ public interface UserMapper {
             "</script>")
     List<ListUserData>page(int begin,int count,Integer userType,String username,String fullname);
 
+    @Select("<script>" +
+            "select count(1)" +
+            "from t_user where 1=1 " +
+            "<if test='param1!=null'>and usertype = #{param1} </if>" +
+            "<if test='param2!=null'>and username like #{param2} </if>" +
+            "<if test='param3!=null'>and fullname like #{param3} </if>"+
+            "</script>")
+    Integer userCount(Integer userType,String username,String fullname);
+
     @Update("UPDATE t_user\n" +
             "SET delete_flag = 0 WHERE user_id = #{param1};")
     int enable(Integer rightId);
