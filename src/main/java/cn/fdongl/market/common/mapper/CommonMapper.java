@@ -459,7 +459,7 @@ public interface CommonMapper {
             "and ((select upload_period_id from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=#{param2});")
     IndustryNum pieChartIndustryNum(Integer userId,Integer uploadPeriodId);
 
-    //取样分析，生成供求总体人数折线图数据，其中tableId中存的是调查期的id
+    //对比分析，生成供求总体人数折线图数据，其中tableId中存的是调查期的id
     @Select("SELECT \n" +
             "upload_period_id AS tableId, \n" +
             "sum(need_popu) AS needPopu, \n" +
@@ -474,9 +474,10 @@ public interface CommonMapper {
             "or (@tmp<=#{param2} and #{param2}<(select t_upload_period.end_date from t_upload_period where t_upload_period.upload_period_id=t_upload_info.upload_period_id limit 1))) \n" +
             "group by upload_period_id;")
     List<TotalNum> lineChartTotalNum(Integer userId,java.sql.Date startDate,java.sql.Date endDate);
-    //趋势分析
+
+    //趋势分析，生成年龄供求人数折线图数据，其中tableId中存的是所统计的个数
     @Select("SELECT \n" +
-            "upload_period_id AS tableId,\n" +
+            "count(1) AS tableId,\n" +
             "sum(16_24_need) AS sixteenTwentyfourNeed,\n" +
             "sum(16_24_jobseek) AS sixteenTwentyfourJobseek,\n" +
             "sum(25_34_need) AS twentyfiveThirtyfourNeed,\n" +
@@ -487,7 +488,7 @@ public interface CommonMapper {
             "sum(over_45_jobseek) AS overFortyfourJobseek,\n" +
             "sum(no_requ_need) AS noRequNeed\n" +
             "from t_age_num inner join t_upload_info on t_age_num.table_id=t_upload_info.table_id where\n" +
-            "delete_flag=0\n" +
+            "delete_flag=0 \n" +
             "and state_flag=3 \n" +
             "and (((select @tmp:=usertype from t_user where t_user.user_id=#{param1} limit 1)=1) \n" +
             "or (@tmp=2 and t_upload_info.creator in (select t_user.user_id from t_user where t_user.superior=#{param1})) \n" +

@@ -184,43 +184,40 @@ public class CommonController extends ControllerBase {
     }
 
     //取样分析，生成目标用户产业需求人数信息饼图数据
-    @PostMapping("/data/aimUserpieChartIndustryNum")
+    @PostMapping("/data/aimUserPieChartIndustryNum")
     public Object AimUserPieChartIndustryNum(Integer aimUserId, Integer uploadPeriodId) throws Exception {
         return success(commonService.pieChartIndustryNum(aimUserId,uploadPeriodId));
     }
+
     //取样分析，生成供求总体人数折线图数据
     @PostMapping("/data/lineChartTotalNum")
-    public Object LineChartTotalNum(AppUserDetail appUserDetail,String startDateString,String endDateString) throws Exception{
+    public Object LineChartTotalNum(AppUserDetail appUserDetail,String startDateString,String endDateString) throws Exception {
         java.sql.Date startDate = new java.sql.Date(dateFormat.parse(startDateString).getTime());
         java.sql.Date endDate = new java.sql.Date(dateFormat.parse(endDateString).getTime());
         return success(commonService.lineChartTotalNum(appUserDetail.getId(),startDate,endDate));
     }
+
     //取样分析，生成目标用户供求总体人数折线图数据
-    @PostMapping("/data/aimUserlineChartTotalNum")
-    public Object AimUserLineChartTotalNum(Integer aimUserId,String startDateString,String endDateString) throws Exception{
+    @PostMapping("/data/aimUserLineChartTotalNum")
+    public Object AimUserLineChartTotalNum(Integer aimUserId,String startDateString,String endDateString) throws Exception {
         java.sql.Date startDate = new java.sql.Date(dateFormat.parse(startDateString).getTime());
         java.sql.Date endDate = new java.sql.Date(dateFormat.parse(endDateString).getTime());
         return success(commonService.lineChartTotalNum(aimUserId,startDate,endDate));
     }
+
     //趋势分析，生成年龄供求人数折线图数据
     @PostMapping("/data/lineChartAgeNum")
-    public Object LineChartAgeNum(AppUserDetail appUserDetail,String startDateString, String endDateString)throws Exception{
+    public Object LineChartAgeNum(AppUserDetail appUserDetail,String startDateString, String endDateString) throws Exception {
         java.sql.Date startDate = new java.sql.Date(dateFormat.parse(startDateString).getTime());
         java.sql.Date endDate = new java.sql.Date(dateFormat.parse(endDateString).getTime());
         return success(commonService.lineChartAgeNum(appUserDetail.getId(),startDate,endDate));
     }
+
     //趋势分析，生成目标用户年龄供求人数折线图数据
-    @PostMapping("/data/aimUserlineChartAgeNum")
-    public Object aimUserLineChartAgeNumtest(Integer aimUserId, String startDateString, String endDateString)throws Exception{
+    @PostMapping("/data/aimUserLineChartAgeNum")
+    public Object AimUserLineChartAgeNum(Integer aimUserId, String startDateString, String endDateString) throws Exception {
         java.sql.Date startDate = new java.sql.Date(dateFormat.parse(startDateString).getTime());
         java.sql.Date endDate = new java.sql.Date(dateFormat.parse(endDateString).getTime());
         return success(commonService.lineChartAgeNum(aimUserId,startDate,endDate));
     }
-
-
-
-//    @PostMapping("/data/lineChart2")
-//    public Object lineChart2(Integer aimUserId,Integer uploadPeriodId)throws Exception{
-//        return success(commonService.pieChart(aimUserId,uploadPeriodId));
-//    }
 }
