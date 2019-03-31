@@ -2,7 +2,7 @@
 <html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>dataAnalysisVisualization</title>
+    <title>dataAnalysisContrast</title>
 
     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
@@ -27,30 +27,24 @@
                                         v-for="item in options"
                                         :key="item.value"
                                         :label="item.label"
-                                        :value="item.value"
-                                >
+                                        :value="item.value">
                                 </el-option>
                             </el-select>
                         </el-col>
                     </el-row>
                     <el-tree
-                            :data="" >
-
-                    </el-tree>
-                    <el-tree
-                            :data="cityOptions"
-                            :props="defaultProps"
-                            @node-click="handleNodeClick"
-                            accordion>
+                            :data="child"
+                            :props="props"
+                            node-key="id"
+                            @node-click="handleNodeClick">
                     </el-tree>
                 </el-col>
                 <el-col :span="13" :offset="1" id="historyRight" style="height:100%;">
-                    <!--<iframe src="/html/dataFillIframe.html"-->
-                            <!--style="height:700px; width:calc(100%);" frameborder="no"></iframe>-->
-                    <el-button type="success" @click=getLineNumData()>button</el-button>
+
                     <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
                     <div id="pie" style="width: 600px;height:400px;" ref="pie"></div>
-                    <div id="lineNum" style="width: 600px;height:400px;" ref="lineNum"></div>
+                    <!--<div id="lineNum" style="width: 600px;height:400px;" ref="lineNum"></div>-->
+                    <!--<div id="lineAge" style="width: 600px;height:400px;" ref="lineAge"></div>-->
                 </el-col>
             </el-row>
         </div>
@@ -59,6 +53,7 @@
 </div>
 </body>
 <script>
+    let id = 1;
     var vue = new Vue({
         el:'#dataAnalysisVisualization',
         data:{
@@ -373,109 +368,149 @@
             defaultProps: {
                 children: 'children',
                 label: 'label'
+            },
+            child: [],
+            aimUserId: '',
+            props:{
+                children:'child',
+                label:'fullname'
             }
         },
         methods:{
-            initialPie(){
-                this.pieChart = echarts.init(this.$refs.pie);
-                // 指定图表的配置项和数据
-                this.pieChart.setOption({
-                    title: {
-                        text: ''
+            initialPie(data){
+                $.ajax({
+                    url: '/common/data/aimUserPieChartIndustryNum ',
+                    type: 'post',
+                    data:{
+                        aimUserId:data.id,
+                        uploadPeriodId:vue.periodId
                     },
-                    series : [
-                        {
-                            name: '访问来源',
-                            type: 'pie',
-                            radius: '60%',
-                            data:[
-                                {value:235, name:'视频广告'},
-                                {value:274, name:'联盟广告'},
-                                {value:310, name:'邮件营销'},
-                                {value:335, name:'直接访问'},
-                                {value:400, name:'搜索引擎'}
-                            ]
+                    success(res){
+                        console.log(res.data);
+                        if (res.data.tableId==0) {
+                            vue.pieChart = echarts.init(vue.$refs.pie);
+                            // 指定图表的配置项和数据
+                            vue.pieChart.setOption({
+                                title: {
+                                    text: data.fullname+'取样分析数据'
+                                }
+                            });
+                            vue.$message.error('该监测点在该时期暂时没有数据！');                        }
+                        else{
+                            vue.pieChart = echarts.init(vue.$refs.pie);
+                            // 指定图表的配置项和数据
+                            vue.pieChart.setOption({
+                                title: {
+                                    text: data.fullname+'取样分析数据'
+                                },
+                                series : [
+                                    {
+                                        name: '访问来源',
+                                        type: 'pie',
+                                        radius: '60%',
+                                        data:[
+                                            {value:res.data.accoCaterNeed, name:'住宿和餐饮业'},
+                                            {value:res.data.archNeed, name:'建筑业'},
+                                            {value:res.data.cultSportEnteNeed, name:'文化、体育和娱乐业'},
+                                            {value:res.data.eduNeed, name:'教育'},
+                                            {value:res.data.elecGasWaterNeed, name:'电力、燃气及水的生产和供应业'},
+                                            {value:res.data.estateNeed, name:'房地产业'},
+                                            {value:res.data.financeNeed, name:'金融业'},
+                                            {value:res.data.healSecuWelfNeed, name:'教育'},
+                                            {value:res.data.industry1Need, name:'农、林、牧、渔业'},
+                                            {value:res.data.infoCompSoftNeed, name:'信息传输、计算机服务和软件业'},
+                                            {value:res.data.inteOrgaNeed, name:'国际组织'},
+                                            {value:res.data.leaseBusiServNeed, name:'租赁和商务服务业'},
+                                            {value:res.data.manaOrgaNeed, name:'公共管理与社会组织'},
+                                            {value:res.data.manuNeed, name:'制造业'},
+                                            {value:res.data.mineNeed, name:'采矿业'},
+                                            {value:res.data.reseTechAddrNeed, name:'科学研究、技术服务和地址勘查业'},
+                                            {value:res.data.resiServNeed, name:'居民服务和其他服务业'},
+                                            {value:res.data.retailNeed, name:'批发和零售业'},
+                                            {value:res.data.tranStorPostNeed, name:'交通运输、仓储和邮政业'},
+                                            {value:res.data.waterEnviFaciNeed, name:'水利、环境和公共设施管理业'},
+                                        ]
+                                    }
+                                ]
+                            });
                         }
-                    ]
-                });
-            },
-            initialLineNum(){
-                this.lineNumChart = echarts.init(this.$refs.lineNum);
-                // 指定图表的配置项和数据
-                this.lineNumChart.setOption({
-                    title: {
-                        test: '用户对比数据分析'
+
                     },
-                    tooltip: {},
-                    xAxis: {
-                        type: 'category',
-                        data: ['1','2','3']
-                    },
-                    yAxis: {},
-                    series : [
-                        {
-                            type: 'line',
-                            radius: '60%',
-                            data: [10, 20, 30],
-                        }
-                    ]
+                    error(res){
+                        console.log('error')
+                    }
                 });
+
+
             },
+            // initialLineNum(){
+            //     this.lineNumChart = echarts.init(this.$refs.lineNum);
+            //     // 指定图表的配置项和数据
+            //     this.lineNumChart.setOption({
+            //         title: {
+            //             test: '用户对比数据分析'
+            //         },
+            //         tooltip: {},
+            //         xAxis: {
+            //             type: 'category',
+            //             data: ['1','2','3']
+            //         },
+            //         yAxis: {},
+            //         series : [
+            //             {
+            //                 type: 'line',
+            //                 radius: '60%',
+            //                 data: [10, 20, 30],
+            //             }
+            //         ]
+            //     });
+            // },
+            // initialLineAge(){
+            //     this.lineAgeChart = echarts.init(this.$refs.lineAge);
+            //     // 指定图表的配置项和数据
+            //     this.lineAgeChart.setOption({
+            //         title: {
+            //             test: '用户年龄趋势分析'
+            //         },
+            //         tooltip: {},
+            //         xAxis: {
+            //             type: 'category',
+            //             data: ['1','2','3']
+            //         },
+            //         yAxis: {},
+            //         series : [
+            //             {
+            //                 type: 'line',
+            //                 radius: '60%',
+            //                 data: [10, 20, 30],
+            //             }
+            //         ]
+            //     });
+            // },
+
             handleNodeClick(data){
                 console.log(data);
-            },
-            getPieData(){
-                // $.ajax({
-                //     url:'/role/rights',
-                //     type:'post',
-                //     data:{
-                //         roleId:id
-                //     },
-                //     success(res){
-                //         vue4.roleRight=res.data;
-                //         vue4.$refs.tree.setCheckedKeys(vue4.roleRight);
-                //         console.log(res.data);
-                //     }
-                // })
-            },
-            getLineNumData(){
-                // $.ajax({
-                //     url:'common/data/aimUserLineChartTotalNum',
-                //     type:'post',
-                //     data:{
-                //         aimUserId:35,
-                //         startDateString: '2019-02-01',
-                //         endDataString: '2019-02-28'
-                //     },
-                //     success(res){
-                //         var data = res.data;
-                //         console.log(res.data);
-                //         lineNumChart.setOption({
-                //             title: {
-                //                 test: '用户对比数据分析'
-                //             },
-                //             tooltip: {},
-                //             xAxis: {
-                //                 type: 'category',
-                //                 data: ['1','2','3']
-                //             },
-                //             yAxis: {},
-                //             series : [
-                //                 {
-                //                     type: 'line',
-                //                     radius: '60%',
-                //                     data: [10, 20, 30],
-                //                 }
-                //             ]
-                //         })
-                //     }
-                // })
-                this.initialLineNum();
+                if (data.child==null){
+                    this.initialPie(data);
 
+                }
+
+            },
+
+            getChildUser(){
+                $.ajax({
+                    url:'/user/list',
+                    type: 'post',
+                    success(res){
+                        vue.child=res.data;
+                        console.log(res.data)
+                    }
+                })
             }
         },
         mounted(){
-            this.initialPie();
+            this.getChildUser();
+
             $.ajax({
                 url:'/common/data/selectUploadPeriodByTime',
                 type:'post',
@@ -485,7 +520,7 @@
                 },
                 success(res){
                     if(res.code === 0){
-                        // console.log(res);
+                        console.log(res);
                         vue.options=[];
                         for(var i = 0; i < res.data.length;i ++){
                             vue.options.push({value:res.data[i].uploadPeriodId,
