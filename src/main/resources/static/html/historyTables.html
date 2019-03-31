@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>historyTables</title>
@@ -17,7 +17,7 @@
                 <el-col :span="10" id="historyLeft">
                     <el-row>
                         <el-col :span="8">请选择调查期:</el-col>
-                        <el-col :span="16">
+                        <el-col :span="10">
                             <el-select v-model="periodId" placeholder="请选择" size="small">
                                 <el-option
                                         v-for="item in options"
@@ -28,12 +28,15 @@
                                 </el-option>
                             </el-select>
                         </el-col>
+                        <el-col :span="4" :offset="1">
+                            <el-button  type="primary" size="small" @click="changeURL">查看</el-button>
+                        </el-col>
                     </el-row>
                     <el-tree :data="cityOptions" :props="defaultProps" @node-click="handleNodeClick" accordion></el-tree>
                 </el-col>
-                <el-col :span="13" :offset="1" id="historyRight" style="height:100%;">
-                    <iframe src="/html/dataFillIframe.html"
-                            style="height:700px; width:calc(100%);" frameborder="no"></iframe>
+                <el-col :span="13" id="historyRight" style="height:100%;">
+                    <iframe v-bind:src="src"
+                            style="height:700px; width:calc(100%);background-color: #FFFFFF" frameborder="no"></iframe>
                 </el-col>
             </el-row>
         </div>
@@ -45,6 +48,7 @@
     var vue = new Vue({
         el:'#historyTables',
         data:{
+            src:'',
             options: [],
             periodId: '',
             cityOptions:[
@@ -354,11 +358,55 @@
             defaultProps: {
                 children: 'children',
                 label: 'label'
-            }
+            },
+            location:''
+
         },
         methods:{
             handleNodeClick(data){
-                console.log(data);
+                if(data.children) this.location = '安徽省-' + data.value.toString();
+                else this.location = this.location + '-' + data.value.toString();
+                console.log()
+            },
+            changeURL(){
+                this.src='';
+                var start='';
+                var end='';
+                for(var i = 0; i < vue.options.length; i ++){
+                    if(vue.options[i].value === vue.periodId){
+                        start=vue.options[i].label.substr(0,10);
+                        end=vue.options[i].label.substr(13);
+                    }
+                }
+                var n=this.location.split('-').length;
+                if(start !== '' && end !== '' && n === 3){
+                    vue.src = '/html/dataFillIframe.html?tableId='+'53';
+
+                    $.ajax({
+                        url: '/common/data/selectUploadInfoByCondition',
+                        type: 'post',
+                        data: {
+                            startDate:start,
+                            endDate:end,
+                            condition:vue.location
+                        },
+                        success(res) {
+                            console.log(res);
+                            if(res.code===0) {
+                                vue.src = '/html/dataFillIframe.html?tableId='+53
+                            }
+                            else {
+                                alert(res.message);
+                            }
+                        },
+                        error(res) {
+                            console.log(res);
+                            alert('初始化失败，请稍后刷新重试');
+                        },
+                    })
+                }
+
+
             }
         },
         mounted(){
