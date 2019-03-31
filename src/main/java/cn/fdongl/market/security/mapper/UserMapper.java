@@ -33,8 +33,9 @@ public interface UserMapper {
             "select user_id as id,username,fullname,usertype as userType,superior as father,state_flag as `status`,delete_flag as deleteFlag " +
             "from t_user where 1=1 " +
             "<if test='param3!=null'>and usertype = #{param3} </if>" +
-            "<if test='param4!=null'>and username like #{param4} </if>" +
-            "<if test='param5!=null'>and fullname like #{param5} </if>"+
+            "<if test='param4!=null or param5!=null'>"+
+            "and (1=0 <if test='param4!=null'>or username like #{param4} </if>" +
+            "<if test='param5!=null'>or fullname like #{param5} </if>)</if>"+
             "limit #{param1},#{param2}"+
             "</script>")
     List<ListUserData>page(int begin,int count,Integer userType,String username,String fullname);
@@ -43,8 +44,9 @@ public interface UserMapper {
             "select count(1)" +
             "from t_user where 1=1 " +
             "<if test='param1!=null'>and usertype = #{param1} </if>" +
-            "<if test='param2!=null'>and username like #{param2} </if>" +
-            "<if test='param3!=null'>and fullname like #{param3} </if>"+
+            "<if test='param2!=null or param3!=null'>"+
+            "and (1=0 <if test='param2!=null'>or username like #{param2} </if>" +
+            "<if test='param3!=null'>or fullname like #{param3} </if>)</if>"+
             "</script>")
     Integer userCount(Integer userType,String username,String fullname);
 
@@ -73,6 +75,7 @@ public interface UserMapper {
     @Select("SELECT \n" +
             "\tuser_id AS id,\n" +
             "\tusername,\n" +
+            "\tfullname,\n" +
             "\tusertype as userType,\n" +
             "\t`password`,\n" +
             "\tstate_flag AS `status`,\n" +

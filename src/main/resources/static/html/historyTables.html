@@ -31,8 +31,9 @@
                     </el-row>
                     <el-tree :data="cityOptions" :props="defaultProps" @node-click="handleNodeClick" accordion></el-tree>
                 </el-col>
-                <el-col :span="13" :offset="1" id="historyRight">
-
+                <el-col :span="13" :offset="1" id="historyRight" style="height:100%;">
+                    <iframe src="/html/dataFillIframe.html"
+                            style="height:700px; width:calc(100%);" frameborder="no"></iframe>
                 </el-col>
             </el-row>
         </div>

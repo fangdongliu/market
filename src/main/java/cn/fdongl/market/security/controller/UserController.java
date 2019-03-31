@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -24,7 +26,6 @@ public class UserController extends ControllerBase {
 
     @Autowired
     UserService userService;
-
 
     @Autowired
     public PasswordEncoder passwordEncoder;
@@ -60,6 +61,17 @@ public class UserController extends ControllerBase {
     @PostMapping("userType")
     public Object userType(AppUserDetail appUserDetail) throws Exception {
         return appUserDetail.getUserType();
+    }
+
+    @RolesAllowed("USER")
+    @PostMapping("userInfo")
+    public Object userInfo(AppUserDetail userDetail) throws Exception {
+        Map<String,Object> map = new HashMap<>();
+        map.put("userType",userDetail.getUserType());
+        map.put("userId",userDetail.getId());
+        map.put("username",userDetail.getUsername());
+        map.put("fullname",userDetail.getFullname());
+        return map;
     }
 
     @PostMapping("addUsers")

@@ -17,6 +17,7 @@ public class AppUserDetail implements UserDetails {
 
     private Integer id;//用户id
     private String username;//用户登录名
+    private String fullname;//用户全称
     private String password;//密码
     private Integer userType;//用户类型，1表示省，2表示市，3表示监测点
     private Integer status;//用户激活状态
