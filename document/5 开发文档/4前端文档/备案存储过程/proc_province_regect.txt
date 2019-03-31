@@ -1,0 +1,29 @@
+delimiter //
+CREATE  PROCEDURE `proc_province_reject`(
+	IN `examine_id` INT,
+	IN `aim_id` INT
+)
+LANGUAGE SQL
+NOT DETERMINISTIC
+CONTAINS SQL
+SQL SECURITY DEFINER
+COMMENT ''
+BEGIN
+	declare tmp int;
+	set tmp=(select count(1) from t_record_info where region_emp_id=user_id and state_flag=2);
+	if(tmp=0) then
+		update t_record_info
+		set state_flag=0,revise_time=now(),reviser=examine_id
+		where region_emp_id=aim_id and state_flag=1;
+		//发送通知
+		insert into t_notice(notice_title,notice_content,create_time,creator,reciver)
+		values("您的备案未通过审核","您的备案未通过审核，请重新填写并上报",now(),examine_id,aim_id);
+	else
+		delete from t_record_info
+		where region_emp_id=aim_id and state_flag=1;
+		//发送通知
+		insert into t_notice(notice_title,notice_content,create_time,creator,reciver)
+		values("您的备案修改未通过审核","您的备案修改未通过审核",now(),examine_id,aim_id);
+	end if;
+	
+END //

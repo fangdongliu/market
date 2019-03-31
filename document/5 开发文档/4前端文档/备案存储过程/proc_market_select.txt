@@ -1,0 +1,44 @@
+delimiter //
+CREATE  PROCEDURE `proc_market_select`(
+	IN `user_id` INT
+)
+LANGUAGE SQL
+NOT DETERMINISTIC
+CONTAINS SQL
+SQL SECURITY DEFINER
+COMMENT ''
+BEGIN
+	declare tmp int;
+	set tmp=(select count(1) from t_record_info where region_emp_id=user_id and state_flag=2);
+	if(tmp=0) then
+		select
+		region_emp_id AS regionEmpId,
+		region_emp_name AS regionEmpName,
+            		region_name AS regionName,
+            		region_emp_contact AS regionEmpContact,
+            		region_emp_contact_mobi AS regionEmpContactMobi,
+            		region_emp_contact_num AS regionEmpContactNum,
+            		region_emp_fax AS regionEmpFax,
+            		state_flag AS stateFlag,
+            		create_time AS createTime,
+            		creator AS creator,
+            		revise_time AS reviseTIme,
+            		reviser AS reviser
+		from t_record_info where region_emp_id=user_id and (state_flag=0 or state_flag=1);//没有已通过的备案
+	else
+		select
+		region_emp_id AS regionEmpId,
+		region_emp_name AS regionEmpName,
+            		region_name AS regionName,
+           	 	region_emp_contact AS regionEmpContact,
+          	  	region_emp_contact_mobi AS regionEmpContactMobi,
+         	   	region_emp_contact_num AS regionEmpContactNum,
+         	   	region_emp_fax AS regionEmpFax,
+         	   	state_flag AS stateFlag,
+         	   	create_time AS createTime,
+         	   	creator AS creator,
+         	   	revise_time AS reviseTIme,
+         	   	reviser AS reviser
+		from t_record_info where region_emp_id=user_id and state_flag=2;//有已通过的备案
+	end if;
+END //
