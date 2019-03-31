@@ -1,7 +1,7 @@
 package cn.fdongl.market.common.controller;
 
 import cn.fdongl.market.common.service.CommonService;
-import cn.fdongl.market.province.entity.UploadPeriod;
+import cn.fdongl.market.common.entity.UploadPeriod;
 import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.util.ControllerBase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class CommonController extends ControllerBase {
 
     //发送全局通知
     @PostMapping("/message/send")
-    public Object SendMessage(AppUserDetail appUserDetail, String title, String content) throws Exception {
+    public Object SendMessage(AppUserDetail appUserDetail,String title,String content) throws Exception {
         commonService.sendMessageGlobal(title,content,appUserDetail.getId());
         return success();
     }
@@ -124,7 +124,7 @@ public class CommonController extends ControllerBase {
         return success(commonService.selectTechGradeNum(tableId));
     }
 
-    //按用户id查询上传数据
+    //按用户id查询上传数据，只用户查询监测点用户
     @PostMapping("/data/selectUploadInfoById")
     public Object SelectUploadInfoById(Integer userId) throws Exception {
         return success(commonService.selectUploadInfoById(userId));
@@ -134,6 +134,12 @@ public class CommonController extends ControllerBase {
     @PostMapping("/data/selectUploadInfoByCondition")
     public Object SelectUploadInfoByCondition(AppUserDetail appUserDetail,java.sql.Date startDate,java.sql.Date endDate,String condition) throws Exception {
         return success(commonService.selectUploadInfoByCondition(appUserDetail.getId(),startDate,endDate,condition));
+    }
+
+    //按调查期id、地点、市场名称查询上传数据（只能查到一条，@尚楠）
+    @PostMapping("/data/selectUploadInfoBySpecificCondition")
+    public Object SelectUploadInfoBySpecificCondition(AppUserDetail appUserDetail,Integer uploadPeriodId,String regionName,String regionEmpName) throws Exception {
+        return success(commonService.selectUploadInfoBySpecificCondition(appUserDetail.getId(),uploadPeriodId,regionName,regionEmpName));
     }
 
     //按id查询调查期
@@ -185,7 +191,7 @@ public class CommonController extends ControllerBase {
 
     //取样分析，生成目标用户产业需求人数信息饼图数据
     @PostMapping("/data/aimUserPieChartIndustryNum")
-    public Object AimUserPieChartIndustryNum(Integer aimUserId, Integer uploadPeriodId) throws Exception {
+    public Object AimUserPieChartIndustryNum(Integer aimUserId,Integer uploadPeriodId) throws Exception {
         return success(commonService.pieChartIndustryNum(aimUserId,uploadPeriodId));
     }
 

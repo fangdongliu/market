@@ -3,9 +3,7 @@ package cn.fdongl.market.province.mapper;
 
 import cn.fdongl.market.market.entity.Record;
 import cn.fdongl.market.market.entity.UploadInfo;
-import cn.fdongl.market.province.entity.AccountData;
-import cn.fdongl.market.province.entity.UploadPeriod;
-import cn.fdongl.market.province.entity.UserInfoDisplay;
+import cn.fdongl.market.common.entity.UploadPeriod;
 import org.apache.ibatis.annotations.*;
 import org.springframework.core.annotation.Order;
 

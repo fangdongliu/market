@@ -1,4 +1,4 @@
-package cn.fdongl.market.province.entity;
+package cn.fdongl.market.common.entity;
 
 import lombok.Data;
 

@@ -1,7 +1,7 @@
 package cn.fdongl.market.province.controller;
 
 import cn.fdongl.market.common.service.CommonService;
-import cn.fdongl.market.province.entity.UploadPeriod;
+import cn.fdongl.market.common.entity.UploadPeriod;
 import cn.fdongl.market.province.service.ProvinceService;
 import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.util.ControllerBase;
