@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>dataAnalysisVisualization</title>
+
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Vue -->
+    <script src="//vuejs.org/js/vue.min.js"></script>
+    <link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">
+    <script src="//unpkg.com/iview/dist/iview.min.js"></script>
+    <!--elementUI-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="../css/stylesheet.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <!--<script src="/js/jump.js"></script>-->
+</head>
+<body>
+<div>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="pie" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var pieChart = echarts.init(document.getElementById('pie'));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: ''
+            },
+            series : [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '60%',
+                    data:[
+                        {value:235, name:'视频广告'},
+                        {value:274, name:'联盟广告'},
+                        {value:310, name:'邮件营销'},
+                        {value:335, name:'直接访问'},
+                        {value:400, name:'搜索引擎'}
+                    ]
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        pieChart.setOption(option);
+    </script>
+    <div id="lineNum" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var lineNumChart = echarts.init(document.getElementById('lineNum'));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: ''
+            },
+            series : [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '60%',
+                    data:[
+                        {value:235, name:'视频广告'},
+                        {value:274, name:'联盟广告'},
+                        {value:310, name:'邮件营销'},
+                        {value:335, name:'直接访问'},
+                        {value:400, name:'搜索引擎'}
+                    ]
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        lineNumChart.setOption(option);
+    </script>
+</div>
+</body>
+<script>
+    var vue = new Vue({
+        el:'#dataAnalysisVisualization',
+        data:{
+            src:'',
+            options: [],
+            periodId: '',
+            cityOptions:[
+                {
+                    value:'安庆',
+                    label:'安庆',
+                    children:[{
+                        value:'安庆市',
+                        label:'安庆市'
+                    },{
+                        value:'怀宁县',
+                        label:'怀宁县'
+                    },{
+                        value:'潜山县',
+                        label:'潜山县'
+                    },{
+                        value:'宿松县',
+                        label:'宿松县'
+                    },{
+                        value:'太湖县',
+                        label:'太湖县'
+                    },{
+                        value:'桐城市',
+                        label:'桐城市'
+                    },{
+                        value:'望江县',
+                        label:'望江县'
+                    },{
+                        value:'岳西县',
+                        label:'岳西县'
+                    },{
+                        value:'枞阳县',
+                        label:'枞阳县'
+                    },{
+                        value:'安庆市',
+                        label:'安庆市'
+                    }]
+                },{
+                    value:'蚌埠',
+                    label:'蚌埠',
+                    children:[{
+                        value:'蚌埠市',
+                        label:'蚌埠市'
+                    },{
+                        value:'固镇县',
+                        label:'固镇县'
+                    },{
+                        value:'怀远县',
+                        label:'怀远县'
+                    },{
+                        value:'五河县',
+                        label:'五河县'
+                    }]
+                },{
+                    value:'巢湖',
+                    label:'巢湖',
+                    children:[{
+                        value:'巢湖市',
+                        label:'巢湖市'
+                    },{
+                        value:'含山县',
+                        label:'含山县'
+                    },{
+                        value:'和县',
+                        label:'和县'
+                    },{
+                        value:'庐江县',
+                        label:'庐江县'
+                    },{
+                        value:'无为县',
+                        label:'无为县'
+                    }]
+                },{
+                    value:'池州',
+                    label:'池州',
+                    children:[{
+                        value:'池州市',
+                        label:'池州市'
+                    },{
+                        value:'东至县',
+                        label:'东至县'
+                    },{
+                        value:'青阳县',
+                        label:'青阳县'
+                    },{
+                        value:'石台县',
+                        label:'石台县'
+                    }]
+                },{
+                    value:'滁州',
+                    label:'滁州',
+                    children:[{
+                        value:'滁州市',
+                        label:'滁州市'
+                    },{
+                        value:'定远县',
+                        label:'定远县'
+                    },{
+                        value:'凤阳县',
+                        label:'凤阳县'
+                    },{
+                        value:'来安县',
+                        label:'来安县'
+                    },{
+                        value:'明光市',
+                        label:'明光市'
+                    },{
+                        value:'全椒县',
+                        label:'全椒县'
+                    },{
+                        value:'天长市',
+                        label:'天长市'
+                    }]
+                },{
+                    value:'阜阳',
+                    label:'阜阳',
+                    children:[{
+                        value:'阜南县',
+                        label:'阜南县'
+                    },{
+                        value:'阜阳市',
+                        label:'阜阳市'
+                    },{
+                        value:'界首市',
+                        label:'界首市'
+                    },{
+                        value:'临泉县',
+                        label:'临泉县'
+                    },{
+                        value:'太和县',
+                        label:'太和县'
+                    },{
+                        value:'颖上县',
+                        label:'颖上县'
+                    }]
+                },{
+                    value:'合肥',
+                    label:'合肥',
+                    children:[{
+                        value:'长丰县',
+                        label:'长丰县'
+                    },{
+                        value:'肥东县',
+                        label:'肥东县'
+                    },{
+                        value:'肥西县',
+                        label:'肥西县'
+                    }]
+                },{
+                    value:'淮北',
+                    label:'淮北',
+                    children:[{
+                        value:'淮北市',
+                        label:'淮北市'
+                    },{
+                        value:'濉溪县',
+                        label:'濉溪县'
+                    }]
+                },{
+                    value:'淮南',
+                    label:'淮南',
+                    children:[{
+                        value:'凤台县',
+                        label:'凤台县'
+                    },{
+                        value:'淮南市',
+                        label:'淮南市'
+                    }]
+                },{
+                    value:'黄山',
+                    label:'黄山',
+                    children:[{
+                        value:'黄山市',
+                        label:'黄山市'
+                    },{
+                        value:'祁门县',
+                        label:'祁门县'
+                    },{
+                        value:'休宁县',
+                        label:'休宁县'
+                    },{
+                        value:'歙县',
+                        label:'歙县'
+                    },{
+                        value:'黟县',
+                        label:'黟县'
+                    }]
+                },{
+                    value:'六安',
+                    label:'六安',
+                    children:[{
+                        value:'霍邱县',
+                        label:'霍邱县'
+                    },{
+                        value:'霍山县',
+                        label:'霍山县'
+                    },{
+                        value:'金寨县',
+                        label:'金寨县'
+                    },{
+                        value:'六安市',
+                        label:'六安市'
+                    },{
+                        value:'寿县',
+                        label:'寿县'
+                    },{
+                        value:'舒城县',
+                        label:'舒城县'
+                    }]
+                },{
+                    value:'马鞍山',
+                    label:'马鞍山',
+                    children:[{
+                        value:'当涂县',
+                        label:'当涂县'
+                    },{
+                        value:'马鞍山市',
+                        label:'马鞍山市'
+                    }]
+                },{
+                    value:'宿州',
+                    label:'宿州',
+                    children:[{
+                        value:'灵璧县',
+                        label:'灵璧县'
+                    },{
+                        value:'宿州市',
+                        label:'宿州市'
+                    },{
+                        value:'萧县',
+                        label:'萧县'
+                    },{
+                        value:'泗县',
+                        label:'泗县'
+                    },{
+                        value:'砀山县',
+                        label:'砀山县'
+                    }]
+                },{
+                    value:'铜陵',
+                    label:'铜陵',
+                    children:[{
+                        value:'铜陵市',
+                        label:'铜陵市'
+                    },{
+                        value:'铜陵县',
+                        label:'铜陵县'
+                    }]
+                },{
+                    value:'芜湖',
+                    label:'芜湖',
+                    children:[{
+                        value:'繁昌县',
+                        label:'繁昌县'
+                    },{
+                        value:'南陵县',
+                        label:'南陵县'
+                    },{
+                        value:'芜湖市',
+                        label:'芜湖市'
+                    },{
+                        value:'芜湖县',
+                        label:'芜湖县'
+                    }]
+                },{
+                    value:'宣城',
+                    label:'宣城',
+                    children:[{
+                        value:'广德县',
+                        label:'广德县'
+                    },{
+                        value:'绩溪县',
+                        label:'绩溪县'
+                    },{
+                        value:'郎溪县',
+                        label:'郎溪县'
+                    },{
+                        value:'宁国市',
+                        label:'宁国市'
+                    },{
+                        value:'宣城市',
+                        label:'宣城市'
+                    },{
+                        value:'泾县',
+                        label:'泾县'
+                    },{
+                        value:'旌德县',
+                        label:'旌德县'
+                    }]
+                },{
+                    value:'亳州',
+                    label:'亳州',
+                    children:[{
+                        value:'利辛县',
+                        label:'利辛县'
+                    },{
+                        value:'蒙城县',
+                        label:'蒙城县'
+                    },{
+                        value:'涡阳县',
+                        label:'涡阳县'
+                    },{
+                        value:'亳州市',
+                        label:'亳州市'
+                    }]
+                }],
+            defaultProps: {
+                children: 'children',
+                label: 'label'
+            }
+        },
+        methods:{
+            handleNodeClick(data){
+                console.log(data);
+            },
+            getPieData(){
+                $.ajax({
+                    url:'/role/rights',
+                    type:'post',
+                    data:{
+                        roleId:id
+                    },
+                    success(res){
+                        vue4.roleRight=res.data;
+                        vue4.$refs.tree.setCheckedKeys(vue4.roleRight);
+                        console.log(res.data);
+                    }
+                })
+            }
+        },
+        mounted(){
+            $.ajax({
+                url:'/common/data/selectUploadPeriodByTime',
+                type:'post',
+                data:{
+                    startDateString:'1970-01-01',
+                    endDateString:'9999-12-31'
+                },
+                success(res){
+                    if(res.code === 0){
+                        // console.log(res);
+                        vue.options=[];
+                        for(var i = 0; i < res.data.length;i ++){
+                            vue.options.push({value:res.data[i].uploadPeriodId,
+                                label:res.data[i].startDate.toString() + ' ~ ' + res.data[i].endDate.toString()});
+                        }
+                    }
+                    else{
+                        vue.$message.error('错了哦，这是一条错误消息');
+                    }
+                },
+                error(res){
+                    vue.$message.error('错了哦，这是一条错误消息');
+                }
+            })
+        }
+    })
+
+</script>
+</html>
