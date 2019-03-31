@@ -1,4 +1,9 @@
-body{
+html,body{
+    overflow: hidden;
+    width: 100%;
+    height:100%;
+    margin:0;
+    padding: 0;
 }
 
 #pics{
@@ -21,15 +26,15 @@ body{
 
 #login{
     position: fixed;
-    width: 400px;
+    width: 350px;
     height: 250px;
     z-index: 1000;
     padding: 15px;
     background-color: rgba(253, 255, 255, 0.54);
     /*border-radius: 15px;*/
     color: #3d4e64;
-    top: 20%;
-    right: 40px;
+    top: 25%;
+    right: 70px;
 }
 
 #login .formtitle{
@@ -40,4 +45,8 @@ body{
 #login .formitem{
     margin-top: 20px;
     font-size: 15px;
+}
+
+#login .el-input{
+    width: 90%;
 }

@@ -37,6 +37,7 @@
             <el-button type="primary" native-type="submit">登录</el-button>
         </el-form-item>
     </el-form>
+
     <!--<el-row>-->
     <!--<el-col :span="10" offset="14"><el-card id="login">-->
     <!--<div slot="header" class="clearfix">-->
@@ -62,6 +63,24 @@
 </body>
 <script>
     var vue = new Vue({
+        mounted() {
+            // this.setSize();
+            window.onresize = function () { // 定义窗口大小变更通知事件
+                this.screenW = document.documentElement.clientWidth;
+                this.screenH = document.documentElement.clientHeight;
+            }
+            console.log(this.screenW, this.screenH);
+        },
+
+        watch: {
+            screenW (val) {
+                this.screenW = val;
+                console.log(this.screenW);
+            },
+            screenH (val) {
+                this.screenH = val;
+            },
+        },
         el:'#app',
         data:{
             form:{
@@ -72,11 +91,6 @@
             screenH:document.documentElement.clientHeight
         },
         methods:{
-            imgLoad(){
-                this.screenH=this.$refs.bannerHeight[0].height;
-                console.log(this.screenH);
-            },
-
             // login() {
             //     console.log(this.form);
             //
@@ -100,26 +114,6 @@
             //     })
             // },
         },
-        // create:function () {
-        //     this.setSize();
-        // },
-        watch: {
-            screenW (val) {
-                this.screenW = val;
-                console.log(this.screenW);
-            },
-            screenH (val) {
-                this.screenH = val;
-            },
-        },
-        // mounted:function () {
-        //     // this.setSize();
-        //     window.onresize = function () { // 定义窗口大小变更通知事件
-        //         this.screenW = document.documentElement.clientWidth;
-        //         this.screenH = document.documentElement.clientHeight;
-        //     }
-        //     console.log(this.screenW,this.screenH);
-        // }
     })
 </script>
 </html>

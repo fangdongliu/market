@@ -5,6 +5,7 @@ import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.util.ControllerBase;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.log4j.Log4j2;
 import org.aspectj.weaver.ast.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,29 +16,45 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
+@Log4j2
 @RestController
 @RequestMapping("/example")//指定接口的一级路径
-public class ExampleController extends ControllerBase {
+public class ExampleControrller extends ControllerBase {
+
+    final
+    TestService testService;
+
+
+
+    int a = 0;
 
     @Autowired
-    TestService testService;
+    public ExampleControrller(TestService testService) {
+        this.testService = testService;
+    }
 
     @RequestMapping("aaaa")
     public Object aa(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
         return "asf";
     }
     @ApiOperation(value = "获取aaa",notes = "")
     @GetMapping("/hh")//指定接口的下一级路径，最终路径为 '/example/hh'
-    public Object hhh(String hh,Integer dd){
-        try {
+    public Object hhh(String hh,Integer dd) throws Exception {
 
-            testService.hh();
-        } catch (Exception e) {
-            System.out.println("1");
-        }
-        return success("1234");
+     //   throw new Exception();
+           log.info(1);
+     //   Thread.sleep(3000);
+//        try {
+//            testService.hh();
+//        } catch (Exception e) {
+//            System.out.println("1");
+//        }
+       // log.info(a);
+        return success(System.identityHashCode(result.get()));
     }
     @RolesAllowed("USER")    //描述访问接口所需权限
     @RequestMapping("/ad")

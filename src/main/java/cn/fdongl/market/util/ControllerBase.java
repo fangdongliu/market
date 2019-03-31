@@ -1,62 +1,72 @@
 package cn.fdongl.market.util;
 
+import org.springframework.context.annotation.Scope;
+
 import javax.xml.crypto.Data;
 import java.text.SimpleDateFormat;
 
 public class ControllerBase {
 
-    Result result = new Result();
+
+    protected ThreadLocal<Result> result = ThreadLocal.withInitial(Result::new);
 
     protected SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     protected SimpleDateFormat datetimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     protected SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
 
     protected Object fail(Object data,String message){
-        result.setCode(1);
-        result.setData(data);
-        result.setMessage(message);
-        return result;
+        Result rs = result.get();
+        rs.setCode(1);
+        rs.setData(data);
+        rs.setMessage(message);
+        return rs;
     }
 
     protected Object fail(Exception e){
-        result.setCode(1);
-        result.setData(null);
-        result.setMessage(e.getMessage());
-        return result;
+        Result rs = result.get();
+        rs.setCode(1);
+        rs.setData(null);
+        rs.setMessage(e.getMessage());
+        return rs;
     }
 
     protected Object fail(Object data){
-        result.setCode(1);
-        result.setData(data);
-        result.setMessage("unknown exception");
-        return result;
+        Result rs = result.get();
+        rs.setCode(1);
+        rs.setData(data);
+        rs.setMessage("unknown exception");
+        return rs;
     }
 
     protected Object fail(){
-        result.setCode(1);
-        result.setData(null);
-        result.setMessage("unknown exception");
-        return result;
+        Result rs = result.get();
+        rs.setCode(1);
+        rs.setData(null);
+        rs.setMessage("unknown exception");
+        return rs;
     }
 
     protected Object success(Object data,String message){
-        result.setCode(0);
-        result.setData(data);
-        result.setMessage(message);
-        return result;
+        Result rs = result.get();
+        rs.setCode(0);
+        rs.setData(data);
+        rs.setMessage(message);
+        return rs;
     }
 
     protected Object success(Object data){
-        result.setCode(0);
-        result.setData(data);
-        result.setMessage("");
-        return result;
+        Result rs = result.get();
+        rs.setCode(0);
+        rs.setData(data);
+        rs.setMessage("");
+        return rs;
     }
 
     protected Object success(){
-        result.setCode(0);
-        result.setData(null);
-        result.setMessage("");
-        return result;
+        Result rs = result.get();
+        rs.setCode(0);
+        rs.setData(null);
+        rs.setMessage("");
+        return rs;
     }
 }
