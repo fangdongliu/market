@@ -28,6 +28,8 @@ public class ExampleControrller extends ControllerBase {
     final
     TestService testService;
 
+
+
     int a = 0;
 
     @Autowired
@@ -42,6 +44,7 @@ public class ExampleControrller extends ControllerBase {
     @ApiOperation(value = "获取aaa",notes = "")
     @GetMapping("/hh")//指定接口的下一级路径，最终路径为 '/example/hh'
     public Object hhh(String hh,Integer dd) throws Exception {
+
      //   throw new Exception();
            log.info(1);
      //   Thread.sleep(3000);

@@ -5,6 +5,7 @@ import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.security.entity.UserPageQuery;
 import cn.fdongl.market.security.service.UserService;
 import cn.fdongl.market.util.ControllerBase;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
@@ -72,6 +73,15 @@ public class UserController extends ControllerBase {
         map.put("username",userDetail.getUsername());
         map.put("fullname",userDetail.getFullname());
         return map;
+    }
+
+    @PostMapping("child")
+    public Object child(AppUserDetail userDetail, Integer father) throws Exception {
+        if(father==null){
+            return success(userService.child(userDetail.getId()));
+        }else{
+            return success(userService.child(father));
+        }
     }
 
     @PostMapping("addUsers")

@@ -40,6 +40,9 @@ public interface UserMapper {
             "</script>")
     List<ListUserData>page(int begin,int count,Integer userType,String username,String fullname);
 
+    @Select("SELECT user_id as id,username,fullname,usertype as userType,superior as father,state_flag as `status`,delete_flag as deleteFlag FROM t_user where superior=#{param1}")
+    List<ListUserData>child(int parent);
+
     @Select("<script>" +
             "select count(1)" +
             "from t_user where 1=1 " +
