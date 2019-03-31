@@ -24,7 +24,7 @@
         }
     </style>
 </head>
-<body>
+<body style="background-color: #FFFFFF">
 <div id="app">
     <div class="formIndex">
         <el-row type="flex" align="middle">
@@ -390,39 +390,15 @@
     var vue = new Vue({
         created(){
             var that = this;
-            $.ajax({
-                url: '/common/data/selectUploadInfoByCondition',
-                type: 'post',
-                data: {
-                    startDate:'2019-03-01',
-                    endDate:'2019-03-31',
-                    condition:'安徽省-安庆-安庆市'
-                },
-                success(res) {
-                    that.tableId = 53;
-                    that.loadData();
-                    // console.log(res);
-                    // if(res.code==0) {
-                    //     that.tableId = res.data.tableId;
-                    //     console.log('tableId:'+that.tableId);
-                    //     if(that.tableId!=null)
-                    //         that.loadData();
-                    // }
-                    // else {
-                    //     alert(res.message);
-                    // }
-                },
-                error(res) {
-                    console.log(res);
-                    alert('初始化失败，请稍后刷新重试');
-                },
-            })
+
         },
         mounted(){
             var div = document.getElementsByTagName('button')[0];
-            // div.style.backgroundColor = "#e8f0fe";
+            var url = window.location.href;
+            var tmp = url.split('=');
+            this.tableId = parseInt(tmp[1]);
+            this.loadData()
         },
-
         el:'#app',
         data:{
             options: [{
@@ -1153,7 +1129,7 @@
                         tableId: that.tableId,
                     },
                     success(res) {
-                        console.log(res);
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form1data.seek=res.data.needPopu;
                             that.form1data.need=res.data.jobseekPopu;
@@ -1173,7 +1149,7 @@
                         tableId: this.tableId,
                     },
                     success: function (res) {
-                        console.log(res);
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form2data[0].need = res.data.industry1Need;
                             that.form2data[1].need = res.data.industry2Need;
@@ -1214,7 +1190,7 @@
                         tableId: this.tableId,
                     },
                     success: function (res) {
-                        console.log(res);
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form4data[0].need = res.data.staOwnNeed;
                             that.form4data[1].need = res.data.collNeed;
@@ -1246,7 +1222,7 @@
                         tableId: this.tableId,
                     },
                     success(res) {
-                        console.log(res);
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form5data[0].need=res.data.leaderNeed;
                             that.form5data[0].seek=res.data.leaderJobseek;
@@ -1279,7 +1255,7 @@
                         tableId: this.tableId,
                     },
                     success: function (res) {
-                        console.log(res);
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form6data[0].job = res.data.mostProf1Name;
                             that.form6data[0].jobcode = res.data.mostProf1Num;
@@ -1337,7 +1313,7 @@
                         tableId: this.tableId,
                     },
                     success(res) {
-                        console.log(res);
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form7data[0].job = res.data.leastProf1Name;
                             that.form7data[0].jobcode = res.data.leastProf1Num;
@@ -1395,7 +1371,7 @@
                         tableId: this.tableId,
                     },
                     success(res) {
-                        console.log(res);
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form8data[0].seek=res.data.unempYouth;
                             that.form8data[1].seek=res.data.graduate;
@@ -1423,7 +1399,7 @@
                         tableId: this.tableId,
                     },
                     success: function (res) {
-                        console.log(res);
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form9data[0].need = res.data.maleNeed;
                             that.form9data[0].seek = res.data.maleJobseek;
@@ -1446,7 +1422,7 @@
                         tableId: this.tableId,
                     },
                     success(res) {
-                        console.log(res);
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form10data[0].need=res.data.sixteenTwentyfourNeed;
                             that.form10data[0].seek=res.data.sixteenTwentyfourJobseek;
@@ -1473,7 +1449,7 @@
                         tableId: this.tableId,
                     },
                     success(res) {
-                        console.log(res);
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form11data[0].need=res.data.belowJuniHighSchoNeed;
                             that.form11data[0].seek=res.data.belowJuniHighSchoJobseek;
@@ -1502,7 +1478,7 @@
                         tableId: this.tableId,
                     },
                     success(res) {
-                        console.log(res);
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form12data[0].need=res.data.profLevel5Need;
                             that.form12data[0].seek=res.data.profLevel5Jobseek;
@@ -1539,20 +1515,19 @@
 
             check:function(param){
                 switch (param){
-                    case 1:this.check3(this.form1data);this.getRate(this.form1data);console.log(this.form1data);break;
-                    case 2:this.checkNeed2(this.form2data);this.getNeedSum2(this.form2data);this.getNeedRate(this.form2data);console.log(this.form2data);break;
-                    case 3:this.checkNeed2(this.form3data);this.getNeedSum2(this.form3data);this.getNeedRate(this.form3data);console.log(this.form3data);break;
-                    case 4:this.checkNeed2(this.form4data);this.getNeedSum2(this.form4data);this.getNeedRate(this.form4data);console.log(this.form4data);break;
-                    case 5:this.check5(this.form5data);this.getSum5(this.form5data);this.getRate(this.form5data);this.getNeedRate(this.form5data);this.getSeekRate(this.form5data);console.log(this.form5data);break;
-                    case 6:this.check4(this.form6data);this.getRate(this.form6data);this.getGap(this.form6data);console.log(this.form6data);break;
-                    case 7:this.check4(this.form7data);this.getRate(this.form7data);this.getGap(this.form7data);console.log(this.form7data);break;
-                    case 8:this.checkSeek2(this.form8data);this.getSeekSum2(this.form8data);this.getSeekRate(this.form8data);console.log(this.form8data);break;
-                    case 9:this.check5(this.form9data);this.getSum5(this.form9data);this.getRate(this.form9data);this.getNeedRate(this.form9data);this.getSeekRate(this.form9data);console.log(this.form9data);break;
-                    case 10:this.check5(this.form10data);this.getSum5(this.form10data);this.getRate(this.form10data);this.getNeedRate(this.form10data);this.getSeekRate(this.form10data);console.log(this.form10data);break;
-                    case 11:this.check5(this.form11data);this.getSum5(this.form11data);this.getRate(this.form11data);this.getNeedRate(this.form11data);this.getSeekRate(this.form11data);console.log(this.form11data);break;
-                    case 12:this.check5(this.form12data);this.getSum5(this.form12data);this.getRate(this.form12data);this.getNeedRate(this.form12data);this.getSeekRate(this.form12data);console.log(this.form12data);break;
+                    case 1:this.check3(this.form1data);this.getRate(this.form1data);break;
+                    case 2:this.checkNeed2(this.form2data);this.getNeedSum2(this.form2data);this.getNeedRate(this.form2data);break;
+                    case 3:this.checkNeed2(this.form3data);this.getNeedSum2(this.form3data);this.getNeedRate(this.form3data);break;
+                    case 4:this.checkNeed2(this.form4data);this.getNeedSum2(this.form4data);this.getNeedRate(this.form4data);break;
+                    case 5:this.check5(this.form5data);this.getSum5(this.form5data);this.getRate(this.form5data);this.getNeedRate(this.form5data);this.getSeekRate(this.form5data);break;
+                    case 6:this.check4(this.form6data);this.getRate(this.form6data);this.getGap(this.form6data);break;
+                    case 7:this.check4(this.form7data);this.getRate(this.form7data);this.getGap(this.form7data);break;
+                    case 8:this.checkSeek2(this.form8data);this.getSeekSum2(this.form8data);this.getSeekRate(this.form8data);break;
+                    case 9:this.check5(this.form9data);this.getSum5(this.form9data);this.getRate(this.form9data);this.getNeedRate(this.form9data);this.getSeekRate(this.form9data);break;
+                    case 10:this.check5(this.form10data);this.getSum5(this.form10data);this.getRate(this.form10data);this.getNeedRate(this.form10data);this.getSeekRate(this.form10data);break;
+                    case 11:this.check5(this.form11data);this.getSum5(this.form11data);this.getRate(this.form11data);this.getNeedRate(this.form11data);this.getSeekRate(this.form11data);break;
+                    case 12:this.check5(this.form12data);this.getSum5(this.form12data);this.getRate(this.form12data);this.getNeedRate(this.form12data);this.getSeekRate(this.form12data);break;
                 }
-                console.log(param+':'+this.finished[param-1]);
             },
 
             check3:function(param){
@@ -1690,10 +1665,10 @@
             },
 
             getRate:function(param){
-                console.log("finished:"+this.finished);
+                // console.log("finished:"+this.finished);
                 if(this.finished[this.index-1]) {
                     var formdata = param;
-                    console.log(formdata);
+                    // console.log(formdata);
                     if (this.index == 1) {
                         this.form1data.rate = (Number(this.form1data.need) / Number(this.form1data.seek)).toFixed(4);
                     }
@@ -1713,8 +1688,8 @@
                         else
                             tmp=Number(formdata[formdata.length-1].need)/(Number(formdata[formdata.length-1].need)-Number(formdata[formdata.length-2].need));
                         for (var i = 0; i < formdata.length - 2; i++) {
-                            console.log(i);
-                            console.log(formdata);
+                            // console.log(i);
+                            // console.log(formdata);
                             if(this.index==5)
                                 formdata[i].rate=Number(formdata[i].need)/(tmp*Number(formdata[i].seek));
                             else if(this.index==12&&i==formdata.length-3)
@@ -1723,7 +1698,7 @@
                                 formdata[i].rate=tmp*Number(formdata[i].need)/Number(formdata[i].seek);
                             formdata[i].rate=Number(formdata[i].rate).toFixed(4);
                         }
-                        console.log(formdata);
+                        // console.log(formdata);
                         if (this.index == 5)
                             form5data = formdata;
                         else if (this.index == 9)
@@ -2019,7 +1994,7 @@
                         noRequNeedTechGradeNum: that.form12data[9].need,//无技术等级或职务需求人数
                     },
                     success(res) {
-                        console.log(res);
+                        // console.log(res);
                         if(res.code==0) {
                             console.log('data:'+this.data.uploadDataSet);
                             alert(words + '成功！');
@@ -2245,8 +2220,8 @@
                                 noRequNeedTechGradeNum: that.form12data[9].need,//无技术等级或职务需求人数
                             },
                             success(res) {
-                                console.log(this.data);
-                                console.log(res);
+                                // console.log(this.data);
+                                // console.log(res);
                                 if(res.code==0) {
                                     alert('保存成功！');
                                     that.changeable[that.index - 1] = true;
@@ -2296,9 +2271,9 @@
                 div1.style.backgroundColor = "#F3F2F1";
                 div2.style.backgroundColor = "#e8f0fe";
                 this.index=param;
-                console.log(this.changeable[this.index-1]);
-                console.log(this.index);
-                console.log(this.forms[this.index-1].title);
+                // console.log(this.changeable[this.index-1]);
+                // console.log(this.index);
+                // console.log(this.forms[this.index-1].title);
             }
         }
     })
