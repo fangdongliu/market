@@ -26,7 +26,7 @@ public class MarketController extends ControllerBase {
 
     //监测点新建备案
     @PostMapping("/record/insert")
-    public Object RecordInsert(AppUserDetail appUserDetail, Record record) throws Exception {
+    public Object RecordInsert(AppUserDetail appUserDetail,Record record) throws Exception {
         record.setRegionEmpId(appUserDetail.getId());
         record.setCreateTime(new Date());
         record.setCreator(appUserDetail.getId());
@@ -44,7 +44,7 @@ public class MarketController extends ControllerBase {
         return success();
     }
 
-    //监测点查询备案（默认查询流程）
+    //监测点查询自己的备案
     @PostMapping("/record/select")
     public Object RecordSelect(AppUserDetail appUserDetail) throws Exception {
         return success(marketService.recordSelect(appUserDetail.getId()));
@@ -98,7 +98,7 @@ public class MarketController extends ControllerBase {
         return success();
     }
 
-    //监测点查询上传数据（默认流程）,只能查到保存和待审核状态
+    //监测点查询自己的上传数据,只能查到保存和待审核状态
     @PostMapping("/upload/select")
     public Object UploadSelect(AppUserDetail appUserDetail) throws Exception {
         return success(marketService.uploadSelect(appUserDetail.getId()));

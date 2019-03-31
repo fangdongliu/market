@@ -17,8 +17,8 @@ public interface CommonMapper {
 
     //省市审核时发送一条通知，单点发送
     @Insert("INSERT INTO t_notice \n" +
-            "(notice_title,notice_content,create_time,creator,receiver,delete_flag) \n" +
-            "values(#{param1},#{param2},now(),#{param3},#{param4},0);")
+            "(notice_title,notice_content,create_time,creator,revise_time,reviser,receiver,delete_flag) \n" +
+            "values(#{param1},#{param2},now(),0,now(),#{param3},#{param4},0);")
     Integer sendMessage(String title,String content,Integer examineId,Integer aimId);
 
     //发送一条通知，全局发送
