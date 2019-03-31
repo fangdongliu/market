@@ -70,13 +70,13 @@ public interface ProvinceMapper {
     //省级备案通过时更新数据
     @Update("UPDATE t_record_info \n" +
             "set state_flag=2,revise_time=now(),reviser=#{param1} \n" +
-            "where state_flag=1 region_emp_id=#{param2};")
+            "where state_flag=1 and region_emp_id=#{param2};")
     Integer recordUpdatePass(Integer provinceId,Integer aimId);
 
     //省级备案通过时更新过期数据
     @Update("UPDATE t_record_info \n" +
             "set state_flag=3,revise_time=now(),reviser=#{param1} \n" +
-            "where state_flag=2 region_emp_id=#{param2};")
+            "where state_flag=2 and region_emp_id=#{param2};")
     Integer recordUpdateExpirePass(Integer provinceId,Integer aimId);
 
     //激活账号

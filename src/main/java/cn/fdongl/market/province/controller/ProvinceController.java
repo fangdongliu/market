@@ -71,7 +71,6 @@ public class ProvinceController extends ControllerBase {
     public Object UploadPeriodInsert(AppUserDetail appUserDetail, UploadPeriod uploadPeriod) throws Exception {
         uploadPeriod.setStartDate(new java.sql.Date(dateFormat.parse(uploadPeriod.getStartDateString()).getTime()));
         uploadPeriod.setEndDate(new java.sql.Date(dateFormat.parse(uploadPeriod.getEndDateString()).getTime()));
-//        provinceService.timeCheck(start,end);//暂时弃用调查期合法性的判断
         uploadPeriod.setCreatTime(new java.util.Date());
         uploadPeriod.setCreator(appUserDetail.getId());
         provinceService.uploadPeriodInsert(uploadPeriod);
@@ -83,7 +82,6 @@ public class ProvinceController extends ControllerBase {
     public Object UploadPeriodUpdate(AppUserDetail appUserDetail, UploadPeriod uploadPeriod) throws Exception {
         uploadPeriod.setStartDate(new java.sql.Date(dateFormat.parse(uploadPeriod.getStartDateString()).getTime()));
         uploadPeriod.setEndDate(new java.sql.Date(dateFormat.parse(uploadPeriod.getEndDateString()).getTime()));
-//        provinceService.timeCheck(start,end);//暂时弃用调查期合法性的判断
         uploadPeriod.setReviseTime(new java.util.Date());
         uploadPeriod.setReviser(appUserDetail.getId());
         provinceService.uploadPeriodUpdate(uploadPeriod);
