@@ -123,6 +123,10 @@ public class UserService {
         return menu.values().toArray();
     }
 
+    public List<ListUserData>child(Integer parentId){
+        return userMapper.child(parentId);
+    }
+
     public void addUsers(Integer currentUser,Integer parent,Integer userType,String prefix,String name,Integer startCount,Integer count) throws Exception {
         List<UsernameAndFullname>array = new ArrayList<>();
 
