@@ -116,9 +116,9 @@
                         console.log(res);
                         if(res.code === 0){
                             for(var i = 0; i < res.data.length; i ++){
-                                res.data[i].number = i + 1;
+                                res.data[i].number = res.data.length - i;
                             }
-                            vue.messageList = res.data;
+                            vue.messageList = res.data.reverse();
                             }
                         else{
                             alert('error1!');

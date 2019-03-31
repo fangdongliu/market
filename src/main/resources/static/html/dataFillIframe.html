@@ -13,6 +13,10 @@
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <link rel="stylesheet" href="../css/formdata.css">
     <style>
+        *{
+            padding:0;
+            margin:0;
+        }
         .el-input__inner{
             cursor:default !important;
         }
@@ -22,11 +26,14 @@
         .el-input__inner:hover{
             border:1px solid #DCDFE6 !important;;
         }
+        .table{
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body style="background-color: #FFFFFF">
-<div id="app">
-    <div class="formIndex">
+<div id="app" style="padding: 0;">
+    <div class="formIndex" style="margin-bottom: 10px;">
         <el-row type="flex" align="middle">
             <el-col :span="9">
                 请选择要查看的数据表：
@@ -43,7 +50,7 @@
             </el-col>
         </el-row>
     </div>
-    <hr/>
+    <!--<hr/>-->
 
     <div class="table" v-if="this.index==1">
         <el-form :model="form1data">
@@ -57,10 +64,10 @@
             </el-form-item>
             <el-form-item class="tablecontent">
                 <el-row>
-                    <el-col :span="2" offset="2">{{form1data.title}}</el-col>
-                    <el-col :span="6"><el-input v-model="form1data.need" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                    <el-col :span="6"><el-input v-model="form1data.seek" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                    <el-col :span="6"><el-input v-model="form1data.rate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
+                    <el-col :span="4" >{{form1data.title}}</el-col>
+                    <el-col :span="6"><el-input v-model="form1data.need" :readonly="flagReadOnly"></el-input></el-col>
+                    <el-col :span="6"><el-input v-model="form1data.seek" :readonly="flagReadOnly"></el-input></el-col>
+                    <el-col :span="6"><el-input v-model="form1data.rate" :readonly="flagReadOnly"></el-input></el-col>
                 </el-row>
             </el-form-item>
         </el-form>
@@ -71,17 +78,17 @@
             <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
-                    <el-col :span="2" offset="6">产业</el-col>
-                    <el-col :span="5" >需求人数</el-col>
-                    <el-col :span="5" >所占比重</el-col>
+                    <el-col :span="8">产业</el-col>
+                    <el-col :span="8" >需求人数</el-col>
+                    <el-col :span="8" >所占比重</el-col>
                 </el-row>
             </el-form-item>
             <div  v-for="item in form2data">
                 <el-form-item class="tablecontent">
                     <el-row>
-                        <el-col :span="2" offset="6">{{item.title}}</el-col>
-                        <el-col :span="5"><el-input v-model="item.need" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="5"><el-input v-model="item.needrate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="8">{{item.title}}</el-col>
+                        <el-col :span="8"><el-input v-model="item.need" :readonly="flagReadOnly" ></el-input></el-col>
+                        <el-col :span="8"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -93,17 +100,17 @@
             <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
-                    <el-col :span="2" offset="6">行业</el-col>
-                    <el-col :span="5" >需求人数</el-col>
-                    <el-col :span="5" >所占比重</el-col>
+                    <el-col :span="8">行业</el-col>
+                    <el-col :span="8" >需求人数</el-col>
+                    <el-col :span="8" >所占比重</el-col>
                 </el-row>
             </el-form-item>
             <div  v-for="item in form3data">
                 <el-form-item class="tablecontent">
                     <el-row>
-                        <el-col :span="2" offset="6">{{item.title}}</el-col>
-                        <el-col :span="5"><el-input v-model="item.need" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="5"><el-input v-model="item.needrate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="8">{{item.title}}</el-col>
+                        <el-col :span="8"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="8"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -115,19 +122,19 @@
             <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
-                    <el-col :span="6" offset="4">产业</el-col>
-                    <el-col :span="5" >需求人数</el-col>
-                    <el-col :span="5" >所占比重</el-col>
+                    <el-col :span="8">产业</el-col>
+                    <el-col :span="8" >需求人数</el-col>
+                    <el-col :span="8" >所占比重</el-col>
                 </el-row>
             </el-form-item>
             <div  v-for="item in form4data">
                 <el-form-item class="tablecontent">
                     <el-row>
-                        <el-col :span="2" offset="4">{{item.title1}}</el-col>
-                        <el-col :span="2">{{item.title2}}</el-col>
-                        <el-col :span="2">{{item.title3}}</el-col>
-                        <el-col :span="5"><el-input v-model="item.need" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="5"><el-input v-model="item.needrate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="2">{{item.title1}}</el-col>
+                        <el-col :span="3">{{item.title2}}</el-col>
+                        <el-col :span="3">{{item.title3}}</el-col>
+                        <el-col :span="8"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="8"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -139,27 +146,27 @@
             <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
-                    <el-col :span="2" offset="4">就业</el-col>
-                    <el-col :span="15" >劳动力供求人数比较</el-col>
+                    <el-col :span="4">就业</el-col>
+                    <el-col :span="20" >劳动力供求人数比较</el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="2" offset="4">类别</el-col>
-                    <el-col :span="3" >需求人数</el-col>
-                    <el-col :span="3" >所占比重</el-col>
-                    <el-col :span="3" >求职人数</el-col>
-                    <el-col :span="3" >所占比重</el-col>
-                    <el-col :span="3" >求人倍率</el-col>
+                    <el-col :span="4">类别</el-col>
+                    <el-col :span="4" >需求人数</el-col>
+                    <el-col :span="4" >所占比重</el-col>
+                    <el-col :span="4" >求职人数</el-col>
+                    <el-col :span="4" >所占比重</el-col>
+                    <el-col :span="4" >求人倍率</el-col>
                 </el-row>
             </el-form-item>
             <div  v-for="item in form5data">
                 <el-form-item class="tablecontent">
                     <el-row>
-                        <el-col :span="2" offset="4">{{item.title}}</el-col>
-                        <el-col :span="3"><el-input v-model="item.need" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.needrate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seekrate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="4">{{item.title}}</el-col>
+                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -171,28 +178,28 @@
             <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
-                    <el-col :span="4" offset="2">职</el-col>
+                    <el-col :span="4">职</el-col>
                     <el-col :span="4">职业</el-col>
-                    <el-col :span="12" >劳动力供求人数比较</el-col>
+                    <el-col :span="16" >劳动力供求人数比较</el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="4" offset="2">业</el-col>
+                    <el-col :span="4">业</el-col>
                     <el-col :span="4">类别</el-col>
-                    <el-col :span="3" >需求人数</el-col>
-                    <el-col :span="3" >求职人数</el-col>
-                    <el-col :span="3" >缺口数</el-col>
-                    <el-col :span="3" >求人倍率</el-col>
+                    <el-col :span="4" >需求人数</el-col>
+                    <el-col :span="4" >求职人数</el-col>
+                    <el-col :span="4" >缺口数</el-col>
+                    <el-col :span="4" >求人倍率</el-col>
                 </el-row>
             </el-form-item>
             <div  v-for="item in form6data">
                 <el-form-item class="tablecontent">
                     <el-row>
-                        <el-col :span="4" offset="2"><el-input v-model="item.job" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.jobcode" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.need" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.gap" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.job" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.jobcode" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.gap" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -204,28 +211,28 @@
             <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
-                    <el-col :span="4" offset="2">职</el-col>
+                    <el-col :span="4">职</el-col>
                     <el-col :span="4">职业</el-col>
-                    <el-col :span="12" >劳动力供求人数比较</el-col>
+                    <el-col :span="16" >劳动力供求人数比较</el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="4" offset="2">业</el-col>
+                    <el-col :span="4">业</el-col>
                     <el-col :span="4">类别</el-col>
-                    <el-col :span="3" >需求人数</el-col>
-                    <el-col :span="3" >求职人数</el-col>
-                    <el-col :span="3" >缺口数</el-col>
-                    <el-col :span="3" >求人倍率</el-col>
+                    <el-col :span="4" >需求人数</el-col>
+                    <el-col :span="4" >求职人数</el-col>
+                    <el-col :span="4" >缺口数</el-col>
+                    <el-col :span="4" >求人倍率</el-col>
                 </el-row>
             </el-form-item>
             <div  v-for="item in form7data">
                 <el-form-item class="tablecontent">
                     <el-row>
-                        <el-col :span="4" offset="2"><el-input v-model="item.job" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.jobcode" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.need" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.gap" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.job" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.jobcode" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.gap" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -237,17 +244,17 @@
             <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
-                    <el-col :span="2" offset="6">求职人员类别</el-col>
-                    <el-col :span="5" >求职人数</el-col>
-                    <el-col :span="5" >所占比重</el-col>
+                    <el-col :span="8">求职人员类别</el-col>
+                    <el-col :span="8" >求职人数</el-col>
+                    <el-col :span="8" >所占比重</el-col>
                 </el-row>
             </el-form-item>
             <div  v-for="item in form8data">
                 <el-form-item class="tablecontent">
                     <el-row>
-                        <el-col :span="2" offset="6">{{item.title}}</el-col>
-                        <el-col :span="5"><el-input v-model="item.seek" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="5"><el-input v-model="item.seekrate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="8">{{item.title}}</el-col>
+                        <el-col :span="8"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="8"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -259,27 +266,27 @@
             <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
-                    <el-col :span="2" offset="4">性</el-col>
-                    <el-col :span="15" >劳动力供求人数比较</el-col>
+                    <el-col :span="4">性</el-col>
+                    <el-col :span="20" >劳动力供求人数比较</el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="2" offset="4">别</el-col>
-                    <el-col :span="3" >需求人数</el-col>
-                    <el-col :span="3" >所占比重</el-col>
-                    <el-col :span="3" >求职人数</el-col>
-                    <el-col :span="3" >所占比重</el-col>
-                    <el-col :span="3" >求人倍率</el-col>
+                    <el-col :span="4">别</el-col>
+                    <el-col :span="4" >需求人数</el-col>
+                    <el-col :span="4" >所占比重</el-col>
+                    <el-col :span="4" >求职人数</el-col>
+                    <el-col :span="4" >所占比重</el-col>
+                    <el-col :span="4" >求人倍率</el-col>
                 </el-row>
             </el-form-item>
             <div  v-for="item in form9data">
                 <el-form-item class="tablecontent">
                     <el-row>
-                        <el-col :span="2" offset="4">{{item.title}}</el-col>
-                        <el-col :span="3"><el-input v-model="item.need" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.needrate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seekrate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="4">{{item.title}}</el-col>
+                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -291,27 +298,27 @@
             <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
-                    <el-col :span="2" offset="4">年</el-col>
-                    <el-col :span="15" >劳动力供求人数比较</el-col>
+                    <el-col :span="4">年</el-col>
+                    <el-col :span="20" >劳动力供求人数比较</el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="2" offset="4">龄</el-col>
-                    <el-col :span="3" >需求人数</el-col>
-                    <el-col :span="3" >所占比重</el-col>
-                    <el-col :span="3" >求职人数</el-col>
-                    <el-col :span="3" >所占比重</el-col>
-                    <el-col :span="3" >求人倍率</el-col>
+                    <el-col :span="4">龄</el-col>
+                    <el-col :span="4" >需求人数</el-col>
+                    <el-col :span="4" >所占比重</el-col>
+                    <el-col :span="4" >求职人数</el-col>
+                    <el-col :span="4" >所占比重</el-col>
+                    <el-col :span="4" >求人倍率</el-col>
                 </el-row>
             </el-form-item>
             <div  v-for="item in form10data">
                 <el-form-item class="tablecontent">
                     <el-row>
-                        <el-col :span="2" offset="4">{{item.title}}</el-col>
-                        <el-col :span="3"><el-input v-model="item.need" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.needrate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seekrate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="4">{{item.title}}</el-col>
+                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -323,27 +330,27 @@
             <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
-                    <el-col :span="2" offset="4">文化</el-col>
-                    <el-col :span="15" >劳动力供求人数比较</el-col>
+                    <el-col :span="4">文化</el-col>
+                    <el-col :span="20" >劳动力供求人数比较</el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="2" offset="4">程度</el-col>
-                    <el-col :span="3" >需求人数</el-col>
-                    <el-col :span="3" >所占比重</el-col>
-                    <el-col :span="3" >求职人数</el-col>
-                    <el-col :span="3" >所占比重</el-col>
-                    <el-col :span="3" >求人倍率</el-col>
+                    <el-col :span="4">程度</el-col>
+                    <el-col :span="4" >需求人数</el-col>
+                    <el-col :span="4" >所占比重</el-col>
+                    <el-col :span="4" >求职人数</el-col>
+                    <el-col :span="4" >所占比重</el-col>
+                    <el-col :span="4" >求人倍率</el-col>
                 </el-row>
             </el-form-item>
             <div  v-for="item in form11data">
                 <el-form-item class="tablecontent">
                     <el-row>
-                        <el-col :span="2" offset="4">{{item.title}}</el-col>
-                        <el-col :span="3"><el-input v-model="item.need" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.needrate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seekrate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="4">{{item.title}}</el-col>
+                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -355,27 +362,27 @@
             <div class="tabletitle">{{forms[this.index-1].title}}</div>
             <el-form-item class="tableheader">
                 <el-row>
-                    <el-col :span="2" offset="4">技术</el-col>
-                    <el-col :span="15" >劳动力供求人数比较</el-col>
+                    <el-col :span="4">技术</el-col>
+                    <el-col :span="20" >劳动力供求人数比较</el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="2" offset="4">等级</el-col>
-                    <el-col :span="3" >需求人数</el-col>
-                    <el-col :span="3" >所占比重</el-col>
-                    <el-col :span="3" >求职人数</el-col>
-                    <el-col :span="3" >所占比重</el-col>
-                    <el-col :span="3" >求人倍率</el-col>
+                    <el-col :span="4">等级</el-col>
+                    <el-col :span="4" >需求人数</el-col>
+                    <el-col :span="4" >所占比重</el-col>
+                    <el-col :span="4" >求职人数</el-col>
+                    <el-col :span="4" >所占比重</el-col>
+                    <el-col :span="4" >求人倍率</el-col>
                 </el-row>
             </el-form-item>
             <div  v-for="item in form12data">
                 <el-form-item class="tablecontent">
                     <el-row>
-                        <el-col :span="2" offset="4">{{item.title}}</el-col>
-                        <el-col :span="3"><el-input v-model="item.need" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.needrate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seek" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.seekrate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
-                        <el-col :span="3"><el-input v-model="item.rate" :readonly="flagReadOnly" :disabled="isReadOnly()"></el-input></el-col>
+                        <el-col :span="4">{{item.title}}</el-col>
+                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
+                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
                     </el-row>
                 </el-form-item>
             </div>
@@ -397,6 +404,7 @@
             var url = window.location.href;
             var tmp = url.split('=');
             this.tableId = parseInt(tmp[1]);
+            if(this.tableId !== -1)
             this.loadData()
         },
         el:'#app',
@@ -1772,10 +1780,6 @@
                 }
             },
 
-            isReadOnly:function(){
-                // console.log(this.changeable[this.index-1]);
-                return this.changeable[this.index-1];
-            },
 
             change:function(){
                 this.changeable[this.index-1]=false;
