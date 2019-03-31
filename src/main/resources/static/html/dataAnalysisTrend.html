@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>dataAnalysisTrend</title>
+
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Vue -->
+    <script src="https://cdn.bootcss.com/vue/2.6.9/vue.min.js"></script>
+    <link href="https://cdn.bootcss.com/element-ui/2.6.1/theme-chalk/index.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/element-ui/2.6.1/index.js"></script>
+    <link rel="stylesheet" href="../css/stylesheet.css">
+    <script src="../js/jump.js"></script>
+</head>
+<body>
+<div id="dataAnalysisVisualization">
+    <el-main class="content" style="overflow: visible;background-color: #FFFFFF;margin:20px;border-radius: 10px;">
+        <div class="contentDetail">
+            <el-row>
+                <el-col :span="10" id="historyLeft">
+                    <el-row>
+                        <el-col :span="8">请选择调查期:</el-col>
+                        <el-col :span="16">
+                            <div class="block">
+                                <el-date-picker
+                                        v-model="date"
+                                        type="daterange"
+                                        range-separator="至"
+                                        start-placeholder="开始日期"
+                                        end-placeholder="结束日期"
+                                        value-format="yyyy-MM-dd">
+                                </el-date-picker>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-tree
+                            :data="child"
+                            :props="props"
+                            node-key="id"
+                            @node-click="handleNodeClick">
+                    </el-tree>
+                </el-col>
+                <el-col :span="13" :offset="1" id="historyRight" style="height:100%;">
+
+                    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+                    <!--<div id="pie" style="width: 600px;height:400px;" ref="pie"></div>-->
+                    <div id="lineNum" style="width: 600px;height:400px;" ref="lineNum"></div>
+                    <div id="lineAge" style="width: 600px;height:400px;" ref="lineAge"></div>
+                </el-col>
+            </el-row>
+        </div>
+    </el-main>
+    <el-footer class="footer">2019 &copy; 第二组织</el-footer>
+</div>
+</body>
+<script>
+    let id = 1;
+    var vue = new Vue({
+        el:'#dataAnalysisVisualization',
+        data:{
+            date:'',
+            pieChart:null,
+            src:'',
+            options: [],
+            periodId: '',
+            cityOptions:[
+                {
+                    value:'安庆',
+                    label:'安庆',
+                    children:[{
+                        value:'安庆市',
+                        label:'安庆市'
+                    },{
+                        value:'怀宁县',
+                        label:'怀宁县'
+                    },{
+                        value:'潜山县',
+                        label:'潜山县'
+                    },{
+                        value:'宿松县',
+                        label:'宿松县'
+                    },{
+                        value:'太湖县',
+                        label:'太湖县'
+                    },{
+                        value:'桐城市',
+                        label:'桐城市'
+                    },{
+                        value:'望江县',
+                        label:'望江县'
+                    },{
+                        value:'岳西县',
+                        label:'岳西县'
+                    },{
+                        value:'枞阳县',
+                        label:'枞阳县'
+                    },{
+                        value:'安庆市',
+                        label:'安庆市'
+                    }]
+                },{
+                    value:'蚌埠',
+                    label:'蚌埠',
+                    children:[{
+                        value:'蚌埠市',
+                        label:'蚌埠市'
+                    },{
+                        value:'固镇县',
+                        label:'固镇县'
+                    },{
+                        value:'怀远县',
+                        label:'怀远县'
+                    },{
+                        value:'五河县',
+                        label:'五河县'
+                    }]
+                },{
+                    value:'巢湖',
+                    label:'巢湖',
+                    children:[{
+                        value:'巢湖市',
+                        label:'巢湖市'
+                    },{
+                        value:'含山县',
+                        label:'含山县'
+                    },{
+                        value:'和县',
+                        label:'和县'
+                    },{
+                        value:'庐江县',
+                        label:'庐江县'
+                    },{
+                        value:'无为县',
+                        label:'无为县'
+                    }]
+                },{
+                    value:'池州',
+                    label:'池州',
+                    children:[{
+                        value:'池州市',
+                        label:'池州市'
+                    },{
+                        value:'东至县',
+                        label:'东至县'
+                    },{
+                        value:'青阳县',
+                        label:'青阳县'
+                    },{
+                        value:'石台县',
+                        label:'石台县'
+                    }]
+                },{
+                    value:'滁州',
+                    label:'滁州',
+                    children:[{
+                        value:'滁州市',
+                        label:'滁州市'
+                    },{
+                        value:'定远县',
+                        label:'定远县'
+                    },{
+                        value:'凤阳县',
+                        label:'凤阳县'
+                    },{
+                        value:'来安县',
+                        label:'来安县'
+                    },{
+                        value:'明光市',
+                        label:'明光市'
+                    },{
+                        value:'全椒县',
+                        label:'全椒县'
+                    },{
+                        value:'天长市',
+                        label:'天长市'
+                    }]
+                },{
+                    value:'阜阳',
+                    label:'阜阳',
+                    children:[{
+                        value:'阜南县',
+                        label:'阜南县'
+                    },{
+                        value:'阜阳市',
+                        label:'阜阳市'
+                    },{
+                        value:'界首市',
+                        label:'界首市'
+                    },{
+                        value:'临泉县',
+                        label:'临泉县'
+                    },{
+                        value:'太和县',
+                        label:'太和县'
+                    },{
+                        value:'颖上县',
+                        label:'颖上县'
+                    }]
+                },{
+                    value:'合肥',
+                    label:'合肥',
+                    children:[{
+                        value:'长丰县',
+                        label:'长丰县'
+                    },{
+                        value:'肥东县',
+                        label:'肥东县'
+                    },{
+                        value:'肥西县',
+                        label:'肥西县'
+                    }]
+                },{
+                    value:'淮北',
+                    label:'淮北',
+                    children:[{
+                        value:'淮北市',
+                        label:'淮北市'
+                    },{
+                        value:'濉溪县',
+                        label:'濉溪县'
+                    }]
+                },{
+                    value:'淮南',
+                    label:'淮南',
+                    children:[{
+                        value:'凤台县',
+                        label:'凤台县'
+                    },{
+                        value:'淮南市',
+                        label:'淮南市'
+                    }]
+                },{
+                    value:'黄山',
+                    label:'黄山',
+                    children:[{
+                        value:'黄山市',
+                        label:'黄山市'
+                    },{
+                        value:'祁门县',
+                        label:'祁门县'
+                    },{
+                        value:'休宁县',
+                        label:'休宁县'
+                    },{
+                        value:'歙县',
+                        label:'歙县'
+                    },{
+                        value:'黟县',
+                        label:'黟县'
+                    }]
+                },{
+                    value:'六安',
+                    label:'六安',
+                    children:[{
+                        value:'霍邱县',
+                        label:'霍邱县'
+                    },{
+                        value:'霍山县',
+                        label:'霍山县'
+                    },{
+                        value:'金寨县',
+                        label:'金寨县'
+                    },{
+                        value:'六安市',
+                        label:'六安市'
+                    },{
+                        value:'寿县',
+                        label:'寿县'
+                    },{
+                        value:'舒城县',
+                        label:'舒城县'
+                    }]
+                },{
+                    value:'马鞍山',
+                    label:'马鞍山',
+                    children:[{
+                        value:'当涂县',
+                        label:'当涂县'
+                    },{
+                        value:'马鞍山市',
+                        label:'马鞍山市'
+                    }]
+                },{
+                    value:'宿州',
+                    label:'宿州',
+                    children:[{
+                        value:'灵璧县',
+                        label:'灵璧县'
+                    },{
+                        value:'宿州市',
+                        label:'宿州市'
+                    },{
+                        value:'萧县',
+                        label:'萧县'
+                    },{
+                        value:'泗县',
+                        label:'泗县'
+                    },{
+                        value:'砀山县',
+                        label:'砀山县'
+                    }]
+                },{
+                    value:'铜陵',
+                    label:'铜陵',
+                    children:[{
+                        value:'铜陵市',
+                        label:'铜陵市'
+                    },{
+                        value:'铜陵县',
+                        label:'铜陵县'
+                    }]
+                },{
+                    value:'芜湖',
+                    label:'芜湖',
+                    children:[{
+                        value:'繁昌县',
+                        label:'繁昌县'
+                    },{
+                        value:'南陵县',
+                        label:'南陵县'
+                    },{
+                        value:'芜湖市',
+                        label:'芜湖市'
+                    },{
+                        value:'芜湖县',
+                        label:'芜湖县'
+                    }]
+                },{
+                    value:'宣城',
+                    label:'宣城',
+                    children:[{
+                        value:'广德县',
+                        label:'广德县'
+                    },{
+                        value:'绩溪县',
+                        label:'绩溪县'
+                    },{
+                        value:'郎溪县',
+                        label:'郎溪县'
+                    },{
+                        value:'宁国市',
+                        label:'宁国市'
+                    },{
+                        value:'宣城市',
+                        label:'宣城市'
+                    },{
+                        value:'泾县',
+                        label:'泾县'
+                    },{
+                        value:'旌德县',
+                        label:'旌德县'
+                    }]
+                },{
+                    value:'亳州',
+                    label:'亳州',
+                    children:[{
+                        value:'利辛县',
+                        label:'利辛县'
+                    },{
+                        value:'蒙城县',
+                        label:'蒙城县'
+                    },{
+                        value:'涡阳县',
+                        label:'涡阳县'
+                    },{
+                        value:'亳州市',
+                        label:'亳州市'
+                    }]
+                }],
+            defaultProps: {
+                children: 'children',
+                label: 'label'
+            },
+            child: [],
+            aimUserId: '',
+            props:{
+                children:'child',
+                label:'fullname'
+            }
+        },
+        methods:{
+            initialPie(data){
+                $.ajax({
+                    url: '/common/data/aimUserPieChartIndustryNum ',
+                    type: 'post',
+                    data:{
+                        aimUserId:data.id,
+                        uploadPeriodId:vue.periodId
+                    },
+                    success(res){
+                        console.log(res.data);
+                        if (res.data.tableId==0) {
+                            vue.pieChart = echarts.init(vue.$refs.pie);
+                            // 指定图表的配置项和数据
+                            vue.pieChart.setOption({
+                                title: {
+                                    text: data.fullname+'取样分析数据'
+                                }
+                            });
+                            vue.$message.error('该监测点在该时期暂时没有数据！');
+                        }
+                        else{
+                            vue.pieChart = echarts.init(vue.$refs.pie);
+                            // 指定图表的配置项和数据
+                            vue.pieChart.setOption({
+                                title: {
+                                    text: data.fullname+'取样分析数据'
+                                },
+                                series : [
+                                    {
+                                        name: '访问来源',
+                                        type: 'pie',
+                                        radius: '60%',
+                                        data:[
+                                            {value:res.data.accoCaterNeed, name:'住宿和餐饮业'},
+                                            {value:res.data.archNeed, name:'建筑业'},
+                                            {value:res.data.cultSportEnteNeed, name:'文化、体育和娱乐业'},
+                                            {value:res.data.eduNeed, name:'教育'},
+                                            {value:res.data.elecGasWaterNeed, name:'电力、燃气及水的生产和供应业'},
+                                            {value:res.data.estateNeed, name:'房地产业'},
+                                            {value:res.data.financeNeed, name:'金融业'},
+                                            {value:res.data.healSecuWelfNeed, name:'教育'},
+                                            {value:res.data.industry1Need, name:'农、林、牧、渔业'},
+                                            {value:res.data.infoCompSoftNeed, name:'信息传输、计算机服务和软件业'},
+                                            {value:res.data.inteOrgaNeed, name:'国际组织'},
+                                            {value:res.data.leaseBusiServNeed, name:'租赁和商务服务业'},
+                                            {value:res.data.manaOrgaNeed, name:'公共管理与社会组织'},
+                                            {value:res.data.manuNeed, name:'制造业'},
+                                            {value:res.data.mineNeed, name:'采矿业'},
+                                            {value:res.data.reseTechAddrNeed, name:'科学研究、技术服务和地址勘查业'},
+                                            {value:res.data.resiServNeed, name:'居民服务和其他服务业'},
+                                            {value:res.data.retailNeed, name:'批发和零售业'},
+                                            {value:res.data.tranStorPostNeed, name:'交通运输、仓储和邮政业'},
+                                            {value:res.data.waterEnviFaciNeed, name:'水利、环境和公共设施管理业'},
+                                        ]
+                                    }
+                                ]
+                            });
+                        }
+
+                    },
+                    error(res){
+                        console.log('error')
+                    }
+                });
+            },
+            initialLineNum(data){
+                $.ajax({
+                    url: '/common/data/aimUserLineChartTotalNum ',
+                    type: 'post',
+                    data:{
+                        aimUserId:data.id,
+                        startDateString:vue.date[0],
+                        endDateString:vue.date[1]
+                    },
+                    success(res){
+                        console.log(res.data);
+                        if (res.data.tableId==0||res.data.tableId==null) {
+                            // vue.pieChart = echarts.init(vue.$refs.pie);
+                            // // 指定图表的配置项和数据
+                            // vue.pieChart.setOption({
+                            //     title: {
+                            //         text: data.fullname+'对比数据分析'
+                            //     }
+                            // });
+                            vue.$message.error('该监测点在该时期暂时没有数据！');
+                        }
+                        else{
+                            this.lineNumChart = echarts.init(this.$refs.lineNum);
+                            // 指定图表的配置项和数据
+                            this.lineNumChart.setOption({
+                                title: {
+                                    test: data.fullname+'对比数据分析'
+                                },
+                                tooltip: {},
+                                xAxis: {
+                                    // type: 'category',
+                                    // data: ['1','2','3']
+                                },
+                                yAxis: {},
+                                series : [
+                                    {
+                                        name: '需求人数',
+                                        type: 'line',
+                                        data: res.data.needPopu,
+                                    },
+                                    {
+                                        name: '求职人数',
+                                        type: 'line',
+                                        data: res.data.jobseekPopu,
+                                    }
+                                ]
+                            });
+                        }
+
+                    },
+                    error(res){
+                        console.log('error')
+                    }
+                });
+
+            },
+            initialLineAge(data){
+                $.ajax({
+                    url: '/common/data/aimUserLineChartAgeNum ',
+                    type: 'post',
+                    data:{
+                        aimUserId:data.id,
+                        startDateString:vue.date[0],
+                        endDateString:vue.date[1]
+                    },
+                    success(res){
+                        console.log(res.data);
+                        if (res.data.tableId==0||res.data.tableId==null) {
+                            // vue.pieChart = echarts.init(vue.$refs.pie);
+                            // // 指定图表的配置项和数据
+                            // vue.pieChart.setOption({
+                            //     title: {
+                            //         text: data.fullname+'对比数据分析'
+                            //     }
+                            // });
+                            vue.$message.error('该监测点在该时期暂时没有数据！');
+                        }
+                        else{
+                            this.lineAgeChart = echarts.init(this.$refs.lineAge);
+                            // 指定图表的配置项和数据
+                            this.lineAgeChart.setOption({
+                                title: {
+                                    test: data.fullname+'年龄数据分析'
+                                },
+                                tooltip: {},
+                                xAxis: {
+                                    type: 'category',
+                                    data: ['16-24岁','25-34岁','35-44岁','35-44岁']
+                                },
+                                yAxis: {},
+                                series : [
+                                    {
+                                        name: '需求人数',
+                                        type: 'line',
+                                        data: [
+
+                                        ]
+                                    },
+                                    {
+                                        name: '求职人数',
+                                        type: 'line',
+                                        data: [],
+                                    }
+                                ]
+                            });
+                        }
+
+                    },
+                    error(res){
+                        console.log('error')
+                    }
+                });
+
+            },
+
+            handleNodeClick(data){
+                console.log(data);
+                if (data.child==null){
+                    this.initialLineNum(data);
+                    this.initialLineAge(data);
+                }
+
+            },
+
+            getChildUser(){
+                $.ajax({
+                    url:'/user/list',
+                    type: 'post',
+                    success(res){
+                        vue.child=res.data;
+                        console.log(res.data)
+                    }
+                })
+            }
+        },
+        mounted(){
+            this.getChildUser();
+
+            $.ajax({
+                url:'/common/data/selectUploadPeriodByTime',
+                type:'post',
+                data:{
+                    startDateString:'1970-01-01',
+                    endDateString:'9999-12-31'
+                },
+                success(res){
+                    if(res.code === 0){
+                        console.log(res);
+                        vue.options=[];
+                        for(var i = 0; i < res.data.length;i ++){
+                            vue.options.push({value:res.data[i].uploadPeriodId,
+                                label:res.data[i].startDate.toString() + ' ~ ' + res.data[i].endDate.toString()});
+                        }
+                    }
+                    else{
+                        vue.$message.error('错了哦，这是一条错误消息');
+                    }
+                },
+                error(res){
+                    vue.$message.error('错了哦，这是一条错误消息');
+                }
+            })
+        }
+    })
+
+</script>
+</html>
