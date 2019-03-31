@@ -7,81 +7,62 @@
     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <!-- Vue -->
-    <script src="//vuejs.org/js/vue.min.js"></script>
-    <link rel="stylesheet" href="//unpkg.com/iview/dist/styles/iview.css">
-    <script src="//unpkg.com/iview/dist/iview.min.js"></script>
-    <!--elementUI-->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.6.9/vue.min.js"></script>
+    <link href="https://cdn.bootcss.com/element-ui/2.6.1/theme-chalk/index.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/element-ui/2.6.1/index.js"></script>
     <link rel="stylesheet" href="../css/stylesheet.css">
-    <link rel="stylesheet" href="../css/index.css">
-    <!--<script src="/js/jump.js"></script>-->
+    <script src="../js/jump.js"></script>
 </head>
 <body>
-<div>
-    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-    <div id="pie" style="width: 600px;height:400px;"></div>
-    <script type="text/javascript">
-        // 基于准备好的dom，初始化echarts实例
-        var pieChart = echarts.init(document.getElementById('pie'));
-        // 指定图表的配置项和数据
-        var option = {
-            title: {
-                text: ''
-            },
-            series : [
-                {
-                    name: '访问来源',
-                    type: 'pie',
-                    radius: '60%',
-                    data:[
-                        {value:235, name:'视频广告'},
-                        {value:274, name:'联盟广告'},
-                        {value:310, name:'邮件营销'},
-                        {value:335, name:'直接访问'},
-                        {value:400, name:'搜索引擎'}
-                    ]
-                }
-            ]
-        };
+<div id="dataAnalysisVisualization">
+    <el-main class="content" style="overflow: visible;background-color: #FFFFFF;margin:20px;border-radius: 10px;">
+        <div class="contentDetail">
+            <el-row>
+                <el-col :span="10" id="historyLeft">
+                    <el-row>
+                        <el-col :span="8">请选择调查期:</el-col>
+                        <el-col :span="16">
+                            <el-select v-model="periodId" placeholder="请选择" size="small">
+                                <el-option
+                                        v-for="item in options"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                >
+                                </el-option>
+                            </el-select>
+                        </el-col>
+                    </el-row>
+                    <el-tree
+                            :data="" >
 
-        // 使用刚指定的配置项和数据显示图表。
-        pieChart.setOption(option);
-    </script>
-    <div id="lineNum" style="width: 600px;height:400px;"></div>
-    <script type="text/javascript">
-        // 基于准备好的dom，初始化echarts实例
-        var lineNumChart = echarts.init(document.getElementById('lineNum'));
-        // 指定图表的配置项和数据
-        var option = {
-            title: {
-                text: ''
-            },
-            series : [
-                {
-                    name: '访问来源',
-                    type: 'pie',
-                    radius: '60%',
-                    data:[
-                        {value:235, name:'视频广告'},
-                        {value:274, name:'联盟广告'},
-                        {value:310, name:'邮件营销'},
-                        {value:335, name:'直接访问'},
-                        {value:400, name:'搜索引擎'}
-                    ]
-                }
-            ]
-        };
-
-        // 使用刚指定的配置项和数据显示图表。
-        lineNumChart.setOption(option);
-    </script>
+                    </el-tree>
+                    <el-tree
+                            :data="cityOptions"
+                            :props="defaultProps"
+                            @node-click="handleNodeClick"
+                            accordion>
+                    </el-tree>
+                </el-col>
+                <el-col :span="13" :offset="1" id="historyRight" style="height:100%;">
+                    <!--<iframe src="/html/dataFillIframe.html"-->
+                            <!--style="height:700px; width:calc(100%);" frameborder="no"></iframe>-->
+                    <el-button type="success" @click=getLineNumData()>button</el-button>
+                    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+                    <div id="pie" style="width: 600px;height:400px;" ref="pie"></div>
+                    <div id="lineNum" style="width: 600px;height:400px;" ref="lineNum"></div>
+                </el-col>
+            </el-row>
+        </div>
+    </el-main>
+    <el-footer class="footer">2019 &copy; 第二组织</el-footer>
 </div>
 </body>
 <script>
     var vue = new Vue({
         el:'#dataAnalysisVisualization',
         data:{
+            pieChart:null,
             src:'',
             options: [],
             periodId: '',
@@ -395,25 +376,106 @@
             }
         },
         methods:{
+            initialPie(){
+                this.pieChart = echarts.init(this.$refs.pie);
+                // 指定图表的配置项和数据
+                this.pieChart.setOption({
+                    title: {
+                        text: ''
+                    },
+                    series : [
+                        {
+                            name: '访问来源',
+                            type: 'pie',
+                            radius: '60%',
+                            data:[
+                                {value:235, name:'视频广告'},
+                                {value:274, name:'联盟广告'},
+                                {value:310, name:'邮件营销'},
+                                {value:335, name:'直接访问'},
+                                {value:400, name:'搜索引擎'}
+                            ]
+                        }
+                    ]
+                });
+            },
+            initialLineNum(){
+                this.lineNumChart = echarts.init(this.$refs.lineNum);
+                // 指定图表的配置项和数据
+                this.lineNumChart.setOption({
+                    title: {
+                        test: '用户对比数据分析'
+                    },
+                    tooltip: {},
+                    xAxis: {
+                        type: 'category',
+                        data: ['1','2','3']
+                    },
+                    yAxis: {},
+                    series : [
+                        {
+                            type: 'line',
+                            radius: '60%',
+                            data: [10, 20, 30],
+                        }
+                    ]
+                });
+            },
             handleNodeClick(data){
                 console.log(data);
             },
             getPieData(){
-                $.ajax({
-                    url:'/role/rights',
-                    type:'post',
-                    data:{
-                        roleId:id
-                    },
-                    success(res){
-                        vue4.roleRight=res.data;
-                        vue4.$refs.tree.setCheckedKeys(vue4.roleRight);
-                        console.log(res.data);
-                    }
-                })
+                // $.ajax({
+                //     url:'/role/rights',
+                //     type:'post',
+                //     data:{
+                //         roleId:id
+                //     },
+                //     success(res){
+                //         vue4.roleRight=res.data;
+                //         vue4.$refs.tree.setCheckedKeys(vue4.roleRight);
+                //         console.log(res.data);
+                //     }
+                // })
+            },
+            getLineNumData(){
+                // $.ajax({
+                //     url:'common/data/aimUserLineChartTotalNum',
+                //     type:'post',
+                //     data:{
+                //         aimUserId:35,
+                //         startDateString: '2019-02-01',
+                //         endDataString: '2019-02-28'
+                //     },
+                //     success(res){
+                //         var data = res.data;
+                //         console.log(res.data);
+                //         lineNumChart.setOption({
+                //             title: {
+                //                 test: '用户对比数据分析'
+                //             },
+                //             tooltip: {},
+                //             xAxis: {
+                //                 type: 'category',
+                //                 data: ['1','2','3']
+                //             },
+                //             yAxis: {},
+                //             series : [
+                //                 {
+                //                     type: 'line',
+                //                     radius: '60%',
+                //                     data: [10, 20, 30],
+                //                 }
+                //             ]
+                //         })
+                //     }
+                // })
+                this.initialLineNum();
+
             }
         },
         mounted(){
+            this.initialPie();
             $.ajax({
                 url:'/common/data/selectUploadPeriodByTime',
                 type:'post',
