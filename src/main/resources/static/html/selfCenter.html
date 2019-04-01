@@ -58,10 +58,11 @@
                 url:'/user/userInfo',
                 type:'post',
                 success(res){
-                    vue.username = res.username;
-                    if(res.userType === 0) vue.userType ='管理员';
-                    else if(res.userType === 1) vue.userType = '省级用户';
-                    else if(res.userType === 2) vue.userType = '市级用户';
+                    console.log(res)
+                    vue.username = res.data.username;
+                    if(res.data.userType === 0) vue.userType ='管理员';
+                    else if(res.data.userType === 1) vue.userType = '省级用户';
+                    else if(res.data.userType === 2) vue.userType = '市级用户';
                     else vue.userType = '监测点用户'
                 }
             })

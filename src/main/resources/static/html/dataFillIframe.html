@@ -1138,10 +1138,13 @@
                         tableId: that.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log('form1:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form1data.seek=res.data.needPopu;
                             that.form1data.need=res.data.jobseekPopu;
+                            that.getRate(1, that.form1data);
+                            console.log(that.form1data);
                         }
                         else alert(res.message);
                     },
@@ -1155,10 +1158,11 @@
                     url: '/common/data/selectIndustryNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success: function (res) {
-                        // console.log(res);
+                        console.log('form2+form3:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form2data[0].need = res.data.industry1Need;
                             that.form2data[1].need = res.data.industry2Need;
@@ -1183,6 +1187,13 @@
                             that.form3data[17].need = res.data.cultSportEnteNeed;
                             that.form3data[18].need = res.data.manaOrgaNeed;
                             that.form3data[19].need = res.data.inteOrgaNeed;
+                            that.getNeedSum2(2,that.form2data);
+                            that.getNeedRate(2,that.form2data);
+                            console.log(that.form2data);
+
+                            that.getNeedSum2(3,that.form3data);
+                            that.getNeedRate(3,that.form3data);
+                            console.log(that.form3data);
                         }
                         else alert(res.message);
                     },
@@ -1196,10 +1207,11 @@
                     url: '/common/data/selectEmployerNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success: function (res) {
-                        // console.log(res);
+                        console.log('form4:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form4data[0].need = res.data.staOwnNeed;
                             that.form4data[1].need = res.data.collNeed;
@@ -1215,6 +1227,9 @@
                             that.form4data[11].need = res.data.instNeed;
                             that.form4data[12].need = res.data.orgaNeed;
                             that.form4data[13].need = res.data.otherNeed;
+                            that.getNeedSum2(4,that.form4data);
+                            that.getNeedRate(4,that.form4data);
+                            console.log(that.form4data);
                         }
                         else alert(res.message);
                     },
@@ -1228,10 +1243,11 @@
                     url: '/common/data/selectProfNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log('form5:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form5data[0].need=res.data.leaderNeed;
                             that.form5data[0].seek=res.data.leaderJobseek;
@@ -1248,6 +1264,11 @@
                             that.form5data[6].need=res.data.otherNeed;
                             that.form5data[6].seek=res.data.otherJobseek;
                             that.form5data[7].seek=res.data.noRequJobseek;
+                            that.getSum5(5,that.form5data);
+                            that.getRate(5,that.form5data);
+                            that.getNeedRate(5,that.form5data);
+                            that.getSeekRate(5,that.form5data);
+                            console.log(that.form5data);
                         }
                         else alert(res.message);
                     },
@@ -1261,10 +1282,11 @@
                     url: '/common/data/selectMostNeeded',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success: function (res) {
-                        // console.log(res);
+                        console.log('form6:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form6data[0].job = res.data.mostProf1Name;
                             that.form6data[0].jobcode = res.data.mostProf1Num;
@@ -1274,7 +1296,7 @@
                             that.form6data[1].jobcode = res.data.mostProf2Num;
                             that.form6data[1].need = res.data.mostProf2Need;
                             that.form6data[1].seek = res.data.mostProf2Jobseek;
-                            that.form6data[2].jo = res.data.mostProf3Nameb;
+                            that.form6data[2].job = res.data.mostProf3Name;
                             that.form6data[2].jobcode = res.data.mostProf3Num;
                             that.form6data[2].need = res.data.mostProf3Need;
                             that.form6data[2].seek = res.data.mostProf3Jobseek;
@@ -1306,6 +1328,9 @@
                             that.form6data[9].jobcode = res.data.mostProf10Num;
                             that.form6data[9].need = res.data.mostProf10Need;
                             that.form6data[9].seek = res.data.mostProf10Jobseek;
+                            that.getRate(6,that.form6data);
+                            that.getGap(6,that.form6data);
+                            console.log(that.form6data);
                         }
                         else alert(res.message);
                     },
@@ -1319,10 +1344,11 @@
                     url: '/common/data/selectLeastNeeded',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log('form7:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form7data[0].job = res.data.leastProf1Name;
                             that.form7data[0].jobcode = res.data.leastProf1Num;
@@ -1332,7 +1358,7 @@
                             that.form7data[1].jobcode = res.data.leastProf2Num;
                             that.form7data[1].need = res.data.leastProf2Need;
                             that.form7data[1].seek = res.data.leastProf2Jobseek;
-                            that.form7data[2].jo = res.data.leastProf3Nameb;
+                            that.form7data[2].job = res.data.leastProf3Name;
                             that.form7data[2].jobcode = res.data.leastProf3Num;
                             that.form7data[2].need = res.data.leastProf3Need;
                             that.form7data[2].seek = res.data.leastProf3Jobseek;
@@ -1364,6 +1390,9 @@
                             that.form7data[9].jobcode = res.data.leastProf10Num;
                             that.form7data[9].need = res.data.leastProf10Need;
                             that.form7data[9].seek = res.data.leastProf10Jobseek;
+                            that.getRate(7,that.form7data);
+                            that.getGap(7,that.form7data);
+                            console.log(that.form7data);
                         }
                         else alert(res.message);
                     },
@@ -1377,21 +1406,25 @@
                     url: '/common/data/selectJobSeekerNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log('form8:');
+                        console.log(res);
                         if (res.code == 0) {
-                            that.form8data[0].seek=res.data.unempYouth;
-                            that.form8data[1].seek=res.data.graduate;
-                            that.form8data[2].seek=res.data.empToUnemp;
-                            that.form8data[3].seek=res.data.othUnemp;
-                            that.form8data[4].seek=res.data.emped;
-                            that.form8data[5].seek=res.data.laidOff;
-                            that.form8data[6].seek=res.data.retiree;
-                            that.form8data[7].seek=res.data.student;
-                            that.form8data[8].seek=res.data.cityRural;
-                            that.form8data[9].seek=res.data.fore;
+                            that.form8data[0].seek = res.data.unempYouth;
+                            that.form8data[1].seek = res.data.graduate;
+                            that.form8data[2].seek = res.data.empToUnemp;
+                            that.form8data[3].seek = res.data.othUnemp;
+                            that.form8data[4].seek = res.data.emped;
+                            that.form8data[5].seek = res.data.laidOff;
+                            that.form8data[6].seek = res.data.retiree;
+                            that.form8data[7].seek = res.data.student;
+                            that.form8data[8].seek = res.data.cityRural;
+                            that.form8data[9].seek = res.data.fore;
+                            that.getSeekSum2(8,that.form8data);
+                            that.getSeekRate(8,that.form8data);
+                            console.log(that.form8data);
                         }
                         else alert(res.message);
                     },
@@ -1405,16 +1438,22 @@
                     url: '/common/data/selectSexNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success: function (res) {
-                        // console.log(res);
+                        console.log('form9:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form9data[0].need = res.data.maleNeed;
                             that.form9data[0].seek = res.data.maleJobseek;
                             that.form9data[1].need = res.data.femaleNeed;
                             that.form9data[1].seek = res.data.femaleJobseek;
                             that.form9data[2].need = res.data.noRequNeed;
+                            that.getSum5(9,that.form9data);
+                            that.getRate(9,that.form9data);
+                            that.getNeedRate(9,that.form9data);
+                            that.getSeekRate(9,that.form9data);
+                            console.log(that.form9data);
                         }
                         else alert(res.message);
                     },
@@ -1428,10 +1467,11 @@
                     url: '/common/data/selectAgeNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log('form10:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form10data[0].need=res.data.sixteenTwentyfourNeed;
                             that.form10data[0].seek=res.data.sixteenTwentyfourJobseek;
@@ -1442,6 +1482,11 @@
                             that.form10data[3].need=res.data.overFortyfourNeed;
                             that.form10data[3].seek=res.data.overFortyfourJobseek;
                             that.form10data[4].need=res.data.noRequNeed;
+                            that.getSum5(10,that.form10data);
+                            that.getRate(10,that.form10data);
+                            that.getNeedRate(10,that.form10data);
+                            that.getSeekRate(10,that.form10data);
+                            console.log(that.form10data);
                         }
                         else alert(res.message);
                     },
@@ -1455,10 +1500,11 @@
                     url: '/common/data/selectDegreeNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log('form11:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form11data[0].need=res.data.belowJuniHighSchoNeed;
                             that.form11data[0].seek=res.data.belowJuniHighSchoJobseek;
@@ -1471,6 +1517,11 @@
                             that.form11data[4].need=res.data.univNeed;
                             that.form11data[4].seek=res.data.univJobseek;
                             that.form11data[5].need=res.data.noRequNeed;
+                            that.getSum5(11,that.form11data);
+                            that.getRate(11,that.form11data);
+                            that.getNeedRate(11,that.form11data);
+                            that.getSeekRate(11,that.form11data);
+                            console.log(that.form11data);
                         }
                         else alert(res.message);
                     },
@@ -1484,10 +1535,11 @@
                     url: '/common/data/selectTechGradeNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log('form12:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form12data[0].need=res.data.profLevel5Need;
                             that.form12data[0].seek=res.data.profLevel5Jobseek;
@@ -1507,6 +1559,11 @@
                             that.form12data[7].seek=res.data.seniProfJobseek;
                             that.form12data[8].seek=res.data.noTechJobseek;
                             that.form12data[9].need=res.data.noRequNeed;
+                            that.getSum5(12,that.form12data);
+                            that.getRate(12,that.form12data);
+                            that.getNeedRate(12,that.form12data);
+                            that.getSeekRate(12,that.form12data);
+                            console.log(that.form12data);
                         }
                         else alert(res.message);
                     },
@@ -1515,202 +1572,150 @@
                         alert('初始化失败，请稍后刷新重试');
                     },
                 })
-
-                for (var i = 0; i < 12; i++) {
-                    this.changeable[i] = true;
-                    this.finished[i] = true;
-                }
-                this.getNeedSum2(this.form2data);
-                this.getNeedSum2(this.form3data);
-                this.getNeedSum2(this.form4data);
-                this.getSeekSum2(this.form8data);
-                this.getSum5(this.form5data);
-                this.getSum5(this.form9data);
-                this.getSum5(this.form10data);
-                this.getSum5(this.form11data);
-                this.getSum5(this.form12data);
-                this.getRate(this.form1data);
-                this.getRate(this.form5data);
-                this.getRate(this.form6data);
-                this.getRate(this.form7data);
-                this.getRate(this.form9data);
-                this.getRate(this.form10data);
-                this.getRate(this.form11data);
-                this.getRate(this.form12data);
-                this.getGap(this.form6data);
-                this.getGap(this.form7data);
-                this.getNeedRate(this.form2data);
-                this.getNeedRate(this.form3data);
-                this.getNeedRate(this.form4data);
-                this.getNeedRate(this.form5data);
-                this.getNeedRate(this.form9data);
-                this.getNeedRate(this.form10data);
-                this.getNeedRate(this.form11data);
-                this.getNeedRate(this.form12data);
-                this.getSeekRate(this.form5data);
-                this.getSeekRate(this.form8data);
-                this.getSeekRate(this.form9data);
-                this.getSeekRate(this.form10data);
-                this.getSeekRate(this.form11data);
-                this.getSeekRate(this.form12data);
             },
 
-            getNeedSum2:function(param){
-                if(this.finished[this.index-1]){
-                    var formdata = param;
-                    formdata[formdata.length-1].need=0;
-                    for(var i = 0;i<formdata.length-1;i++){
-                        formdata[formdata.length-1].need+=Number(formdata[i].need);
-                    }
-                    if(this.index==2)
-                        this.form2data=formdata;
-                    else if(this.index==3)
-                        this.form3data=formdata;
-                    else this.form4data=formdata;
+            getNeedSum2:function(index, param){
+                var formdata = param;
+                formdata[formdata.length-1].need=0;
+                for(var i = 0;i<formdata.length-1;i++){
+                    formdata[formdata.length-1].need+=Number(formdata[i].need);
                 }
+                if(index==2)
+                    this.form2data=formdata;
+                else if(index==3)
+                    this.form3data=formdata;
+                else this.form4data=formdata;
             },
 
-            getSeekSum2:function(param){
-                if(this.finished[this.index-1]){
-                    var formdata = param;
-                    for(var i = 0;i<formdata.length-1;i++){
-                        formdata[formdata.length-1].seek+=Number(formdata[i].seek);
-                    }
-                    this.form8data=formdata;
+            getSeekSum2:function(index, param){
+                var formdata = param;
+                for(var i = 0;i<formdata.length-1;i++){
+                    formdata[formdata.length-1].seek+=Number(formdata[i].seek);
                 }
+                this.form8data=formdata;
             },
 
-            getSum5:function(param){
-                if(this.finished[this.index-1]){
-                    var formdata = param;
-                    formdata[formdata.length-1].seek=formdata[formdata.length-1].need=0;
-                    for(var i = 0;i<formdata.length-1;i++){
-                        if(!((this.index==5&&i==formdata.length-2)||(this.index==12&&i==formdata.length-3))) {
-                            formdata[formdata.length - 1].need += Number(formdata[i].need);
-                        }
-                        if(!(this.index>5&&i==formdata.length-2)) {
-                            formdata[formdata.length - 1].seek += Number(formdata[i].seek);
-                        }
+            getSum5:function(index, param){
+                var formdata = param;
+                formdata[formdata.length-1].seek=formdata[formdata.length-1].need=0;
+                for(var i = 0;i<formdata.length-1;i++){
+                    if(!((index==5&&i==formdata.length-2)||(index==12&&i==formdata.length-3))) {
+                        formdata[formdata.length - 1].need += Number(formdata[i].need);
                     }
-                    if(this.index==5)
-                        this.form5data=formdata;
-                    else if(this.index==9)
-                        this.form9data=formdata;
-                    else if(this.index==10)
-                        this.form10data=formdata;
-                    else if(this.index==11)
-                        this.form11data=formdata;
-                    else this.form12data=formdata;
+                    if(!(index>5&&i==formdata.length-2)) {
+                        formdata[formdata.length - 1].seek += Number(formdata[i].seek);
+                    }
                 }
+                if(index==5)
+                    this.form5data=formdata;
+                else if(index==9)
+                    this.form9data=formdata;
+                else if(index==10)
+                    this.form10data=formdata;
+                else if(index==11)
+                    this.form11data=formdata;
+                else this.form12data=formdata;
             },
 
-            getRate:function(param){
-                // console.log("finished:"+this.finished);
-                if(this.finished[this.index-1]) {
-                    var formdata = param;
-                    // console.log(formdata);
-                    if (this.index == 1) {
-                        this.form1data.rate = (Number(this.form1data.need) / Number(this.form1data.seek)).toFixed(4);
+            getRate:function(index, param){
+                var formdata = param;
+                // console.log(formdata);
+                if (index == 1) {
+                    this.form1data.rate = (Number(this.form1data.need) / Number(this.form1data.seek)).toFixed(4);
+                }
+                else if(index==6||index==7){
+                    for (var i = 0; i < formdata.length; i++){
+                        formdata[i].rate = (Number(formdata[i].need) / Number(formdata[i].seek)).toFixed(4);
                     }
-                    else if(this.index==6||this.index==7){
-                        for (var i = 0; i < formdata.length; i++){
-                            formdata[i].rate = (Number(formdata[i].need) / Number(formdata[i].seek).toFixed(4));
-                        }
-                        if(this.index==6)
-                            this.form6data = formdata;
-                        else
-                            this.form7data = formdata;
-                    }
-                    else{
-                        var tmp;
-                        if(this.index==5)
-                            tmp=Number(formdata[formdata.length-1].seek)/(Number(formdata[formdata.length-1].seek)-Number(formdata[formdata.length-2].seek));
-                        else
-                            tmp=Number(formdata[formdata.length-1].need)/(Number(formdata[formdata.length-1].need)-Number(formdata[formdata.length-2].need));
-                        for (var i = 0; i < formdata.length - 2; i++) {
-                            // console.log(i);
-                            // console.log(formdata);
-                            if(this.index==5)
-                                formdata[i].rate=Number(formdata[i].need)/(tmp*Number(formdata[i].seek));
-                            else if(this.index==12&&i==formdata.length-3)
-                                formdata[i].rate=0;
-                            else
-                                formdata[i].rate=tmp*Number(formdata[i].need)/Number(formdata[i].seek);
-                            formdata[i].rate=Number(formdata[i].rate).toFixed(4);
-                        }
+                    if(index==6)
+                        this.form6data = formdata;
+                    else
+                        this.form7data = formdata;
+                }
+                else{
+                    var tmp;
+                    if(index==5)
+                        tmp=Number(formdata[formdata.length-1].seek)/(Number(formdata[formdata.length-1].seek)-Number(formdata[formdata.length-2].seek));
+                    else
+                        tmp=Number(formdata[formdata.length-1].need)/(Number(formdata[formdata.length-1].need)-Number(formdata[formdata.length-2].need));
+                    for (var i = 0; i < formdata.length - 2; i++) {
+                        // console.log(i);
                         // console.log(formdata);
-                        if (this.index == 5)
-                            form5data = formdata;
-                        else if (this.index == 9)
-                            form9data = formdata;
-                        else if (this.index == 10)
-                            form10data = formdata;
-                        else if (this.index == 11)
-                            form11data = formdata;
-                        else form12data = formdata;
+                        if(index==5)
+                            formdata[i].rate=Number(formdata[i].need)/(tmp*Number(formdata[i].seek));
+                        else if(index==12&&i==formdata.length-3)
+                            formdata[i].rate=0;
+                        else
+                            formdata[i].rate=tmp*Number(formdata[i].need)/Number(formdata[i].seek);
+                        formdata[i].rate=Number(formdata[i].rate).toFixed(4);
                     }
+                    // console.log(formdata);
+                    if (index == 5)
+                        form5data = formdata;
+                    else if (index == 9)
+                        form9data = formdata;
+                    else if (index == 10)
+                        form10data = formdata;
+                    else if (index == 11)
+                        form11data = formdata;
+                    else form12data = formdata;
                 }
             },
 
-            getGap:function (param) {
-                if(this.finished[this.index-1]){
-                    var formdata = param;
-                    for(var i = 0;i<formdata.length;i++){
-                        formdata[i].gap=Number(formdata[i].need)-Number(formdata[i].seek);
-                    }
-                    if(this.index==6)
-                        this.form6data=formdata;
-                    else this.form7data=formdata;
+            getGap:function (index, param) {
+                var formdata = param;
+                for(var i = 0;i<formdata.length;i++){
+                    formdata[i].gap=Number(formdata[i].need)-Number(formdata[i].seek);
                 }
+                if(index==6)
+                    this.form6data=formdata;
+                else this.form7data=formdata;
             },
 
-            getNeedRate:function(param){
-                if(this.finished[this.index-1]){
-                    var formdata = param;
-                    for(var i = 0;i<formdata.length;i++){
-                        if(!((this.index==5&&i==formdata.length-2)||(this.index==12&&i==formdata.length-3))) {
-                            formdata[i].needrate = (Number(formdata[i].need) / Number(formdata[formdata.length - 1].need)).toFixed(4);
-                        }
+            getNeedRate:function(index, param){
+                var formdata = param;
+                for(var i = 0;i<formdata.length;i++){
+                    if(!((index==5&&i==formdata.length-2)||(index==12&&i==formdata.length-3))) {
+                        formdata[i].needrate = (Number(formdata[i].need) / Number(formdata[formdata.length - 1].need)).toFixed(4);
                     }
-                    if(this.index==2)
-                        this.form2data=formdata;
-                    else if(this.index==3)
-                        this.form3data=formdata;
-                    else if(this.index==4)
-                        this.form4data=formdata;
-                    else if(this.index==5)
-                        this.form5data=formdata;
-                    else if(this.index==9)
-                        this.form9data=formdata;
-                    else if(this.index==10)
-                        this.form10data=formdata;
-                    else if(this.index==11)
-                        this.form11data=formdata;
-                    else this.form12data=formdata;
                 }
+                if(index==2)
+                    this.form2data=formdata;
+                else if(index==3)
+                    this.form3data=formdata;
+                else if(index==4)
+                    this.form4data=formdata;
+                else if(index==5)
+                    this.form5data=formdata;
+                else if(index==9)
+                    this.form9data=formdata;
+                else if(index==10)
+                    this.form10data=formdata;
+                else if(index==11)
+                    this.form11data=formdata;
+                else this.form12data=formdata;
             },
 
-            getSeekRate:function(param){
-                if(this.finished[this.index-1]){
-                    var formdata = param;
-                    for(var i = 0;i<formdata.length;i++){
-                        if(this.index<9||i!=formdata.length-2) {
-                            formdata[i].seekrate = (Number(formdata[i].seek) / Number(formdata[formdata.length - 1].seek)).toFixed(4);
-                        }
+            getSeekRate:function(index, param){
+                var formdata = param;
+                for(var i = 0;i<formdata.length;i++){
+                    if(index<9||i!=formdata.length-2) {
+                        formdata[i].seekrate = (Number(formdata[i].seek) / Number(formdata[formdata.length - 1].seek)).toFixed(4);
                     }
-                    if(this.index==8)
-                        this.form8data=formdata;
-                    else if(this.index==5)
-                        this.form5data=formdata;
-                    else if(this.index==9)
-                        this.form9data=formdata;
-                    else if(this.index==10)
-                        this.form10data=formdata;
-                    else if(this.index==11)
-                        this.form11data=formdata;
-                    else this.form12data=formdata;
                 }
+                if(index==8)
+                    this.form8data=formdata;
+                else if(index==5)
+                    this.form5data=formdata;
+                else if(index==9)
+                    this.form9data=formdata;
+                else if(index==10)
+                    this.form10data=formdata;
+                else if(index==11)
+                    this.form11data=formdata;
+                else this.form12data=formdata;
             },
+
 
 
             change:function(){

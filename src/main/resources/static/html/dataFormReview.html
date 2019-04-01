@@ -19,11 +19,37 @@
     <el-main class="content" style="overflow: visible;background-color: #FFFFFF;margin:20px;border-radius: 10px;">
         <div class="contentDetail">
             <div v-if="this.visibleFlag==true">
+                <el-table
+                        :data="dataList"
+                        stripe
+                        style="width: 100%"
+                        v-if="visibleFlag">
+                    <el-table-column
+                            prop="number"
+                            label="序号"
+                            width="100px">
+                    </el-table-column>
+                    <el-table-column
+                            prop="regionEmpName"
+                            label="人力资源市场名">
+                    </el-table-column>
+                    <el-table-column
+                            prop="reviseTime"
+                            label="上传时间">
+                    </el-table-column>
+                    <el-table-column
+                            prop="stateInChinese"
+                            label="审核状态">
+                    </el-table-column>
+                    <el-table-column
+                            label="操作"
+                            width="150px">
+                        <template slot-scope="scope">
+                            <el-button @click="handleClick(scope.row)" type="primary" size="small">查看</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
 
-
-
-
-                <el-button @click="turnFlag">崽崽你的在这里</el-button>
             </div>
             <div v-else>
                 <div class="formIndex">
@@ -31,12 +57,35 @@
                     <el-button class="indexes" v-for="form in forms" @click="turnForm(form.index)" circle>
                         {{form.index}}
                     </el-button>
-                    <el-button id="submit" @click="showReview=true" type="success">提交审核</el-button>
+                    <el-button id="submit" @click="showReview=true;innerVisible=false" type="success">提交审核</el-button>
                 </div>
                 <hr/>
                 <!--崽崽看还要改这里弹出框-->
-                <el-dialog title="提交审核" :visible.sync="showReview">
+                <el-dialog
+                        title="提交审核"
+                        :visible.sync="showReview"
+                        width="60%"
+                        :before-close="handleClose"
+                        lock-scroll
+                >
+                    是否通过此数据表？
+                    <el-dialog
+                            width="30%"
+                            title="请填写拒绝通过数据的原因："
+                            :visible.sync="innerVisible"
+                            append-to-body>
+                        <el-input v-model="rejectedMessage" autosize type="textarea"></el-input>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="handleCancelReject">取消</el-button>
+                            <el-button @click="handleConfirmReject" type="primary">确定</el-button>
+                        </span>
 
+                    </el-dialog>
+
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="handlePass" type="success" size="mini">通&emsp;过</el-button>
+                        <el-button @click="innerVisible = true" type="danger" size="mini">不通过</el-button>
+                    </span>
                 </el-dialog>
 
                 <div class="tabletitle">{{forms[this.index-1].title}}</div>
@@ -383,19 +432,24 @@
 <script>
     var vue = new Vue({
         created() {
-            this.getTableId();
+            // this.getTableId();
         },
         mounted(){
-            this.loadData();
+            // this.loadData();
+            this.getList();
             var div = document.getElementsByTagName('button')[1];
-            div.style.backgroundColor = "#e8f0fe";
+            // div.style.backgroundColor = "#e8f0fe";
         },
 
         el:'#app',
         data:{
-            showReview:false,
+            userType:-1,
+            rejectedMessage:'',
+            innerVisible:false,
+            dataList: [],
+            tabelId:-1,
             visibleFlag:true,
-            tableId:null,
+            showReview:false,
             index:1,
             forms:[
                 {index:1, title:'表1：供求总体人数'},
@@ -1074,16 +1128,135 @@
             }],
         },
         methods:{
+            handlePass(){
+                console.log(vue.tabelId)
+                if(vue.userType === 1) {
+                    $.ajax({
+                        url: '/province/upload/pass',
+                        type: 'post',
+                        data: {
+                            aimId: vue.tabelId,
+                            content: '您的数据已通过审核！'
+                        },
+                        success(res) {
+                            if(res.code === 0) {
+                                vue.$message({
+                                    type: 'success',
+                                    message: '成功!'
+                                });
+                                vue.showReview = false;
+                                vue.getList();
+                                vue.visibleFlag = true;
+                            }
+                            else{
+                                vue.$message({
+                                    type: 'error',
+                                    message: '出错了哦!'
+                                });
+                            }
+                        },
+                        error(res) {
+                            vue.$message({
+                                type: 'error',
+                                message: '出错了哦!'
+                            });
+                            vue.showReview = false;
+                        }
+                    });
+                }
+                else if(userType === 2){
+                    $.ajax({
+                        url: '/city/upload/pass',
+                        type: 'post',
+                        data: {
+                            aimId: vue.tabelId,
+                            content: '您的数据已通过审核！'
+                        },
+                        success(res) {
+                            vue.$message({
+                                type: 'success',
+                                message: '成功!'
+                            });
+                            vue.showReview = false;
+                            vue.getList();
+                            vue.visibleFlag=true;
+                        },
+                        error(res) {
+                            this.$message({
+                                type: 'error',
+                                message: '出错了哦!'
+                            });
+                            vue.showReview = false;
+                        }
+                    });
+                }
+            },
+            handleCancelReject(){
+                this.innerVisible = false;
+                this.showReview = true;
+            },
+            handleConfirmReject(){
+                this.innerVisible = false;
+                if(vue.userType === 1) {
+                    $.ajax({
+                        url: '/province/upload/reject',
+                        type: 'post',
+                        data: {
+                            aimId: vue.tableId,
+                            content: vue.rejectedMessage
+                        },
+                        success(res) {
+                            vue.$message({
+                                type: 'success',
+                                message: '已拒绝!'
+                            });
+                            vue.showReview = false;
+                            vue.getList();
+                            vue.visibleFlag = true;
+                        },
+                        error(res) {
+                            this.$message({
+                                type: 'error',
+                                message: '出错了哦!'
+                            });
+                            vue.showReview = false;
+                        }
+                    })
+                }
+                else if(vue.userType===2){
+                    $.ajax({
+                        url: '/city/upload/reject',
+                        type: 'post',
+                        data: {
+                            aimId: vue.tableId,
+                            content: vue.rejectedMessage
+                        },
+                        success(res) {
+                            vue.$message({
+                                type: 'success',
+                                message: '已拒绝!'
+                            });
+                            vue.showReview = false;
+                            vue.getList();
+                            vue.visibleFlag = true;
+                        },
+                        error(res) {
+                            this.$message({
+                                type: 'error',
+                                message: '出错了哦!'
+                            });
+                            vue.showReview = false;
+                        }
+                    })
+                }
 
+            },
+            handleClose(done) {
+                done();
+            },
             turnFlag:function () {
                 this.visibleFlag=!this.visibleFlag;
             },
-
-            //崽崽看下面这个函数！！！！！！！！！！！
-            getTableId:function(){
-                this.tableId=17;
-            },
-
             loadData:function() {
                 var that = this;
                 $.ajax({
@@ -1689,6 +1862,116 @@
                 this.index=param;
                 console.log(this.index);
                 console.log(this.forms[this.index-1].title);
+            },
+            getList(){
+                $.ajax({
+                    url:'/user/userType',
+                    type:'post',
+                    success(res){
+                        vue.userType = res;
+                        if(res === 1){
+                            //省
+                            $.ajax({
+                                url:'/province/upload/examineQuery',
+                                type:'post',
+                                success(res){
+                                    if(res.code === 0) {
+                                        console.log(res);
+                                        for (var i = 0; i < res.data.length; i++) {
+                                            res.data[i].number = i + 1;
+                                            res.data[i].stateInChinese = '待审核';
+                                            // $.ajax({
+                                            //     url:'/user/userInfo',
+                                            //     type:'post',
+                                            //     success(res){
+                                            //         console.log(res)
+                                            //     },
+                                            //     error(res){
+                                            //         vue.$message({
+                                            //             message:'出错了！',
+                                            //             type:'error'
+                                            //         });
+                                            //     }
+                                            // })
+                                        }
+                                        vue.dataList = res.data;
+                                    }
+
+                                },
+                                error(res){
+                                    vue.$message({
+                                        message:'出错了！',
+                                        type:'error'
+                                    });
+                                }
+                            })
+                        }
+                        else if(res === 2){
+                            //市
+                            $.ajax({
+                                url:'/city/upload/examineQuery',
+                                type:'post',
+                                success(res){
+                                    if(res.code === 0){
+                                        // console.log(res);
+                                        vue.dataList = res.data;
+                                        for (var i = 0; i < vue.dataList.length; i++) {
+                                            vue.dataList[i].number = i + 1;
+                                            vue.dataList[i].stateInChinese = '待审核';
+                                            // $.ajax({
+                                            //     url:'/user/userInfo',
+                                            //     type:'post',
+                                            //     data:{
+                                            //         userId:vue.dataList[i].creator
+                                            //     },
+                                            //     success(r){
+                                            //         console.log(r)
+                                            //         // console.log(tmp)
+                                            //         console.log(r.data.fullname)
+                                            //         console.log(i);
+                                            //         vue.dataList[i].regionEmpName = r.data.fullname;
+                                            //     },
+                                            //     error(r){
+                                            //         vue.$message({
+                                            //             message:'出错了！',
+                                            //             type:'error'
+                                            //         });
+                                            //     }
+                                            // });
+                                        }
+                                    }
+                                    else{
+                                        vue.$message({
+                                            message:'出错了！',
+                                            type:'error'
+                                        });
+                                    }
+                                },
+                                error(res){
+                                    vue.$message({
+                                        message:'出错了！',
+                                        type:'error'
+                                    });
+                                }
+                            })
+
+                        }
+                    },
+                    error(res){
+                        vue.$message({
+                            message:'出错了！',
+                            type:'error'
+                        });
+                    }
+                })
+            },
+            handleClick: function(obj) {
+                // console.log(obj);
+                this.tableId = obj.tableId;
+                console.log(vue.tableId);
+                this.loadData();
+                console.log(vue.tableId);
+                this.visibleFlag = false;
             }
         }
     })
