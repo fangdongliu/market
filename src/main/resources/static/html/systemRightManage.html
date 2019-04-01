@@ -275,12 +275,11 @@
                         if(res.code==1){
                             vue.$message.error('权限名重复，请重新创建');
                         }
+                        this.dialogFormVisibleCreate = false
                         console.log(res);
+                        location.reload();
                     }
                 });
-                this.dialogFormVisibleCreate = false;
-                console.log(newRight);
-                // location.reload();
             },
             createRightBig(newRight){
                 $.ajax({
