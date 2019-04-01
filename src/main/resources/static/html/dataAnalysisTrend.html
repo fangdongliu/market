@@ -2,41 +2,51 @@
 <html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>historyTables</title>
+    <title>dataAnalysisTrend</title>
+
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Vue -->
     <script src="https://cdn.bootcss.com/vue/2.6.9/vue.min.js"></script>
     <link href="https://cdn.bootcss.com/element-ui/2.6.1/theme-chalk/index.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/element-ui/2.6.1/index.js"></script>
     <link rel="stylesheet" href="../css/stylesheet.css">
+    <script src="../js/jump.js"></script>
 </head>
 <body>
-<div id="historyTables" style="height:100%;">
+<div id="dataAnalysisVisualization">
     <el-main class="content" style="overflow: visible;background-color: #FFFFFF;margin:20px;border-radius: 10px;">
         <div class="contentDetail">
             <el-row>
                 <el-col :span="10" id="historyLeft">
                     <el-row>
                         <el-col :span="8">请选择调查期:</el-col>
-                        <el-col :span="10">
-                            <el-select v-model="periodId" placeholder="请选择" size="small">
-                                <el-option
-                                        v-for="item in options"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
-                                >
-                                </el-option>
-                            </el-select>
-                        </el-col>
-                        <el-col :span="4" :offset="1">
-                            <el-button  type="primary" size="small" @click="changeURL">查看</el-button>
+                        <el-col :span="16">
+                            <div class="block">
+                                <el-date-picker
+                                        v-model="date"
+                                        type="daterange"
+                                        range-separator="至"
+                                        start-placeholder="开始日期"
+                                        end-placeholder="结束日期"
+                                        value-format="yyyy-MM-dd">
+                                </el-date-picker>
+                            </div>
                         </el-col>
                     </el-row>
-                    <el-tree :data="cityOptions" :props="defaultProps" @node-click="handleNodeClick" accordion></el-tree>
+                    <el-tree
+                            :data="child"
+                            :props="props"
+                            node-key="id"
+                            @node-click="handleNodeClick">
+                    </el-tree>
                 </el-col>
-                <el-col :span="13" id="historyRight" style="height:100%;border-left: 1px solid #c1d0db;padding-left: 20px;">
-                    <iframe v-bind:src="src"
-                            style="height:1000px; width:calc(100%);background-color: #FFFFFF" frameborder="no"></iframe>
+                <el-col :span="13" :offset="1" id="historyRight" style="height:100%;">
+
+                    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+                    <!--<div id="pie" style="width: 600px;height:400px;" ref="pie"></div>-->
+                    <div id="lineNum" style="width: 600px;height:400px;" ref="lineNum"></div>
+                    <div id="lineAge" style="width: 600px;height:400px;" ref="lineAge"></div>
                 </el-col>
             </el-row>
         </div>
@@ -45,10 +55,13 @@
 </div>
 </body>
 <script>
+    let id = 1;
     var vue = new Vue({
-        el:'#historyTables',
+        el:'#dataAnalysisVisualization',
         data:{
-            src:'/html/dataFillIframe.html?tableId=-1',
+            date:'',
+            pieChart:null,
+            src:'',
             options: [],
             periodId: '',
             cityOptions:[
@@ -359,56 +372,217 @@
                 children: 'children',
                 label: 'label'
             },
-            location:''
-
+            child: [],
+            aimUserId: '',
+            props:{
+                children:'child',
+                label:'fullname'
+            }
         },
         methods:{
-            handleNodeClick(data){
-                if(data.children) this.location = '安徽省-' + data.value.toString();
-                else this.location = this.location + '-' + data.value.toString();
-                console.log()
-            },
-            changeURL(){
-                this.src='';
-                var start='';
-                var end='';
-                for(var i = 0; i < vue.options.length; i ++){
-                    if(vue.options[i].value === vue.periodId){
-                        start=vue.options[i].label.substr(0,10);
-                        end=vue.options[i].label.substr(13);
-                    }
-                }
-                var n=this.location.split('-').length;
-                if(start !== '' && end !== '' && n === 3){
-                    vue.src = '/html/dataFillIframe.html?tableId='+'53';
-                    $.ajax({
-                        url: '/common/data/selectUploadInfoByCondition',
-                        type: 'post',
-                        data: {
-                            startDate:start,
-                            endDate:end,
-                            condition:vue.location
-                        },
-                        success(res) {
-                            console.log(res);
-                            if(res.code===0) {
-                                vue.src = '/html/dataFillIframe.html?tableId='+'53'
-                            }
-                            else {
-                                alert(res.message);
-                            }
-                        },
-                        error(res) {
-                            console.log(res);
-                            alert('初始化失败，请稍后刷新重试');
+            initialPie(data){
+                $.ajax({
+                    url: '/common/data/aimUserPieChartIndustryNum ',
+                    type: 'post',
+                    data:{
+                        aimUserId:data.id,
+                        uploadPeriodId:vue.periodId
+                    },
+                    success(res){
+                        console.log(res.data);
+                        if (res.data.tableId==0) {
+                            vue.pieChart = echarts.init(vue.$refs.pie);
+                            // 指定图表的配置项和数据
+                            vue.pieChart.setOption({
+                                title: {
+                                    text: data.fullname+'取样分析数据'
+                                }
+                            });
+                            vue.$message.error('该监测点在该时期暂时没有数据！');
                         }
-                    })
+                        else{
+                            vue.pieChart = echarts.init(vue.$refs.pie);
+                            // 指定图表的配置项和数据
+                            vue.pieChart.setOption({
+                                title: {
+                                    text: data.fullname+'取样分析数据'
+                                },
+                                series : [
+                                    {
+                                        name: '访问来源',
+                                        type: 'pie',
+                                        radius: '60%',
+                                        data:[
+                                            {value:res.data.accoCaterNeed, name:'住宿和餐饮业'},
+                                            {value:res.data.archNeed, name:'建筑业'},
+                                            {value:res.data.cultSportEnteNeed, name:'文化、体育和娱乐业'},
+                                            {value:res.data.eduNeed, name:'教育'},
+                                            {value:res.data.elecGasWaterNeed, name:'电力、燃气及水的生产和供应业'},
+                                            {value:res.data.estateNeed, name:'房地产业'},
+                                            {value:res.data.financeNeed, name:'金融业'},
+                                            {value:res.data.healSecuWelfNeed, name:'教育'},
+                                            {value:res.data.industry1Need, name:'农、林、牧、渔业'},
+                                            {value:res.data.infoCompSoftNeed, name:'信息传输、计算机服务和软件业'},
+                                            {value:res.data.inteOrgaNeed, name:'国际组织'},
+                                            {value:res.data.leaseBusiServNeed, name:'租赁和商务服务业'},
+                                            {value:res.data.manaOrgaNeed, name:'公共管理与社会组织'},
+                                            {value:res.data.manuNeed, name:'制造业'},
+                                            {value:res.data.mineNeed, name:'采矿业'},
+                                            {value:res.data.reseTechAddrNeed, name:'科学研究、技术服务和地址勘查业'},
+                                            {value:res.data.resiServNeed, name:'居民服务和其他服务业'},
+                                            {value:res.data.retailNeed, name:'批发和零售业'},
+                                            {value:res.data.tranStorPostNeed, name:'交通运输、仓储和邮政业'},
+                                            {value:res.data.waterEnviFaciNeed, name:'水利、环境和公共设施管理业'},
+                                        ]
+                                    }
+                                ]
+                            });
+                        }
+
+                    },
+                    error(res){
+                        console.log('error')
+                    }
+                });
+            },
+            initialLineNum(data){
+                $.ajax({
+                    url: '/common/data/aimUserLineChartTotalNum ',
+                    type: 'post',
+                    data:{
+                        aimUserId:data.id,
+                        startDateString:vue.date[0],
+                        endDateString:vue.date[1]
+                    },
+                    success(res){
+                        console.log(res.data);
+                        if (res.data.tableId==0||res.data.tableId==null) {
+                            // vue.pieChart = echarts.init(vue.$refs.pie);
+                            // // 指定图表的配置项和数据
+                            // vue.pieChart.setOption({
+                            //     title: {
+                            //         text: data.fullname+'对比数据分析'
+                            //     }
+                            // });
+                            vue.$message.error('该监测点在该时期暂时没有数据！');
+                        }
+                        else{
+                            this.lineNumChart = echarts.init(this.$refs.lineNum);
+                            // 指定图表的配置项和数据
+                            this.lineNumChart.setOption({
+                                title: {
+                                    test: data.fullname+'对比数据分析'
+                                },
+                                tooltip: {},
+                                xAxis: {
+                                    // type: 'category',
+                                    // data: ['1','2','3']
+                                },
+                                yAxis: {},
+                                series : [
+                                    {
+                                        name: '需求人数',
+                                        type: 'line',
+                                        data: res.data.needPopu,
+                                    },
+                                    {
+                                        name: '求职人数',
+                                        type: 'line',
+                                        data: res.data.jobseekPopu,
+                                    }
+                                ]
+                            });
+                        }
+
+                    },
+                    error(res){
+                        console.log('error')
+                    }
+                });
+
+            },
+            initialLineAge(data){
+                $.ajax({
+                    url: '/common/data/aimUserLineChartAgeNum ',
+                    type: 'post',
+                    data:{
+                        aimUserId:data.id,
+                        startDateString:vue.date[0],
+                        endDateString:vue.date[1]
+                    },
+                    success(res){
+                        console.log(res.data);
+                        if (res.data.tableId==0||res.data.tableId==null) {
+                            // vue.pieChart = echarts.init(vue.$refs.pie);
+                            // // 指定图表的配置项和数据
+                            // vue.pieChart.setOption({
+                            //     title: {
+                            //         text: data.fullname+'对比数据分析'
+                            //     }
+                            // });
+                            vue.$message.error('该监测点在该时期暂时没有数据！');
+                        }
+                        else{
+                            this.lineAgeChart = echarts.init(this.$refs.lineAge);
+                            // 指定图表的配置项和数据
+                            this.lineAgeChart.setOption({
+                                title: {
+                                    test: data.fullname+'年龄数据分析'
+                                },
+                                tooltip: {},
+                                xAxis: {
+                                    type: 'category',
+                                    data: ['16-24岁','25-34岁','35-44岁','35-44岁']
+                                },
+                                yAxis: {},
+                                series : [
+                                    {
+                                        name: '需求人数',
+                                        type: 'line',
+                                        data: [
+
+                                        ]
+                                    },
+                                    {
+                                        name: '求职人数',
+                                        type: 'line',
+                                        data: [],
+                                    }
+                                ]
+                            });
+                        }
+
+                    },
+                    error(res){
+                        console.log('error')
+                    }
+                });
+
+            },
+
+            handleNodeClick(data){
+                console.log(data);
+                if (data.child==null){
+                    this.initialLineNum(data);
+                    this.initialLineAge(data);
                 }
 
+            },
 
+            getChildUser(){
+                $.ajax({
+                    url:'/user/list',
+                    type: 'post',
+                    success(res){
+                        vue.child=res.data;
+                        console.log(res.data)
+                    }
+                })
             }
         },
         mounted(){
+            this.getChildUser();
+
             $.ajax({
                 url:'/common/data/selectUploadPeriodByTime',
                 type:'post',
@@ -418,7 +592,7 @@
                 },
                 success(res){
                     if(res.code === 0){
-                        // console.log(res);
+                        console.log(res);
                         vue.options=[];
                         for(var i = 0; i < res.data.length;i ++){
                             vue.options.push({value:res.data[i].uploadPeriodId,
@@ -426,137 +600,15 @@
                         }
                     }
                     else{
-                        vue.$message.error('错了哦');
+                        vue.$message.error('错了哦，这是一条错误消息');
                     }
                 },
                 error(res){
-                    vue.$message.error('错了哦');
-                }
-            });
-
-            $.ajax({
-                url:'/user/userType',
-                type:'post',
-                success(r){
-                    vue.cityOptions=[];
-                    if(r === 1){
-                        //省
-                        $.ajax({
-                            url:'/province/record/conditionalQuery',
-                            type:'post',
-                            data:{
-                                condition:''
-                            },
-                            success(res){
-                                // console.log(res);
-                                var i,j,k;
-                                if(res.code === 0){
-                                    for(i = 0; i < res.data.length; i ++){
-                                        // console.log(res)
-                                        var tmp = res.data[i].regionName.split('-');
-                                        for(j = 0; j < vue.cityOptions.length; j ++){
-                                            if(vue.cityOptions[j].label === tmp[1]){
-                                                if(vue.cityOptions[j].children){
-                                                    for(k = 0; k < vue.cityOptions[j].children.length; k ++){
-                                                        if(vue.cityOptions[j].children[k].label === tmp[1]){
-                                                            vue.cityOptions[j].children[k].push(res.data[i].regionEmpName);
-                                                            break;
-                                                        }
-                                                    }
-                                                    if(k === vue.cityOptions[j].children.length){
-                                                        // vue.cityOptions[j].children.push({label:tmp[2], value:tmp[2],children:[res.data[i].regionEmpName]});
-                                                    }
-                                                }
-                                                else{
-                                                    vue.cityOptions[j].children.push({label:tmp[2], value:tmp[2],children:[res.data[i].regionEmpName]});
-                                                }
-                                                break;
-                                            }
-                                        }
-                                        if(j === vue.cityOptions.length)
-                                        {
-                                            vue.cityOptions.push({
-                                                label:tmp[1],
-                                                value:tmp[1],
-                                                children:[{label:tmp[2], value:tmp[2],children:[{label:res.data[i].regionEmpName, value:res.data[i].regionEmpName}]}]
-
-                                            })
-                                        }
-                                        // console.log(tmp)
-                                    }
-                                }
-                                else{
-                                    vue.$message.error('错了哦');
-                                }
-                            },
-                            error(res){
-                                vue.$message.error('错了哦');
-                            }
-                        })
-                    }
-                    else if(r === 2){
-                        //市
-                        $.ajax({
-                            url:'/city/record/conditionalQuery',
-                            type:'post',
-                            data:{
-                                condition:''
-                            },
-                            success(res){
-                                console.log(res)
-                                if(res.code === 0){
-                                    var i,j;
-                                    for(i = 0; i < res.data.length; i ++){
-                                        var tmp = res.data[i].regionName.split('-');
-                                        for(j = 0; j < vue.cityOptions.length; j ++){
-                                            if(vue.cityOptions[j].label === tmp[2]){
-                                                vue.cityOptions[j].children.push(res.data[i].regionEmpName);
-                                                break;
-                                            }
-                                        }
-                                        if(j === vue.cityOptions.length){
-                                            vue.cityOptions.push({
-                                            label:tmp[2],
-                                            value:tmp[2],
-                                            children:[{label:res.data[i].regionEmpName, value:res.data[i].regionEmpName}]
-                                            })
-                                        }
-                                    }
-                                }
-                                else{
-                                    vue.$message.error('错了哦');
-                                }
-                            },
-                            error(res){
-                                vue.$message.error('错了哦');
-                            }
-                        })
-                    }
-                    else if(r === 3){
-                        //监测点
-                        $.ajax({
-                            url:'/market/record/select',
-                            type:'post',
-                            success(res){
-                                if(res.code === 0){
-                                    vue.location = res.data.regionName;
-                                    vue.cityOptions = [];
-                                }
-                                else{
-                                    vue.$message.error('错了哦');
-                                }
-                            },
-                            error(res){
-                                vue.$message.error('错了哦');
-                            }
-                        })
-                    }
-                },
-                error(r){
-                    vue.$message.error('错了哦');
+                    vue.$message.error('错了哦，这是一条错误消息');
                 }
             })
         }
     })
+
 </script>
 </html>

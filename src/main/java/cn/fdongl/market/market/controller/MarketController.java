@@ -3,7 +3,7 @@ package cn.fdongl.market.market.controller;
 import cn.fdongl.market.common.service.CommonService;
 import cn.fdongl.market.market.entity.*;
 import cn.fdongl.market.market.service.MarketService;
-import cn.fdongl.market.province.entity.UploadPeriod;
+import cn.fdongl.market.common.entity.UploadPeriod;
 import cn.fdongl.market.security.entity.AppUserDetail;
 import cn.fdongl.market.util.ControllerBase;
 import org.springframework.beans.factory.annotation.Autowired;

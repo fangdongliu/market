@@ -12,382 +12,355 @@
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <link rel="stylesheet" href="../css/formdata.css">
-    <style>
-        *{
-            padding:0;
-            margin:0;
-        }
-        .el-input__inner{
-            cursor:default !important;
-        }
-        .el-input__inner:focus{
-            border:1px solid #DCDFE6 !important;;
-        }
-        .el-input__inner:hover{
-            border:1px solid #DCDFE6 !important;;
-        }
-        .table{
-            margin-top: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/stylesheet.css">
 </head>
-<body style="background-color: #FFFFFF">
-<div id="app" style="padding: 0;">
-    <div class="formIndex" style="margin-bottom: 10px;">
-        <el-row type="flex" align="middle">
-            <el-col :span="9">
-                请选择要查看的数据表：
-            </el-col>
-            <el-col :span="10">
-                <el-select v-model="index" size="small">
-                    <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col>
-        </el-row>
-    </div>
-    <!--<hr/>-->
-
-    <div class="table" v-if="this.index==1">
-        <el-form :model="form1data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
-            <el-form-item class="tableheader">
-                <el-row>
-                    <el-col :span="6" offset="4">需求人数</el-col>
-                    <el-col :span="6" >求职人数</el-col>
-                    <el-col :span="6" >求职倍率</el-col>
-                </el-row>
-            </el-form-item>
-            <el-form-item class="tablecontent">
-                <el-row>
-                    <el-col :span="4" >{{form1data.title}}</el-col>
-                    <el-col :span="6"><el-input v-model="form1data.need" :readonly="flagReadOnly"></el-input></el-col>
-                    <el-col :span="6"><el-input v-model="form1data.seek" :readonly="flagReadOnly"></el-input></el-col>
-                    <el-col :span="6"><el-input v-model="form1data.rate" :readonly="flagReadOnly"></el-input></el-col>
-                </el-row>
-            </el-form-item>
-        </el-form>
-    </div>
-
-    <div class="table" v-else-if="this.index==2">
-        <el-form :model="form2data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
-            <el-form-item class="tableheader">
-                <el-row>
-                    <el-col :span="8">产业</el-col>
-                    <el-col :span="8" >需求人数</el-col>
-                    <el-col :span="8" >所占比重</el-col>
-                </el-row>
-            </el-form-item>
-            <div  v-for="item in form2data">
-                <el-form-item class="tablecontent">
-                    <el-row>
-                        <el-col :span="8">{{item.title}}</el-col>
-                        <el-col :span="8"><el-input v-model="item.need" :readonly="flagReadOnly" ></el-input></el-col>
-                        <el-col :span="8"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
-                    </el-row>
-                </el-form-item>
+<body>
+<div id="app">
+    <el-main class="content" style="overflow: visible;background-color: #FFFFFF;margin:20px;border-radius: 10px;">
+        <div class="contentDetail">
+            <div class="formIndex">
+                <el-button class="indexes" v-for="form in forms" @click="turnForm(form.index)" circle>
+                    {{form.index}}
+                </el-button>
+                <el-button id="submit" @click="submit" type="success">提交审核</el-button>
             </div>
-        </el-form>
-    </div>
-
-    <div class="table" v-else-if="this.index==3">
-        <el-form :model="form3data">
+            <hr/>
             <div class="tabletitle">{{forms[this.index-1].title}}</div>
-            <el-form-item class="tableheader">
-                <el-row>
-                    <el-col :span="8">行业</el-col>
-                    <el-col :span="8" >需求人数</el-col>
-                    <el-col :span="8" >所占比重</el-col>
-                </el-row>
-            </el-form-item>
-            <div  v-for="item in form3data">
-                <el-form-item class="tablecontent">
-                    <el-row>
-                        <el-col :span="8">{{item.title}}</el-col>
-                        <el-col :span="8"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="8"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
-                    </el-row>
-                </el-form-item>
-            </div>
-        </el-form>
-    </div>
 
-    <div class="table" v-else-if="this.index==4">
-        <el-form :model="form4data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
-            <el-form-item class="tableheader">
-                <el-row>
-                    <el-col :span="8">产业</el-col>
-                    <el-col :span="8" >需求人数</el-col>
-                    <el-col :span="8" >所占比重</el-col>
-                </el-row>
-            </el-form-item>
-            <div  v-for="item in form4data">
-                <el-form-item class="tablecontent">
-                    <el-row>
-                        <el-col :span="2">{{item.title1}}</el-col>
-                        <el-col :span="3">{{item.title2}}</el-col>
-                        <el-col :span="3">{{item.title3}}</el-col>
-                        <el-col :span="8"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="8"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
-                    </el-row>
-                </el-form-item>
+            <div class="table" v-if="this.index==1">
+                <el-form :model="form1data">
+                    <el-form-item class="tableheader">
+                        <el-row>
+                            <el-col :span="6" offset="4">需求人数</el-col>
+                            <el-col :span="6" >求职人数</el-col>
+                            <el-col :span="6" >求职倍率</el-col>
+                        </el-row>
+                    </el-form-item>
+                    <el-form-item class="tablecontent">
+                        <el-row>
+                            <el-col :span="2" offset="2">{{form1data.title}}</el-col>
+                            <el-col :span="6">{{form1data.need}}</el-col>
+                            <el-col :span="6">{{form1data.seek}}</el-col>
+                            <el-col :span="6">{{form1data.rate}}</el-col>
+                        </el-row>
+                    </el-form-item>
+                </el-form>
             </div>
-        </el-form>
-    </div>
 
-    <div class="table" v-else-if="this.index==5">
-        <el-form :model="form5data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
-            <el-form-item class="tableheader">
-                <el-row>
-                    <el-col :span="4">就业</el-col>
-                    <el-col :span="20" >劳动力供求人数比较</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="4">类别</el-col>
-                    <el-col :span="4" >需求人数</el-col>
-                    <el-col :span="4" >所占比重</el-col>
-                    <el-col :span="4" >求职人数</el-col>
-                    <el-col :span="4" >所占比重</el-col>
-                    <el-col :span="4" >求人倍率</el-col>
-                </el-row>
-            </el-form-item>
-            <div  v-for="item in form5data">
-                <el-form-item class="tablecontent">
-                    <el-row>
-                        <el-col :span="4">{{item.title}}</el-col>
-                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
-                    </el-row>
-                </el-form-item>
+            <div class="table" v-else-if="this.index==2">
+                <el-form :model="form2data">
+                    <el-form-item class="tableheader">
+                        <el-row>
+                            <el-col :span="2" offset="6">产业</el-col>
+                            <el-col :span="5" >需求人数</el-col>
+                            <el-col :span="5" >所占比重</el-col>
+                        </el-row>
+                    </el-form-item>
+                    <div  v-for="item in form2data">
+                        <el-form-item class="tablecontent">
+                            <el-row>
+                                <el-col :span="2" offset="6">{{item.title}}</el-col>
+                                <el-col :span="5">{{item.need}}</el-col>
+                                <el-col :span="5">{{item.needrate}}</el-col>
+                            </el-row>
+                        </el-form-item>
+                    </div>
+                </el-form>
             </div>
-        </el-form>
-    </div>
 
-    <div class="table" v-else-if="this.index==6">
-        <el-form :model="form6data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
-            <el-form-item class="tableheader">
-                <el-row>
-                    <el-col :span="4">职</el-col>
-                    <el-col :span="4">职业</el-col>
-                    <el-col :span="16" >劳动力供求人数比较</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="4">业</el-col>
-                    <el-col :span="4">类别</el-col>
-                    <el-col :span="4" >需求人数</el-col>
-                    <el-col :span="4" >求职人数</el-col>
-                    <el-col :span="4" >缺口数</el-col>
-                    <el-col :span="4" >求人倍率</el-col>
-                </el-row>
-            </el-form-item>
-            <div  v-for="item in form6data">
-                <el-form-item class="tablecontent">
-                    <el-row>
-                        <el-col :span="4"><el-input v-model="item.job" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.jobcode" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.gap" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
-                    </el-row>
-                </el-form-item>
+            <div class="table" v-else-if="this.index==3">
+                <el-form :model="form3data">
+                    <el-form-item class="tableheader">
+                        <el-row>
+                            <el-col :span="2" offset="6">行业</el-col>
+                            <el-col :span="5" >需求人数</el-col>
+                            <el-col :span="5" >所占比重</el-col>
+                        </el-row>
+                    </el-form-item>
+                    <div  v-for="item in form3data">
+                        <el-form-item class="tablecontent">
+                            <el-row>
+                                <el-col :span="2" offset="6">{{item.title}}</el-col>
+                                <el-col :span="5">{{item.need}}</el-col>
+                                <el-col :span="5">{{item.needrate}}</el-col>
+                            </el-row>
+                        </el-form-item>
+                    </div>
+                </el-form>
             </div>
-        </el-form>
-    </div>
 
-    <div class="table" v-else-if="this.index==7">
-        <el-form :model="form7data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
-            <el-form-item class="tableheader">
-                <el-row>
-                    <el-col :span="4">职</el-col>
-                    <el-col :span="4">职业</el-col>
-                    <el-col :span="16" >劳动力供求人数比较</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="4">业</el-col>
-                    <el-col :span="4">类别</el-col>
-                    <el-col :span="4" >需求人数</el-col>
-                    <el-col :span="4" >求职人数</el-col>
-                    <el-col :span="4" >缺口数</el-col>
-                    <el-col :span="4" >求人倍率</el-col>
-                </el-row>
-            </el-form-item>
-            <div  v-for="item in form7data">
-                <el-form-item class="tablecontent">
-                    <el-row>
-                        <el-col :span="4"><el-input v-model="item.job" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.jobcode" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.gap" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
-                    </el-row>
-                </el-form-item>
+            <div class="table" v-else-if="this.index==4">
+                <el-form :model="form4data">
+                    <el-form-item class="tableheader">
+                        <el-row>
+                            <el-col :span="6" offset="4">产业</el-col>
+                            <el-col :span="5" >需求人数</el-col>
+                            <el-col :span="5" >所占比重</el-col>
+                        </el-row>
+                    </el-form-item>
+                    <div  v-for="item in form4data">
+                        <el-form-item class="tablecontent">
+                            <el-row>
+                                <el-col :span="2" offset="4">{{item.title1}}</el-col>
+                                <el-col :span="2">{{item.title2}}</el-col>
+                                <el-col :span="2">{{item.title3}}</el-col>
+                                <el-col :span="5">{{item.need}}</el-col>
+                                <el-col :span="5">{{item.needrate}}</el-col>
+                            </el-row>
+                        </el-form-item>
+                    </div>
+                </el-form>
             </div>
-        </el-form>
-    </div>
 
-    <div class="table" v-else-if="this.index==8">
-        <el-form :model="form8data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
-            <el-form-item class="tableheader">
-                <el-row>
-                    <el-col :span="8">求职人员类别</el-col>
-                    <el-col :span="8" >求职人数</el-col>
-                    <el-col :span="8" >所占比重</el-col>
-                </el-row>
-            </el-form-item>
-            <div  v-for="item in form8data">
-                <el-form-item class="tablecontent">
-                    <el-row>
-                        <el-col :span="8">{{item.title}}</el-col>
-                        <el-col :span="8"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="8"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
-                    </el-row>
-                </el-form-item>
+            <div class="table" v-else-if="this.index==5">
+                <el-form :model="form5data">
+                    <el-form-item class="tableheader">
+                        <el-row>
+                            <el-col :span="2" offset="4">就业</el-col>
+                            <el-col :span="15" >劳动力供求人数比较</el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="2" offset="4">类别</el-col>
+                            <el-col :span="3" >需求人数</el-col>
+                            <el-col :span="3" >所占比重</el-col>
+                            <el-col :span="3" >求职人数</el-col>
+                            <el-col :span="3" >所占比重</el-col>
+                            <el-col :span="3" >求人倍率</el-col>
+                        </el-row>
+                    </el-form-item>
+                    <div  v-for="item in form5data">
+                        <el-form-item class="tablecontent">
+                            <el-row>
+                                <el-col :span="2" offset="4">{{item.title}}</el-col>
+                                <el-col :span="3">{{item.need}}</el-col>
+                                <el-col :span="3">{{item.needrate}}</el-col>
+                                <el-col :span="3">{{item.seek}}</el-col>
+                                <el-col :span="3">{{item.seekrate}}</el-col>
+                                <el-col :span="3">{{item.rate}}</el-col>
+                            </el-row>
+                        </el-form-item>
+                    </div>
+                </el-form>
             </div>
-        </el-form>
-    </div>
 
-    <div class="table" v-else-if="this.index==9">
-        <el-form :model="form9data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
-            <el-form-item class="tableheader">
-                <el-row>
-                    <el-col :span="4">性</el-col>
-                    <el-col :span="20" >劳动力供求人数比较</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="4">别</el-col>
-                    <el-col :span="4" >需求人数</el-col>
-                    <el-col :span="4" >所占比重</el-col>
-                    <el-col :span="4" >求职人数</el-col>
-                    <el-col :span="4" >所占比重</el-col>
-                    <el-col :span="4" >求人倍率</el-col>
-                </el-row>
-            </el-form-item>
-            <div  v-for="item in form9data">
-                <el-form-item class="tablecontent">
-                    <el-row>
-                        <el-col :span="4">{{item.title}}</el-col>
-                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
-                    </el-row>
-                </el-form-item>
+            <div class="table" v-else-if="this.index==6">
+                <el-form :model="form6data">
+                    <el-form-item class="tableheader">
+                        <el-row>
+                            <el-col :span="4" offset="2">职</el-col>
+                            <el-col :span="4">职业</el-col>
+                            <el-col :span="12" >劳动力供求人数比较</el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="4" offset="2">业</el-col>
+                            <el-col :span="4">类别</el-col>
+                            <el-col :span="3" >需求人数</el-col>
+                            <el-col :span="3" >求职人数</el-col>
+                            <el-col :span="3" >缺口数</el-col>
+                            <el-col :span="3" >求人倍率</el-col>
+                        </el-row>
+                    </el-form-item>
+                    <div  v-for="item in form6data">
+                        <el-form-item class="tablecontent">
+                            <el-row>
+                                <el-col :span="4" offset="2">{{item.job}}</el-col>
+                                <el-col :span="4">{{item.jobcode}}</el-col>
+                                <el-col :span="3">{{item.need}}</el-col>
+                                <el-col :span="3">{{item.seek}}</el-col>
+                                <el-col :span="3">{{item.gap}}</el-col>
+                                <el-col :span="3">{{item.rate}}</el-col>
+                            </el-row>
+                        </el-form-item>
+                    </div>
+                </el-form>
             </div>
-        </el-form>
-    </div>
 
-    <div class="table" v-else-if="this.index==10">
-        <el-form :model="form10data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
-            <el-form-item class="tableheader">
-                <el-row>
-                    <el-col :span="4">年</el-col>
-                    <el-col :span="20" >劳动力供求人数比较</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="4">龄</el-col>
-                    <el-col :span="4" >需求人数</el-col>
-                    <el-col :span="4" >所占比重</el-col>
-                    <el-col :span="4" >求职人数</el-col>
-                    <el-col :span="4" >所占比重</el-col>
-                    <el-col :span="4" >求人倍率</el-col>
-                </el-row>
-            </el-form-item>
-            <div  v-for="item in form10data">
-                <el-form-item class="tablecontent">
-                    <el-row>
-                        <el-col :span="4">{{item.title}}</el-col>
-                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
-                    </el-row>
-                </el-form-item>
+            <div class="table" v-else-if="this.index==7">
+                <el-form :model="form7data">
+                    <el-form-item class="tableheader">
+                        <el-row>
+                            <el-col :span="4" offset="2">职</el-col>
+                            <el-col :span="4">职业</el-col>
+                            <el-col :span="12" >劳动力供求人数比较</el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="4" offset="2">业</el-col>
+                            <el-col :span="4">类别</el-col>
+                            <el-col :span="3" >需求人数</el-col>
+                            <el-col :span="3" >求职人数</el-col>
+                            <el-col :span="3" >缺口数</el-col>
+                            <el-col :span="3" >求人倍率</el-col>
+                        </el-row>
+                    </el-form-item>
+                    <div  v-for="item in form7data">
+                        <el-form-item class="tablecontent">
+                            <el-row>
+                                <el-col :span="4" offset="2">{{item.job}}</el-col>
+                                <el-col :span="4">{{item.jobcode}}</el-col>
+                                <el-col :span="3">{{item.need}}</el-col>
+                                <el-col :span="3">{{item.seek}}</el-col>
+                                <el-col :span="3">{{item.gap}}</el-col>
+                                <el-col :span="3">{{item.rate}}</el-col>
+                            </el-row>
+                        </el-form-item>
+                    </div>
+                </el-form>
             </div>
-        </el-form>
-    </div>
 
-    <div class="table" v-else-if="this.index==11">
-        <el-form :model="form11data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
-            <el-form-item class="tableheader">
-                <el-row>
-                    <el-col :span="4">文化</el-col>
-                    <el-col :span="20" >劳动力供求人数比较</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="4">程度</el-col>
-                    <el-col :span="4" >需求人数</el-col>
-                    <el-col :span="4" >所占比重</el-col>
-                    <el-col :span="4" >求职人数</el-col>
-                    <el-col :span="4" >所占比重</el-col>
-                    <el-col :span="4" >求人倍率</el-col>
-                </el-row>
-            </el-form-item>
-            <div  v-for="item in form11data">
-                <el-form-item class="tablecontent">
-                    <el-row>
-                        <el-col :span="4">{{item.title}}</el-col>
-                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
-                    </el-row>
-                </el-form-item>
+            <div class="table" v-else-if="this.index==8">
+                <el-form :model="form8data">
+                    <el-form-item class="tableheader">
+                        <el-row>
+                            <el-col :span="2" offset="6">求职人员类别</el-col>
+                            <el-col :span="5" >求职人数</el-col>
+                            <el-col :span="5" >所占比重</el-col>
+                        </el-row>
+                    </el-form-item>
+                    <div  v-for="item in form8data">
+                        <el-form-item class="tablecontent">
+                            <el-row>
+                                <el-col :span="2" offset="6">{{item.title}}</el-col>
+                                <el-col :span="5">{{item.seek}}</el-col>
+                                <el-col :span="5">{{item.seekrate}}</el-col>
+                            </el-row>
+                        </el-form-item>
+                    </div>
+                </el-form>
             </div>
-        </el-form>
-    </div>
 
-    <div class="table" v-else-if="this.index==12">
-        <el-form :model="form12data">
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
-            <el-form-item class="tableheader">
-                <el-row>
-                    <el-col :span="4">技术</el-col>
-                    <el-col :span="20" >劳动力供求人数比较</el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="4">等级</el-col>
-                    <el-col :span="4" >需求人数</el-col>
-                    <el-col :span="4" >所占比重</el-col>
-                    <el-col :span="4" >求职人数</el-col>
-                    <el-col :span="4" >所占比重</el-col>
-                    <el-col :span="4" >求人倍率</el-col>
-                </el-row>
-            </el-form-item>
-            <div  v-for="item in form12data">
-                <el-form-item class="tablecontent">
-                    <el-row>
-                        <el-col :span="4">{{item.title}}</el-col>
-                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
-                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
-                    </el-row>
-                </el-form-item>
+            <div class="table" v-else-if="this.index==9">
+                <el-form :model="form9data">
+                    <el-form-item class="tableheader">
+                        <el-row>
+                            <el-col :span="2" offset="4">性</el-col>
+                            <el-col :span="15" >劳动力供求人数比较</el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="2" offset="4">别</el-col>
+                            <el-col :span="3" >需求人数</el-col>
+                            <el-col :span="3" >所占比重</el-col>
+                            <el-col :span="3" >求职人数</el-col>
+                            <el-col :span="3" >所占比重</el-col>
+                            <el-col :span="3" >求人倍率</el-col>
+                        </el-row>
+                    </el-form-item>
+                    <div  v-for="item in form9data">
+                        <el-form-item class="tablecontent">
+                            <el-row>
+                                <el-col :span="2" offset="4">{{item.title}}</el-col>
+                                <el-col :span="3">{{item.need}}</el-col>
+                                <el-col :span="3">{{item.needrate}}</el-col>
+                                <el-col :span="3">{{item.seek}}</el-col>
+                                <el-col :span="3">{{item.seekrate}}</el-col>
+                                <el-col :span="3">{{item.rate}}</el-col>
+                            </el-row>
+                        </el-form-item>
+                    </div>
+                </el-form>
             </div>
-        </el-form>
-    </div>
+
+            <div class="table" v-else-if="this.index==10">
+                <el-form :model="form10data">
+                    <el-form-item class="tableheader">
+                        <el-row>
+                            <el-col :span="2" offset="4">年</el-col>
+                            <el-col :span="15" >劳动力供求人数比较</el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="2" offset="4">龄</el-col>
+                            <el-col :span="3" >需求人数</el-col>
+                            <el-col :span="3" >所占比重</el-col>
+                            <el-col :span="3" >求职人数</el-col>
+                            <el-col :span="3" >所占比重</el-col>
+                            <el-col :span="3" >求人倍率</el-col>
+                        </el-row>
+                    </el-form-item>
+                    <div  v-for="item in form10data">
+                        <el-form-item class="tablecontent">
+                            <el-row>
+                                <el-col :span="2" offset="4">{{item.title}}</el-col>
+                                <el-col :span="3">{{item.need}}</el-col>
+                                <el-col :span="3">{{item.needrate}}</el-col>
+                                <el-col :span="3">{{item.seek}}</el-col>
+                                <el-col :span="3">{{item.seekrate}}</el-col>
+                                <el-col :span="3">{{item.rate}}</el-col>
+                            </el-row>
+                        </el-form-item>
+                    </div>
+                </el-form>
+            </div>
+
+            <div class="table" v-else-if="this.index==11">
+                <el-form :model="form11data">
+                    <el-form-item class="tableheader">
+                        <el-row>
+                            <el-col :span="2" offset="4">文化</el-col>
+                            <el-col :span="15" >劳动力供求人数比较</el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="2" offset="4">程度</el-col>
+                            <el-col :span="3" >需求人数</el-col>
+                            <el-col :span="3" >所占比重</el-col>
+                            <el-col :span="3" >求职人数</el-col>
+                            <el-col :span="3" >所占比重</el-col>
+                            <el-col :span="3" >求人倍率</el-col>
+                        </el-row>
+                    </el-form-item>
+                    <div  v-for="item in form11data">
+                        <el-form-item class="tablecontent">
+                            <el-row>
+                                <el-col :span="2" offset="4">{{item.title}}</el-col>
+                                <el-col :span="3">{{item.need}}</el-col>
+                                <el-col :span="3">{{item.needrate}}</el-col>
+                                <el-col :span="3">{{item.seek}}</el-col>
+                                <el-col :span="3">{{item.seekrate}}</el-col>
+                                <el-col :span="3">{{item.rate}}</el-col>
+                            </el-row>
+                        </el-form-item>
+                    </div>
+                </el-form>
+            </div>
+
+            <div class="table" v-else-if="this.index==12">
+                <el-form :model="form12data">
+                    <el-form-item class="tableheader">
+                        <el-row>
+                            <el-col :span="2" offset="4">技术</el-col>
+                            <el-col :span="15" >劳动力供求人数比较</el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="2" offset="4">等级</el-col>
+                            <el-col :span="3" >需求人数</el-col>
+                            <el-col :span="3" >所占比重</el-col>
+                            <el-col :span="3" >求职人数</el-col>
+                            <el-col :span="3" >所占比重</el-col>
+                            <el-col :span="3" >求人倍率</el-col>
+                        </el-row>
+                    </el-form-item>
+                    <div  v-for="item in form12data">
+                        <el-form-item class="tablecontent">
+                            <el-row>
+                                <el-col :span="2" offset="4">{{item.title}}</el-col>
+                                <el-col :span="3">{{item.need}}</el-col>
+                                <el-col :span="3">{{item.needrate}}</el-col>
+                                <el-col :span="3">{{item.seek}}</el-col>
+                                <el-col :span="3">{{item.seekrate}}</el-col>
+                                <el-col :span="3">{{item.rate}}</el-col>
+                            </el-row>
+                        </el-form-item>
+                    </div>
+                </el-form>
+            </div>
+
+            <div>
+                <el-button id='last' @click="last" type="primary">上一页</el-button>
+                <el-button id='save' @click="next"  type="primary">下一页</el-button>
+            </div>
+
+        </div>
+    </el-main>
+    <el-footer class="footer">2019 &copy; 第二组织</el-footer>
+
 
 </div>
 
@@ -397,71 +370,53 @@
     var vue = new Vue({
         created(){
             var that = this;
+            $.ajax({
+                url: '/market/upload/select',
+                type: 'post',
+                data: {},
+                success(res) {
+                    console.log(res);
+                    if(res.code==0) {
+                        that.tableId = res.data.tableId;
+                        console.log('tableId:'+that.tableId);
+                        if(that.tableId!=null)
+                            that.loadData();
+                    }
+                    else {
+                        alert(res.message);
+                    }
+                },
+                error(res) {
+                    console.log(res);
+                    alert('初始化失败，请稍后刷新重试');
+                },
+            })
+
 
         },
         mounted(){
             var div = document.getElementsByTagName('button')[0];
-            var url = window.location.href;
-            var tmp = url.split('=');
-            this.tableId = parseInt(tmp[1]);
-            if(this.tableId !== -1)
-            this.loadData()
+            div.style.backgroundColor = "#e8f0fe";
         },
+
         el:'#app',
         data:{
-            options: [{
-                value: 1,
-                label: '供求总体人数'
-            }, {
-                value: 2,
-                label: '按产业分组的需求人数'
-            }, {
-                value: 3,
-                label: '按行业分组的需求人数'
-            }, {
-                value: 4,
-                label: '按用人单位性质分组的需求人数'
-            }, {
-                value: 5,
-                label: '按按职业分组的供求人数'
-            }, {
-                value: 6,
-                label: '需求大于求职缺口最大的前十个职业（职业小类）'
-            }, {
-                value: 7,
-                label: '需求小于求职缺口最大的前十个职业（职业小类）'
-            }, {
-                value: 8,
-                label: '按求职人员类别分组的求职人数'
-            }, {
-                value: 9,
-                label: '按性别分组的供求人数'
-            }, {
-                value: 10,
-                label: '按年龄分组的供求人数'
-            }, {
-                value: 11,
-                label: '按文化程度分组的供求人数'
-            }, {
-                value: 12,
-                label: '按技术等级分组的供求人数'
-            }],
-            flagReadOnly:true,
+            uploadPeriod:'已截止',
             tableId:null,
             index:1,
             forms:[
-                {index:1, id:'button1', title:'表1：供求总体人数'},
-                {index:2, id:'button2', title:'表2：按产业分组的需求人数'},
-                {index:3, id:'button3', title:'表3：按行业分组的需求人数'},
-                {index:4, id:'button4', title:'表4：按用人单位性质划分的需求人数'},
-                {index:5, id:'button5', title:'表5：按职业分组的需求人数'},
-                {index:6, id:'button6', title:'表6：需求大于求职的十个行业'},
-                {index:7, id:'button7', title:'表7：需求小于求职的十个行业'},
-                {index:8, id:'button8', title:'表8：按求职人员类别分组的需求人数'},
-                {index:9, id:'button9', title:'表9：按性别分组的供求人数'},
-                {index:10, id:'button10', title:'表10：按年龄分组的供求人数'},
-                {index:11, id:'button11', title:'表11：按文化程度的供求人数'},
-                {index:12, id:'button12', title:'表12：按技能等级分组的供求人数'},
+                {index:1, title:'表1：供求总体人数'},
+                {index:2, title:'表2：按产业分组的需求人数'},
+                {index:3, title:'表3：按行业分组的需求人数'},
+                {index:4, title:'表4：按用人单位性质划分的需求人数'},
+                {index:5, title:'表5：按职业分组的需求人数'},
+                {index:6, title:'表6：需求大于求职的十个行业'},
+                {index:7, title:'表7：需求小于求职的十个行业'},
+                {index:8, title:'表8：按求职人员类别分组的需求人数'},
+                {index:9, title:'表9：按性别分组的供求人数'},
+                {index:10, title:'表10：按年龄分组的供求人数'},
+                {index:11, title:'表11：按文化程度的供求人数'},
+                {index:12, title:'表12：按技能等级分组的供求人数'},
             ],
             finished:[false,false,false,false,false,false,false,false,false,false,false,false],
             changeable:[false,false,false,false,false,false,false,false,false,false,false,false],
@@ -1137,7 +1092,7 @@
                         tableId: that.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log(res);
                         if (res.code == 0) {
                             that.form1data.seek=res.data.needPopu;
                             that.form1data.need=res.data.jobseekPopu;
@@ -1157,7 +1112,7 @@
                         tableId: this.tableId,
                     },
                     success: function (res) {
-                        // console.log(res);
+                        console.log(res);
                         if (res.code == 0) {
                             that.form2data[0].need = res.data.industry1Need;
                             that.form2data[1].need = res.data.industry2Need;
@@ -1198,7 +1153,7 @@
                         tableId: this.tableId,
                     },
                     success: function (res) {
-                        // console.log(res);
+                        console.log(res);
                         if (res.code == 0) {
                             that.form4data[0].need = res.data.staOwnNeed;
                             that.form4data[1].need = res.data.collNeed;
@@ -1230,7 +1185,7 @@
                         tableId: this.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log(res);
                         if (res.code == 0) {
                             that.form5data[0].need=res.data.leaderNeed;
                             that.form5data[0].seek=res.data.leaderJobseek;
@@ -1263,7 +1218,7 @@
                         tableId: this.tableId,
                     },
                     success: function (res) {
-                        // console.log(res);
+                        console.log(res);
                         if (res.code == 0) {
                             that.form6data[0].job = res.data.mostProf1Name;
                             that.form6data[0].jobcode = res.data.mostProf1Num;
@@ -1321,7 +1276,7 @@
                         tableId: this.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log(res);
                         if (res.code == 0) {
                             that.form7data[0].job = res.data.leastProf1Name;
                             that.form7data[0].jobcode = res.data.leastProf1Num;
@@ -1379,7 +1334,7 @@
                         tableId: this.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log(res);
                         if (res.code == 0) {
                             that.form8data[0].seek=res.data.unempYouth;
                             that.form8data[1].seek=res.data.graduate;
@@ -1407,7 +1362,7 @@
                         tableId: this.tableId,
                     },
                     success: function (res) {
-                        // console.log(res);
+                        console.log(res);
                         if (res.code == 0) {
                             that.form9data[0].need = res.data.maleNeed;
                             that.form9data[0].seek = res.data.maleJobseek;
@@ -1430,7 +1385,7 @@
                         tableId: this.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log(res);
                         if (res.code == 0) {
                             that.form10data[0].need=res.data.sixteenTwentyfourNeed;
                             that.form10data[0].seek=res.data.sixteenTwentyfourJobseek;
@@ -1457,7 +1412,7 @@
                         tableId: this.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log(res);
                         if (res.code == 0) {
                             that.form11data[0].need=res.data.belowJuniHighSchoNeed;
                             that.form11data[0].seek=res.data.belowJuniHighSchoJobseek;
@@ -1486,7 +1441,7 @@
                         tableId: this.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log(res);
                         if (res.code == 0) {
                             that.form12data[0].need=res.data.profLevel5Need;
                             that.form12data[0].seek=res.data.profLevel5Jobseek;
@@ -1523,19 +1478,20 @@
 
             check:function(param){
                 switch (param){
-                    case 1:this.check3(this.form1data);this.getRate(this.form1data);break;
-                    case 2:this.checkNeed2(this.form2data);this.getNeedSum2(this.form2data);this.getNeedRate(this.form2data);break;
-                    case 3:this.checkNeed2(this.form3data);this.getNeedSum2(this.form3data);this.getNeedRate(this.form3data);break;
-                    case 4:this.checkNeed2(this.form4data);this.getNeedSum2(this.form4data);this.getNeedRate(this.form4data);break;
-                    case 5:this.check5(this.form5data);this.getSum5(this.form5data);this.getRate(this.form5data);this.getNeedRate(this.form5data);this.getSeekRate(this.form5data);break;
-                    case 6:this.check4(this.form6data);this.getRate(this.form6data);this.getGap(this.form6data);break;
-                    case 7:this.check4(this.form7data);this.getRate(this.form7data);this.getGap(this.form7data);break;
-                    case 8:this.checkSeek2(this.form8data);this.getSeekSum2(this.form8data);this.getSeekRate(this.form8data);break;
-                    case 9:this.check5(this.form9data);this.getSum5(this.form9data);this.getRate(this.form9data);this.getNeedRate(this.form9data);this.getSeekRate(this.form9data);break;
-                    case 10:this.check5(this.form10data);this.getSum5(this.form10data);this.getRate(this.form10data);this.getNeedRate(this.form10data);this.getSeekRate(this.form10data);break;
-                    case 11:this.check5(this.form11data);this.getSum5(this.form11data);this.getRate(this.form11data);this.getNeedRate(this.form11data);this.getSeekRate(this.form11data);break;
-                    case 12:this.check5(this.form12data);this.getSum5(this.form12data);this.getRate(this.form12data);this.getNeedRate(this.form12data);this.getSeekRate(this.form12data);break;
+                    case 1:this.check3(this.form1data);this.getRate(this.form1data);console.log(this.form1data);break;
+                    case 2:this.checkNeed2(this.form2data);this.getNeedSum2(this.form2data);this.getNeedRate(this.form2data);console.log(this.form2data);break;
+                    case 3:this.checkNeed2(this.form3data);this.getNeedSum2(this.form3data);this.getNeedRate(this.form3data);console.log(this.form3data);break;
+                    case 4:this.checkNeed2(this.form4data);this.getNeedSum2(this.form4data);this.getNeedRate(this.form4data);console.log(this.form4data);break;
+                    case 5:this.check5(this.form5data);this.getSum5(this.form5data);this.getRate(this.form5data);this.getNeedRate(this.form5data);this.getSeekRate(this.form5data);console.log(this.form5data);break;
+                    case 6:this.check4(this.form6data);this.getRate(this.form6data);this.getGap(this.form6data);console.log(this.form6data);break;
+                    case 7:this.check4(this.form7data);this.getRate(this.form7data);this.getGap(this.form7data);console.log(this.form7data);break;
+                    case 8:this.checkSeek2(this.form8data);this.getSeekSum2(this.form8data);this.getSeekRate(this.form8data);console.log(this.form8data);break;
+                    case 9:this.check5(this.form9data);this.getSum5(this.form9data);this.getRate(this.form9data);this.getNeedRate(this.form9data);this.getSeekRate(this.form9data);console.log(this.form9data);break;
+                    case 10:this.check5(this.form10data);this.getSum5(this.form10data);this.getRate(this.form10data);this.getNeedRate(this.form10data);this.getSeekRate(this.form10data);console.log(this.form10data);break;
+                    case 11:this.check5(this.form11data);this.getSum5(this.form11data);this.getRate(this.form11data);this.getNeedRate(this.form11data);this.getSeekRate(this.form11data);console.log(this.form11data);break;
+                    case 12:this.check5(this.form12data);this.getSum5(this.form12data);this.getRate(this.form12data);this.getNeedRate(this.form12data);this.getSeekRate(this.form12data);console.log(this.form12data);break;
                 }
+                console.log(param+':'+this.finished[param-1]);
             },
 
             check3:function(param){
@@ -1673,10 +1629,10 @@
             },
 
             getRate:function(param){
-                // console.log("finished:"+this.finished);
+                console.log("finished:"+this.finished);
                 if(this.finished[this.index-1]) {
                     var formdata = param;
-                    // console.log(formdata);
+                    console.log(formdata);
                     if (this.index == 1) {
                         this.form1data.rate = (Number(this.form1data.need) / Number(this.form1data.seek)).toFixed(4);
                     }
@@ -1696,8 +1652,8 @@
                         else
                             tmp=Number(formdata[formdata.length-1].need)/(Number(formdata[formdata.length-1].need)-Number(formdata[formdata.length-2].need));
                         for (var i = 0; i < formdata.length - 2; i++) {
-                            // console.log(i);
-                            // console.log(formdata);
+                            console.log(i);
+                            console.log(formdata);
                             if(this.index==5)
                                 formdata[i].rate=Number(formdata[i].need)/(tmp*Number(formdata[i].seek));
                             else if(this.index==12&&i==formdata.length-3)
@@ -1706,7 +1662,7 @@
                                 formdata[i].rate=tmp*Number(formdata[i].need)/Number(formdata[i].seek);
                             formdata[i].rate=Number(formdata[i].rate).toFixed(4);
                         }
-                        // console.log(formdata);
+                        console.log(formdata);
                         if (this.index == 5)
                             form5data = formdata;
                         else if (this.index == 9)
@@ -1780,6 +1736,10 @@
                 }
             },
 
+            isReadOnly:function(){
+                // console.log(this.changeable[this.index-1]);
+                return this.changeable[this.index-1];
+            },
 
             change:function(){
                 this.changeable[this.index-1]=false;
@@ -1998,13 +1958,20 @@
                         noRequNeedTechGradeNum: that.form12data[9].need,//无技术等级或职务需求人数
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log(res);
                         if(res.code==0) {
                             console.log('data:'+this.data.uploadDataSet);
                             alert(words + '成功！');
                             that.changeable[that.index - 1] = true;
-                            that.index++;
-                            that.index--;
+                            console.log('param:'+param);
+                            if (param==0) {
+                                if (that.index < 12)
+                                    that.turnForm(that.index + 1);
+                                else {
+                                    that.index++;
+                                    that.index--;
+                                }
+                            }
                         }
                         else
                             alert(res.message);
@@ -2224,18 +2191,20 @@
                                 noRequNeedTechGradeNum: that.form12data[9].need,//无技术等级或职务需求人数
                             },
                             success(res) {
-                                // console.log(this.data);
-                                // console.log(res);
+                                console.log(this.data);
+                                console.log(res);
                                 if(res.code==0) {
                                     alert('保存成功！');
                                     that.changeable[that.index - 1] = true;
-                                    this.next();
+                                    if (that.index < 12)
+                                        that.turnForm(that.index + 1);
                                 }
                                 else alert(res.message);
                             },
                             error(res) {
                                 console.log(res);
                                 alert('保存失败，请稍后重试');
+                                return;
                             }
                         })
                     }
@@ -2260,13 +2229,13 @@
             },
 
             last:function(){
-                if (this.index > 1) {
-                    var div1 = document.getElementsByTagName('button')[this.index-1];
-                    var div2 = document.getElementsByTagName('button')[this.index-2];
-                    div1.style.backgroundColor = "#F3F2F1";
-                    div2.style.backgroundColor = "#e8f0fe";
-                    this.index--;
-                }
+                if (this.index > 1)
+                    this.turnForm(this.index-1);
+            },
+
+            next:function () {
+                if (this.index < 12)
+                    this.turnForm(this.index+1);
             },
 
             turnForm:function (param) {
@@ -2275,9 +2244,9 @@
                 div1.style.backgroundColor = "#F3F2F1";
                 div2.style.backgroundColor = "#e8f0fe";
                 this.index=param;
-                // console.log(this.changeable[this.index-1]);
-                // console.log(this.index);
-                // console.log(this.forms[this.index-1].title);
+                console.log(this.changeable[this.index-1]);
+                console.log(this.index);
+                console.log(this.forms[this.index-1].title);
             }
         }
     })

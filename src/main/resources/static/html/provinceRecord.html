@@ -17,121 +17,121 @@
     </style>
 </head>
 <body>
-    <div id="provinceRecordApp" style="height: 100%;">
-        <el-container style="height: 100%;">
-            <el-main class="content">
-                <div class="contentDetail">
-                    <el-table
-                            :data="marketData"
-                            stripe
-                            style="width: 100%">
-                        <el-table-column
-                                prop="number"
-                                label="序号"
-                                width="100px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="regionName"
-                                label="人力资源市场名">
-                        </el-table-column>
-                        <el-table-column
-                                prop="createTime"
-                                label="申请时间">
-                        </el-table-column>
-                        <el-table-column
-                                prop="stateInChinese"
-                                label="审核状态">
-                        </el-table-column>
-                        <el-table-column
-                                label="操作"
-                                width="150px">
-                            <template slot-scope="scope">
-                                <el-button @click="handleClick(scope.row)" type="primary" size="small">查看</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </div>
-                <el-dialog
+<div id="provinceRecordApp" style="height: 100%;">
+    <el-container style="height: 100%;">
+        <el-main class="content">
+            <div class="contentDetail">
+                <el-table
+                        :data="marketData"
+                        stripe
+                        style="width: 100%">
+                    <el-table-column
+                            prop="number"
+                            label="序号"
+                            width="100px">
+                    </el-table-column>
+                    <el-table-column
+                            prop="regionEmpName"
+                            label="人力资源市场名">
+                    </el-table-column>
+                    <el-table-column
+                            prop="createTime"
+                            label="申请时间">
+                    </el-table-column>
+                    <el-table-column
+                            prop="stateInChinese"
+                            label="审核状态">
+                    </el-table-column>
+                    <el-table-column
+                            label="操作"
+                            width="150px">
+                        <template slot-scope="scope">
+                            <el-button @click="handleClick(scope.row)" type="primary" size="small">查看</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+            <el-dialog
                     title="详细信息"
                     :visible.sync="dialogVisible"
                     width="60%"
                     :before-close="handleClose"
                     lock-scroll
-                    >
+            >
 
-                    <el-dialog
-                            width="30%"
-                            title="请填写拒绝通过备案的原因："
-                            :visible.sync="innerVisible"
-                            append-to-body>
-                        <el-input v-model="rejectedMessage" autosize type="textarea"></el-input>
-                        <span slot="footer" class="dialog-footer">
+                <el-dialog
+                        width="30%"
+                        title="请填写拒绝通过备案的原因："
+                        :visible.sync="innerVisible"
+                        append-to-body>
+                    <el-input v-model="rejectedMessage" autosize type="textarea"></el-input>
+                    <span slot="footer" class="dialog-footer">
                             <el-button @click="handleCancelReject">取消</el-button>
                             <el-button @click="handleConfirmReject" type="primary">确定</el-button>
                         </span>
 
-                    </el-dialog>
+                </el-dialog>
 
-                        <el-row type="flex" justify="center" class="info" align="middle" style="margin-top: 20px">
-                            <el-col :span="6" class="infoTitle">
-                                人力资源市场名：
-                            </el-col>
-                            <el-col :span="6" class="infoContent">
-                                {{detailData.name}}
-                            </el-col>
-                        </el-row>
-                        <el-row type="flex" justify="center" class="info" align="middle">
-                            <el-col :span="6" class="infoTitle">
-                                所属地区：
-                            </el-col>
-                            <el-col :span="6" class="infoContent">
-                                {{detailData.location}}
-                            </el-col>
-                        </el-row>
-                        <el-row type="flex" justify="center" class="info" align="middle">
-                            <el-col :span="6" class="infoTitle">
-                                联系人：
-                            </el-col>
-                            <el-col :span="6" class="infoContent">
-                                {{detailData.people}}
-                            </el-col>
-                        </el-row>
-                        <el-row type="flex" justify="center" class="info" align="middle">
-                            <el-col :span="6" class="infoTitle">
-                                联系人手机：
-                            </el-col>
-                            <el-col :span="6" class="infoContent">
-                                {{detailData.mobile}}
-                            </el-col>
-                        </el-row>
-                        <el-row type="flex" justify="center" class="info" align="middle">
-                            <el-col :span="6" class="infoTitle">
-                                联系电话：
-                            </el-col>
-                            <el-col :span="6" class="infoContent">
-                                {{detailData.phone.substring(0,3) + ' - ' + detailData.phone.substring(3)}}
-                            </el-col>
-                        </el-row>
-                        <el-row type="flex" justify="center" class="info" align="middle">
-                            <el-col :span="6" class="infoTitle">
-                                传真：
-                            </el-col>
-                            <el-col :span="6" class="infoContent">
-                                {{detailData.fax.substring(0,4) + ' - ' + detailData.fax.substring(4)}}
-                            </el-col>
-                        </el-row>
+                <el-row type="flex" justify="center" class="info" align="middle" style="margin-top: 20px">
+                    <el-col :span="6" class="infoTitle">
+                        人力资源市场名：
+                    </el-col>
+                    <el-col :span="6" class="infoContent">
+                        {{detailData.name}}
+                    </el-col>
+                </el-row>
+                <el-row type="flex" justify="center" class="info" align="middle">
+                    <el-col :span="6" class="infoTitle">
+                        所属地区：
+                    </el-col>
+                    <el-col :span="6" class="infoContent">
+                        {{detailData.location}}
+                    </el-col>
+                </el-row>
+                <el-row type="flex" justify="center" class="info" align="middle">
+                    <el-col :span="6" class="infoTitle">
+                        联系人：
+                    </el-col>
+                    <el-col :span="6" class="infoContent">
+                        {{detailData.people}}
+                    </el-col>
+                </el-row>
+                <el-row type="flex" justify="center" class="info" align="middle">
+                    <el-col :span="6" class="infoTitle">
+                        联系人手机：
+                    </el-col>
+                    <el-col :span="6" class="infoContent">
+                        {{detailData.mobile}}
+                    </el-col>
+                </el-row>
+                <el-row type="flex" justify="center" class="info" align="middle">
+                    <el-col :span="6" class="infoTitle">
+                        联系电话：
+                    </el-col>
+                    <el-col :span="6" class="infoContent">
+                        {{detailData.phone.substring(0,3) + ' - ' + detailData.phone.substring(3)}}
+                    </el-col>
+                </el-row>
+                <el-row type="flex" justify="center" class="info" align="middle">
+                    <el-col :span="6" class="infoTitle">
+                        传真：
+                    </el-col>
+                    <el-col :span="6" class="infoContent">
+                        {{detailData.fax.substring(0,4) + ' - ' + detailData.fax.substring(4)}}
+                    </el-col>
+                </el-row>
 
-                    <span slot="footer" class="dialog-footer">
+                <span slot="footer" class="dialog-footer">
                         <el-button @click="handlePass" type="success" size="mini">通&emsp;过</el-button>
                         <el-button @click="innerVisible = true" type="danger" size="mini">不通过</el-button>
                     </span>
-                </el-dialog>
+            </el-dialog>
 
-            </el-main>
-            <el-footer class="footer">2019 &copy; 第二组织</el-footer>
+        </el-main>
+        <el-footer class="footer">2019 &copy; 第二组织</el-footer>
 
-        </el-container>
-    </div>
+    </el-container>
+</div>
 </body>
 <script>
     var vue2 = new Vue({
@@ -154,7 +154,7 @@
         },
         methods:{
             handleClose(done) {
-                    done();
+                done();
             },
             handleClick: function(obj) {
                 // console.log(obj);
@@ -244,6 +244,6 @@
         mounted:function () {
             this.getList()
         }
-        })
+    })
 </script>
 </html>

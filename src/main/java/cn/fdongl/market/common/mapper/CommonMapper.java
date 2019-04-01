@@ -2,7 +2,7 @@ package cn.fdongl.market.common.mapper;
 
 import cn.fdongl.market.common.entity.Notice;
 import cn.fdongl.market.market.entity.*;
-import cn.fdongl.market.province.entity.UploadPeriod;
+import cn.fdongl.market.common.entity.UploadPeriod;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -358,7 +358,7 @@ public interface CommonMapper {
             "and table_id=#{param1} limit 1;")
     TechGradeNum selectTechGradeNum(Integer tableId);
 
-    //上传数据条件查询，查时间段和条件
+    //上传数据条件查询，查时间段、条件
     @Select("SELECT \n" +
             "table_id AS tableId, \n" +
             "upload_period_id AS uploadPeriodId, \n" +
@@ -380,6 +380,26 @@ public interface CommonMapper {
             "or ((select @tmp:=region_name from t_record_info where region_emp_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)) \n" +
             "or ((select @tmp:=region_emp_contact from t_record_info where region_emp_id=t_upload_info.creator limit 1) like (case when #{param4} is not null then CONCAT('%',#{param4},'%') else @tmp end)));")
     List<UploadInfo> selectUploadInfoByCondition(Integer userId,java.sql.Date startDate,java.sql.Date endDate,String condition);
+
+    //按调查期id、地点、市场名称查询上传数据
+    @Select("SELECT \n" +
+            "table_id AS tableId, \n" +
+            "upload_period_id AS uploadPeriodId, \n" +
+            "state_flag AS stateFlag, \n" +
+            "create_time AS createTime, \n" +
+            "creator AS creator, \n" +
+            "revise_time AS reviseTime, \n" +
+            "reviser AS reviser \n" +
+            "from t_upload_info where \n" +
+            "delete_flag=0 \n" +
+            "and state_flag=3 \n" +
+            "and (((select @tmp:=usertype from t_user where t_user.user_id=#{param1} limit 1)=1) \n" +
+            "or (@tmp=2 and t_upload_info.creator in (select t_user.user_id from t_user where t_user.superior=#{param1})) \n" +
+            "or (@tmp=3 and t_upload_info.creator=#{param1})) \n" +
+            "and upload_period_id=#{param2} \n" +
+            "and ((select region_name from t_record_info where t_record_info.region_emp_id=t_upload_info.creator limit 1) like CONCAT('%',#{param3},'%')) \n" +
+            "and ((select region_emp_name from t_record_info where t_record_info.region_emp_id=t_upload_info.creator limit 1) like CONCAT('%',#{param4},'%')) limit 1;")
+    UploadInfo selectUploadInfoBySpecificCondition(Integer userId,Integer uploadPeriodId,String regionName,String regionEmpName);
 
     //根据用户id查询上传数据信息
     @Select("SELECT \n" +

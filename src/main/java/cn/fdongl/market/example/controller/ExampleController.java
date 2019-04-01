@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Log4j2
 @RestController
 @RequestMapping("/example")//指定接口的一级路径
-public class ExampleControrller extends ControllerBase {
+public class ExampleController extends ControllerBase {
 
     final
     TestService testService;
@@ -33,7 +33,7 @@ public class ExampleControrller extends ControllerBase {
     int a = 0;
 
     @Autowired
-    public ExampleControrller(TestService testService) {
+    public ExampleController(TestService testService) {
         this.testService = testService;
     }
 

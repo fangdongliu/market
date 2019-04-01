@@ -3,7 +3,7 @@ package cn.fdongl.market.common.service;
 import cn.fdongl.market.common.entity.Notice;
 import cn.fdongl.market.common.mapper.CommonMapper;
 import cn.fdongl.market.market.entity.*;
-import cn.fdongl.market.province.entity.UploadPeriod;
+import cn.fdongl.market.common.entity.UploadPeriod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -112,6 +112,11 @@ public class CommonService {
     //上传数据条件查询
     public List<UploadInfo> selectUploadInfoByCondition(Integer userId,java.sql.Date startDate,java.sql.Date endDate,String condition) throws Exception {
         return commonMapper.selectUploadInfoByCondition(userId,startDate,endDate,condition);
+    }
+
+    //按调查期id、地点、市场名称查询上传数据
+    public UploadInfo selectUploadInfoBySpecificCondition(Integer userId,Integer uploadPeriodId,String regionName,String regionEmpName) throws Exception {
+        return commonMapper.selectUploadInfoBySpecificCondition(userId,uploadPeriodId,regionName,regionEmpName);
     }
 
     //根据用户id查询上传数据信息
