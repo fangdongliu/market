@@ -14,7 +14,7 @@
     <el-main class="content" style="overflow: visible;background-color: #FFFFFF;margin:20px;border-radius: 10px;">
         <div class="contentDetail">
             <el-row>
-                <el-col :span="10" id="historyLeft">
+                <el-col :span="9" id="historyLeft">
                     <el-row>
                         <el-col :span="8">请选择调查期:</el-col>
                         <el-col :span="10">
@@ -34,7 +34,7 @@
                     </el-row>
                     <el-tree :data="cityOptions" :props="defaultProps" node-key="id" @node-click="handleNodeClick" accordion></el-tree>
                 </el-col>
-                <el-col :span="13" id="historyRight" style="height:100%;border-left: 1px solid #c1d0db;padding-left: 20px;">
+                <el-col :span="15" id="historyRight" style="height:100%;border-left: 1px solid #c1d0db;padding-left: 20px;">
                     <iframe v-bind:src="src"
                             style="height:1000px; width:calc(100%);background-color: #FFFFFF" frameborder="no"></iframe>
                 </el-col>
