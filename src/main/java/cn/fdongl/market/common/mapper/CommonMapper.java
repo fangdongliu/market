@@ -401,7 +401,7 @@ public interface CommonMapper {
             "and ((select region_emp_name from t_record_info where t_record_info.region_emp_id=t_upload_info.creator limit 1) like CONCAT('%',#{param4},'%')) limit 1;")
     UploadInfo selectUploadInfoBySpecificCondition(Integer userId,Integer uploadPeriodId,String regionName,String regionEmpName);
 
-    //根据用户id查询上传数据信息
+    //根据用户id和调查期id查询上传数据信息
     @Select("SELECT \n" +
             "table_id AS tableId, \n" +
             "upload_period_id AS uploadPeriodId, \n" +
@@ -413,8 +413,9 @@ public interface CommonMapper {
             "from t_upload_info where \n" +
             "delete_flag=0 \n" +
             "and state_flag=3 \n" +
-            "and creator=#{param1};")
-    List<UploadInfo> selectUploadInfoById(Integer userId);
+            "and creator=#{param1} \n" +
+            "and upload_period_id=#{param2};")
+    List<UploadInfo> selectUploadInfoById(Integer userId,Integer uploadPeriodId);
 
     //根据id查询调查期
     @Select("SELECT \n" +
