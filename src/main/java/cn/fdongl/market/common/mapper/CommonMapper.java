@@ -473,9 +473,9 @@ public interface CommonMapper {
             "from t_industry_num where \n" +
             "((select delete_flag from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=0) \n" +
             "and ((select state_flag from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=3) \n" +
-            "and (((select @type:=usertype from t_user where t_user.user_id=#{param1})=1) \n" +
-            "or (@type=2 and (select @tmp:=t_upload_info.creator from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1) in (select user_id from t_user where superior=#{param1})) \n" +
-            "or (@type=3 and @tmp=#{param1})) \n" +
+            "and (((select @type:=usertype from t_user where t_user.user_id=#{param1} limit 1)=1) \n" +
+            "or (@type=2 and ((select t_upload_info.creator from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1) in (select user_id from t_user where superior=#{param1}))) \n" +
+            "or (@type=3 and (select t_upload_info.creator from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=#{param1})) \n" +
             "and ((select upload_period_id from t_upload_info where t_upload_info.table_id=t_industry_num.table_id limit 1)=#{param2});")
     IndustryNum pieChartIndustryNum(Integer userId,Integer uploadPeriodId);
 
