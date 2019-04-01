@@ -91,10 +91,10 @@
                                     size="mini"
                                     @click="handleEdit(scope.$index, scope.row)">查看并编辑</el-button>
 
-                            <el-button
-                                    size="mini"
-                                    type="danger"
-                                    @click="deleteRole(scope.$index, scope.row)">删除</el-button>
+                            <!--<el-button-->
+                                    <!--size="mini"-->
+                                    <!--type="danger"-->
+                                    <!--@click="deleteRole(scope.$index, scope.row)">删除</el-button>-->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -120,7 +120,11 @@
                                     :expand-on-click-node="false"
                                     :check-strictly="true"
                                     label="label">
+                                <span class="custom-tree-node" slot-scope="{ node, data }">
+                                    <span>{{ data.label+"("+data.menuName+")"}}</span>
+                                </span>
                             </el-tree>
+
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
