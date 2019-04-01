@@ -31,7 +31,7 @@ public interface UserMapper {
 
     @Select("<script>" +
             "select user_id as id,username,fullname,usertype as userType,superior as father,state_flag as `status`,delete_flag as deleteFlag " +
-            "from t_user where 1=1 " +
+            "from t_user where user_id!=1 " +
             "<if test='param3!=null'>and usertype = #{param3} </if>" +
             "<if test='param4!=null or param5!=null'>"+
             "and (1=0 <if test='param4!=null'>or username like #{param4} </if>" +
@@ -45,7 +45,7 @@ public interface UserMapper {
 
     @Select("<script>" +
             "select count(1)" +
-            "from t_user where 1=1 " +
+            "from t_user where user_id!=1 " +
             "<if test='param1!=null'>and usertype = #{param1} </if>" +
             "<if test='param2!=null or param3!=null'>"+
             "and (1=0 <if test='param2!=null'>or username like #{param2} </if>" +
