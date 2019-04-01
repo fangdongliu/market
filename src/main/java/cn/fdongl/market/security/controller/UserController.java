@@ -66,7 +66,11 @@ public class UserController extends ControllerBase {
 
     @RolesAllowed("USER")
     @PostMapping("userInfo")
-    public Object userInfo(AppUserDetail userDetail) throws Exception {
+    public Object userInfo(AppUserDetail userDetail,Integer userId) throws Exception {
+        if(userId!=null){
+            return userService.userInfo(userId);
+        }
+
         Map<String,Object> map = new HashMap<>();
         map.put("userType",userDetail.getUserType());
         map.put("userId",userDetail.getId());

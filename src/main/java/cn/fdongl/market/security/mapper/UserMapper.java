@@ -29,6 +29,9 @@ public interface UserMapper {
     @Select("SELECT user_id as id,username,fullname,usertype as userType,superior as father,state_flag as `status`,delete_flag as deleteFlag FROM t_user")
     List<ListUserData>list();
 
+    @Select("SELECT user_id as id,username,fullname,usertype as userType,superior as father,state_flag as `status`,delete_flag as deleteFlag FROM t_user where user_id=#{param1} limit 1")
+    ListUserData userInfo(int userId);
+
     @Select("<script>" +
             "select user_id as id,username,fullname,usertype as userType,superior as father,state_flag as `status`,delete_flag as deleteFlag " +
             "from t_user where user_id!=1 " +
