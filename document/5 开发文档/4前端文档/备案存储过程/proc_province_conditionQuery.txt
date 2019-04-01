@@ -1,0 +1,58 @@
+delimiter //
+CREATE  PROCEDURE `proc_province_conditionalQuery`(
+	IN `state` INT,
+	IN `condition` VARCHAR(100)
+)
+LANGUAGE SQL
+NOT DETERMINISTIC 
+CONTAINS SQL
+SQL SECURITY DEFINER
+COMMENT ''
+BEGIN
+	if(state=0) then
+		select
+		region_emp_id AS regionEmpId,
+		region_emp_name AS regionEmpName,
+            		region_name AS regionName,
+            		region_emp_contact AS regionEmpContact,
+            		region_emp_contact_mobi AS regionEmpContactMobi,
+            		region_emp_contact_num AS regionEmpContactNum,
+            		region_emp_fax AS regionEmpFax,
+            		state_flag AS stateFlag,
+            		create_time AS createTime,
+            		creator AS creator,
+            		revise_time AS reviseTIme,
+            		reviser AS reviser
+		from t_record_info where state_flag=2 and region_emp_name like condition;//检测点名称
+	elseif(state=1) then
+		select
+		region_emp_id AS regionEmpId,
+		region_emp_name AS regionEmpName,
+            		region_name AS regionName,
+            		region_emp_contact AS regionEmpContact,
+            		region_emp_contact_mobi AS regionEmpContactMobi,
+            		region_emp_contact_num AS regionEmpContactNum,
+            		region_emp_fax AS regionEmpFax,
+            		state_flag AS stateFlag,
+            		create_time AS createTime,
+            		creator AS creator,
+            		revise_time AS reviseTIme,
+            		reviser AS reviser
+		from t_record_info where state_flag=2 and region_name like condition;//地区名称
+	elseif(state=2) then
+		select
+		region_emp_id AS regionEmpId,
+		region_emp_name AS regionEmpName,
+            		region_name AS regionName,
+            		region_emp_contact AS regionEmpContact,
+            		region_emp_contact_mobi AS regionEmpContactMobi,
+            		region_emp_contact_num AS regionEmpContactNum,
+            		region_emp_fax AS regionEmpFax,
+            		state_flag AS stateFlag,
+            		create_time AS createTime,
+            		creator AS creator,
+            		revise_time AS reviseTIme,
+            		reviser AS reviser
+		from t_record_info where state_flag=2 and region_emp_contact like condition;//联系人名称
+	end if;
+END //
