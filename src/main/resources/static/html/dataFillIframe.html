@@ -404,8 +404,9 @@
             var url = window.location.href;
             var tmp = url.split('=');
             this.tableId = parseInt(tmp[1]);
+            console.log(this.tableId);
             if(this.tableId !== -1)
-            this.loadData()
+                this.loadData()
         },
         el:'#app',
         data:{
@@ -1519,6 +1520,39 @@
                     this.changeable[i] = true;
                     this.finished[i] = true;
                 }
+                this.getNeedSum2(this.form2data);
+                this.getNeedSum2(this.form3data);
+                this.getNeedSum2(this.form4data);
+                this.getSeekSum2(this.form8data);
+                this.getSum5(this.form5data);
+                this.getSum5(this.form9data);
+                this.getSum5(this.form10data);
+                this.getSum5(this.form11data);
+                this.getSum5(this.form12data);
+                this.getRate(this.form1data);
+                this.getRate(this.form5data);
+                this.getRate(this.form6data);
+                this.getRate(this.form7data);
+                this.getRate(this.form9data);
+                this.getRate(this.form10data);
+                this.getRate(this.form11data);
+                this.getRate(this.form12data);
+                this.getGap(this.form6data);
+                this.getGap(this.form7data);
+                this.getNeedRate(this.form2data);
+                this.getNeedRate(this.form3data);
+                this.getNeedRate(this.form4data);
+                this.getNeedRate(this.form5data);
+                this.getNeedRate(this.form9data);
+                this.getNeedRate(this.form10data);
+                this.getNeedRate(this.form11data);
+                this.getNeedRate(this.form12data);
+                this.getSeekRate(this.form5data);
+                this.getSeekRate(this.form8data);
+                this.getSeekRate(this.form9data);
+                this.getSeekRate(this.form10data);
+                this.getSeekRate(this.form11data);
+                this.getSeekRate(this.form12data);
             },
 
             check:function(param){
