@@ -86,12 +86,24 @@
                                             @click="() => view(node, data)">
                                         权限详情
                                     </el-button>
-                                    <el-button
-                                            type="text"
-                                            size="mini"
-                                            @click="() => remove(node, data)">
-                                        删除权限
-                                    </el-button>
+                                    <!--<el-button-->
+                                            <!--type="text"-->
+                                            <!--size="mini"-->
+                                            <!--@click="() => remove(node, data)">-->
+                                        <!--删除权限-->
+                                    <!--</el-button>-->
+
+                                    <el-switch
+                                            v-model="data.status"
+                                            active-color="#13ce66"
+                                            inactive-color="#ff4949"
+                                            active-text="启用"
+                                            inactive-text="禁用"
+                                            :active-value="0"
+                                            :inactive-value="1"
+                                            @change="changeSwitch(data)">
+                                    </el-switch>
+
                                 </span>
                               </span>
                         </el-tree>
@@ -142,6 +154,8 @@
                                             v-model="right.status"
                                             active-color="#13ce66"
                                             inactive-color="#ff4949"
+                                            active-text="启用"
+                                            inactive-text="禁用"
                                             :active-value="0"
                                             :inactive-value="1"></el-switch>
                                             <!--@change="changeSwitch(right)"-->
@@ -218,6 +232,16 @@
                     const children = parent.data.children || parent.data;
                     const index = children.findIndex(d => d.id === data.id);
                     children.splice(index, 1);
+                    $.ajax({
+                        url:'/right/disable',
+                        type:'post',
+                        data:{
+                            rightId:data.id
+                        },
+                        success(res){
+                            console.log('success')
+                        }
+                    })
                     this.$message({
                         type: 'success',
                         message: '删除成功!'
@@ -248,12 +272,15 @@
                         father:vue.tmpData.id,
                     },
                     success(res){
+                        if(res.code==1){
+                            vue.$message.error('权限名重复，请重新创建');
+                        }
                         console.log(res);
                     }
                 });
                 this.dialogFormVisibleCreate = false;
                 console.log(newRight);
-                location.reload();
+                // location.reload();
             },
             createRightBig(newRight){
                 $.ajax({
@@ -365,50 +392,48 @@
 
                 this.currentPage = page;
             },
-            // changeSwitch (data) {
-            //     this.$confirm('确定修改此权限的状态?', '提示', {
-            //         confirmButtonText: '确定',
-            //         cancelButtonText: '取消',
-            //         type: 'warning'
-            //     }).then(() => {
-            //         if (data.status==1)
-            //             $.ajax({
-            //                 url:'/right/disable',
-            //                 type:'post',
-            //                 data:{
-            //                     rightId:data.id
-            //                 },
-            //                 success(res){
-            //                     vue.rightData=res.data;
-            //                     console.log(res.data);
-            //                 }
-            //             });
-            //         else
-            //             $.ajax({
-            //                 url:'/right/enable',
-            //                 type:'post',
-            //                 data:{
-            //                     rightId:data.id
-            //                 },
-            //                 success(res){
-            //                     vue.rightData=res.data;
-            //                     console.log(res.data);
-            //                 }
-            //             });
-            //         this.$message({
-            //             type: 'success',
-            //             message: '操作成功!'
-            //         });
-            //     }).catch(() => {
-            //         data.status=1-data.status;
-            //         this.$message({
-            //             type: 'info',
-            //             message: '已取消操作'
-            //         });
-            //
-            //     });
-            //     console.log(data.status);
-            // },
+            changeSwitch (data) {
+                this.$confirm('确定修改此权限的状态?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    if (data.status==1)
+                        $.ajax({
+                            url:'/right/disable',
+                            type:'post',
+                            data:{
+                                rightId:data.id
+                            },
+                            success(res){
+                                console.log(res.data);
+                            }
+                        });
+                    else
+                        $.ajax({
+                            url:'/right/enable',
+                            type:'post',
+                            data:{
+                                rightId:data.id
+                            },
+                            success(res){
+                                console.log(res.data);
+                            }
+                        });
+                    this.$message({
+                        type: 'success',
+                        message: '操作成功!'
+                    });
+                }).catch(() => {
+                    data.status=1-data.status;
+                    this.$message({
+                        type: 'info',
+                        message: '已取消操作'
+                    });
+
+                });
+                console.log(data.status);
+            },
             toggleSelection(rows) {
                 if (rows) {
                     rows.forEach(row => {
