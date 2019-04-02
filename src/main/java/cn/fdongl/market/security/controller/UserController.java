@@ -68,7 +68,7 @@ public class UserController extends ControllerBase {
     @PostMapping("userInfo")
     public Object userInfo(AppUserDetail userDetail,Integer userId) throws Exception {
         if(userId!=null){
-            return userService.userInfo(userId);
+            return success(userService.userInfo(userId));
         }
 
         Map<String,Object> map = new HashMap<>();
@@ -76,7 +76,7 @@ public class UserController extends ControllerBase {
         map.put("userId",userDetail.getId());
         map.put("username",userDetail.getUsername());
         map.put("fullname",userDetail.getFullname());
-        return map;
+        return success(map);
     }
 
     @PostMapping("child")

@@ -1126,7 +1126,7 @@
                 seek:0,
                 seekrate:0,
                 rate:'-----',
-            }],
+            }]
         },
         methods:{
             loadData:function() {
@@ -1138,10 +1138,13 @@
                         tableId: that.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log('form1:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form1data.seek=res.data.needPopu;
                             that.form1data.need=res.data.jobseekPopu;
+                            that.getRate(1, that.form1data);
+                            console.log(that.form1data);
                         }
                         else alert(res.message);
                     },
@@ -1155,10 +1158,11 @@
                     url: '/common/data/selectIndustryNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success: function (res) {
-                        // console.log(res);
+                        console.log('form2+form3:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form2data[0].need = res.data.industry1Need;
                             that.form2data[1].need = res.data.industry2Need;
@@ -1183,6 +1187,13 @@
                             that.form3data[17].need = res.data.cultSportEnteNeed;
                             that.form3data[18].need = res.data.manaOrgaNeed;
                             that.form3data[19].need = res.data.inteOrgaNeed;
+                            that.getNeedSum2(2,that.form2data);
+                            that.getNeedRate(2,that.form2data);
+                            console.log(that.form2data);
+
+                            that.getNeedSum2(3,that.form3data);
+                            that.getNeedRate(3,that.form3data);
+                            console.log(that.form3data);
                         }
                         else alert(res.message);
                     },
@@ -1196,10 +1207,11 @@
                     url: '/common/data/selectEmployerNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success: function (res) {
-                        // console.log(res);
+                        console.log('form4:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form4data[0].need = res.data.staOwnNeed;
                             that.form4data[1].need = res.data.collNeed;
@@ -1215,6 +1227,9 @@
                             that.form4data[11].need = res.data.instNeed;
                             that.form4data[12].need = res.data.orgaNeed;
                             that.form4data[13].need = res.data.otherNeed;
+                            that.getNeedSum2(4,that.form4data);
+                            that.getNeedRate(4,that.form4data);
+                            console.log(that.form4data);
                         }
                         else alert(res.message);
                     },
@@ -1228,10 +1243,11 @@
                     url: '/common/data/selectProfNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log('form5:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form5data[0].need=res.data.leaderNeed;
                             that.form5data[0].seek=res.data.leaderJobseek;
@@ -1248,6 +1264,11 @@
                             that.form5data[6].need=res.data.otherNeed;
                             that.form5data[6].seek=res.data.otherJobseek;
                             that.form5data[7].seek=res.data.noRequJobseek;
+                            that.getSum5(5,that.form5data);
+                            that.getRate(5,that.form5data);
+                            that.getNeedRate(5,that.form5data);
+                            that.getSeekRate(5,that.form5data);
+                            console.log(that.form5data);
                         }
                         else alert(res.message);
                     },
@@ -1261,10 +1282,11 @@
                     url: '/common/data/selectMostNeeded',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success: function (res) {
-                        // console.log(res);
+                        console.log('form6:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form6data[0].job = res.data.mostProf1Name;
                             that.form6data[0].jobcode = res.data.mostProf1Num;
@@ -1274,7 +1296,7 @@
                             that.form6data[1].jobcode = res.data.mostProf2Num;
                             that.form6data[1].need = res.data.mostProf2Need;
                             that.form6data[1].seek = res.data.mostProf2Jobseek;
-                            that.form6data[2].jo = res.data.mostProf3Nameb;
+                            that.form6data[2].job = res.data.mostProf3Name;
                             that.form6data[2].jobcode = res.data.mostProf3Num;
                             that.form6data[2].need = res.data.mostProf3Need;
                             that.form6data[2].seek = res.data.mostProf3Jobseek;
@@ -1306,6 +1328,9 @@
                             that.form6data[9].jobcode = res.data.mostProf10Num;
                             that.form6data[9].need = res.data.mostProf10Need;
                             that.form6data[9].seek = res.data.mostProf10Jobseek;
+                            that.getRate(6,that.form6data);
+                            that.getGap(6,that.form6data);
+                            console.log(that.form6data);
                         }
                         else alert(res.message);
                     },
@@ -1319,10 +1344,11 @@
                     url: '/common/data/selectLeastNeeded',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log('form7:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form7data[0].job = res.data.leastProf1Name;
                             that.form7data[0].jobcode = res.data.leastProf1Num;
@@ -1332,7 +1358,7 @@
                             that.form7data[1].jobcode = res.data.leastProf2Num;
                             that.form7data[1].need = res.data.leastProf2Need;
                             that.form7data[1].seek = res.data.leastProf2Jobseek;
-                            that.form7data[2].jo = res.data.leastProf3Nameb;
+                            that.form7data[2].job = res.data.leastProf3Name;
                             that.form7data[2].jobcode = res.data.leastProf3Num;
                             that.form7data[2].need = res.data.leastProf3Need;
                             that.form7data[2].seek = res.data.leastProf3Jobseek;
@@ -1364,6 +1390,9 @@
                             that.form7data[9].jobcode = res.data.leastProf10Num;
                             that.form7data[9].need = res.data.leastProf10Need;
                             that.form7data[9].seek = res.data.leastProf10Jobseek;
+                            that.getRate(7,that.form7data);
+                            that.getGap(7,that.form7data);
+                            console.log(that.form7data);
                         }
                         else alert(res.message);
                     },
@@ -1377,21 +1406,25 @@
                     url: '/common/data/selectJobSeekerNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log('form8:');
+                        console.log(res);
                         if (res.code == 0) {
-                            that.form8data[0].seek=res.data.unempYouth;
-                            that.form8data[1].seek=res.data.graduate;
-                            that.form8data[2].seek=res.data.empToUnemp;
-                            that.form8data[3].seek=res.data.othUnemp;
-                            that.form8data[4].seek=res.data.emped;
-                            that.form8data[5].seek=res.data.laidOff;
-                            that.form8data[6].seek=res.data.retiree;
-                            that.form8data[7].seek=res.data.student;
-                            that.form8data[8].seek=res.data.cityRural;
-                            that.form8data[9].seek=res.data.fore;
+                            that.form8data[0].seek = res.data.unempYouth;
+                            that.form8data[1].seek = res.data.graduate;
+                            that.form8data[2].seek = res.data.empToUnemp;
+                            that.form8data[3].seek = res.data.othUnemp;
+                            that.form8data[4].seek = res.data.emped;
+                            that.form8data[5].seek = res.data.laidOff;
+                            that.form8data[6].seek = res.data.retiree;
+                            that.form8data[7].seek = res.data.student;
+                            that.form8data[8].seek = res.data.cityRural;
+                            that.form8data[9].seek = res.data.fore;
+                            that.getSeekSum2(8,that.form8data);
+                            that.getSeekRate(8,that.form8data);
+                            console.log(that.form8data);
                         }
                         else alert(res.message);
                     },
@@ -1405,16 +1438,22 @@
                     url: '/common/data/selectSexNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success: function (res) {
-                        // console.log(res);
+                        console.log('form9:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form9data[0].need = res.data.maleNeed;
                             that.form9data[0].seek = res.data.maleJobseek;
                             that.form9data[1].need = res.data.femaleNeed;
                             that.form9data[1].seek = res.data.femaleJobseek;
                             that.form9data[2].need = res.data.noRequNeed;
+                            that.getSum5(9,that.form9data);
+                            that.getRate(9,that.form9data);
+                            that.getNeedRate(9,that.form9data);
+                            that.getSeekRate(9,that.form9data);
+                            console.log(that.form9data);
                         }
                         else alert(res.message);
                     },
@@ -1428,10 +1467,11 @@
                     url: '/common/data/selectAgeNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log('form10:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form10data[0].need=res.data.sixteenTwentyfourNeed;
                             that.form10data[0].seek=res.data.sixteenTwentyfourJobseek;
@@ -1442,6 +1482,11 @@
                             that.form10data[3].need=res.data.overFortyfourNeed;
                             that.form10data[3].seek=res.data.overFortyfourJobseek;
                             that.form10data[4].need=res.data.noRequNeed;
+                            that.getSum5(10,that.form10data);
+                            that.getRate(10,that.form10data);
+                            that.getNeedRate(10,that.form10data);
+                            that.getSeekRate(10,that.form10data);
+                            console.log(that.form10data);
                         }
                         else alert(res.message);
                     },
@@ -1455,10 +1500,11 @@
                     url: '/common/data/selectDegreeNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log('form11:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form11data[0].need=res.data.belowJuniHighSchoNeed;
                             that.form11data[0].seek=res.data.belowJuniHighSchoJobseek;
@@ -1471,6 +1517,11 @@
                             that.form11data[4].need=res.data.univNeed;
                             that.form11data[4].seek=res.data.univJobseek;
                             that.form11data[5].need=res.data.noRequNeed;
+                            that.getSum5(11,that.form11data);
+                            that.getRate(11,that.form11data);
+                            that.getNeedRate(11,that.form11data);
+                            that.getSeekRate(11,that.form11data);
+                            console.log(that.form11data);
                         }
                         else alert(res.message);
                     },
@@ -1484,10 +1535,11 @@
                     url: '/common/data/selectTechGradeNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
-                        // console.log(res);
+                        console.log('form12:');
+                        console.log(res);
                         if (res.code == 0) {
                             that.form12data[0].need=res.data.profLevel5Need;
                             that.form12data[0].seek=res.data.profLevel5Jobseek;
@@ -1507,6 +1559,11 @@
                             that.form12data[7].seek=res.data.seniProfJobseek;
                             that.form12data[8].seek=res.data.noTechJobseek;
                             that.form12data[9].need=res.data.noRequNeed;
+                            that.getSum5(12,that.form12data);
+                            that.getRate(12,that.form12data);
+                            that.getNeedRate(12,that.form12data);
+                            that.getSeekRate(12,that.form12data);
+                            console.log(that.form12data);
                         }
                         else alert(res.message);
                     },
@@ -1515,304 +1572,150 @@
                         alert('初始化失败，请稍后刷新重试');
                     },
                 })
+            },
 
-                for (var i = 0; i < 12; i++) {
-                    this.changeable[i] = true;
-                    this.finished[i] = true;
+            getNeedSum2:function(index, param){
+                var formdata = param;
+                formdata[formdata.length-1].need=0;
+                for(var i = 0;i<formdata.length-1;i++){
+                    formdata[formdata.length-1].need+=Number(formdata[i].need);
                 }
-                this.getNeedSum2(this.form2data);
-                this.getNeedSum2(this.form3data);
-                this.getNeedSum2(this.form4data);
-                this.getSeekSum2(this.form8data);
-                this.getSum5(this.form5data);
-                this.getSum5(this.form9data);
-                this.getSum5(this.form10data);
-                this.getSum5(this.form11data);
-                this.getSum5(this.form12data);
-                this.getRate(this.form1data);
-                this.getRate(this.form5data);
-                this.getRate(this.form6data);
-                this.getRate(this.form7data);
-                this.getRate(this.form9data);
-                this.getRate(this.form10data);
-                this.getRate(this.form11data);
-                this.getRate(this.form12data);
-                this.getGap(this.form6data);
-                this.getGap(this.form7data);
-                this.getNeedRate(this.form2data);
-                this.getNeedRate(this.form3data);
-                this.getNeedRate(this.form4data);
-                this.getNeedRate(this.form5data);
-                this.getNeedRate(this.form9data);
-                this.getNeedRate(this.form10data);
-                this.getNeedRate(this.form11data);
-                this.getNeedRate(this.form12data);
-                this.getSeekRate(this.form5data);
-                this.getSeekRate(this.form8data);
-                this.getSeekRate(this.form9data);
-                this.getSeekRate(this.form10data);
-                this.getSeekRate(this.form11data);
-                this.getSeekRate(this.form12data);
+                if(index==2)
+                    this.form2data=formdata;
+                else if(index==3)
+                    this.form3data=formdata;
+                else this.form4data=formdata;
             },
 
-            check:function(param){
-                switch (param){
-                    case 1:this.check3(this.form1data);this.getRate(this.form1data);break;
-                    case 2:this.checkNeed2(this.form2data);this.getNeedSum2(this.form2data);this.getNeedRate(this.form2data);break;
-                    case 3:this.checkNeed2(this.form3data);this.getNeedSum2(this.form3data);this.getNeedRate(this.form3data);break;
-                    case 4:this.checkNeed2(this.form4data);this.getNeedSum2(this.form4data);this.getNeedRate(this.form4data);break;
-                    case 5:this.check5(this.form5data);this.getSum5(this.form5data);this.getRate(this.form5data);this.getNeedRate(this.form5data);this.getSeekRate(this.form5data);break;
-                    case 6:this.check4(this.form6data);this.getRate(this.form6data);this.getGap(this.form6data);break;
-                    case 7:this.check4(this.form7data);this.getRate(this.form7data);this.getGap(this.form7data);break;
-                    case 8:this.checkSeek2(this.form8data);this.getSeekSum2(this.form8data);this.getSeekRate(this.form8data);break;
-                    case 9:this.check5(this.form9data);this.getSum5(this.form9data);this.getRate(this.form9data);this.getNeedRate(this.form9data);this.getSeekRate(this.form9data);break;
-                    case 10:this.check5(this.form10data);this.getSum5(this.form10data);this.getRate(this.form10data);this.getNeedRate(this.form10data);this.getSeekRate(this.form10data);break;
-                    case 11:this.check5(this.form11data);this.getSum5(this.form11data);this.getRate(this.form11data);this.getNeedRate(this.form11data);this.getSeekRate(this.form11data);break;
-                    case 12:this.check5(this.form12data);this.getSum5(this.form12data);this.getRate(this.form12data);this.getNeedRate(this.form12data);this.getSeekRate(this.form12data);break;
-                }
-            },
-
-            check3:function(param){
-                if(this.form1data.need==""||this.form1data.seek=="")
-                    alert("请完整填写数据");
-                else if(isNaN(this.form1data.need)||isNaN(this.form1data.seek))
-                    alert("请正确填写数据");
-                else
-                    this.finished[0]=true;
-            },
-
-            checkNeed2:function(param){
+            getSeekSum2:function(index, param){
                 var formdata = param;
                 for(var i = 0;i<formdata.length-1;i++){
-                    if(formdata[i].need=="") {
-                        alert("请完整填写数据");
-                        break;
-                    }
-                    else if(isNaN(formdata[i].need)) {
-                        alert("请正确填写数据");
-                        break;
-                    }
+                    formdata[formdata.length-1].seek+=Number(formdata[i].seek);
                 }
-                if(i==formdata.length-1)
-                    this.finished[this.index-1]=true;
+                this.form8data=formdata;
             },
 
-            checkSeek2:function(param){
+            getSum5:function(index, param){
                 var formdata = param;
+                formdata[formdata.length-1].seek=formdata[formdata.length-1].need=0;
                 for(var i = 0;i<formdata.length-1;i++){
-                    if(formdata[i].seek=="") {
-                        alert("请完整填写数据");
-                        break;
+                    if(!((index==5&&i==formdata.length-2)||(index==12&&i==formdata.length-3))) {
+                        formdata[formdata.length - 1].need += Number(formdata[i].need);
                     }
-                    else if(isNaN(formdata[i].seek)) {
-                        alert("请正确填写数据");
-                        break;
+                    if(!(index>5&&i==formdata.length-2)) {
+                        formdata[formdata.length - 1].seek += Number(formdata[i].seek);
                     }
                 }
-                if(i==formdata.length-1)
-                    this.finished[this.index-1]=true;
+                if(index==5)
+                    this.form5data=formdata;
+                else if(index==9)
+                    this.form9data=formdata;
+                else if(index==10)
+                    this.form10data=formdata;
+                else if(index==11)
+                    this.form11data=formdata;
+                else this.form12data=formdata;
             },
 
-            check4:function(param){
+            getRate:function(index, param){
                 var formdata = param;
-                for(var i = 0;i<formdata.length-1;i++){
-                    if(formdata[i].seek==""||formdata[i].need==""){
-                        alert("请完整填写数据");
-                        break;
-                    }
-                    else if(isNaN(formdata[i].need)||isNaN(formdata[i].seek)) {
-                        alert("请正确填写数据");
-                        break;
-                    }
+                // console.log(formdata);
+                if (index == 1) {
+                    this.form1data.rate = (Number(this.form1data.need) / Number(this.form1data.seek)).toFixed(4);
                 }
-                if(i==formdata.length-1)
-                    this.finished[this.index-1]=true;
-            },
-
-            check5:function(param){
-                var formdata = param;
-                for(var i = 0;i<formdata.length-1;i++){
-                    if(!((this.index==5&&i==formdata.length-2)||(this.index==12&&i==formdata.length-3))){
-                        if(formdata[i].need=="") {
-                            alert("请完整填写数据");
-                            break;
-                        }
-                        else if(isNaN(formdata[i].need)){
-                            alert("请正确填写数据");
-                            break;
-                        }
+                else if(index==6||index==7){
+                    for (var i = 0; i < formdata.length; i++){
+                        formdata[i].rate = (Number(formdata[i].need) / Number(formdata[i].seek)).toFixed(4);
                     }
-                    if(!(i==formdata.length-2&&this.index>5)){
-                        if(formdata[i].seek=="") {
-                            alert("请完整填写数据");
-                            break;
-                        }
-                        else if(isNaN(formdata[i].seek)){
-                            alert("请正确填写数据");
-                            break;
-                        }
-                    }
+                    if(index==6)
+                        this.form6data = formdata;
+                    else
+                        this.form7data = formdata;
                 }
-                if(i==formdata.length-1)
-                    this.finished[this.index-1]=true;
-            },
-
-            getNeedSum2:function(param){
-                if(this.finished[this.index-1]){
-                    var formdata = param;
-                    formdata[formdata.length-1].need=0;
-                    for(var i = 0;i<formdata.length-1;i++){
-                        formdata[formdata.length-1].need+=Number(formdata[i].need);
-                    }
-                    if(this.index==2)
-                        this.form2data=formdata;
-                    else if(this.index==3)
-                        this.form3data=formdata;
-                    else this.form4data=formdata;
-                }
-            },
-
-            getSeekSum2:function(param){
-                if(this.finished[this.index-1]){
-                    var formdata = param;
-                    for(var i = 0;i<formdata.length-1;i++){
-                        formdata[formdata.length-1].seek+=Number(formdata[i].seek);
-                    }
-                    this.form8data=formdata;
-                }
-            },
-
-            getSum5:function(param){
-                if(this.finished[this.index-1]){
-                    var formdata = param;
-                    formdata[formdata.length-1].seek=formdata[formdata.length-1].need=0;
-                    for(var i = 0;i<formdata.length-1;i++){
-                        if(!((this.index==5&&i==formdata.length-2)||(this.index==12&&i==formdata.length-3))) {
-                            formdata[formdata.length - 1].need += Number(formdata[i].need);
-                        }
-                        if(!(this.index>5&&i==formdata.length-2)) {
-                            formdata[formdata.length - 1].seek += Number(formdata[i].seek);
-                        }
-                    }
-                    if(this.index==5)
-                        this.form5data=formdata;
-                    else if(this.index==9)
-                        this.form9data=formdata;
-                    else if(this.index==10)
-                        this.form10data=formdata;
-                    else if(this.index==11)
-                        this.form11data=formdata;
-                    else this.form12data=formdata;
-                }
-            },
-
-            getRate:function(param){
-                // console.log("finished:"+this.finished);
-                if(this.finished[this.index-1]) {
-                    var formdata = param;
-                    // console.log(formdata);
-                    if (this.index == 1) {
-                        this.form1data.rate = (Number(this.form1data.need) / Number(this.form1data.seek)).toFixed(4);
-                    }
-                    else if(this.index==6||this.index==7){
-                        for (var i = 0; i < formdata.length; i++){
-                            formdata[i].rate = (Number(formdata[i].need) / Number(formdata[i].seek).toFixed(4));
-                        }
-                        if(this.index==6)
-                            this.form6data = formdata;
-                        else
-                            this.form7data = formdata;
-                    }
-                    else{
-                        var tmp;
-                        if(this.index==5)
-                            tmp=Number(formdata[formdata.length-1].seek)/(Number(formdata[formdata.length-1].seek)-Number(formdata[formdata.length-2].seek));
-                        else
-                            tmp=Number(formdata[formdata.length-1].need)/(Number(formdata[formdata.length-1].need)-Number(formdata[formdata.length-2].need));
-                        for (var i = 0; i < formdata.length - 2; i++) {
-                            // console.log(i);
-                            // console.log(formdata);
-                            if(this.index==5)
-                                formdata[i].rate=Number(formdata[i].need)/(tmp*Number(formdata[i].seek));
-                            else if(this.index==12&&i==formdata.length-3)
-                                formdata[i].rate=0;
-                            else
-                                formdata[i].rate=tmp*Number(formdata[i].need)/Number(formdata[i].seek);
-                            formdata[i].rate=Number(formdata[i].rate).toFixed(4);
-                        }
+                else{
+                    var tmp;
+                    if(index==5)
+                        tmp=Number(formdata[formdata.length-1].seek)/(Number(formdata[formdata.length-1].seek)-Number(formdata[formdata.length-2].seek));
+                    else
+                        tmp=Number(formdata[formdata.length-1].need)/(Number(formdata[formdata.length-1].need)-Number(formdata[formdata.length-2].need));
+                    for (var i = 0; i < formdata.length - 2; i++) {
+                        // console.log(i);
                         // console.log(formdata);
-                        if (this.index == 5)
-                            form5data = formdata;
-                        else if (this.index == 9)
-                            form9data = formdata;
-                        else if (this.index == 10)
-                            form10data = formdata;
-                        else if (this.index == 11)
-                            form11data = formdata;
-                        else form12data = formdata;
+                        if(index==5)
+                            formdata[i].rate=Number(formdata[i].need)/(tmp*Number(formdata[i].seek));
+                        else if(index==12&&i==formdata.length-3)
+                            formdata[i].rate=0;
+                        else
+                            formdata[i].rate=tmp*Number(formdata[i].need)/Number(formdata[i].seek);
+                        formdata[i].rate=Number(formdata[i].rate).toFixed(4);
                     }
+                    // console.log(formdata);
+                    if (index == 5)
+                        form5data = formdata;
+                    else if (index == 9)
+                        form9data = formdata;
+                    else if (index == 10)
+                        form10data = formdata;
+                    else if (index == 11)
+                        form11data = formdata;
+                    else form12data = formdata;
                 }
             },
 
-            getGap:function (param) {
-                if(this.finished[this.index-1]){
-                    var formdata = param;
-                    for(var i = 0;i<formdata.length;i++){
-                        formdata[i].gap=Number(formdata[i].need)-Number(formdata[i].seek);
-                    }
-                    if(this.index==6)
-                        this.form6data=formdata;
-                    else this.form7data=formdata;
+            getGap:function (index, param) {
+                var formdata = param;
+                for(var i = 0;i<formdata.length;i++){
+                    formdata[i].gap=Number(formdata[i].need)-Number(formdata[i].seek);
                 }
+                if(index==6)
+                    this.form6data=formdata;
+                else this.form7data=formdata;
             },
 
-            getNeedRate:function(param){
-                if(this.finished[this.index-1]){
-                    var formdata = param;
-                    for(var i = 0;i<formdata.length;i++){
-                        if(!((this.index==5&&i==formdata.length-2)||(this.index==12&&i==formdata.length-3))) {
-                            formdata[i].needrate = (Number(formdata[i].need) / Number(formdata[formdata.length - 1].need)).toFixed(4);
-                        }
+            getNeedRate:function(index, param){
+                var formdata = param;
+                for(var i = 0;i<formdata.length;i++){
+                    if(!((index==5&&i==formdata.length-2)||(index==12&&i==formdata.length-3))) {
+                        formdata[i].needrate = (Number(formdata[i].need) / Number(formdata[formdata.length - 1].need)).toFixed(4);
                     }
-                    if(this.index==2)
-                        this.form2data=formdata;
-                    else if(this.index==3)
-                        this.form3data=formdata;
-                    else if(this.index==4)
-                        this.form4data=formdata;
-                    else if(this.index==5)
-                        this.form5data=formdata;
-                    else if(this.index==9)
-                        this.form9data=formdata;
-                    else if(this.index==10)
-                        this.form10data=formdata;
-                    else if(this.index==11)
-                        this.form11data=formdata;
-                    else this.form12data=formdata;
                 }
+                if(index==2)
+                    this.form2data=formdata;
+                else if(index==3)
+                    this.form3data=formdata;
+                else if(index==4)
+                    this.form4data=formdata;
+                else if(index==5)
+                    this.form5data=formdata;
+                else if(index==9)
+                    this.form9data=formdata;
+                else if(index==10)
+                    this.form10data=formdata;
+                else if(index==11)
+                    this.form11data=formdata;
+                else this.form12data=formdata;
             },
 
-            getSeekRate:function(param){
-                if(this.finished[this.index-1]){
-                    var formdata = param;
-                    for(var i = 0;i<formdata.length;i++){
-                        if(this.index<9||i!=formdata.length-2) {
-                            formdata[i].seekrate = (Number(formdata[i].seek) / Number(formdata[formdata.length - 1].seek)).toFixed(4);
-                        }
+            getSeekRate:function(index, param){
+                var formdata = param;
+                for(var i = 0;i<formdata.length;i++){
+                    if(index<9||i!=formdata.length-2) {
+                        formdata[i].seekrate = (Number(formdata[i].seek) / Number(formdata[formdata.length - 1].seek)).toFixed(4);
                     }
-                    if(this.index==8)
-                        this.form8data=formdata;
-                    else if(this.index==5)
-                        this.form5data=formdata;
-                    else if(this.index==9)
-                        this.form9data=formdata;
-                    else if(this.index==10)
-                        this.form10data=formdata;
-                    else if(this.index==11)
-                        this.form11data=formdata;
-                    else this.form12data=formdata;
                 }
+                if(index==8)
+                    this.form8data=formdata;
+                else if(index==5)
+                    this.form5data=formdata;
+                else if(index==9)
+                    this.form9data=formdata;
+                else if(index==10)
+                    this.form10data=formdata;
+                else if(index==11)
+                    this.form11data=formdata;
+                else this.form12data=formdata;
             },
+
 
 
             change:function(){
@@ -1820,498 +1723,6 @@
                 this.index++;
                 this.index--;
                 this.finished[this.index-1]=false;//若有修改，检查完成标志置false
-            },
-
-            updateData:function(param) {
-                var that=this;
-                var words = "提交";
-                if (param == 0)
-                    words = "保存";
-                $.ajax({
-                    url: '/market/upload/update',
-                    type: 'post',
-                    data: {
-                        tableId: that.tableId,
-                        stateFlag: param,
-
-                        needPopu: that.form1data.seek,//需求人数
-                        jobseekPopu: that.form1data.need,//求职人数
-
-                        industry1Need: that.form2data[0].need,//第一产业需求人数
-                        industry2Need: that.form2data[1].need,//第二产业需求人数
-                        industry3Need: that.form2data[2].need,//第三产业需求人数
-                        mineNeed: that.form3data[1].need,//采矿业，第二产业
-                        manuNeed: that.form3data[2].need,//制造业，第二产业
-                        elecGasWaterNeed: that.form3data[3].need,//电力、燃气及水的生产和供应业，第二产业
-                        archNeed: that.form3data[4].need,//建筑业，第二产业
-                        tranStorPostNeed: that.form3data[5].need,//交通运输、仓储和邮政业，第三产业
-                        infoCompSoftNeed: that.form3data[6].need,//信息传输、计算机服务和软件业，第三产业
-                        retailNeed: that.form3data[7].need,//批发和零售业，第三产业
-                        accoCaterNeed: that.form3data[8].need,//住宿和餐饮业，第三产业
-                        financeNeed: that.form3data[9].need,//金融业，第三产业
-                        estateNeed: that.form3data[10].need,//房地产业，第三产业
-                        leaseBusiServNeed: that.form3data[11].need,//租赁和商务服务业，第三产业
-                        reseTechAddrNeed: that.form3data[12].need,//科学研究、技术服务和地址勘查业，第三产业
-                        waterEnviFaciNeed: that.form3data[13].need,//水利、环境和公共设施管理业，第三产业
-                        resiServNeed: that.form3data[14].need,//居民服务和其他服务业，第三产业
-                        eduNeed: that.form3data[15].need,//教育，第三产业
-                        healSecuWelfNeed: that.form3data[16].need,//卫生、社会保障和社会福利业，第三产业
-                        cultSportEnteNeed: that.form3data[17].need,//文化、体育和娱乐业，第三产业
-                        manaOrgaNeed: that.form3data[18].need,//公共管理与社会组织，第三产业
-                        inteOrgaNeed: that.form3data[19].need,//国际组织，第三产业
-
-                        staOwnNeed: that.form4data[0].need,//国有企业，内资企业，企业
-                        collNeed: that.form4data[1].need,//集体企业，内资企业，企业
-                        coopStockNeed: that.form4data[2].need,//股份合作企业，内资企业，企业
-                        jointNeed: that.form4data[3].need,//联营企业，内资企业，企业
-                        limiLiabNeed: that.form4data[4].need,//有限责任公司，内资企业，企业
-                        limitedNeed: that.form4data[5].need,//股份有限公司，内资企业，企业
-                        privNeed: that.form4data[6].need,//私营企业，内资企业，企业
-                        otherEnteNeed: that.form4data[7].need,//其他企业，内资企业，企业
-                        hmtInveNeed: that.form4data[8].need,//港、澳、台投资企业，企业
-                        foreInveEnte: that.form4data[9].need,//外商投资企业，企业
-                        indiNeed: that.form4data[10].need,//个体经营，企业
-                        instNeed: that.form4data[11].need,//事业
-                        orgaNeed: that.form4data[12].need,//机关
-                        otherNeedEmployerNum: that.form4data[13].need,//其他
-
-                        leaderNeed: that.form5data[0].need,//单位负责人需求人数
-                        leaderJobseek: that.form5data[0].seek,//单位负责人求职人数
-                        profTechNeed: that.form5data[1].need,//专业技术人员需求人数
-                        profTechJobseek: that.form5data[1].seek,//专业技术人员求职人数
-                        staffRelaNeed: that.form5data[2].need,//办事人员和有关人员需求人数
-                        staffRelaJobseek: that.form5data[2].seek,//办事人员和有关人员求职人数
-                        busiServNeed: that.form5data[3].need,//商业和服务人员需求人数
-                        busiServJobseek: that.form5data[3].seek,//商业和服务人员求职人数
-                        prodNeed: that.form5data[4].need,//农林牧渔水利生产人员需求人数
-                        prodJobseek: that.form5data[4].seek,//农林牧渔水利生产人员求职人数
-                        operNeed: that.form5data[5].need,//生产运输设备操作工需求人数
-                        operJobseek: that.form5data[5].seek,//生产运输设备操作工求职人数
-                        otherNeed: that.form5data[6].need,//其他需求人数
-                        otherJobseek: that.form5data[6].seek,//其他求职人数
-                        noRequJobseek: that.form5data[7].seek,//无要求求职人数
-
-                        mostProf1Name: that.form6data[0].job,//最需要排名第一的职业名称
-                        mostProf1Num: that.form6data[0].jobcode,//最需要排名第一的职业代码
-                        mostProf1Need: that.form6data[0].need,//最需要排名第一的职业需求人数
-                        mostProf1Jobseek: that.form6data[0].seek,//最需要排名第一的职业求职人数
-                        mostProf2Name: that.form6data[1].job,//最需要排名第二的职业名称
-                        mostProf2Num: that.form6data[1].jobcode,//最需要排名第二的职业代码
-                        mostProf2Need: that.form6data[1].need,//最需要排名第二的职业需求人数
-                        mostProf2Jobseek: that.form6data[1].seek,//最需要排名第二的职业求职人数
-                        mostProf3Name: that.form6data[2].job,//最需要排名第三的职业名称
-                        mostProf3Num: that.form6data[2].jobcode,//最需要排名第三的职业代码
-                        mostProf3Need: that.form6data[2].need,//最需要排名第三的职业需求人数
-                        mostProf3Jobseek: that.form6data[2].seek,//最需要排名第三的职业求职人数
-                        mostProf4Name: that.form6data[3].job,//最需要排名第四的职业名称
-                        mostProf4Num: that.form6data[3].jobcode,//最需要排名第四的职业代码
-                        mostProf4Need: that.form6data[3].need,//最需要排名第四的职业需求人数
-                        mostProf4Jobseek: that.form6data[3].seek,//最需要排名第四的职业求职人数
-                        mostProf5Name: that.form6data[4].job,//最需要排名第五的职业名称
-                        mostProf5Num: that.form6data[4].jobcode,//最需要排名第五的职业代码
-                        mostProf5Need: that.form6data[4].need,//最需要排名第五的职业需求人数
-                        mostProf5Jobseek: that.form6data[4].seek,//最需要排名第五的职业求职人数
-                        mostProf6Name: that.form6data[5].job,//最需要排名第六的职业名称
-                        mostProf6Num: that.form6data[5].jobcode,//最需要排名第六的职业代码
-                        mostProf6Need: that.form6data[5].need,//最需要排名第六的职业需求人数
-                        mostProf6Jobseek: that.form6data[5].seek,//最需要排名第六的职业求职人数
-                        mostProf7Name: that.form6data[6].job,//最需要排名第七的职业名称
-                        mostProf7Num: that.form6data[6].jobcode,//最需要排名第七的职业代码
-                        mostProf7Need: that.form6data[6].need,//最需要排名第七的职业需求人数
-                        mostProf7Jobseek: that.form6data[6].seek,//最需要排名第七的职业求职人数
-                        mostProf8Name: that.form6data[7].job,//最需要排名第八的职业名称
-                        mostProf8Num: that.form6data[7].jobcode,//最需要排名第八的职业代码
-                        mostProf8Need: that.form6data[7].need,//最需要排名第八的职业需求人数
-                        mostProf8Jobseek: that.form6data[7].seek,//最需要排名第八的职业求职人数
-                        mostProf9Name: that.form6data[8].job,//最需要排名第九的职业名称
-                        mostProf9Num: that.form6data[8].jobcode,//最需要排名第九的职业代码
-                        mostProf9Need: that.form6data[8].need,//最需要排名第九的职业需求人数
-                        mostProf9Jobseek: that.form6data[8].seek,//最需要排名第九的职业求职人数
-                        mostProf10Name: that.form6data[9].job,//最需要排名第十的职业名称
-                        mostProf10Num: that.form6data[9].jobcode,//最需要排名第十的职业代码
-                        mostProf10Need: that.form6data[9].need,//最需要排名第十的职业需求人数
-                        mostProf10Jobseek: that.form6data[9].seek,//最需要排名第十的职业求职人数
-
-                        leastProf1Name: that.form7data[0].job,//最饱和排名第一的职业名称
-                        leastProf1Num: that.form7data[0].jobcode,//最饱和排名第一的职业代码
-                        leastProf1Need: that.form7data[0].need,//最饱和排名第一的职业需求人数
-                        leastProf1Jobseek: that.form7data[0].seek,//最饱和排名第一的职业求职人数
-                        leastProf2Name: that.form7data[1].job,//最饱和排名第二的职业名称
-                        leastProf2Num: that.form7data[1].jobcode,//最饱和排名第二的职业代码
-                        leastProf2Need: that.form7data[1].need,//最饱和排名第二的职业需求人数
-                        leastProf2Jobseek: that.form7data[1].seek,//最饱和排名第二的职业求职人数
-                        leastProf3Name: that.form7data[2].job,//最饱和排名第三的职业名称
-                        leastProf3Num: that.form7data[2].jobcode,//最饱和排名第三的职业代码
-                        leastProf3Need: that.form7data[2].need,//最饱和排名第三的职业需求人数
-                        leastProf3Jobseek: that.form7data[2].seek,//最饱和排名第三的职业求职人数
-                        leastProf4Name: that.form7data[3].job,//最饱和排名第四的职业名称
-                        leastProf4Num: that.form7data[3].jobcode,//最饱和排名第四的职业代码
-                        leastProf4Need: that.form7data[3].need,//最饱和排名第四的职业需求人数
-                        leastProf4Jobseek: that.form7data[3].seek,//最饱和排名第四的职业求职人数
-                        leastProf5Name: that.form7data[4].job,//最饱和排名第五的职业名称
-                        leastProf5Num: that.form7data[4].jobcode,//最饱和排名第五的职业代码
-                        leastProf5Need: that.form7data[4].need,//最饱和排名第五的职业需求人数
-                        leastProf5Jobseek: that.form7data[4].seek,//最饱和排名第五的职业求职人数
-                        leastProf6Name: that.form7data[5].job,//最饱和排名第六的职业名称
-                        leastProf6Num: that.form7data[5].jobcode,//最饱和排名第六的职业代码
-                        leastProf6Need: that.form7data[5].need,//最饱和排名第六的职业需求人数
-                        leastProf6Jobseek: that.form7data[5].seek,//最饱和排名第六的职业求职人数
-                        leastProf7Name: that.form7data[6].job,//最饱和排名第七的职业名称
-                        leastProf7Num: that.form7data[6].jobcode,//最饱和排名第七的职业代码
-                        leastProf7Need: that.form7data[6].need,//最饱和排名第七的职业需求人数
-                        leastProf7Jobseek: that.form7data[6].seek,//最饱和排名第七的职业求职人数
-                        leastProf8Name: that.form7data[7].job,//最饱和排名第八的职业名称
-                        leastProf8Num: that.form7data[7].jobcode,//最饱和排名第八的职业代码
-                        leastProf8Need: that.form7data[7].need,//最饱和排名第八的职业需求人数
-                        leastProf8Jobseek: that.form7data[7].seek,//最饱和排名第八的职业求职人数
-                        leastProf9Name: that.form7data[8].job,//最饱和排名第九的职业名称
-                        leastProf9Num: that.form7data[8].jobcode,//最饱和排名第九的职业代码
-                        leastProf9Need: that.form7data[8].need,//最饱和排名第九的职业需求人数
-                        leastProf9Jobseek: that.form7data[8].seek,//最饱和排名第九的职业求职人数
-                        leastProf10Name: that.form7data[9].job,//最饱和排名第十的职业名称
-                        leastProf10Num: that.form7data[9].jobcode,//最饱和排名第十的职业代码
-                        leastProf10Need: that.form7data[9].need,//最饱和排名第十的职业需求人数
-                        leastProf10Jobseek: that.form7data[9].seek,//最饱和排名第十的职业求职人数
-
-                        unempYouth: that.form8data[0].seek,//新成长失业青年
-                        graduate: that.form8data[1].seek,//应届高校毕业生
-                        empToUnemp: that.form8data[2].seek,//就业转失业人员
-                        othUnemp: that.form8data[3].seek,//其他失业人员
-                        emped: that.form8data[4].seek,//在业人员
-                        laidOff: that.form8data[5].seek,//下岗职工
-                        retiree: that.form8data[6].seek,//退休人员
-                        student: that.form8data[7].seek,//在学人员
-                        cityRural: that.form8data[8].seek,//本市农村人员
-                        fore: that.form8data[9].seek,//外埠人员
-
-                        maleNeed: that.form9data[0].need,//男性需求人数
-                        maleJobseek: that.form9data[0].seek,//男性求职人数
-                        femaleNeed: that.form9data[1].need,//女性需求人数
-                        femaleJobseek: that.form9data[1].seek,//女性求职人数
-                        noRequNeedSexNum: that.form9data[2].need,//无要求需求人数
-
-                        sixteenTwentyfourNeed: that.form10data[0].need,//16-24岁需求人数
-                        sixteenTwentyfourJobseek: that.form10data[0].seek,//16-24岁求职人数
-                        twentyfiveThirtyfourNeed: that.form10data[1].need,//25-34岁需求人数
-                        twentyfiveThirtyfourJobseek: that.form10data[1].seek,//25-34岁求职人数
-                        thirtyfiveFortyfourNeed: that.form10data[2].need,//35-44岁需求人数
-                        thirtyfiveFortyfourJobseek: that.form10data[2].seek,//35-44岁求职人数
-                        overFortyfourNeed: that.form10data[3].need,//45岁以上需求人数
-                        overFortyfourJobseek: that.form10data[3].seek,//45岁以上求职人数
-                        noRequNeedAgeNum: that.form10data[4].need,
-
-                        belowJuniHighSchoNeed: that.form11data[0].need,//初中及以下需求人数
-                        belowJuniHighSchoJobseek: that.form11data[0].seek,//初中及以下求职人数
-                        highSchoNeed: that.form11data[1].need,//高中需求人数
-                        highSchoJobseek: that.form11data[1].seek,//高中求职人数
-                        otherHighSchoNeed: that.form11data[2].need,//职高技校中专需求人数
-                        otherHighSchoJobseek: that.form11data[2].seek,//职高技校中专求职人数
-                        juniCollNeed: that.form11data[3].need,//大专需求人数
-                        juniCollJobseek: that.form11data[3].seek,//大专求职人数
-                        univNeed: that.form11data[4].need,//大学需求人数
-                        univJobseek: that.form11data[4].seek,//大学求职人数
-                        noRequNeedDegreeNum: that.form11data[5].need,//无要求需求人数
-
-                        profLevel5Need: that.form12data[0].need,//职业资格五级（初级技能）需求人数
-                        profLevel5Jobseek: that.form12data[0].seek,//职业资格五级（初级技能）求职人数
-                        profLevel4Need: that.form12data[1].need,//职业资格四级（中级技能）需求人数
-                        profLevel4Jobseek: that.form12data[1].seek,//职业资格四级（中级技能）求职人数
-                        profLevel3Need: that.form12data[2].need,//职业资格三级（高级技能）需求人数
-                        profLevel3Jobseek: that.form12data[2].seek,//职业资格三级（高级技能）求职人数
-                        profLevel2Need: that.form12data[3].need,//职业资格二级（技师）需求人数
-                        profLevel2Jobsee: that.form12data[3].seek,//职业资格二级（技师）求职人数
-                        profLevel1Need: that.form12data[4].need,//职业资格一级（高级技师）需求人数
-                        profLevel1Jobseek: that.form12data[4].seek,//职业资格一级（高级技师）求职人数
-                        primProfNeed: that.form12data[5].need,//初级专业技术职务需求人数
-                        primProfJobseek: that.form12data[5].seek,//初级专业技术职务求职人数
-                        mediProfNeed: that.form12data[6].need,//中级专业技术职务需求人数
-                        mediProfJobseek: that.form12data[6].seek,//中级专业技术职务求职人数
-                        seniProfNeed: that.form12data[7].need,//高级专业技术职务需求人数
-                        seniProfJobseek: that.form12data[7].seek,//高级专业技术职务求职人数
-                        noTechJobseek: that.form12data[8].seek,//无技术等级或职务求职人数
-                        noRequNeedTechGradeNum: that.form12data[9].need,//无技术等级或职务需求人数
-                    },
-                    success(res) {
-                        // console.log(res);
-                        if(res.code==0) {
-                            console.log('data:'+this.data.uploadDataSet);
-                            alert(words + '成功！');
-                            that.changeable[that.index - 1] = true;
-                            that.index++;
-                            that.index--;
-                        }
-                        else
-                            alert(res.message);
-                    },
-                    error(res) {
-                        console.log(res);
-                        alert(res.message);
-                    }
-                })
-            },
-
-            save:function(){
-                this.check(this.index);
-                if(this.finished[this.index-1]) {
-                    if (this.tableId == null) {
-                        var that=this;
-                        $.ajax({
-                            url: '/market/upload/insert',
-                            type: 'post',
-                            data: {
-                                stateFlag: 0,
-                                needPopu: that.form1data.seek,//需求人数
-                                jobseekPopu: that.form1data.need,//求职人数
-
-                                industry1Need: that.form2data[0].need,//第一产业需求人数
-                                industry2Need: that.form2data[1].need,//第二产业需求人数
-                                industry3Need: that.form2data[2].need,//第三产业需求人数
-                                mineNeed: that.form3data[1].need,//采矿业，第二产业
-                                manuNeed: that.form3data[2].need,//制造业，第二产业
-                                elecGasWaterNeed: that.form3data[3].need,//电力、燃气及水的生产和供应业，第二产业
-                                archNeed: that.form3data[4].need,//建筑业，第二产业
-                                tranStorPostNeed: that.form3data[5].need,//交通运输、仓储和邮政业，第三产业
-                                infoCompSoftNeed: that.form3data[6].need,//信息传输、计算机服务和软件业，第三产业
-                                retailNeed: that.form3data[7].need,//批发和零售业，第三产业
-                                accoCaterNeed: that.form3data[8].need,//住宿和餐饮业，第三产业
-                                financeNeed: that.form3data[9].need,//金融业，第三产业
-                                estateNeed: that.form3data[10].need,//房地产业，第三产业
-                                leaseBusiServNeed: that.form3data[11].need,//租赁和商务服务业，第三产业
-                                reseTechAddrNeed: that.form3data[12].need,//科学研究、技术服务和地址勘查业，第三产业
-                                waterEnviFaciNeed: that.form3data[13].need,//水利、环境和公共设施管理业，第三产业
-                                resiServNeed: that.form3data[14].need,//居民服务和其他服务业，第三产业
-                                eduNeed: that.form3data[15].need,//教育，第三产业
-                                healSecuWelfNeed: that.form3data[16].need,//卫生、社会保障和社会福利业，第三产业
-                                cultSportEnteNeed: that.form3data[17].need,//文化、体育和娱乐业，第三产业
-                                manaOrgaNeed: that.form3data[18].need,//公共管理与社会组织，第三产业
-                                inteOrgaNeed: that.form3data[19].need,//国际组织，第三产业
-
-                                staOwnNeed: that.form4data[0].need,//国有企业，内资企业，企业
-                                collNeed: that.form4data[1].need,//集体企业，内资企业，企业
-                                coopStockNeed: that.form4data[2].need,//股份合作企业，内资企业，企业
-                                jointNeed: that.form4data[3].need,//联营企业，内资企业，企业
-                                limiLiabNeed: that.form4data[4].need,//有限责任公司，内资企业，企业
-                                limitedNeed: that.form4data[5].need,//股份有限公司，内资企业，企业
-                                privNeed: that.form4data[6].need,//私营企业，内资企业，企业
-                                otherEnteNeed: that.form4data[7].need,//其他企业，内资企业，企业
-                                hmtInveNeed: that.form4data[8].need,//港、澳、台投资企业，企业
-                                foreInveEnte: that.form4data[9].need,//外商投资企业，企业
-                                indiNeed: that.form4data[10].need,//个体经营，企业
-                                instNeed: that.form4data[11].need,//事业
-                                orgaNeed: that.form4data[12].need,//机关
-                                otherNeedEmployerNum: that.form4data[13].need,//其他
-
-                                leaderNeed: that.form5data[0].need,//单位负责人需求人数
-                                leaderJobseek: that.form5data[0].seek,//单位负责人求职人数
-                                profTechNeed: that.form5data[1].need,//专业技术人员需求人数
-                                profTechJobseek: that.form5data[1].seek,//专业技术人员求职人数
-                                staffRelaNeed: that.form5data[2].need,//办事人员和有关人员需求人数
-                                staffRelaJobseek: that.form5data[2].seek,//办事人员和有关人员求职人数
-                                busiServNeed: that.form5data[3].need,//商业和服务人员需求人数
-                                busiServJobseek: that.form5data[3].seek,//商业和服务人员求职人数
-                                prodNeed: that.form5data[4].need,//农林牧渔水利生产人员需求人数
-                                prodJobseek: that.form5data[4].seek,//农林牧渔水利生产人员求职人数
-                                operNeed: that.form5data[5].need,//生产运输设备操作工需求人数
-                                operJobseek: that.form5data[5].seek,//生产运输设备操作工求职人数
-                                otherNeed: that.form5data[6].need,//其他需求人数
-                                otherJobseek: that.form5data[6].seek,//其他求职人数
-                                noRequJobseek: that.form5data[7].seek,//无要求求职人数
-
-                                mostProf1Name: that.form6data[0].job,//最需要排名第一的职业名称
-                                mostProf1Num: that.form6data[0].jobcode,//最需要排名第一的职业代码
-                                mostProf1Need: that.form6data[0].need,//最需要排名第一的职业需求人数
-                                mostProf1Jobseek: that.form6data[0].seek,//最需要排名第一的职业求职人数
-                                mostProf2Name: that.form6data[1].job,//最需要排名第二的职业名称
-                                mostProf2Num: that.form6data[1].jobcode,//最需要排名第二的职业代码
-                                mostProf2Need: that.form6data[1].need,//最需要排名第二的职业需求人数
-                                mostProf2Jobseek: that.form6data[1].seek,//最需要排名第二的职业求职人数
-                                mostProf3Name: that.form6data[2].job,//最需要排名第三的职业名称
-                                mostProf3Num: that.form6data[2].jobcode,//最需要排名第三的职业代码
-                                mostProf3Need: that.form6data[2].need,//最需要排名第三的职业需求人数
-                                mostProf3Jobseek: that.form6data[2].seek,//最需要排名第三的职业求职人数
-                                mostProf4Name: that.form6data[3].job,//最需要排名第四的职业名称
-                                mostProf4Num: that.form6data[3].jobcode,//最需要排名第四的职业代码
-                                mostProf4Need: that.form6data[3].need,//最需要排名第四的职业需求人数
-                                mostProf4Jobseek: that.form6data[3].seek,//最需要排名第四的职业求职人数
-                                mostProf5Name: that.form6data[4].job,//最需要排名第五的职业名称
-                                mostProf5Num: that.form6data[4].jobcode,//最需要排名第五的职业代码
-                                mostProf5Need: that.form6data[4].need,//最需要排名第五的职业需求人数
-                                mostProf5Jobseek: that.form6data[4].seek,//最需要排名第五的职业求职人数
-                                mostProf6Name: that.form6data[5].job,//最需要排名第六的职业名称
-                                mostProf6Num: that.form6data[5].jobcode,//最需要排名第六的职业代码
-                                mostProf6Need: that.form6data[5].need,//最需要排名第六的职业需求人数
-                                mostProf6Jobseek: that.form6data[5].seek,//最需要排名第六的职业求职人数
-                                mostProf7Name: that.form6data[6].job,//最需要排名第七的职业名称
-                                mostProf7Num: that.form6data[6].jobcode,//最需要排名第七的职业代码
-                                mostProf7Need: that.form6data[6].need,//最需要排名第七的职业需求人数
-                                mostProf7Jobseek: that.form6data[6].seek,//最需要排名第七的职业求职人数
-                                mostProf8Name: that.form6data[7].job,//最需要排名第八的职业名称
-                                mostProf8Num: that.form6data[7].jobcode,//最需要排名第八的职业代码
-                                mostProf8Need: that.form6data[7].need,//最需要排名第八的职业需求人数
-                                mostProf8Jobseek: that.form6data[7].seek,//最需要排名第八的职业求职人数
-                                mostProf9Name: that.form6data[8].job,//最需要排名第九的职业名称
-                                mostProf9Num: that.form6data[8].jobcode,//最需要排名第九的职业代码
-                                mostProf9Need: that.form6data[8].need,//最需要排名第九的职业需求人数
-                                mostProf9Jobseek: that.form6data[8].seek,//最需要排名第九的职业求职人数
-                                mostProf10Name: that.form6data[9].job,//最需要排名第十的职业名称
-                                mostProf10Num: that.form6data[9].jobcode,//最需要排名第十的职业代码
-                                mostProf10Need: that.form6data[9].need,//最需要排名第十的职业需求人数
-                                mostProf10Jobseek: that.form6data[9].seek,//最需要排名第十的职业求职人数
-
-                                leastProf1Name: that.form7data[0].job,//最饱和排名第一的职业名称
-                                leastProf1Num: that.form7data[0].jobcode,//最饱和排名第一的职业代码
-                                leastProf1Need: that.form7data[0].need,//最饱和排名第一的职业需求人数
-                                leastProf1Jobseek: that.form7data[0].seek,//最饱和排名第一的职业求职人数
-                                leastProf2Name: that.form7data[1].job,//最饱和排名第二的职业名称
-                                leastProf2Num: that.form7data[1].jobcode,//最饱和排名第二的职业代码
-                                leastProf2Need: that.form7data[1].need,//最饱和排名第二的职业需求人数
-                                leastProf2Jobseek: that.form7data[1].seek,//最饱和排名第二的职业求职人数
-                                leastProf3Name: that.form7data[2].job,//最饱和排名第三的职业名称
-                                leastProf3Num: that.form7data[2].jobcode,//最饱和排名第三的职业代码
-                                leastProf3Need: that.form7data[2].need,//最饱和排名第三的职业需求人数
-                                leastProf3Jobseek: that.form7data[2].seek,//最饱和排名第三的职业求职人数
-                                leastProf4Name: that.form7data[3].job,//最饱和排名第四的职业名称
-                                leastProf4Num: that.form7data[3].jobcode,//最饱和排名第四的职业代码
-                                leastProf4Need: that.form7data[3].need,//最饱和排名第四的职业需求人数
-                                leastProf4Jobseek: that.form7data[3].seek,//最饱和排名第四的职业求职人数
-                                leastProf5Name: that.form7data[4].job,//最饱和排名第五的职业名称
-                                leastProf5Num: that.form7data[4].jobcode,//最饱和排名第五的职业代码
-                                leastProf5Need: that.form7data[4].need,//最饱和排名第五的职业需求人数
-                                leastProf5Jobseek: that.form7data[4].seek,//最饱和排名第五的职业求职人数
-                                leastProf6Name: that.form7data[5].job,//最饱和排名第六的职业名称
-                                leastProf6Num: that.form7data[5].jobcode,//最饱和排名第六的职业代码
-                                leastProf6Need: that.form7data[5].need,//最饱和排名第六的职业需求人数
-                                leastProf6Jobseek: that.form7data[5].seek,//最饱和排名第六的职业求职人数
-                                leastProf7Name: that.form7data[6].job,//最饱和排名第七的职业名称
-                                leastProf7Num: that.form7data[6].jobcode,//最饱和排名第七的职业代码
-                                leastProf7Need: that.form7data[6].need,//最饱和排名第七的职业需求人数
-                                leastProf7Jobseek: that.form7data[6].seek,//最饱和排名第七的职业求职人数
-                                leastProf8Name: that.form7data[7].job,//最饱和排名第八的职业名称
-                                leastProf8Num: that.form7data[7].jobcode,//最饱和排名第八的职业代码
-                                leastProf8Need: that.form7data[7].need,//最饱和排名第八的职业需求人数
-                                leastProf8Jobseek: that.form7data[7].seek,//最饱和排名第八的职业求职人数
-                                leastProf9Name: that.form7data[8].job,//最饱和排名第九的职业名称
-                                leastProf9Num: that.form7data[8].jobcode,//最饱和排名第九的职业代码
-                                leastProf9Need: that.form7data[8].need,//最饱和排名第九的职业需求人数
-                                leastProf9Jobseek: that.form7data[8].seek,//最饱和排名第九的职业求职人数
-                                leastProf10Name: that.form7data[9].job,//最饱和排名第十的职业名称
-                                leastProf10Num: that.form7data[9].jobcode,//最饱和排名第十的职业代码
-                                leastProf10Need: that.form7data[9].need,//最饱和排名第十的职业需求人数
-                                leastProf10Jobseek: that.form7data[9].seek,//最饱和排名第十的职业求职人数
-
-                                unempYouth: that.form8data[0].seek,//新成长失业青年
-                                graduate: that.form8data[1].seek,//应届高校毕业生
-                                empToUnemp: that.form8data[2].seek,//就业转失业人员
-                                othUnemp: that.form8data[3].seek,//其他失业人员
-                                emped: that.form8data[4].seek,//在业人员
-                                laidOff: that.form8data[5].seek,//下岗职工
-                                retiree: that.form8data[6].seek,//退休人员
-                                student: that.form8data[7].seek,//在学人员
-                                cityRural: that.form8data[8].seek,//本市农村人员
-                                fore: that.form8data[9].seek,//外埠人员
-
-                                maleNeed: that.form9data[0].need,//男性需求人数
-                                maleJobseek: that.form9data[0].seek,//男性求职人数
-                                femaleNeed: that.form9data[1].need,//女性需求人数
-                                femaleJobseek: that.form9data[1].seek,//女性求职人数
-                                noRequNeedSexNum: that.form9data[2].need,//无要求需求人数
-
-                                sixteenTwentyfourNeed: that.form10data[0].need,//16-24岁需求人数
-                                sixteenTwentyfourJobseek: that.form10data[0].seek,//16-24岁求职人数
-                                twentyfiveThirtyfourNeed: that.form10data[1].need,//25-34岁需求人数
-                                twentyfiveThirtyfourJobseek: that.form10data[1].seek,//25-34岁求职人数
-                                thirtyfiveFortyfourNeed: that.form10data[2].need,//35-44岁需求人数
-                                thirtyfiveFortyfourJobseek: that.form10data[2].seek,//35-44岁求职人数
-                                overFortyfourNeed: that.form10data[3].need,//45岁以上需求人数
-                                overFortyfourJobseek: that.form10data[3].seek,//45岁以上求职人数
-                                noRequNeedAgeNum: that.form10data[4].need,
-
-                                belowJuniHighSchoNeed: that.form11data[0].need,//初中及以下需求人数
-                                belowJuniHighSchoJobseek: that.form11data[0].seek,//初中及以下求职人数
-                                highSchoNeed: that.form11data[1].need,//高中需求人数
-                                highSchoJobseek: that.form11data[1].seek,//高中求职人数
-                                otherHighSchoNeed: that.form11data[2].need,//职高技校中专需求人数
-                                otherHighSchoJobseek: that.form11data[2].seek,//职高技校中专求职人数
-                                juniCollNeed: that.form11data[3].need,//大专需求人数
-                                juniCollJobseek: that.form11data[3].seek,//大专求职人数
-                                univNeed: that.form11data[4].need,//大学需求人数
-                                univJobseek: that.form11data[4].seek,//大学求职人数
-                                noRequNeedDegreeNum: that.form11data[5].need,//无要求需求人数
-
-                                profLevel5Need: that.form12data[0].need,//职业资格五级（初级技能）需求人数
-                                profLevel5Jobseek: that.form12data[0].seek,//职业资格五级（初级技能）求职人数
-                                profLevel4Need: that.form12data[1].need,//职业资格四级（中级技能）需求人数
-                                profLevel4Jobseek: that.form12data[1].seek,//职业资格四级（中级技能）求职人数
-                                profLevel3Need: that.form12data[2].need,//职业资格三级（高级技能）需求人数
-                                profLevel3Jobseek: that.form12data[2].seek,//职业资格三级（高级技能）求职人数
-                                profLevel2Need: that.form12data[3].need,//职业资格二级（技师）需求人数
-                                profLevel2Jobsee: that.form12data[3].seek,//职业资格二级（技师）求职人数
-                                profLevel1Need: that.form12data[4].need,//职业资格一级（高级技师）需求人数
-                                profLevel1Jobseek: that.form12data[4].seek,//职业资格一级（高级技师）求职人数
-                                primProfNeed: that.form12data[5].need,//初级专业技术职务需求人数
-                                primProfJobseek: that.form12data[5].seek,//初级专业技术职务求职人数
-                                mediProfNeed: that.form12data[6].need,//中级专业技术职务需求人数
-                                mediProfJobseek: that.form12data[6].seek,//中级专业技术职务求职人数
-                                seniProfNeed: that.form12data[7].need,//高级专业技术职务需求人数
-                                seniProfJobseek: that.form12data[7].seek,//高级专业技术职务求职人数
-                                noTechJobseek: that.form12data[8].seek,//无技术等级或职务求职人数
-                                noRequNeedTechGradeNum: that.form12data[9].need,//无技术等级或职务需求人数
-                            },
-                            success(res) {
-                                // console.log(this.data);
-                                // console.log(res);
-                                if(res.code==0) {
-                                    alert('保存成功！');
-                                    that.changeable[that.index - 1] = true;
-                                    this.next();
-                                }
-                                else alert(res.message);
-                            },
-                            error(res) {
-                                console.log(res);
-                                alert('保存失败，请稍后重试');
-                            }
-                        })
-                    }
-                    else
-                        this.updateData(0);
-                }
-            },
-
-            submit:function(){
-                for(var i = 0;i<12;i++) {
-                    if (this.finished[i] == false)
-                        this.check(i+1);
-                    if(this.finished[i] == false)
-                        break;
-                }
-                if(i==12) {
-                    this.updateData(1);
-                    for (var i = 0; i < 12; i++)
-                        this.changeable[i] = true;
-                    this.turnForm(1);
-                }
-            },
-
-            last:function(){
-                if (this.index > 1) {
-                    var div1 = document.getElementsByTagName('button')[this.index-1];
-                    var div2 = document.getElementsByTagName('button')[this.index-2];
-                    div1.style.backgroundColor = "#F3F2F1";
-                    div2.style.backgroundColor = "#e8f0fe";
-                    this.index--;
-                }
-            },
-
-            turnForm:function (param) {
-                var div1 = document.getElementsByTagName('button')[this.index-1];
-                var div2 = document.getElementsByTagName('button')[param-1];
-                div1.style.backgroundColor = "#F3F2F1";
-                div2.style.backgroundColor = "#e8f0fe";
-                this.index=param;
-                // console.log(this.changeable[this.index-1]);
-                // console.log(this.index);
-                // console.log(this.forms[this.index-1].title);
             }
         }
     })
