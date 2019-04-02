@@ -7,7 +7,25 @@
     <script src="https://cdn.bootcss.com/vue/2.6.9/vue.min.js"></script>
     <link href="https://cdn.bootcss.com/element-ui/2.6.1/theme-chalk/index.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/element-ui/2.6.1/index.js"></script>
-    <link rel="stylesheet" href="../css/stylesheet.css">
+    <link rel="stylesheet" href="../css/stylesheet.css"><link rel="stylesheet" href="../css/formdata.css">
+    <style>
+        *{
+            padding:0;
+            margin:0;
+        }
+        .el-input__inner{
+            cursor:default !important;
+        }
+        .el-input__inner:focus{
+            border:1px solid #DCDFE6 !important;;
+        }
+        .el-input__inner:hover{
+            border:1px solid #DCDFE6 !important;;
+        }
+        .table{
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
 <div id="historyTables" style="height:100%;">
@@ -20,7 +38,7 @@
                         <el-col :span="10">
                             <el-select v-model="periodId" placeholder="请选择" size="small">
                                 <el-option
-                                        v-for="item in options"
+                                        v-for="item in optionsPeriod"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value"
@@ -35,8 +53,364 @@
                     <el-tree :data="cityOptions" :props="defaultProps" node-key="id" @node-click="handleNodeClick" accordion></el-tree>
                 </el-col>
                 <el-col :span="15" id="historyRight" style="height:100%;border-left: 1px solid #c1d0db;padding-left: 20px;">
-                    <iframe v-bind:src="src"
-                            style="height:1000px; width:calc(100%);background-color: #FFFFFF" frameborder="no"></iframe>
+                    <div class="formIndex" style="margin-bottom: 10px;">
+                        <el-row type="flex" align="middle">
+                            <el-col :span="9">
+                                请选择要查看的数据表：
+                            </el-col>
+                            <el-col :span="10">
+                                <el-select v-model="index" size="small">
+                                    <el-option
+                                            v-for="item in options"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                    </div>
+                    <!--<hr/>-->
+
+                    <div class="table" v-if="this.index==1">
+                        <el-form :model="form1data">
+                            <div class="tabletitle">{{forms[this.index-1].title}}</div>
+                            <el-form-item class="tableheader">
+                                <el-row>
+                                    <el-col :span="6" offset="4">需求人数</el-col>
+                                    <el-col :span="6" >求职人数</el-col>
+                                    <el-col :span="6" >求职倍率</el-col>
+                                </el-row>
+                            </el-form-item>
+                            <el-form-item class="tablecontent">
+                                <el-row>
+                                    <el-col :span="4" >{{form1data.title}}</el-col>
+                                    <el-col :span="6"><el-input v-model="form1data.need" :readonly="flagReadOnly"></el-input></el-col>
+                                    <el-col :span="6"><el-input v-model="form1data.seek" :readonly="flagReadOnly"></el-input></el-col>
+                                    <el-col :span="6"><el-input v-model="form1data.rate" :readonly="flagReadOnly"></el-input></el-col>
+                                </el-row>
+                            </el-form-item>
+                        </el-form>
+                    </div>
+
+                    <div class="table" v-else-if="this.index==2">
+                        <el-form :model="form2data">
+                            <div class="tabletitle">{{forms[this.index-1].title}}</div>
+                            <el-form-item class="tableheader">
+                                <el-row>
+                                    <el-col :span="8">产业</el-col>
+                                    <el-col :span="8" >需求人数</el-col>
+                                    <el-col :span="8" >所占比重</el-col>
+                                </el-row>
+                            </el-form-item>
+                            <div  v-for="item in form2data">
+                                <el-form-item class="tablecontent">
+                                    <el-row>
+                                        <el-col :span="8">{{item.title}}</el-col>
+                                        <el-col :span="8"><el-input v-model="item.need" :readonly="flagReadOnly" ></el-input></el-col>
+                                        <el-col :span="8"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
+                                    </el-row>
+                                </el-form-item>
+                            </div>
+                        </el-form>
+                    </div>
+
+                    <div class="table" v-else-if="this.index==3">
+                        <el-form :model="form3data">
+                            <div class="tabletitle">{{forms[this.index-1].title}}</div>
+                            <el-form-item class="tableheader">
+                                <el-row>
+                                    <el-col :span="8">行业</el-col>
+                                    <el-col :span="8" >需求人数</el-col>
+                                    <el-col :span="8" >所占比重</el-col>
+                                </el-row>
+                            </el-form-item>
+                            <div  v-for="item in form3data">
+                                <el-form-item class="tablecontent">
+                                    <el-row>
+                                        <el-col :span="8">{{item.title}}</el-col>
+                                        <el-col :span="8"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="8"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
+                                    </el-row>
+                                </el-form-item>
+                            </div>
+                        </el-form>
+                    </div>
+
+                    <div class="table" v-else-if="this.index==4">
+                        <el-form :model="form4data">
+                            <div class="tabletitle">{{forms[this.index-1].title}}</div>
+                            <el-form-item class="tableheader">
+                                <el-row>
+                                    <el-col :span="8">产业</el-col>
+                                    <el-col :span="8" >需求人数</el-col>
+                                    <el-col :span="8" >所占比重</el-col>
+                                </el-row>
+                            </el-form-item>
+                            <div  v-for="item in form4data">
+                                <el-form-item class="tablecontent">
+                                    <el-row>
+                                        <el-col :span="2">{{item.title1}}</el-col>
+                                        <el-col :span="3">{{item.title2}}</el-col>
+                                        <el-col :span="3">{{item.title3}}</el-col>
+                                        <el-col :span="8"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="8"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
+                                    </el-row>
+                                </el-form-item>
+                            </div>
+                        </el-form>
+                    </div>
+
+                    <div class="table" v-else-if="this.index==5">
+                        <el-form :model="form5data">
+                            <div class="tabletitle">{{forms[this.index-1].title}}</div>
+                            <el-form-item class="tableheader">
+                                <el-row>
+                                    <el-col :span="4">就业</el-col>
+                                    <el-col :span="20" >劳动力供求人数比较</el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="4">类别</el-col>
+                                    <el-col :span="4" >需求人数</el-col>
+                                    <el-col :span="4" >所占比重</el-col>
+                                    <el-col :span="4" >求职人数</el-col>
+                                    <el-col :span="4" >所占比重</el-col>
+                                    <el-col :span="4" >求人倍率</el-col>
+                                </el-row>
+                            </el-form-item>
+                            <div  v-for="item in form5data">
+                                <el-form-item class="tablecontent">
+                                    <el-row>
+                                        <el-col :span="4">{{item.title}}</el-col>
+                                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
+                                    </el-row>
+                                </el-form-item>
+                            </div>
+                        </el-form>
+                    </div>
+
+                    <div class="table" v-else-if="this.index==6">
+                        <el-form :model="form6data">
+                            <div class="tabletitle">{{forms[this.index-1].title}}</div>
+                            <el-form-item class="tableheader">
+                                <el-row>
+                                    <el-col :span="4">职</el-col>
+                                    <el-col :span="4">职业</el-col>
+                                    <el-col :span="16" >劳动力供求人数比较</el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="4">业</el-col>
+                                    <el-col :span="4">类别</el-col>
+                                    <el-col :span="4" >需求人数</el-col>
+                                    <el-col :span="4" >求职人数</el-col>
+                                    <el-col :span="4" >缺口数</el-col>
+                                    <el-col :span="4" >求人倍率</el-col>
+                                </el-row>
+                            </el-form-item>
+                            <div  v-for="item in form6data">
+                                <el-form-item class="tablecontent">
+                                    <el-row>
+                                        <el-col :span="4"><el-input v-model="item.job" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.jobcode" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.gap" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
+                                    </el-row>
+                                </el-form-item>
+                            </div>
+                        </el-form>
+                    </div>
+
+                    <div class="table" v-else-if="this.index==7">
+                        <el-form :model="form7data">
+                            <div class="tabletitle">{{forms[this.index-1].title}}</div>
+                            <el-form-item class="tableheader">
+                                <el-row>
+                                    <el-col :span="4">职</el-col>
+                                    <el-col :span="4">职业</el-col>
+                                    <el-col :span="16" >劳动力供求人数比较</el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="4">业</el-col>
+                                    <el-col :span="4">类别</el-col>
+                                    <el-col :span="4" >需求人数</el-col>
+                                    <el-col :span="4" >求职人数</el-col>
+                                    <el-col :span="4" >缺口数</el-col>
+                                    <el-col :span="4" >求人倍率</el-col>
+                                </el-row>
+                            </el-form-item>
+                            <div  v-for="item in form7data">
+                                <el-form-item class="tablecontent">
+                                    <el-row>
+                                        <el-col :span="4"><el-input v-model="item.job" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.jobcode" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.gap" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
+                                    </el-row>
+                                </el-form-item>
+                            </div>
+                        </el-form>
+                    </div>
+
+                    <div class="table" v-else-if="this.index==8">
+                        <el-form :model="form8data">
+                            <div class="tabletitle">{{forms[this.index-1].title}}</div>
+                            <el-form-item class="tableheader">
+                                <el-row>
+                                    <el-col :span="8">求职人员类别</el-col>
+                                    <el-col :span="8" >求职人数</el-col>
+                                    <el-col :span="8" >所占比重</el-col>
+                                </el-row>
+                            </el-form-item>
+                            <div  v-for="item in form8data">
+                                <el-form-item class="tablecontent">
+                                    <el-row>
+                                        <el-col :span="8">{{item.title}}</el-col>
+                                        <el-col :span="8"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="8"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
+                                    </el-row>
+                                </el-form-item>
+                            </div>
+                        </el-form>
+                    </div>
+
+                    <div class="table" v-else-if="this.index==9">
+                        <el-form :model="form9data">
+                            <div class="tabletitle">{{forms[this.index-1].title}}</div>
+                            <el-form-item class="tableheader">
+                                <el-row>
+                                    <el-col :span="4">性</el-col>
+                                    <el-col :span="20" >劳动力供求人数比较</el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="4">别</el-col>
+                                    <el-col :span="4" >需求人数</el-col>
+                                    <el-col :span="4" >所占比重</el-col>
+                                    <el-col :span="4" >求职人数</el-col>
+                                    <el-col :span="4" >所占比重</el-col>
+                                    <el-col :span="4" >求人倍率</el-col>
+                                </el-row>
+                            </el-form-item>
+                            <div  v-for="item in form9data">
+                                <el-form-item class="tablecontent">
+                                    <el-row>
+                                        <el-col :span="4">{{item.title}}</el-col>
+                                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
+                                    </el-row>
+                                </el-form-item>
+                            </div>
+                        </el-form>
+                    </div>
+
+                    <div class="table" v-else-if="this.index==10">
+                        <el-form :model="form10data">
+                            <div class="tabletitle">{{forms[this.index-1].title}}</div>
+                            <el-form-item class="tableheader">
+                                <el-row>
+                                    <el-col :span="4">年</el-col>
+                                    <el-col :span="20" >劳动力供求人数比较</el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="4">龄</el-col>
+                                    <el-col :span="4" >需求人数</el-col>
+                                    <el-col :span="4" >所占比重</el-col>
+                                    <el-col :span="4" >求职人数</el-col>
+                                    <el-col :span="4" >所占比重</el-col>
+                                    <el-col :span="4" >求人倍率</el-col>
+                                </el-row>
+                            </el-form-item>
+                            <div  v-for="item in form10data">
+                                <el-form-item class="tablecontent">
+                                    <el-row>
+                                        <el-col :span="4">{{item.title}}</el-col>
+                                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
+                                    </el-row>
+                                </el-form-item>
+                            </div>
+                        </el-form>
+                    </div>
+
+                    <div class="table" v-else-if="this.index==11">
+                        <el-form :model="form11data">
+                            <div class="tabletitle">{{forms[this.index-1].title}}</div>
+                            <el-form-item class="tableheader">
+                                <el-row>
+                                    <el-col :span="4">文化</el-col>
+                                    <el-col :span="20" >劳动力供求人数比较</el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="4">程度</el-col>
+                                    <el-col :span="4" >需求人数</el-col>
+                                    <el-col :span="4" >所占比重</el-col>
+                                    <el-col :span="4" >求职人数</el-col>
+                                    <el-col :span="4" >所占比重</el-col>
+                                    <el-col :span="4" >求人倍率</el-col>
+                                </el-row>
+                            </el-form-item>
+                            <div  v-for="item in form11data">
+                                <el-form-item class="tablecontent">
+                                    <el-row>
+                                        <el-col :span="4">{{item.title}}</el-col>
+                                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
+                                    </el-row>
+                                </el-form-item>
+                            </div>
+                        </el-form>
+                    </div>
+
+                    <div class="table" v-else-if="this.index==12">
+                        <el-form :model="form12data">
+                            <div class="tabletitle">{{forms[this.index-1].title}}</div>
+                            <el-form-item class="tableheader">
+                                <el-row>
+                                    <el-col :span="4">技术</el-col>
+                                    <el-col :span="20" >劳动力供求人数比较</el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="4">等级</el-col>
+                                    <el-col :span="4" >需求人数</el-col>
+                                    <el-col :span="4" >所占比重</el-col>
+                                    <el-col :span="4" >求职人数</el-col>
+                                    <el-col :span="4" >所占比重</el-col>
+                                    <el-col :span="4" >求人倍率</el-col>
+                                </el-row>
+                            </el-form-item>
+                            <div  v-for="item in form12data">
+                                <el-form-item class="tablecontent">
+                                    <el-row>
+                                        <el-col :span="4">{{item.title}}</el-col>
+                                        <el-col :span="4"><el-input v-model="item.need" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.needrate" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.seek" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.seekrate" :readonly="flagReadOnly"></el-input></el-col>
+                                        <el-col :span="4"><el-input v-model="item.rate" :readonly="flagReadOnly"></el-input></el-col>
+                                    </el-row>
+                                </el-form-item>
+                            </div>
+                        </el-form>
+                    </div>
+
+                    <!--<iframe v-bind:src="src"-->
+                            <!--style="height:1000px; width:calc(100%);background-color: #FFFFFF" frameborder="no"></iframe>-->
                 </el-col>
             </el-row>
         </div>
@@ -48,15 +422,731 @@
     var vue = new Vue({
         el:'#historyTables',
         data:{
-            src:'/html/dataFillIframe.html?tableId=-1',
-            options: [],
+            optionsPeriod: [],
             periodId:'',
             cityOptions:[],
             defaultProps: {
                 children:'child',
                 label:'fullname'
             },
-            userId:''
+            userId:'',
+            tableId:-1,
+            options: [{
+                value: 1,
+                label: '供求总体人数'
+            }, {
+                value: 2,
+                label: '按产业分组的需求人数'
+            }, {
+                value: 3,
+                label: '按行业分组的需求人数'
+            }, {
+                value: 4,
+                label: '按用人单位性质分组的需求人数'
+            }, {
+                value: 5,
+                label: '按按职业分组的供求人数'
+            }, {
+                value: 6,
+                label: '需求大于求职缺口最大的前十个职业（职业小类）'
+            }, {
+                value: 7,
+                label: '需求小于求职缺口最大的前十个职业（职业小类）'
+            }, {
+                value: 8,
+                label: '按求职人员类别分组的求职人数'
+            }, {
+                value: 9,
+                label: '按性别分组的供求人数'
+            }, {
+                value: 10,
+                label: '按年龄分组的供求人数'
+            }, {
+                value: 11,
+                label: '按文化程度分组的供求人数'
+            }, {
+                value: 12,
+                label: '按技术等级分组的供求人数'
+            }],
+            flagReadOnly:true,
+            index:1,
+            forms:[
+                {index:1, id:'button1', title:'表1：供求总体人数'},
+                {index:2, id:'button2', title:'表2：按产业分组的需求人数'},
+                {index:3, id:'button3', title:'表3：按行业分组的需求人数'},
+                {index:4, id:'button4', title:'表4：按用人单位性质划分的需求人数'},
+                {index:5, id:'button5', title:'表5：按职业分组的需求人数'},
+                {index:6, id:'button6', title:'表6：需求大于求职的十个行业'},
+                {index:7, id:'button7', title:'表7：需求小于求职的十个行业'},
+                {index:8, id:'button8', title:'表8：按求职人员类别分组的需求人数'},
+                {index:9, id:'button9', title:'表9：按性别分组的供求人数'},
+                {index:10, id:'button10', title:'表10：按年龄分组的供求人数'},
+                {index:11, id:'button11', title:'表11：按文化程度的供求人数'},
+                {index:12, id:'button12', title:'表12：按技能等级分组的供求人数'},
+            ],
+            finished:[false,false,false,false,false,false,false,false,false,false,false,false],
+            changeable:[false,false,false,false,false,false,false,false,false,false,false,false],
+            // need:需求人数，needrate：需求人数所占比重，seek：求职人数，seekrate:求职人数所占比重
+            // job:职业，jobcode:职业代码，rate:求人比率，缺口数：gap
+
+
+            form1data:{
+                title: '本期有效数',
+                need: '',
+                seek: '',
+                rate: ''
+            },
+            form2data:[{
+                title:'第一产业',
+                need:'',
+                needrate:''
+            },{
+                title:'第二产业',
+                need:'',
+                needrate:''
+            },{
+                title:'第三产业',
+                need:'',
+                needrate:''
+            },{
+                title:'合计',
+                need:0,
+                needrate:0
+            }],
+            form3data:[{
+                title:'农、林、牧、鱼业',
+                need:'',
+                needrate:''
+            },{
+                title:'采矿业',
+                need:'',
+                needrate:''
+            },{
+                title:'制造业',
+                need:'',
+                needrate:''
+            },{
+                title:'电力、燃气及水的生产和供应业',
+                need:'',
+                needrate:''
+            },{
+                title:'建筑业',
+                need:'',
+                needrate:''
+            },{
+                title:'交通运输、仓储和邮政业',
+                need:'',
+                needrate:''
+            },{
+                title:'信息传输、计算机服务和软件业',
+                need:'',
+                needrate:''
+            },{
+                title:'批发和零售业',
+                need:'',
+                needrate:''
+            },{
+                title:'住宿和餐饮业',
+                need:'',
+                needrate:''
+            },{
+                title:'金融业',
+                need:'',
+                needrate:''
+            },{
+                title:'房地产业',
+                need:'',
+                needrate:''
+            },{
+                title:'租赁和商务服务业',
+                need:'',
+                needrate:''
+            },{
+                title:'科学研究、技术服务和地址勘查业',
+                need:'',
+                needrate:''
+            },{
+                title:'水利、环境和公共设施管理业',
+                need:'',
+                needrate:''
+            },{
+                title:'居民服务和其他服务业',
+                need:'',
+                needrate:''
+            },{
+                title:'教育',
+                need:'',
+                needrate:''
+            },{
+                title:'卫生、社会保障和社会福利业',
+                need:'',
+                needrate:''
+            },{
+                title:'文化、体育和娱乐业',
+                need:'',
+                needrate:''
+            },{
+                title:'公共管理与社会组织',
+                need:'',
+                needrate:''
+            },{
+                title:'国际组织',
+                need:'',
+                needrate:''
+            },{
+                title:'合计',
+                need:0,
+                needrate:0
+            }],
+            form4data:[{
+                title1:'|',
+                title2:'|',
+                title3:'国有企业',
+                need:'',
+                needrate:'',
+            },{
+                title1:'|',
+                title2:'|',
+                title3:'集体企业',
+                need:'',
+                needrate:'',
+            },{
+                title1:'|',
+                title2:'|',
+                title3:'股份合作企业',
+                need:'',
+                needrate:'',
+            },{
+                title1:'|',
+                title2:'|',
+                title3:'联营企业',
+                need:'',
+                needrate:'',
+            },{
+                title1:' |',
+                title2:'内资企业',
+                title3:'有限责任公公司',
+                need:'',
+                needrate:'',
+            },{
+                title1:'企业',
+                title2:'|',
+                title3:'股份有限公司',
+                need:'',
+                needrate:'',
+            },{
+                title1:'|',
+                title2:'|',
+                title3:'私营企业',
+                need:'',
+                needrate:'',
+            },{
+                title1:'|',
+                title2:'|',
+                title3:'其他企业',
+                need:'',
+                needrate:'',
+            },{
+                title1:'-',
+                title2:'港、澳、台投资企业',
+                title3:'-',
+                need:'',
+                needrate:'',
+            },{
+                title1:'-',
+                title2:'外商投资企业',
+                title3:'-',
+                need:'',
+                needrate:'',
+            },{
+                title1:'-',
+                title2:'个体经营',
+                title3:'-',
+                need:'',
+                needrate:'',
+            },{
+                title1:'-',
+                title2:'事业',
+                title3:'-',
+                need:'',
+                needrate:'',
+            },{
+                title1:'-',
+                title2:'机关',
+                title3:'-',
+                need:'',
+                needrate:'',
+            },{
+                title1:'-',
+                title2:'其他',
+                title3:'-',
+                need:'',
+                needrate:'',
+            },{
+                title1:'-',
+                title2:'合计',
+                title3:'-',
+                need:0,
+                needrate:0,
+            }],
+            form5data:[{
+                title:'单位负责人',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'专业技术人员',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'办事人员和有关人员',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'商业和服务人员',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'农林牧渔水利生产人员',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'生产运输设备操作工',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'其他',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'无要求',
+                need:'------',
+                needrate:'------',
+                seek:'',
+                seekrate:'',
+                rate:'------',
+            },{
+                title:'合计',
+                need:0,
+                needrate:0,
+                seek:0,
+                seekrate:0,
+                rate:'------',
+            }],
+            form6data:[{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },],
+            form7data:[{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },{
+                job:'',
+                jobcode:'',
+                need:'',
+                seek:'',
+                gap:'',
+                rate:''
+            },],
+            form8data:[{
+                title:'新成长失业青年',
+                seek:'',
+                seekrate:''
+            },{
+                title:'应届高校毕业生',
+                seek:'',
+                seekrate:''
+            },{
+                title:'就业转失业人员',
+                seek:'',
+                seekrate:''
+            },{
+                title:'其他失业人员',
+                seek:'',
+                seekrate:''
+            },{
+                title:'在业人员',
+                seek:'',
+                seekrate:''
+            },{
+                title:'下岗职工',
+                seek:'',
+                seekrate:''
+            },{
+                title:'退休人员',
+                seek:'',
+                seekrate:''
+            },{
+                title:'在学人员',
+                seek:'',
+                seekrate:''
+            },{
+                title:'本市农村人员',
+                seek:'',
+                seekrate:''
+            },{
+                title:'外埠人员',
+                seek:'',
+                seekrate:''
+            },{
+                title:'合计',
+                seek:0,
+                seekrate:0,
+            }],
+            form9data:[{
+                title:'男',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'女',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'无要求',
+                need:'',
+                needrate:'',
+                seek:'-----',
+                seekrate:'-----',
+                rate:'-----',
+            },{
+                title:'合计',
+                need:0,
+                needrate:0,
+                seek:0,
+                seekrate:0,
+                rate:'-----',
+            }],
+            form10data:[{
+                title:'16-24岁',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'25-34岁',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'35-44岁',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'45岁以上',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'无要求',
+                need:'',
+                needrate:'',
+                seek:'-----',
+                seekrate:'-----',
+                rate:'-----',
+            },{
+                title:'合计',
+                need:0,
+                needrate:0,
+                seek:0,
+                seekrate:0,
+                rate:'-----',
+            }],
+            form11data:[{
+                title:'初中及以下',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'高中',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'职高、技校、中专',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'大专',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'大学',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'硕士以上',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'无要求',
+                need:'',
+                needrate:'',
+                seek:'-----',
+                seekrate:'-----',
+                rate:'-----',
+            },{
+                title:'合计',
+                need:0,
+                needrate:0,
+                seek:0,
+                seekrate:0,
+                rate:'-----',
+            }],
+            form12data:[{
+                title:'职业资格五级（初级技能）',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'职业资格四级（中级技能）',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'职业资格三级（高级技能）',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'职业资格二级（技师）',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'职业资格一级（高级技师）',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'初级专业技术职务',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'中级专业技术职务',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'高级专业技术职务',
+                need:'',
+                needrate:'',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'无技术等级或职务',
+                need:'-----',
+                needrate:'-----',
+                seek:'',
+                seekrate:'',
+                rate:'',
+            },{
+                title:'无要求',
+                need:'',
+                needrate:'',
+                seek:'-----',
+                seekrate:'-----',
+                rate:'-----',
+            },{
+                title:'合计',
+                need:0,
+                needrate:0,
+                seek:0,
+                seekrate:0,
+                rate:'-----',
+            }]
         },
         methods:{
             handleNodeClick(data){
@@ -73,9 +1163,7 @@
                 })
             },
             changeURL(){
-                this.src='';
                 if(vue.userId !== '' && vue.periodId !==''){
-                    // vue.src = '/html/dataFillIframe.html?tableId='+'53';
                     $.ajax({
                         url: '/common/data/selectUploadInfoById',
                         type: 'post',
@@ -86,7 +1174,8 @@
                         success(res) {
                             console.log(res);
                             if(res.code===0) {
-                                vue.src = '/html/dataFillIframe.html?tableId='+res.data[0].tableId;
+                                vue.tableId = res.data[0].tableId;
+                                vue.loadData()
                             }
                             else {
                                 alert(res.message);
@@ -100,6 +1189,592 @@
                 }
 
 
+            },
+            loadData:function() {
+                var that = this;
+                $.ajax({
+                    url: '/common/data/selectTotalNum',
+                    type: 'post',
+                    data: {
+                        tableId: that.tableId,
+                    },
+                    success(res) {
+                        console.log('form1:');
+                        console.log(res);
+                        if (res.code == 0) {
+                            that.form1data.seek=res.data.needPopu;
+                            that.form1data.need=res.data.jobseekPopu;
+                            that.getRate(1, that.form1data);
+                            console.log(that.form1data);
+                        }
+                        else alert(res.message);
+                    },
+                    error(res) {
+                        console.log(res);
+                        alert('初始化失败，请稍后刷新重试');
+                    },
+                })
+
+                $.ajax({
+                    url: '/common/data/selectIndustryNum',
+                    type: 'post',
+                    data: {
+                        tableId: that.tableId,
+                    },
+                    success: function (res) {
+                        console.log('form2+form3:');
+                        console.log(res);
+                        if (res.code == 0) {
+                            that.form2data[0].need = res.data.industry1Need;
+                            that.form2data[1].need = res.data.industry2Need;
+                            that.form2data[2].need = res.data.industry3Need;
+                            that.form3data[0].need = res.data.industry1Need;
+                            that.form3data[1].need = res.data.mineNeed;
+                            that.form3data[2].need = res.data.manuNeed;
+                            that.form3data[3].need = res.data.elecGasWaterNeed;
+                            that.form3data[4].need = res.data.archNeed;
+                            that.form3data[5].need = res.data.tranStorPostNeed;
+                            that.form3data[6].need = res.data.infoCompSoftNeed;
+                            that.form3data[7].need = res.data.retailNeed;
+                            that.form3data[8].need = res.data.accoCaterNeed;
+                            that.form3data[9].need = res.data.financeNeed;
+                            that.form3data[10].need = res.data.estateNeed;
+                            that.form3data[11].need = res.data.leaseBusiServNeed;
+                            that.form3data[12].need = res.data.reseTechAddrNeed;
+                            that.form3data[13].need = res.data.waterEnviFaciNeed;
+                            that.form3data[14].need = res.data.resiServNeed;
+                            that.form3data[15].need = res.data.eduNeed;
+                            that.form3data[16].need = res.data.healSecuWelfNeed;
+                            that.form3data[17].need = res.data.cultSportEnteNeed;
+                            that.form3data[18].need = res.data.manaOrgaNeed;
+                            that.form3data[19].need = res.data.inteOrgaNeed;
+                            that.getNeedSum2(2,that.form2data);
+                            that.getNeedRate(2,that.form2data);
+                            console.log(that.form2data);
+
+                            that.getNeedSum2(3,that.form3data);
+                            that.getNeedRate(3,that.form3data);
+                            console.log(that.form3data);
+                        }
+                        else alert(res.message);
+                    },
+                    error(res) {
+                        console.log(res);
+                        alert('初始化失败，请稍后刷新重试');
+                    },
+                })
+
+                $.ajax({
+                    url: '/common/data/selectEmployerNum',
+                    type: 'post',
+                    data: {
+                        tableId: that.tableId,
+                    },
+                    success: function (res) {
+                        console.log('form4:');
+                        console.log(res);
+                        if (res.code == 0) {
+                            that.form4data[0].need = res.data.staOwnNeed;
+                            that.form4data[1].need = res.data.collNeed;
+                            that.form4data[2].need = res.data.coopStockNeed;
+                            that.form4data[3].need = res.data.jointNeed;
+                            that.form4data[4].need = res.data.limiLiabNeed;
+                            that.form4data[5].need = res.data.limitedNeed;
+                            that.form4data[6].need = res.data.privNeed;
+                            that.form4data[7].need = res.data.otherEnteNeed;
+                            that.form4data[8].need = res.data.hmtInveNeed;
+                            that.form4data[9].need = res.data.foreInveEnte;
+                            that.form4data[10].need = res.data.indiNeed;
+                            that.form4data[11].need = res.data.instNeed;
+                            that.form4data[12].need = res.data.orgaNeed;
+                            that.form4data[13].need = res.data.otherNeed;
+                            that.getNeedSum2(4,that.form4data);
+                            that.getNeedRate(4,that.form4data);
+                            console.log(that.form4data);
+                        }
+                        else alert(res.message);
+                    },
+                    error(res) {
+                        console.log(res);
+                        alert('初始化失败，请稍后刷新重试');
+                    },
+                })
+
+                $.ajax({
+                    url: '/common/data/selectProfNum',
+                    type: 'post',
+                    data: {
+                        tableId: that.tableId,
+                    },
+                    success(res) {
+                        console.log('form5:');
+                        console.log(res);
+                        if (res.code == 0) {
+                            that.form5data[0].need=res.data.leaderNeed;
+                            that.form5data[0].seek=res.data.leaderJobseek;
+                            that.form5data[1].need=res.data.profTechNeed;
+                            that.form5data[1].seek=res.data.profTechJobseek;
+                            that.form5data[2].need=res.data.staffRelaNeed;
+                            that.form5data[2].seek=res.data.staffRelaJobseek;
+                            that.form5data[3].need=res.data.busiServNeed;
+                            that.form5data[3].seek=res.data.busiServJobseek;
+                            that.form5data[4].need=res.data.prodNeed;
+                            that.form5data[4].seek=res.data.prodJobseek;
+                            that.form5data[5].need=res.data.operNeed;
+                            that.form5data[5].seek=res.data.operJobseek;
+                            that.form5data[6].need=res.data.otherNeed;
+                            that.form5data[6].seek=res.data.otherJobseek;
+                            that.form5data[7].seek=res.data.noRequJobseek;
+                            that.getSum5(5,that.form5data);
+                            that.getRate(5,that.form5data);
+                            that.getNeedRate(5,that.form5data);
+                            that.getSeekRate(5,that.form5data);
+                            console.log(that.form5data);
+                        }
+                        else alert(res.message);
+                    },
+                    error(res) {
+                        console.log(res);
+                        alert('初始化失败，请稍后刷新重试');
+                    },
+                })
+
+                $.ajax({
+                    url: '/common/data/selectMostNeeded',
+                    type: 'post',
+                    data: {
+                        tableId: that.tableId,
+                    },
+                    success: function (res) {
+                        console.log('form6:');
+                        console.log(res);
+                        if (res.code == 0) {
+                            that.form6data[0].job = res.data.mostProf1Name;
+                            that.form6data[0].jobcode = res.data.mostProf1Num;
+                            that.form6data[0].need = res.data.mostProf1Need;
+                            that.form6data[0].seek = res.data.mostProf1Jobseek;
+                            that.form6data[1].job = res.data.mostProf2Name;
+                            that.form6data[1].jobcode = res.data.mostProf2Num;
+                            that.form6data[1].need = res.data.mostProf2Need;
+                            that.form6data[1].seek = res.data.mostProf2Jobseek;
+                            that.form6data[2].job = res.data.mostProf3Name;
+                            that.form6data[2].jobcode = res.data.mostProf3Num;
+                            that.form6data[2].need = res.data.mostProf3Need;
+                            that.form6data[2].seek = res.data.mostProf3Jobseek;
+                            that.form6data[3].job = res.data.mostProf4Name;
+                            that.form6data[3].jobcode = res.data.mostProf4Num;
+                            that.form6data[3].need = res.data.mostProf4Need;
+                            that.form6data[3].seek = res.data.mostProf4Jobseek;
+                            that.form6data[4].job = res.data.mostProf5Name;
+                            that.form6data[4].jobcode = res.data.mostProf5Num;
+                            that.form6data[4].need = res.data.mostProf5Need;
+                            that.form6data[4].seek = res.data.mostProf5Jobseek;
+                            that.form6data[5].job = res.data.mostProf6Name;
+                            that.form6data[5].jobcode = res.data.mostProf6Num;
+                            that.form6data[5].need = res.data.mostProf6Need;
+                            that.form6data[5].seek = res.data.mostProf6Jobseek;
+                            that.form6data[6].job = res.data.mostProf7Name;
+                            that.form6data[6].jobcode = res.data.mostProf7Num;
+                            that.form6data[6].need = res.data.mostProf7Need;
+                            that.form6data[6].seek = res.data.mostProf7Jobseek;
+                            that.form6data[7].job = res.data.mostProf8Name;
+                            that.form6data[7].jobcode = res.data.mostProf8Num;
+                            that.form6data[7].need = res.data.mostProf8Need;
+                            that.form6data[7].seek = res.data.mostProf8Jobseek;
+                            that.form6data[8].job = res.data.mostProf9Name;
+                            that.form6data[8].jobcode = res.data.mostProf9Num;
+                            that.form6data[8].need = res.data.mostProf9Need;
+                            that.form6data[8].seek = res.data.mostProf9Jobseek;
+                            that.form6data[9].job = res.data.mostProf10Name;
+                            that.form6data[9].jobcode = res.data.mostProf10Num;
+                            that.form6data[9].need = res.data.mostProf10Need;
+                            that.form6data[9].seek = res.data.mostProf10Jobseek;
+                            that.getRate(6,that.form6data);
+                            that.getGap(6,that.form6data);
+                            console.log(that.form6data);
+                        }
+                        else alert(res.message);
+                    },
+                    error(res) {
+                        console.log(res);
+                        alert('初始化失败，请稍后刷新重试');
+                    },
+                })
+
+                $.ajax({
+                    url: '/common/data/selectLeastNeeded',
+                    type: 'post',
+                    data: {
+                        tableId: that.tableId,
+                    },
+                    success(res) {
+                        console.log('form7:');
+                        console.log(res);
+                        if (res.code == 0) {
+                            that.form7data[0].job = res.data.leastProf1Name;
+                            that.form7data[0].jobcode = res.data.leastProf1Num;
+                            that.form7data[0].need = res.data.leastProf1Need;
+                            that.form7data[0].seek = res.data.leastProf1Jobseek;
+                            that.form7data[1].job = res.data.leastProf2Name;
+                            that.form7data[1].jobcode = res.data.leastProf2Num;
+                            that.form7data[1].need = res.data.leastProf2Need;
+                            that.form7data[1].seek = res.data.leastProf2Jobseek;
+                            that.form7data[2].job = res.data.leastProf3Name;
+                            that.form7data[2].jobcode = res.data.leastProf3Num;
+                            that.form7data[2].need = res.data.leastProf3Need;
+                            that.form7data[2].seek = res.data.leastProf3Jobseek;
+                            that.form7data[3].job = res.data.leastProf4Name;
+                            that.form7data[3].jobcode = res.data.leastProf4Num;
+                            that.form7data[3].need = res.data.leastProf4Need;
+                            that.form7data[3].seek = res.data.leastProf4Jobseek;
+                            that.form7data[4].job = res.data.leastProf5Name;
+                            that.form7data[4].jobcode = res.data.leastProf5Num;
+                            that.form7data[4].need = res.data.leastProf5Need;
+                            that.form7data[4].seek = res.data.leastProf5Jobseek;
+                            that.form7data[5].job = res.data.leastProf6Name;
+                            that.form7data[5].jobcode = res.data.leastProf6Num;
+                            that.form7data[5].need = res.data.leastProf6Need;
+                            that.form7data[5].seek = res.data.leastProf6Jobseek;
+                            that.form7data[6].job = res.data.leastProf7Name;
+                            that.form7data[6].jobcode = res.data.leastProf7Num;
+                            that.form7data[6].need = res.data.leastProf7Need;
+                            that.form7data[6].seek = res.data.leastProf7Jobseek;
+                            that.form7data[7].job = res.data.leastProf8Name;
+                            that.form7data[7].jobcode = res.data.leastProf8Num;
+                            that.form7data[7].need = res.data.leastProf8Need;
+                            that.form7data[7].seek = res.data.leastProf8Jobseek;
+                            that.form7data[8].job = res.data.leastProf9Name;
+                            that.form7data[8].jobcode = res.data.leastProf9Num;
+                            that.form7data[8].need = res.data.leastProf9Need;
+                            that.form7data[8].seek = res.data.leastProf9Jobseek;
+                            that.form7data[9].job = res.data.leastProf10Name;
+                            that.form7data[9].jobcode = res.data.leastProf10Num;
+                            that.form7data[9].need = res.data.leastProf10Need;
+                            that.form7data[9].seek = res.data.leastProf10Jobseek;
+                            that.getRate(7,that.form7data);
+                            that.getGap(7,that.form7data);
+                            console.log(that.form7data);
+                        }
+                        else alert(res.message);
+                    },
+                    error(res) {
+                        console.log(res);
+                        alert('初始化失败，请稍后刷新重试');
+                    },
+                })
+
+                $.ajax({
+                    url: '/common/data/selectJobSeekerNum',
+                    type: 'post',
+                    data: {
+                        tableId: that.tableId,
+                    },
+                    success(res) {
+                        console.log('form8:');
+                        console.log(res);
+                        if (res.code == 0) {
+                            that.form8data[0].seek = res.data.unempYouth;
+                            that.form8data[1].seek = res.data.graduate;
+                            that.form8data[2].seek = res.data.empToUnemp;
+                            that.form8data[3].seek = res.data.othUnemp;
+                            that.form8data[4].seek = res.data.emped;
+                            that.form8data[5].seek = res.data.laidOff;
+                            that.form8data[6].seek = res.data.retiree;
+                            that.form8data[7].seek = res.data.student;
+                            that.form8data[8].seek = res.data.cityRural;
+                            that.form8data[9].seek = res.data.fore;
+                            that.getSeekSum2(8,that.form8data);
+                            that.getSeekRate(8,that.form8data);
+                            console.log(that.form8data);
+                        }
+                        else alert(res.message);
+                    },
+                    error(res) {
+                        console.log(res);
+                        alert('初始化失败，请稍后刷新重试');
+                    },
+                })
+
+                $.ajax({
+                    url: '/common/data/selectSexNum',
+                    type: 'post',
+                    data: {
+                        tableId: that.tableId,
+                    },
+                    success: function (res) {
+                        console.log('form9:');
+                        console.log(res);
+                        if (res.code == 0) {
+                            that.form9data[0].need = res.data.maleNeed;
+                            that.form9data[0].seek = res.data.maleJobseek;
+                            that.form9data[1].need = res.data.femaleNeed;
+                            that.form9data[1].seek = res.data.femaleJobseek;
+                            that.form9data[2].need = res.data.noRequNeed;
+                            that.getSum5(9,that.form9data);
+                            that.getRate(9,that.form9data);
+                            that.getNeedRate(9,that.form9data);
+                            that.getSeekRate(9,that.form9data);
+                            console.log(that.form9data);
+                        }
+                        else alert(res.message);
+                    },
+                    error(res) {
+                        console.log(res);
+                        alert('初始化失败，请稍后刷新重试');
+                    },
+                })
+
+                $.ajax({
+                    url: '/common/data/selectAgeNum',
+                    type: 'post',
+                    data: {
+                        tableId: that.tableId,
+                    },
+                    success(res) {
+                        console.log('form10:');
+                        console.log(res);
+                        if (res.code == 0) {
+                            that.form10data[0].need=res.data.sixteenTwentyfourNeed;
+                            that.form10data[0].seek=res.data.sixteenTwentyfourJobseek;
+                            that.form10data[1].need=res.data.twentyfiveThirtyfourNeed;
+                            that.form10data[1].seek=res.data.twentyfiveThirtyfourJobseek;
+                            that.form10data[2].need=res.data.thirtyfiveFortyfourNeed;
+                            that.form10data[2].seek=res.data.thirtyfiveFortyfourJobseek;
+                            that.form10data[3].need=res.data.overFortyfourNeed;
+                            that.form10data[3].seek=res.data.overFortyfourJobseek;
+                            that.form10data[4].need=res.data.noRequNeed;
+                            that.getSum5(10,that.form10data);
+                            that.getRate(10,that.form10data);
+                            that.getNeedRate(10,that.form10data);
+                            that.getSeekRate(10,that.form10data);
+                            console.log(that.form10data);
+                        }
+                        else alert(res.message);
+                    },
+                    error(res) {
+                        console.log(res);
+                        alert('初始化失败，请稍后刷新重试');
+                    },
+                })
+
+                $.ajax({
+                    url: '/common/data/selectDegreeNum',
+                    type: 'post',
+                    data: {
+                        tableId: that.tableId,
+                    },
+                    success(res) {
+                        console.log('form11:');
+                        console.log(res);
+                        if (res.code == 0) {
+                            that.form11data[0].need=res.data.belowJuniHighSchoNeed;
+                            that.form11data[0].seek=res.data.belowJuniHighSchoJobseek;
+                            that.form11data[1].need=res.data.highSchoNeed;
+                            that.form11data[1].seek=res.data.highSchoJobseek;
+                            that.form11data[2].need=res.data.otherHighSchoNeed;
+                            that.form11data[2].seek=res.data.otherHighSchoJobseek;
+                            that.form11data[3].need=res.data.juniCollNeed;
+                            that.form11data[3].seek=res.data.juniCollJobseek;
+                            that.form11data[4].need=res.data.univNeed;
+                            that.form11data[4].seek=res.data.univJobseek;
+                            that.form11data[5].need=res.data.noRequNeed;
+                            that.getSum5(11,that.form11data);
+                            that.getRate(11,that.form11data);
+                            that.getNeedRate(11,that.form11data);
+                            that.getSeekRate(11,that.form11data);
+                            console.log(that.form11data);
+                        }
+                        else alert(res.message);
+                    },
+                    error(res) {
+                        console.log(res);
+                        alert('初始化失败，请稍后刷新重试');
+                    },
+                })
+
+                $.ajax({
+                    url: '/common/data/selectTechGradeNum',
+                    type: 'post',
+                    data: {
+                        tableId: that.tableId,
+                    },
+                    success(res) {
+                        console.log('form12:');
+                        console.log(res);
+                        if (res.code == 0) {
+                            that.form12data[0].need=res.data.profLevel5Need;
+                            that.form12data[0].seek=res.data.profLevel5Jobseek;
+                            that.form12data[1].need=res.data.profLevel4Need;
+                            that.form12data[1].seek=res.data.profLevel4Jobseek;
+                            that.form12data[2].need=res.data.profLevel3Need;
+                            that.form12data[2].seek=res.data.profLevel3Jobseek;
+                            that.form12data[3].need=res.data.profLevel2Need;
+                            that.form12data[3].seek=res.data.profLevel2Jobsee;
+                            that.form12data[4].need=res.data.profLevel1Need;
+                            that.form12data[4].seek=res.data.profLevel1Jobseek;
+                            that.form12data[5].need=res.data.primProfNeed;
+                            that.form12data[5].seek=res.data.primProfJobseek;
+                            that.form12data[6].need=res.data.mediProfNeed;
+                            that.form12data[6].seek=res.data.mediProfJobseek;
+                            that.form12data[7].need=res.data.seniProfNeed;
+                            that.form12data[7].seek=res.data.seniProfJobseek;
+                            that.form12data[8].seek=res.data.noTechJobseek;
+                            that.form12data[9].need=res.data.noRequNeed;
+                            that.getSum5(12,that.form12data);
+                            that.getRate(12,that.form12data);
+                            that.getNeedRate(12,that.form12data);
+                            that.getSeekRate(12,that.form12data);
+                            console.log(that.form12data);
+                        }
+                        else alert(res.message);
+                    },
+                    error(res) {
+                        console.log(res);
+                        alert('初始化失败，请稍后刷新重试');
+                    },
+                })
+            },
+
+            getNeedSum2:function(index, param){
+                var formdata = param;
+                formdata[formdata.length-1].need=0;
+                for(var i = 0;i<formdata.length-1;i++){
+                    formdata[formdata.length-1].need+=Number(formdata[i].need);
+                }
+                if(index==2)
+                    this.form2data=formdata;
+                else if(index==3)
+                    this.form3data=formdata;
+                else this.form4data=formdata;
+            },
+
+            getSeekSum2:function(index, param){
+                var formdata = param;
+                for(var i = 0;i<formdata.length-1;i++){
+                    formdata[formdata.length-1].seek+=Number(formdata[i].seek);
+                }
+                this.form8data=formdata;
+            },
+
+            getSum5:function(index, param){
+                var formdata = param;
+                formdata[formdata.length-1].seek=formdata[formdata.length-1].need=0;
+                for(var i = 0;i<formdata.length-1;i++){
+                    if(!((index==5&&i==formdata.length-2)||(index==12&&i==formdata.length-3))) {
+                        formdata[formdata.length - 1].need += Number(formdata[i].need);
+                    }
+                    if(!(index>5&&i==formdata.length-2)) {
+                        formdata[formdata.length - 1].seek += Number(formdata[i].seek);
+                    }
+                }
+                if(index==5)
+                    this.form5data=formdata;
+                else if(index==9)
+                    this.form9data=formdata;
+                else if(index==10)
+                    this.form10data=formdata;
+                else if(index==11)
+                    this.form11data=formdata;
+                else this.form12data=formdata;
+            },
+
+            getRate:function(index, param){
+                var formdata = param;
+                // console.log(formdata);
+                if (index == 1) {
+                    this.form1data.rate = (Number(this.form1data.need) / Number(this.form1data.seek)).toFixed(4);
+                }
+                else if(index==6||index==7){
+                    for (var i = 0; i < formdata.length; i++){
+                        formdata[i].rate = (Number(formdata[i].need) / Number(formdata[i].seek)).toFixed(4);
+                    }
+                    if(index==6)
+                        this.form6data = formdata;
+                    else
+                        this.form7data = formdata;
+                }
+                else{
+                    var tmp;
+                    if(index==5)
+                        tmp=Number(formdata[formdata.length-1].seek)/(Number(formdata[formdata.length-1].seek)-Number(formdata[formdata.length-2].seek));
+                    else
+                        tmp=Number(formdata[formdata.length-1].need)/(Number(formdata[formdata.length-1].need)-Number(formdata[formdata.length-2].need));
+                    for (var i = 0; i < formdata.length - 2; i++) {
+                        // console.log(i);
+                        // console.log(formdata);
+                        if(index==5)
+                            formdata[i].rate=Number(formdata[i].need)/(tmp*Number(formdata[i].seek));
+                        else if(index==12&&i==formdata.length-3)
+                            formdata[i].rate=0;
+                        else
+                            formdata[i].rate=tmp*Number(formdata[i].need)/Number(formdata[i].seek);
+                        formdata[i].rate=Number(formdata[i].rate).toFixed(4);
+                    }
+                    // console.log(formdata);
+                    if (index == 5)
+                        form5data = formdata;
+                    else if (index == 9)
+                        form9data = formdata;
+                    else if (index == 10)
+                        form10data = formdata;
+                    else if (index == 11)
+                        form11data = formdata;
+                    else form12data = formdata;
+                }
+            },
+
+            getGap:function (index, param) {
+                var formdata = param;
+                for(var i = 0;i<formdata.length;i++){
+                    formdata[i].gap=Number(formdata[i].need)-Number(formdata[i].seek);
+                }
+                if(index==6)
+                    this.form6data=formdata;
+                else this.form7data=formdata;
+            },
+
+            getNeedRate:function(index, param){
+                var formdata = param;
+                for(var i = 0;i<formdata.length;i++){
+                    if(!((index==5&&i==formdata.length-2)||(index==12&&i==formdata.length-3))) {
+                        formdata[i].needrate = (Number(formdata[i].need) / Number(formdata[formdata.length - 1].need)).toFixed(4);
+                    }
+                }
+                if(index==2)
+                    this.form2data=formdata;
+                else if(index==3)
+                    this.form3data=formdata;
+                else if(index==4)
+                    this.form4data=formdata;
+                else if(index==5)
+                    this.form5data=formdata;
+                else if(index==9)
+                    this.form9data=formdata;
+                else if(index==10)
+                    this.form10data=formdata;
+                else if(index==11)
+                    this.form11data=formdata;
+                else this.form12data=formdata;
+            },
+
+            getSeekRate:function(index, param){
+                var formdata = param;
+                for(var i = 0;i<formdata.length;i++){
+                    if(index<9||i!=formdata.length-2) {
+                        formdata[i].seekrate = (Number(formdata[i].seek) / Number(formdata[formdata.length - 1].seek)).toFixed(4);
+                    }
+                }
+                if(index==8)
+                    this.form8data=formdata;
+                else if(index==5)
+                    this.form5data=formdata;
+                else if(index==9)
+                    this.form9data=formdata;
+                else if(index==10)
+                    this.form10data=formdata;
+                else if(index==11)
+                    this.form11data=formdata;
+                else this.form12data=formdata;
             }
         },
         mounted(){
@@ -113,9 +1788,9 @@
                 success(res){
                     if(res.code === 0){
                         // console.log(res);
-                        vue.options=[];
+                        vue.optionsPeriod=[];
                         for(var i = 0; i < res.data.length;i ++){
-                            vue.options.push({value:res.data[i].uploadPeriodId,
+                            vue.optionsPeriod.push({value:res.data[i].uploadPeriodId,
                                 label:res.data[i].startDate.toString() + ' ~ ' + res.data[i].endDate.toString()});
                         }
                     }
@@ -323,7 +1998,7 @@
             //         vue.$message.error('错了哦');
             //     }
             // })
-
+            var div = document.getElementsByTagName('button')[0];
         }
     })
 </script>
