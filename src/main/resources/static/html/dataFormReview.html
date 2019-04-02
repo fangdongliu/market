@@ -1970,10 +1970,11 @@
             handleClick: function(obj) {
                 // console.log(obj);
                 this.tableId = obj.tableId;
-                this.aimId = this.tableId;
-                console.log(vue.tableId);
+                this.aimId = obj.creator;
+                // console.log(obj)
+                // console.log(vue.tableId);
                 this.loadData();
-                console.log(vue.tableId);
+                // console.log(vue.tableId);
                 this.visibleFlag = false;
             }
         }
