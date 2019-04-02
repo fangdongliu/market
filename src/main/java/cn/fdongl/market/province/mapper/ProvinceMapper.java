@@ -4,6 +4,7 @@ package cn.fdongl.market.province.mapper;
 import cn.fdongl.market.market.entity.Record;
 import cn.fdongl.market.market.entity.UploadInfo;
 import cn.fdongl.market.common.entity.UploadPeriod;
+import cn.fdongl.market.market.entity.UploadInfoExtra;
 import org.apache.ibatis.annotations.*;
 import org.springframework.core.annotation.Order;
 
@@ -94,15 +95,16 @@ public interface ProvinceMapper {
     @Select("SELECT \n" +
             "table_id AS tableId, \n" +
             "upload_period_id AS uploadPeriodId, \n" +
-            "state_flag AS stateFlag, \n" +
-            "create_time AS createTime, \n" +
-            "creator AS creator, \n" +
-            "revise_time AS reviseTime, \n" +
-            "reviser AS reviser \n" +
-            "from t_upload_info where \n" +
-            "delete_flag=0 \n" +
-            "and state_flag=2;")
-    List<UploadInfo> uploadExamineQuery();
+            "t_upload_info.state_flag AS stateFlag, \n" +
+            "t_upload_info.create_time AS createTime, \n" +
+            "t_upload_info.creator AS creator, \n" +
+            "t_upload_info.revise_time AS reviseTime, \n" +
+            "t_upload_info.reviser AS reviser, \n" +
+            "region_emp_name AS regionEmpName \n" +
+            "from t_upload_info inner join t_record_info on t_upload_info.creator=t_record_info.region_emp_id where \n" +
+            "t_upload_info.delete_flag=0 \n" +
+            "and t_upload_info.state_flag=2;")
+    List<UploadInfoExtra> uploadExamineQuery();
 
     //省级上传数据未通过时更新数据
     @Update("UPDATE t_upload_info \n" +
