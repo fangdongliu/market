@@ -6,6 +6,13 @@ html,body{
     padding: 0;
 }
 
+/*.el-card{*/
+    /*z-index:100;*/
+    /*position: fixed;*/
+    /*top:35%;*/
+    /*left: 40%;*/
+/*}*/
+
 #pics{
     position: absolute;
     width: 100%;

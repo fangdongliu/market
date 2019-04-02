@@ -8,16 +8,26 @@
     <link href="https://cdn.bootcss.com/element-ui/2.6.1/theme-chalk/index.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/element-ui/2.6.1/index.js"></script>
     <link rel="stylesheet" href="../css/stylesheet.css">
+    <style>
+        .el-table__row:first-child .el-table_1_column_5 .cell {
+            background: #ffecb8;
+            width:62px;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
 <div id="deadline" style="height:100%;">
     <el-main class="content" style="overflow: visible">
         <div class="contentDetail">
             <el-row type="flex" class="littleTitle">
-                <el-col :span="21">往期上报时限记录</el-col>
+                <el-col :span="18">往期上报时限记录</el-col>
                 <el-col :span="3">
-                    <el-button v-if="flag === -1" size="small" icon="el-icon-plus" type="primary" @click="formVisible=true">添加上报时限</el-button>
-                    <el-button v-else size="small" icon="el-icon-edit" type="primary" @click="formVisible=true">修改上报时限</el-button>
+                    <el-button size="small" icon="el-icon-plus" type="primary" @click="formVisible=true;btn=1">添加上报时限</el-button>
+                </el-col>
+                <el-col :span="3">
+                    <el-button size="small" icon="el-icon-edit" type="primary" @click="formVisible=true;btn=2">修改上报时限</el-button>
                 </el-col>
             </el-row>
             <el-table
@@ -87,6 +97,7 @@
                 startTime:'',
                 endTime:''
             },
+            btn:-1,
             formVisible:false,
             flag:-1//记录最新的时间是否小于当前时间
                     // 如果小于当前时间则新建时限，否则修改这条最新时限 flag是这条时限的id
@@ -210,7 +221,7 @@
                     return;
                 }
                 //日期合格
-                if(vue.flag===-1){
+                if(vue.btn===1){
                     $.ajax({
                         url:'/province/uploadPeriod/insert',
                         type:'post',
@@ -285,20 +296,33 @@
                         endDateString:'9999-12-31'
                     },
                     success(res){
+                        var point;
                         for(var i=0;i < res.data.length; i ++){
-                            res.data[i].number = i+1;
                             var now = new Date();
                             var obj = vue.getYYYYMMDD(res.data[i].endDate);
                             var rec = new Date(obj.y, obj.m, obj.d);
                             if(rec > now){
-                                now = rec;
-                                vue.flag = res.data[i].uploadPeriodId;
-                                res.data[i].state = '生效中';
+                                obj = vue.getYYYYMMDD(res.data[i].startDate);
+                                rec = new Date(obj.y, obj.m, obj.d);
+                                if(rec < now) {
+                                    point = i;
+                                    vue.flag = res.data[i].uploadPeriodId;
+                                    res.data[i].state = '生效中';
+                                }
+                                else{
+                                    res.data[i].state = '待生效';
+                                }
                             }
                             else{
                                 res.data[i].state = '已失效';
                             }
-                       }
+                        }
+                        res.data.push(res.data[point]);
+                        res.data.splice(point,1);
+                        res.data.reverse();
+                        for(var j = 0; j < res.data.length; j ++){
+                            res.data[j].number = j+1;
+                        }
                        vue.deadlineList = res.data;
                     }
                 })

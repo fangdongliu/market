@@ -119,9 +119,9 @@ public class CommonService {
         return commonMapper.selectUploadInfoBySpecificCondition(userId,uploadPeriodId,regionName,regionEmpName);
     }
 
-    //根据用户id查询上传数据信息
-    public List<UploadInfo> selectUploadInfoById(Integer userId) throws Exception {
-        return commonMapper.selectUploadInfoById(userId);
+    //根据用户id和调查期id查询上传数据信息
+    public List<UploadInfo> selectUploadInfoById(Integer userId,Integer uploadPeriodId) throws Exception {
+        return commonMapper.selectUploadInfoById(userId,uploadPeriodId);
     }
 
     //按id查询调查期

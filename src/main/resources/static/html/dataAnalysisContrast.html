@@ -18,7 +18,7 @@
     <el-main class="content" style="overflow: visible;background-color: #FFFFFF;margin:20px;border-radius: 10px;">
         <div class="contentDetail">
             <el-row>
-                <el-col :span="10" id="historyLeft">
+                <el-col :span="8" id="historyLeft">
                     <el-row>
                         <el-col :span="8">请选择调查期:</el-col>
                         <el-col :span="16">
@@ -39,10 +39,10 @@
                             @node-click="handleNodeClick">
                     </el-tree>
                 </el-col>
-                <el-col :span="13" :offset="1" id="historyRight" style="height:100%;">
+                <el-col :span="15" :offset="1" id="historyRight" style="height:100%;">
 
                     <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-                    <div id="pie" style="width: 600px;height:400px;" ref="pie"></div>
+                    <div id="pie" style="width: 800px;height:600px;" ref="pie"></div>
                     <!--<div id="lineNum" style="width: 600px;height:400px;" ref="lineNum"></div>-->
                     <!--<div id="lineAge" style="width: 600px;height:400px;" ref="lineAge"></div>-->
                 </el-col>
@@ -400,35 +400,118 @@
                             vue.pieChart = echarts.init(vue.$refs.pie);
                             // 指定图表的配置项和数据
                             vue.pieChart.setOption({
+                                tooltip: {
+                                    trigger: 'item',
+                                    formatter: "{a} <br/>{b}: {c} ({d}%)"
+                                },
+                                // legend: {
+                                //     orient: 'vertical',
+                                //     x: 'left',
+                                //     data:['农、林、牧、渔业','采矿业','制造业','电力、燃气及水的生产和供应业','建筑业',
+                                //         '住宿和餐饮业','文化、体育和娱乐业','教育','房地产业','金融业',
+                                //         '卫生、社会保障和社会福利业', '信息传输、计算机服务和软件业', '国际组织',
+                                //         '租赁和商务服务业', '公共管理与社会组织', '科学研究、技术服务和地址勘查业',
+                                //         '居民服务和其他服务业', '批发和零售业', '交通运输、仓储和邮政业','水利、环境和公共设施管理业']
+                                // },
                                 title: {
                                     text: data.fullname+'取样分析数据'
                                 },
                                 series : [
                                     {
-                                        name: '访问来源',
+                                        name: '产业',
                                         type: 'pie',
-                                        radius: '60%',
+                                        selectedMode: 'single',
+                                        radius: [0, '30%'],
+                                        label: {
+                                            normal: {
+                                                position: 'inner'
+                                            }
+                                        },
+                                        labelLine: {
+                                            normal: {
+                                                show: false
+                                            }
+                                        },
+                                        data: [
+                                            {value: res.data.industry1Need, name: '第一产业'},
+                                            {value: res.data.industry2Need, name: '第二产业'},
+                                            {value: res.data.industry3Need, name: '第三产业'}
+                                        ],
+                                    },
+                                    {
+                                        name: '行业',
+                                        type:'pie',
+                                        radius: ['40%', '55%'],
+                                        label: {
+                                            normal: {
+                                                formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+                                                backgroundColor: '#eee',
+                                                borderColor: '#aaa',
+                                                borderWidth: 1,
+                                                borderRadius: 2,
+                                                // shadowBlur:3,
+                                                // shadowOffsetX: 2,
+                                                // shadowOffsetY: 2,
+                                                // shadowColor: '#999',
+                                                // padding: [0, 7],
+                                                rich: {
+                                                    a: {
+                                                        color: '#000',
+                                                        lineHeight: 22,
+                                                        align: 'center'
+                                                    },
+                                                    // abg: {
+                                                    //     backgroundColor: '#333',
+                                                    //     width: '100%',
+                                                    //     align: 'right',
+                                                    //     height: 22,
+                                                    //     borderRadius: [4, 4, 0, 0]
+                                                    // },
+                                                    hr: {
+                                                        borderColor: '#aaa',
+                                                        width: '100%',
+                                                        borderWidth: 0.5,
+                                                        height: 0
+                                                    },
+                                                    b: {
+                                                        fontSize: 10,
+                                                        lineHeight: 15
+                                                    },
+                                                    per: {
+                                                        color: '#eee',
+                                                        backgroundColor: '#334455',
+                                                        padding: [1, 1],
+                                                        borderRadius: 2
+                                                    }
+                                                }
+                                            }
+                                        },
                                         data:[
-                                            {value:res.data.accoCaterNeed, name:'住宿和餐饮业'},
-                                            {value:res.data.archNeed, name:'建筑业'},
-                                            {value:res.data.cultSportEnteNeed, name:'文化、体育和娱乐业'},
-                                            {value:res.data.eduNeed, name:'教育'},
-                                            {value:res.data.elecGasWaterNeed, name:'电力、燃气及水的生产和供应业'},
-                                            {value:res.data.estateNeed, name:'房地产业'},
-                                            {value:res.data.financeNeed, name:'金融业'},
-                                            {value:res.data.healSecuWelfNeed, name:'教育'},
+                                            //第一产业
                                             {value:res.data.industry1Need, name:'农、林、牧、渔业'},
+                                            //第二产业
+                                            {value:res.data.elecGasWaterNeed, name:'电力、燃气及水的生产和供应业'},
+                                            {value:res.data.mineNeed, name:'采矿业'},
+                                            {value:res.data.manuNeed, name:'制造业'},
+                                            {value:res.data.archNeed, name:'建筑业'},
+                                            //第三产业
+                                            {value:res.data.eduNeed, name:'教育'},
+                                            {value:res.data.financeNeed, name:'金融业'},
+                                            {value:res.data.accoCaterNeed, name:'住宿和餐饮业'},
+                                            {value:res.data.cultSportEnteNeed, name:'文化、体育和娱乐业'},
+                                            {value:res.data.reseTechAddrNeed, name:'科学研究、技术服务和地址勘查业'},
                                             {value:res.data.infoCompSoftNeed, name:'信息传输、计算机服务和软件业'},
-                                            {value:res.data.inteOrgaNeed, name:'国际组织'},
+                                            {value:res.data.healSecuWelfNeed, name:'卫生、社会保障和社会福利业'},
                                             {value:res.data.leaseBusiServNeed, name:'租赁和商务服务业'},
                                             {value:res.data.manaOrgaNeed, name:'公共管理与社会组织'},
-                                            {value:res.data.manuNeed, name:'制造业'},
-                                            {value:res.data.mineNeed, name:'采矿业'},
-                                            {value:res.data.reseTechAddrNeed, name:'科学研究、技术服务和地址勘查业'},
                                             {value:res.data.resiServNeed, name:'居民服务和其他服务业'},
+                                            {value:res.data.inteOrgaNeed, name:'国际组织'},
                                             {value:res.data.retailNeed, name:'批发和零售业'},
+                                            {value:res.data.estateNeed, name:'房地产业'},
                                             {value:res.data.tranStorPostNeed, name:'交通运输、仓储和邮政业'},
                                             {value:res.data.waterEnviFaciNeed, name:'水利、环境和公共设施管理业'},
+
+
                                         ]
                                     }
                                 ]

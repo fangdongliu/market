@@ -124,10 +124,10 @@ public class CommonController extends ControllerBase {
         return success(commonService.selectTechGradeNum(tableId));
     }
 
-    //按用户id查询上传数据，只用户查询监测点用户
+    //按用户id和调查期id查询上传数据，只用户查询监测点用户
     @PostMapping("/data/selectUploadInfoById")
-    public Object SelectUploadInfoById(Integer userId) throws Exception {
-        return success(commonService.selectUploadInfoById(userId));
+    public Object SelectUploadInfoById(Integer userId,Integer uploadPeriodId) throws Exception {
+        return success(commonService.selectUploadInfoById(userId,uploadPeriodId));
     }
 
     //上传数据条件查询

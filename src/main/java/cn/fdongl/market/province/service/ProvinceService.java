@@ -4,6 +4,7 @@ import cn.fdongl.market.common.mapper.CommonMapper;
 import cn.fdongl.market.market.entity.Record;
 import cn.fdongl.market.market.entity.UploadInfo;
 import cn.fdongl.market.common.entity.UploadPeriod;
+import cn.fdongl.market.market.entity.UploadInfoExtra;
 import cn.fdongl.market.province.mapper.ProvinceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -115,7 +116,7 @@ public class ProvinceService {
     }
 
     //省级查询待审核的上传数据，非事务
-    public List<UploadInfo> uploadExamineQuery() throws Exception {
+    public List<UploadInfoExtra> uploadExamineQuery() throws Exception {
         return provinceMapper.uploadExamineQuery();
     }
 

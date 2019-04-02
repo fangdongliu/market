@@ -70,7 +70,7 @@ public class UserService {
     }
 
     public Object userInfo(Integer userId)throws Exception{
-        return userMapper.roleInfo(userId);
+        return userMapper.userInfo(userId);
     }
 
     public void changeRoles(Integer currentUser,Integer userId,Integer[]roles)throws Exception{
@@ -148,6 +148,10 @@ public class UserService {
 
     public void updatePassword(String password,Integer userId){
         userMapper.updatePassword(passwordEncoder.encode(password),userId);
+    }
+
+    public Object userInfo(int userId){
+        return userMapper.userInfo(userId);
     }
 
 }

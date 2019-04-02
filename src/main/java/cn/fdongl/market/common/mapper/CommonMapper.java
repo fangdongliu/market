@@ -60,9 +60,9 @@ public interface CommonMapper {
             "receiver AS receiver \n" +
             "from t_notice where \n" +
             "delete_flag=0 \n" +
-            "and (((select @tmp:=usertype from t_user where t_user.user_id=t_notice.creator limit 1)=1) \n" +
-            "or (@tmp=2 and #{param1} in (select user_id from t_user where t_user.superior=t_notice.creator)) \n" +
-            "or (@tmp=3 and #{param1}=receiver));")
+            "and ((creator=0 and #{param1}=receiver) \n" +
+            "or ((select @tmp:=usertype from t_user where t_user.user_id=t_notice.creator limit 1)=1) \n" +
+            "or (@tmp=2 and #{param1} in (select user_id from t_user where t_user.superior=t_notice.creator)));")
     List<Notice> receiveMessage(Integer userId);
 
     //删除一条通知
@@ -401,7 +401,7 @@ public interface CommonMapper {
             "and ((select region_emp_name from t_record_info where t_record_info.region_emp_id=t_upload_info.creator limit 1) like CONCAT('%',#{param4},'%')) limit 1;")
     UploadInfo selectUploadInfoBySpecificCondition(Integer userId,Integer uploadPeriodId,String regionName,String regionEmpName);
 
-    //根据用户id查询上传数据信息
+    //根据用户id和调查期id查询上传数据信息
     @Select("SELECT \n" +
             "table_id AS tableId, \n" +
             "upload_period_id AS uploadPeriodId, \n" +
@@ -413,8 +413,9 @@ public interface CommonMapper {
             "from t_upload_info where \n" +
             "delete_flag=0 \n" +
             "and state_flag=3 \n" +
-            "and creator=#{param1};")
-    List<UploadInfo> selectUploadInfoById(Integer userId);
+            "and creator=#{param1} \n" +
+            "and upload_period_id=#{param2};")
+    List<UploadInfo> selectUploadInfoById(Integer userId,Integer uploadPeriodId);
 
     //根据id查询调查期
     @Select("SELECT \n" +
