@@ -54,12 +54,12 @@ public interface CityMapper {
     //市级上传数据未通过时更新数据
     @Update("UPDATE t_upload_info \n" +
             "set state_flag=0,revise_time=now(),reviser=#{param1} \n" +
-            "where state_flag=1 and creator=#{param2};")
+            "where state_flag=1 and table_id=#{param2};")
     Integer uploadUpdateReject(Integer cityId,Integer aimId);
 
     //市级上传数据通过时更新数据
     @Update("UPDATE t_upload_info \n" +
             "set state_flag=2,revise_time=now(),reviser=#{param1} \n" +
-            "where state_flag=1 and creator=#{param2};")
+            "where state_flag=1 and table_id=#{param2};")
     Integer uploadUpdatePass(Integer cityId,Integer aimId);
 }

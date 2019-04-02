@@ -448,6 +448,7 @@
             innerVisible:false,
             dataList: [],
             tabelId:-1,
+            aimId:-1,
             visibleFlag:true,
             showReview:false,
             index:1,
@@ -1129,13 +1130,13 @@
         },
         methods:{
             handlePass(){
-                console.log(vue.tabelId)
+                console.log(vue.aimId);
                 if(vue.userType === 1) {
                     $.ajax({
                         url: '/province/upload/pass',
                         type: 'post',
                         data: {
-                            aimId: vue.tabelId,
+                            aimId: vue.aimId,
                             content: '您的数据已通过审核！'
                         },
                         success(res) {
@@ -1153,6 +1154,7 @@
                                     type: 'error',
                                     message: '出错了哦!'
                                 });
+                                // alert(res.message)
                             }
                         },
                         error(res) {
@@ -1169,7 +1171,7 @@
                         url: '/city/upload/pass',
                         type: 'post',
                         data: {
-                            aimId: vue.tabelId,
+                            aimId: vue.aimId,
                             content: '您的数据已通过审核！'
                         },
                         success(res) {
@@ -1202,7 +1204,7 @@
                         url: '/province/upload/reject',
                         type: 'post',
                         data: {
-                            aimId: vue.tableId,
+                            aimId: vue.aimId,
                             content: vue.rejectedMessage
                         },
                         success(res) {
@@ -1228,7 +1230,7 @@
                         url: '/city/upload/reject',
                         type: 'post',
                         data: {
-                            aimId: vue.tableId,
+                            aimId: vue.aimId,
                             content: vue.rejectedMessage
                         },
                         success(res) {
@@ -1968,6 +1970,7 @@
             handleClick: function(obj) {
                 // console.log(obj);
                 this.tableId = obj.tableId;
+                this.aimId = this.tableId;
                 console.log(vue.tableId);
                 this.loadData();
                 console.log(vue.tableId);
