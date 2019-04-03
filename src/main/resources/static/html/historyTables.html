@@ -1150,7 +1150,10 @@
         },
         methods:{
             handleNodeClick(data){
-                if(data.userType === 3) vue.userId = data.id;
+                if(data.userType === 3) {
+                    vue.userId = data.id;
+                    vue.changeURL();
+                }
             },
             getChildUser(){
                 $.ajax({
@@ -1174,8 +1177,16 @@
                         success(res) {
                             console.log(res);
                             if(res.code===0) {
-                                vue.tableId = res.data[0].tableId;
-                                vue.loadData()
+                                if(res.data.length === 0){
+                                    vue.$message({
+                                        message:'该检测点在该时期暂时没有数据！',
+                                        type:'error'
+                                    });
+                                }
+                                else{
+                                    vue.tableId = res.data[0].tableId;
+                                    vue.loadData();
+                                }
                             }
                             else {
                                 alert(res.message);
@@ -1192,6 +1203,7 @@
             },
             loadData:function() {
                 var that = this;
+                console.log(that.tableId);
                 $.ajax({
                     url: '/common/data/selectTotalNum',
                     type: 'post',
@@ -1199,18 +1211,18 @@
                         tableId: that.tableId,
                     },
                     success(res) {
-                        console.log('form1:');
-                        console.log(res);
+                        // console.log('form1:');
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form1data.seek=res.data.needPopu;
                             that.form1data.need=res.data.jobseekPopu;
                             that.getRate(1, that.form1data);
-                            console.log(that.form1data);
+                            // console.log(that.form1data);
                         }
                         else alert(res.message);
                     },
                     error(res) {
-                        console.log(res);
+                        // console.log(res);
                         alert('初始化失败，请稍后刷新重试');
                     },
                 })
@@ -1222,8 +1234,8 @@
                         tableId: that.tableId,
                     },
                     success: function (res) {
-                        console.log('form2+form3:');
-                        console.log(res);
+                        // console.log('form2+form3:');
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form2data[0].need = res.data.industry1Need;
                             that.form2data[1].need = res.data.industry2Need;
@@ -1250,16 +1262,16 @@
                             that.form3data[19].need = res.data.inteOrgaNeed;
                             that.getNeedSum2(2,that.form2data);
                             that.getNeedRate(2,that.form2data);
-                            console.log(that.form2data);
+                            // console.log(that.form2data);
 
                             that.getNeedSum2(3,that.form3data);
                             that.getNeedRate(3,that.form3data);
-                            console.log(that.form3data);
+                            // console.log(that.form3data);
                         }
                         else alert(res.message);
                     },
                     error(res) {
-                        console.log(res);
+                        // console.log(res);
                         alert('初始化失败，请稍后刷新重试');
                     },
                 })
@@ -1271,8 +1283,8 @@
                         tableId: that.tableId,
                     },
                     success: function (res) {
-                        console.log('form4:');
-                        console.log(res);
+                        // console.log('form4:');
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form4data[0].need = res.data.staOwnNeed;
                             that.form4data[1].need = res.data.collNeed;
@@ -1290,12 +1302,12 @@
                             that.form4data[13].need = res.data.otherNeed;
                             that.getNeedSum2(4,that.form4data);
                             that.getNeedRate(4,that.form4data);
-                            console.log(that.form4data);
+                            // console.log(that.form4data);
                         }
                         else alert(res.message);
                     },
                     error(res) {
-                        console.log(res);
+                        // console.log(res);
                         alert('初始化失败，请稍后刷新重试');
                     },
                 })
@@ -1307,8 +1319,8 @@
                         tableId: that.tableId,
                     },
                     success(res) {
-                        console.log('form5:');
-                        console.log(res);
+                        // console.log('form5:');
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form5data[0].need=res.data.leaderNeed;
                             that.form5data[0].seek=res.data.leaderJobseek;
@@ -1329,12 +1341,12 @@
                             that.getRate(5,that.form5data);
                             that.getNeedRate(5,that.form5data);
                             that.getSeekRate(5,that.form5data);
-                            console.log(that.form5data);
+                            // console.log(that.form5data);
                         }
                         else alert(res.message);
                     },
                     error(res) {
-                        console.log(res);
+                        // console.log(res);
                         alert('初始化失败，请稍后刷新重试');
                     },
                 })
@@ -1346,8 +1358,8 @@
                         tableId: that.tableId,
                     },
                     success: function (res) {
-                        console.log('form6:');
-                        console.log(res);
+                        // /e.log('form6:');
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form6data[0].job = res.data.mostProf1Name;
                             that.form6data[0].jobcode = res.data.mostProf1Num;
@@ -1391,12 +1403,12 @@
                             that.form6data[9].seek = res.data.mostProf10Jobseek;
                             that.getRate(6,that.form6data);
                             that.getGap(6,that.form6data);
-                            console.log(that.form6data);
+                            // console.log(that.form6data);
                         }
                         else alert(res.message);
                     },
                     error(res) {
-                        console.log(res);
+                        // console.log(res);
                         alert('初始化失败，请稍后刷新重试');
                     },
                 })
@@ -1408,8 +1420,8 @@
                         tableId: that.tableId,
                     },
                     success(res) {
-                        console.log('form7:');
-                        console.log(res);
+                        // console.log('form7:');
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form7data[0].job = res.data.leastProf1Name;
                             that.form7data[0].jobcode = res.data.leastProf1Num;
@@ -1453,12 +1465,12 @@
                             that.form7data[9].seek = res.data.leastProf10Jobseek;
                             that.getRate(7,that.form7data);
                             that.getGap(7,that.form7data);
-                            console.log(that.form7data);
+                            // console.log(that.form7data);
                         }
                         else alert(res.message);
                     },
                     error(res) {
-                        console.log(res);
+                        // console.log(res);
                         alert('初始化失败，请稍后刷新重试');
                     },
                 })
@@ -1470,8 +1482,8 @@
                         tableId: that.tableId,
                     },
                     success(res) {
-                        console.log('form8:');
-                        console.log(res);
+                        // console.log('form8:');
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form8data[0].seek = res.data.unempYouth;
                             that.form8data[1].seek = res.data.graduate;
@@ -1485,12 +1497,12 @@
                             that.form8data[9].seek = res.data.fore;
                             that.getSeekSum2(8,that.form8data);
                             that.getSeekRate(8,that.form8data);
-                            console.log(that.form8data);
+                            // console.log(that.form8data);
                         }
                         else alert(res.message);
                     },
                     error(res) {
-                        console.log(res);
+                        // console.log(res);
                         alert('初始化失败，请稍后刷新重试');
                     },
                 })
@@ -1502,8 +1514,8 @@
                         tableId: that.tableId,
                     },
                     success: function (res) {
-                        console.log('form9:');
-                        console.log(res);
+                        // console.log('form9:');
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form9data[0].need = res.data.maleNeed;
                             that.form9data[0].seek = res.data.maleJobseek;
@@ -1514,12 +1526,12 @@
                             that.getRate(9,that.form9data);
                             that.getNeedRate(9,that.form9data);
                             that.getSeekRate(9,that.form9data);
-                            console.log(that.form9data);
+                            // console.log(that.form9data);
                         }
                         else alert(res.message);
                     },
                     error(res) {
-                        console.log(res);
+                        // console.log(res);
                         alert('初始化失败，请稍后刷新重试');
                     },
                 })
@@ -1531,8 +1543,8 @@
                         tableId: that.tableId,
                     },
                     success(res) {
-                        console.log('form10:');
-                        console.log(res);
+                        // console.log('form10:');
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form10data[0].need=res.data.sixteenTwentyfourNeed;
                             that.form10data[0].seek=res.data.sixteenTwentyfourJobseek;
@@ -1547,12 +1559,12 @@
                             that.getRate(10,that.form10data);
                             that.getNeedRate(10,that.form10data);
                             that.getSeekRate(10,that.form10data);
-                            console.log(that.form10data);
+                            // console.log(that.form10data);
                         }
                         else alert(res.message);
                     },
                     error(res) {
-                        console.log(res);
+                        // console.log(res);
                         alert('初始化失败，请稍后刷新重试');
                     },
                 })
@@ -1564,8 +1576,8 @@
                         tableId: that.tableId,
                     },
                     success(res) {
-                        console.log('form11:');
-                        console.log(res);
+                        // console.log('form11:');
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form11data[0].need=res.data.belowJuniHighSchoNeed;
                             that.form11data[0].seek=res.data.belowJuniHighSchoJobseek;
@@ -1582,12 +1594,12 @@
                             that.getRate(11,that.form11data);
                             that.getNeedRate(11,that.form11data);
                             that.getSeekRate(11,that.form11data);
-                            console.log(that.form11data);
+                            // console.log(that.form11data);
                         }
                         else alert(res.message);
                     },
                     error(res) {
-                        console.log(res);
+                        // console.log(res);
                         alert('初始化失败，请稍后刷新重试');
                     },
                 })
@@ -1599,8 +1611,8 @@
                         tableId: that.tableId,
                     },
                     success(res) {
-                        console.log('form12:');
-                        console.log(res);
+                        // console.log('form12:');
+                        // console.log(res);
                         if (res.code == 0) {
                             that.form12data[0].need=res.data.profLevel5Need;
                             that.form12data[0].seek=res.data.profLevel5Jobseek;
@@ -1624,12 +1636,12 @@
                             that.getRate(12,that.form12data);
                             that.getNeedRate(12,that.form12data);
                             that.getSeekRate(12,that.form12data);
-                            console.log(that.form12data);
+                            // console.log(that.form12data);
                         }
                         else alert(res.message);
                     },
                     error(res) {
-                        console.log(res);
+                        // console.log(res);
                         alert('初始化失败，请稍后刷新重试');
                     },
                 })

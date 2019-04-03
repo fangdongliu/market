@@ -57,7 +57,7 @@
                     <el-button class="indexes" v-for="form in forms" @click="turnForm(form.index)" circle>
                         {{form.index}}
                     </el-button>
-                    <el-button id="submit" @click="showReview=true;innerVisible=false" type="success">提交审核</el-button>
+                    <el-button id="submit" @click="showReview=true;innerVisible=false" type="success">{{btnContent}}审核</el-button>
                 </div>
                 <hr/>
                 <!--崽崽看还要改这里弹出框-->
@@ -443,6 +443,7 @@
 
         el:'#app',
         data:{
+            btnContent:'',
             userType:-1,
             rejectedMessage:'',
             innerVisible:false,
@@ -1872,6 +1873,7 @@
                     success(res){
                         vue.userType = res;
                         if(res === 1){
+                            vue.btnContent='确认';
                             //省
                             $.ajax({
                                 url:'/province/upload/examineQuery',
@@ -1910,6 +1912,7 @@
                         }
                         else if(res === 2){
                             //市
+                            vue.btnContent = '提交'
                             $.ajax({
                                 url:'/city/upload/examineQuery',
                                 type:'post',
