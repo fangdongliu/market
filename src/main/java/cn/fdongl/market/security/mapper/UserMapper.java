@@ -33,15 +33,15 @@ public interface UserMapper {
     ListUserData userInfo(int userId);
 
     @Select("<script>" +
-            "select user_id as id,username,fullname,usertype as userType,superior as father,state_flag as `status`,delete_flag as deleteFlag " +
+            "select a.*,b.username as father from(select user_id as id,username,fullname,usertype as userType,superior,state_flag as `status`,delete_flag as deleteFlag " +
             "from t_user where user_id!=1 " +
             "<if test='param3!=null'>and usertype = #{param3} </if>" +
             "<if test='param4!=null or param5!=null'>"+
             "and (1=0 <if test='param4!=null'>or username like #{param4} </if>" +
             "<if test='param5!=null'>or fullname like #{param5} </if>)</if>"+
             "limit #{param1},#{param2}"+
-            "</script>")
-    List<ListUserData>page(int begin,int count,Integer userType,String username,String fullname);
+            ")a left join t_user b on a.superior = b.user_id</script>")
+    List<ListUserData2>page(int begin,int count,Integer userType,String username,String fullname);
 
     @Select("SELECT user_id as id,username,fullname,usertype as userType,superior as father,state_flag as `status`,delete_flag as deleteFlag FROM t_user where superior=#{param1}")
     List<ListUserData>child(int parent);
