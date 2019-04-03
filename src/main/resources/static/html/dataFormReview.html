@@ -18,345 +18,408 @@
 <div id="app">
     <el-main class="content" style="overflow: visible;background-color: #FFFFFF;margin:20px;border-radius: 10px;">
         <div class="contentDetail">
-            <div class="formIndex">
-                <el-button class="indexes" v-for="form in forms" @click="turnForm(form.index)" circle>
-                    {{form.index}}
-                </el-button>
-                <el-button id="submit" @click="submit" type="success">提交审核</el-button>
-            </div>
-            <hr/>
-            <div class="tabletitle">{{forms[this.index-1].title}}</div>
+            <div v-if="this.visibleFlag==true">
+                <el-table
+                        :data="dataList"
+                        stripe
+                        style="width: 100%"
+                        v-if="visibleFlag">
+                    <el-table-column
+                            prop="number"
+                            label="序号"
+                            width="100px">
+                    </el-table-column>
+                    <el-table-column
+                            prop="regionEmpName"
+                            label="人力资源市场名">
+                    </el-table-column>
+                    <el-table-column
+                            prop="createTime"
+                            label="上传时间">
+                    </el-table-column>
+                    <el-table-column
+                            prop="stateInChinese"
+                            label="审核状态">
+                    </el-table-column>
+                    <el-table-column
+                            label="操作"
+                            width="150px">
+                        <template slot-scope="scope">
+                            <el-button @click="handleClick(scope.row)" type="primary" size="small">查看</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
 
-            <div class="table" v-if="this.index==1">
-                <el-form :model="form1data">
-                    <el-form-item class="tableheader">
-                        <el-row>
-                            <el-col :span="6" offset="4">需求人数</el-col>
-                            <el-col :span="6" >求职人数</el-col>
-                            <el-col :span="6" >求职倍率</el-col>
-                        </el-row>
-                    </el-form-item>
-                    <el-form-item class="tablecontent">
-                        <el-row>
-                            <el-col :span="2" offset="2">{{form1data.title}}</el-col>
-                            <el-col :span="6">{{form1data.need}}</el-col>
-                            <el-col :span="6">{{form1data.seek}}</el-col>
-                            <el-col :span="6">{{form1data.rate}}</el-col>
-                        </el-row>
-                    </el-form-item>
-                </el-form>
             </div>
+            <div v-else>
+                <div class="formIndex">
+                    <el-button id="back" icon="el-icon-arrow-left"  @click="turnFlag" type="success" circle></el-button>
+                    <el-button class="indexes" v-for="form in forms" @click="turnForm(form.index)" circle>
+                        {{form.index}}
+                    </el-button>
+                    <el-button id="submit" @click="showReview=true;innerVisible=false" type="success">{{btnContent}}审核</el-button>
+                </div>
+                <hr/>
+                <!--崽崽看还要改这里弹出框-->
+                <el-dialog
+                        title="提交审核"
+                        :visible.sync="showReview"
+                        width="60%"
+                        :before-close="handleClose"
+                        lock-scroll
+                >
+                    是否通过此数据表？
+                    <el-dialog
+                            width="30%"
+                            title="请填写拒绝通过数据的原因："
+                            :visible.sync="innerVisible"
+                            append-to-body>
+                        <el-input v-model="rejectedMessage" autosize type="textarea"></el-input>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="handleCancelReject">取消</el-button>
+                            <el-button @click="handleConfirmReject" type="primary">确定</el-button>
+                        </span>
 
-            <div class="table" v-else-if="this.index==2">
-                <el-form :model="form2data">
-                    <el-form-item class="tableheader">
-                        <el-row>
-                            <el-col :span="2" offset="6">产业</el-col>
-                            <el-col :span="5" >需求人数</el-col>
-                            <el-col :span="5" >所占比重</el-col>
-                        </el-row>
-                    </el-form-item>
-                    <div  v-for="item in form2data">
-                        <el-form-item class="tablecontent">
+                    </el-dialog>
+
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="handlePass" type="success" size="mini">通&emsp;过</el-button>
+                        <el-button @click="innerVisible = true" type="danger" size="mini">不通过</el-button>
+                    </span>
+                </el-dialog>
+
+                <div class="tabletitle">{{forms[this.index-1].title}}</div>
+
+                <div class="table" v-if="this.index==1">
+                    <el-form :model="form1data">
+                        <el-form-item class="tableheader">
                             <el-row>
-                                <el-col :span="2" offset="6">{{item.title}}</el-col>
-                                <el-col :span="5">{{item.need}}</el-col>
-                                <el-col :span="5">{{item.needrate}}</el-col>
+                                <el-col :span="6" offset="4">需求人数</el-col>
+                                <el-col :span="6" >求职人数</el-col>
+                                <el-col :span="6" >求职倍率</el-col>
                             </el-row>
                         </el-form-item>
-                    </div>
-                </el-form>
-            </div>
-
-            <div class="table" v-else-if="this.index==3">
-                <el-form :model="form3data">
-                    <el-form-item class="tableheader">
-                        <el-row>
-                            <el-col :span="2" offset="6">行业</el-col>
-                            <el-col :span="5" >需求人数</el-col>
-                            <el-col :span="5" >所占比重</el-col>
-                        </el-row>
-                    </el-form-item>
-                    <div  v-for="item in form3data">
                         <el-form-item class="tablecontent">
                             <el-row>
-                                <el-col :span="2" offset="6">{{item.title}}</el-col>
-                                <el-col :span="5">{{item.need}}</el-col>
-                                <el-col :span="5">{{item.needrate}}</el-col>
+                                <el-col :span="2" offset="2">{{form1data.title}}</el-col>
+                                <el-col :span="6">{{form1data.need}}</el-col>
+                                <el-col :span="6">{{form1data.seek}}</el-col>
+                                <el-col :span="6">{{form1data.rate}}</el-col>
                             </el-row>
                         </el-form-item>
-                    </div>
-                </el-form>
-            </div>
+                    </el-form>
+                </div>
 
-            <div class="table" v-else-if="this.index==4">
-                <el-form :model="form4data">
-                    <el-form-item class="tableheader">
-                        <el-row>
-                            <el-col :span="6" offset="4">产业</el-col>
-                            <el-col :span="5" >需求人数</el-col>
-                            <el-col :span="5" >所占比重</el-col>
-                        </el-row>
-                    </el-form-item>
-                    <div  v-for="item in form4data">
-                        <el-form-item class="tablecontent">
+                <div class="table" v-else-if="this.index==2">
+                    <el-form :model="form2data">
+                        <el-form-item class="tableheader">
                             <el-row>
-                                <el-col :span="2" offset="4">{{item.title1}}</el-col>
-                                <el-col :span="2">{{item.title2}}</el-col>
-                                <el-col :span="2">{{item.title3}}</el-col>
-                                <el-col :span="5">{{item.need}}</el-col>
-                                <el-col :span="5">{{item.needrate}}</el-col>
+                                <el-col :span="2" offset="6">产业</el-col>
+                                <el-col :span="5" >需求人数</el-col>
+                                <el-col :span="5" >所占比重</el-col>
                             </el-row>
                         </el-form-item>
-                    </div>
-                </el-form>
-            </div>
+                        <div  v-for="item in form2data">
+                            <el-form-item class="tablecontent">
+                                <el-row>
+                                    <el-col :span="2" offset="6">{{item.title}}</el-col>
+                                    <el-col :span="5">{{item.need}}</el-col>
+                                    <el-col :span="5">{{item.needrate}}</el-col>
+                                </el-row>
+                            </el-form-item>
+                        </div>
+                    </el-form>
+                </div>
 
-            <div class="table" v-else-if="this.index==5">
-                <el-form :model="form5data">
-                    <el-form-item class="tableheader">
-                        <el-row>
-                            <el-col :span="2" offset="4">就业</el-col>
-                            <el-col :span="15" >劳动力供求人数比较</el-col>
-                        </el-row>
-                        <el-row>
-                            <el-col :span="2" offset="4">类别</el-col>
-                            <el-col :span="3" >需求人数</el-col>
-                            <el-col :span="3" >所占比重</el-col>
-                            <el-col :span="3" >求职人数</el-col>
-                            <el-col :span="3" >所占比重</el-col>
-                            <el-col :span="3" >求人倍率</el-col>
-                        </el-row>
-                    </el-form-item>
-                    <div  v-for="item in form5data">
-                        <el-form-item class="tablecontent">
+                <div class="table" v-else-if="this.index==3">
+                    <el-form :model="form3data">
+                        <el-form-item class="tableheader">
                             <el-row>
-                                <el-col :span="2" offset="4">{{item.title}}</el-col>
-                                <el-col :span="3">{{item.need}}</el-col>
-                                <el-col :span="3">{{item.needrate}}</el-col>
-                                <el-col :span="3">{{item.seek}}</el-col>
-                                <el-col :span="3">{{item.seekrate}}</el-col>
-                                <el-col :span="3">{{item.rate}}</el-col>
+                                <el-col :span="2" offset="6">行业</el-col>
+                                <el-col :span="5" >需求人数</el-col>
+                                <el-col :span="5" >所占比重</el-col>
                             </el-row>
                         </el-form-item>
-                    </div>
-                </el-form>
-            </div>
+                        <div  v-for="item in form3data">
+                            <el-form-item class="tablecontent">
+                                <el-row>
+                                    <el-col :span="2" offset="6">{{item.title}}</el-col>
+                                    <el-col :span="5">{{item.need}}</el-col>
+                                    <el-col :span="5">{{item.needrate}}</el-col>
+                                </el-row>
+                            </el-form-item>
+                        </div>
+                    </el-form>
+                </div>
 
-            <div class="table" v-else-if="this.index==6">
-                <el-form :model="form6data">
-                    <el-form-item class="tableheader">
-                        <el-row>
-                            <el-col :span="4" offset="2">职</el-col>
-                            <el-col :span="4">职业</el-col>
-                            <el-col :span="12" >劳动力供求人数比较</el-col>
-                        </el-row>
-                        <el-row>
-                            <el-col :span="4" offset="2">业</el-col>
-                            <el-col :span="4">类别</el-col>
-                            <el-col :span="3" >需求人数</el-col>
-                            <el-col :span="3" >求职人数</el-col>
-                            <el-col :span="3" >缺口数</el-col>
-                            <el-col :span="3" >求人倍率</el-col>
-                        </el-row>
-                    </el-form-item>
-                    <div  v-for="item in form6data">
-                        <el-form-item class="tablecontent">
+                <div class="table" v-else-if="this.index==4">
+                    <el-form :model="form4data">
+                        <el-form-item class="tableheader">
                             <el-row>
-                                <el-col :span="4" offset="2">{{item.job}}</el-col>
-                                <el-col :span="4">{{item.jobcode}}</el-col>
-                                <el-col :span="3">{{item.need}}</el-col>
-                                <el-col :span="3">{{item.seek}}</el-col>
-                                <el-col :span="3">{{item.gap}}</el-col>
-                                <el-col :span="3">{{item.rate}}</el-col>
+                                <el-col :span="6" offset="4">产业</el-col>
+                                <el-col :span="5" >需求人数</el-col>
+                                <el-col :span="5" >所占比重</el-col>
                             </el-row>
                         </el-form-item>
-                    </div>
-                </el-form>
-            </div>
+                        <div  v-for="item in form4data">
+                            <el-form-item class="tablecontent">
+                                <el-row>
+                                    <el-col :span="2" offset="4">{{item.title1}}</el-col>
+                                    <el-col :span="2">{{item.title2}}</el-col>
+                                    <el-col :span="2">{{item.title3}}</el-col>
+                                    <el-col :span="5">{{item.need}}</el-col>
+                                    <el-col :span="5">{{item.needrate}}</el-col>
+                                </el-row>
+                            </el-form-item>
+                        </div>
+                    </el-form>
+                </div>
 
-            <div class="table" v-else-if="this.index==7">
-                <el-form :model="form7data">
-                    <el-form-item class="tableheader">
-                        <el-row>
-                            <el-col :span="4" offset="2">职</el-col>
-                            <el-col :span="4">职业</el-col>
-                            <el-col :span="12" >劳动力供求人数比较</el-col>
-                        </el-row>
-                        <el-row>
-                            <el-col :span="4" offset="2">业</el-col>
-                            <el-col :span="4">类别</el-col>
-                            <el-col :span="3" >需求人数</el-col>
-                            <el-col :span="3" >求职人数</el-col>
-                            <el-col :span="3" >缺口数</el-col>
-                            <el-col :span="3" >求人倍率</el-col>
-                        </el-row>
-                    </el-form-item>
-                    <div  v-for="item in form7data">
-                        <el-form-item class="tablecontent">
+                <div class="table" v-else-if="this.index==5">
+                    <el-form :model="form5data">
+                        <el-form-item class="tableheader">
                             <el-row>
-                                <el-col :span="4" offset="2">{{item.job}}</el-col>
-                                <el-col :span="4">{{item.jobcode}}</el-col>
-                                <el-col :span="3">{{item.need}}</el-col>
-                                <el-col :span="3">{{item.seek}}</el-col>
-                                <el-col :span="3">{{item.gap}}</el-col>
-                                <el-col :span="3">{{item.rate}}</el-col>
+                                <el-col :span="2" offset="4">就业</el-col>
+                                <el-col :span="15" >劳动力供求人数比较</el-col>
                             </el-row>
-                        </el-form-item>
-                    </div>
-                </el-form>
-            </div>
-
-            <div class="table" v-else-if="this.index==8">
-                <el-form :model="form8data">
-                    <el-form-item class="tableheader">
-                        <el-row>
-                            <el-col :span="2" offset="6">求职人员类别</el-col>
-                            <el-col :span="5" >求职人数</el-col>
-                            <el-col :span="5" >所占比重</el-col>
-                        </el-row>
-                    </el-form-item>
-                    <div  v-for="item in form8data">
-                        <el-form-item class="tablecontent">
                             <el-row>
-                                <el-col :span="2" offset="6">{{item.title}}</el-col>
-                                <el-col :span="5">{{item.seek}}</el-col>
-                                <el-col :span="5">{{item.seekrate}}</el-col>
+                                <el-col :span="2" offset="4">类别</el-col>
+                                <el-col :span="3" >需求人数</el-col>
+                                <el-col :span="3" >所占比重</el-col>
+                                <el-col :span="3" >求职人数</el-col>
+                                <el-col :span="3" >所占比重</el-col>
+                                <el-col :span="3" >求人倍率</el-col>
                             </el-row>
                         </el-form-item>
-                    </div>
-                </el-form>
-            </div>
+                        <div  v-for="item in form5data">
+                            <el-form-item class="tablecontent">
+                                <el-row>
+                                    <el-col :span="2" offset="4">{{item.title}}</el-col>
+                                    <el-col :span="3">{{item.need}}</el-col>
+                                    <el-col :span="3">{{item.needrate}}</el-col>
+                                    <el-col :span="3">{{item.seek}}</el-col>
+                                    <el-col :span="3">{{item.seekrate}}</el-col>
+                                    <el-col :span="3">{{item.rate}}</el-col>
+                                </el-row>
+                            </el-form-item>
+                        </div>
+                    </el-form>
+                </div>
 
-            <div class="table" v-else-if="this.index==9">
-                <el-form :model="form9data">
-                    <el-form-item class="tableheader">
-                        <el-row>
-                            <el-col :span="2" offset="4">性</el-col>
-                            <el-col :span="15" >劳动力供求人数比较</el-col>
-                        </el-row>
-                        <el-row>
-                            <el-col :span="2" offset="4">别</el-col>
-                            <el-col :span="3" >需求人数</el-col>
-                            <el-col :span="3" >所占比重</el-col>
-                            <el-col :span="3" >求职人数</el-col>
-                            <el-col :span="3" >所占比重</el-col>
-                            <el-col :span="3" >求人倍率</el-col>
-                        </el-row>
-                    </el-form-item>
-                    <div  v-for="item in form9data">
-                        <el-form-item class="tablecontent">
+                <div class="table" v-else-if="this.index==6">
+                    <el-form :model="form6data">
+                        <el-form-item class="tableheader">
                             <el-row>
-                                <el-col :span="2" offset="4">{{item.title}}</el-col>
-                                <el-col :span="3">{{item.need}}</el-col>
-                                <el-col :span="3">{{item.needrate}}</el-col>
-                                <el-col :span="3">{{item.seek}}</el-col>
-                                <el-col :span="3">{{item.seekrate}}</el-col>
-                                <el-col :span="3">{{item.rate}}</el-col>
+                                <el-col :span="4" offset="2">职</el-col>
+                                <el-col :span="4">职业</el-col>
+                                <el-col :span="12" >劳动力供求人数比较</el-col>
                             </el-row>
-                        </el-form-item>
-                    </div>
-                </el-form>
-            </div>
-
-            <div class="table" v-else-if="this.index==10">
-                <el-form :model="form10data">
-                    <el-form-item class="tableheader">
-                        <el-row>
-                            <el-col :span="2" offset="4">年</el-col>
-                            <el-col :span="15" >劳动力供求人数比较</el-col>
-                        </el-row>
-                        <el-row>
-                            <el-col :span="2" offset="4">龄</el-col>
-                            <el-col :span="3" >需求人数</el-col>
-                            <el-col :span="3" >所占比重</el-col>
-                            <el-col :span="3" >求职人数</el-col>
-                            <el-col :span="3" >所占比重</el-col>
-                            <el-col :span="3" >求人倍率</el-col>
-                        </el-row>
-                    </el-form-item>
-                    <div  v-for="item in form10data">
-                        <el-form-item class="tablecontent">
                             <el-row>
-                                <el-col :span="2" offset="4">{{item.title}}</el-col>
-                                <el-col :span="3">{{item.need}}</el-col>
-                                <el-col :span="3">{{item.needrate}}</el-col>
-                                <el-col :span="3">{{item.seek}}</el-col>
-                                <el-col :span="3">{{item.seekrate}}</el-col>
-                                <el-col :span="3">{{item.rate}}</el-col>
+                                <el-col :span="4" offset="2">业</el-col>
+                                <el-col :span="4">类别</el-col>
+                                <el-col :span="3" >需求人数</el-col>
+                                <el-col :span="3" >求职人数</el-col>
+                                <el-col :span="3" >缺口数</el-col>
+                                <el-col :span="3" >求人倍率</el-col>
                             </el-row>
                         </el-form-item>
-                    </div>
-                </el-form>
-            </div>
+                        <div  v-for="item in form6data">
+                            <el-form-item class="tablecontent">
+                                <el-row>
+                                    <el-col :span="4" offset="2">{{item.job}}</el-col>
+                                    <el-col :span="4">{{item.jobcode}}</el-col>
+                                    <el-col :span="3">{{item.need}}</el-col>
+                                    <el-col :span="3">{{item.seek}}</el-col>
+                                    <el-col :span="3">{{item.gap}}</el-col>
+                                    <el-col :span="3">{{item.rate}}</el-col>
+                                </el-row>
+                            </el-form-item>
+                        </div>
+                    </el-form>
+                </div>
 
-            <div class="table" v-else-if="this.index==11">
-                <el-form :model="form11data">
-                    <el-form-item class="tableheader">
-                        <el-row>
-                            <el-col :span="2" offset="4">文化</el-col>
-                            <el-col :span="15" >劳动力供求人数比较</el-col>
-                        </el-row>
-                        <el-row>
-                            <el-col :span="2" offset="4">程度</el-col>
-                            <el-col :span="3" >需求人数</el-col>
-                            <el-col :span="3" >所占比重</el-col>
-                            <el-col :span="3" >求职人数</el-col>
-                            <el-col :span="3" >所占比重</el-col>
-                            <el-col :span="3" >求人倍率</el-col>
-                        </el-row>
-                    </el-form-item>
-                    <div  v-for="item in form11data">
-                        <el-form-item class="tablecontent">
+                <div class="table" v-else-if="this.index==7">
+                    <el-form :model="form7data">
+                        <el-form-item class="tableheader">
                             <el-row>
-                                <el-col :span="2" offset="4">{{item.title}}</el-col>
-                                <el-col :span="3">{{item.need}}</el-col>
-                                <el-col :span="3">{{item.needrate}}</el-col>
-                                <el-col :span="3">{{item.seek}}</el-col>
-                                <el-col :span="3">{{item.seekrate}}</el-col>
-                                <el-col :span="3">{{item.rate}}</el-col>
+                                <el-col :span="4" offset="2">职</el-col>
+                                <el-col :span="4">职业</el-col>
+                                <el-col :span="12" >劳动力供求人数比较</el-col>
                             </el-row>
-                        </el-form-item>
-                    </div>
-                </el-form>
-            </div>
-
-            <div class="table" v-else-if="this.index==12">
-                <el-form :model="form12data">
-                    <el-form-item class="tableheader">
-                        <el-row>
-                            <el-col :span="2" offset="4">技术</el-col>
-                            <el-col :span="15" >劳动力供求人数比较</el-col>
-                        </el-row>
-                        <el-row>
-                            <el-col :span="2" offset="4">等级</el-col>
-                            <el-col :span="3" >需求人数</el-col>
-                            <el-col :span="3" >所占比重</el-col>
-                            <el-col :span="3" >求职人数</el-col>
-                            <el-col :span="3" >所占比重</el-col>
-                            <el-col :span="3" >求人倍率</el-col>
-                        </el-row>
-                    </el-form-item>
-                    <div  v-for="item in form12data">
-                        <el-form-item class="tablecontent">
                             <el-row>
-                                <el-col :span="2" offset="4">{{item.title}}</el-col>
-                                <el-col :span="3">{{item.need}}</el-col>
-                                <el-col :span="3">{{item.needrate}}</el-col>
-                                <el-col :span="3">{{item.seek}}</el-col>
-                                <el-col :span="3">{{item.seekrate}}</el-col>
-                                <el-col :span="3">{{item.rate}}</el-col>
+                                <el-col :span="4" offset="2">业</el-col>
+                                <el-col :span="4">类别</el-col>
+                                <el-col :span="3" >需求人数</el-col>
+                                <el-col :span="3" >求职人数</el-col>
+                                <el-col :span="3" >缺口数</el-col>
+                                <el-col :span="3" >求人倍率</el-col>
                             </el-row>
                         </el-form-item>
-                    </div>
-                </el-form>
-            </div>
+                        <div  v-for="item in form7data">
+                            <el-form-item class="tablecontent">
+                                <el-row>
+                                    <el-col :span="4" offset="2">{{item.job}}</el-col>
+                                    <el-col :span="4">{{item.jobcode}}</el-col>
+                                    <el-col :span="3">{{item.need}}</el-col>
+                                    <el-col :span="3">{{item.seek}}</el-col>
+                                    <el-col :span="3">{{item.gap}}</el-col>
+                                    <el-col :span="3">{{item.rate}}</el-col>
+                                </el-row>
+                            </el-form-item>
+                        </div>
+                    </el-form>
+                </div>
 
-            <div>
-                <el-button id='last' @click="last" type="primary">上一页</el-button>
-                <el-button id='save' @click="next"  type="primary">下一页</el-button>
-            </div>
+                <div class="table" v-else-if="this.index==8">
+                    <el-form :model="form8data">
+                        <el-form-item class="tableheader">
+                            <el-row>
+                                <el-col :span="2" offset="6">求职人员类别</el-col>
+                                <el-col :span="5" >求职人数</el-col>
+                                <el-col :span="5" >所占比重</el-col>
+                            </el-row>
+                        </el-form-item>
+                        <div  v-for="item in form8data">
+                            <el-form-item class="tablecontent">
+                                <el-row>
+                                    <el-col :span="2" offset="6">{{item.title}}</el-col>
+                                    <el-col :span="5">{{item.seek}}</el-col>
+                                    <el-col :span="5">{{item.seekrate}}</el-col>
+                                </el-row>
+                            </el-form-item>
+                        </div>
+                    </el-form>
+                </div>
 
+                <div class="table" v-else-if="this.index==9">
+                    <el-form :model="form9data">
+                        <el-form-item class="tableheader">
+                            <el-row>
+                                <el-col :span="2" offset="4">性</el-col>
+                                <el-col :span="15" >劳动力供求人数比较</el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="2" offset="4">别</el-col>
+                                <el-col :span="3" >需求人数</el-col>
+                                <el-col :span="3" >所占比重</el-col>
+                                <el-col :span="3" >求职人数</el-col>
+                                <el-col :span="3" >所占比重</el-col>
+                                <el-col :span="3" >求人倍率</el-col>
+                            </el-row>
+                        </el-form-item>
+                        <div  v-for="item in form9data">
+                            <el-form-item class="tablecontent">
+                                <el-row>
+                                    <el-col :span="2" offset="4">{{item.title}}</el-col>
+                                    <el-col :span="3">{{item.need}}</el-col>
+                                    <el-col :span="3">{{item.needrate}}</el-col>
+                                    <el-col :span="3">{{item.seek}}</el-col>
+                                    <el-col :span="3">{{item.seekrate}}</el-col>
+                                    <el-col :span="3">{{item.rate}}</el-col>
+                                </el-row>
+                            </el-form-item>
+                        </div>
+                    </el-form>
+                </div>
+
+                <div class="table" v-else-if="this.index==10">
+                    <el-form :model="form10data">
+                        <el-form-item class="tableheader">
+                            <el-row>
+                                <el-col :span="2" offset="4">年</el-col>
+                                <el-col :span="15" >劳动力供求人数比较</el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="2" offset="4">龄</el-col>
+                                <el-col :span="3" >需求人数</el-col>
+                                <el-col :span="3" >所占比重</el-col>
+                                <el-col :span="3" >求职人数</el-col>
+                                <el-col :span="3" >所占比重</el-col>
+                                <el-col :span="3" >求人倍率</el-col>
+                            </el-row>
+                        </el-form-item>
+                        <div  v-for="item in form10data">
+                            <el-form-item class="tablecontent">
+                                <el-row>
+                                    <el-col :span="2" offset="4">{{item.title}}</el-col>
+                                    <el-col :span="3">{{item.need}}</el-col>
+                                    <el-col :span="3">{{item.needrate}}</el-col>
+                                    <el-col :span="3">{{item.seek}}</el-col>
+                                    <el-col :span="3">{{item.seekrate}}</el-col>
+                                    <el-col :span="3">{{item.rate}}</el-col>
+                                </el-row>
+                            </el-form-item>
+                        </div>
+                    </el-form>
+                </div>
+
+                <div class="table" v-else-if="this.index==11">
+                    <el-form :model="form11data">
+                        <el-form-item class="tableheader">
+                            <el-row>
+                                <el-col :span="2" offset="4">文化</el-col>
+                                <el-col :span="15" >劳动力供求人数比较</el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="2" offset="4">程度</el-col>
+                                <el-col :span="3" >需求人数</el-col>
+                                <el-col :span="3" >所占比重</el-col>
+                                <el-col :span="3" >求职人数</el-col>
+                                <el-col :span="3" >所占比重</el-col>
+                                <el-col :span="3" >求人倍率</el-col>
+                            </el-row>
+                        </el-form-item>
+                        <div  v-for="item in form11data">
+                            <el-form-item class="tablecontent">
+                                <el-row>
+                                    <el-col :span="2" offset="4">{{item.title}}</el-col>
+                                    <el-col :span="3">{{item.need}}</el-col>
+                                    <el-col :span="3">{{item.needrate}}</el-col>
+                                    <el-col :span="3">{{item.seek}}</el-col>
+                                    <el-col :span="3">{{item.seekrate}}</el-col>
+                                    <el-col :span="3">{{item.rate}}</el-col>
+                                </el-row>
+                            </el-form-item>
+                        </div>
+                    </el-form>
+                </div>
+
+                <div class="table" v-else-if="this.index==12">
+                    <el-form :model="form12data">
+                        <el-form-item class="tableheader">
+                            <el-row>
+                                <el-col :span="2" offset="4">技术</el-col>
+                                <el-col :span="15" >劳动力供求人数比较</el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="2" offset="4">等级</el-col>
+                                <el-col :span="3" >需求人数</el-col>
+                                <el-col :span="3" >所占比重</el-col>
+                                <el-col :span="3" >求职人数</el-col>
+                                <el-col :span="3" >所占比重</el-col>
+                                <el-col :span="3" >求人倍率</el-col>
+                            </el-row>
+                        </el-form-item>
+                        <div  v-for="item in form12data">
+                            <el-form-item class="tablecontent">
+                                <el-row>
+                                    <el-col :span="2" offset="4">{{item.title}}</el-col>
+                                    <el-col :span="3">{{item.need}}</el-col>
+                                    <el-col :span="3">{{item.needrate}}</el-col>
+                                    <el-col :span="3">{{item.seek}}</el-col>
+                                    <el-col :span="3">{{item.seekrate}}</el-col>
+                                    <el-col :span="3">{{item.rate}}</el-col>
+                                </el-row>
+                            </el-form-item>
+                        </div>
+                    </el-form>
+                </div>
+
+                <div>
+                    <el-button id='last' @click="last" type="primary">上一页</el-button>
+                    <el-button id='save' @click="next"  type="primary">下一页</el-button>
+                </div>
+            </div>
         </div>
     </el-main>
     <el-footer class="footer">2019 &copy; 第二组织</el-footer>
@@ -369,16 +432,26 @@
 <script>
     var vue = new Vue({
         created() {
-            this.getTableId();
+            // this.getTableId();
         },
         mounted(){
-            var div = document.getElementsByTagName('button')[0];
-            div.style.backgroundColor = "#e8f0fe";
+            // this.loadData();
+            this.getList();
+            var div = document.getElementsByTagName('button')[1];
+            // div.style.backgroundColor = "#e8f0fe";
         },
 
         el:'#app',
         data:{
-            tableId:null,
+            btnContent:'',
+            userType:-1,
+            rejectedMessage:'',
+            innerVisible:false,
+            dataList: [],
+            tabelId:-1,
+            aimId:-1,
+            visibleFlag:true,
+            showReview:false,
             index:1,
             forms:[
                 {index:1, title:'表1：供求总体人数'},
@@ -1057,11 +1130,136 @@
             }],
         },
         methods:{
-            getTableId:function(){
-                this.tableId=63;
-                this.loadData();
+            handlePass(){
+                console.log(vue.aimId);
+                if(vue.userType === 1) {
+                    $.ajax({
+                        url: '/province/upload/pass',
+                        type: 'post',
+                        data: {
+                            aimId: vue.aimId,
+                            content: '您的数据已通过审核！'
+                        },
+                        success(res) {
+                            if(res.code === 0) {
+                                vue.$message({
+                                    type: 'success',
+                                    message: '成功!'
+                                });
+                                vue.showReview = false;
+                                vue.getList();
+                                vue.visibleFlag = true;
+                            }
+                            else{
+                                vue.$message({
+                                    type: 'error',
+                                    message: '出错了哦!'
+                                });
+                                // alert(res.message)
+                            }
+                        },
+                        error(res) {
+                            vue.$message({
+                                type: 'error',
+                                message: '出错了哦!'
+                            });
+                            vue.showReview = false;
+                        }
+                    });
+                }
+                else if(vue.userType === 2){
+                    $.ajax({
+                        url: '/city/upload/pass',
+                        type: 'post',
+                        data: {
+                            aimId: vue.aimId,
+                            content: '您的数据已通过审核！'
+                        },
+                        success(res) {
+                            vue.$message({
+                                type: 'success',
+                                message: '成功!'
+                            });
+                            vue.showReview = false;
+                            vue.getList();
+                            vue.visibleFlag=true;
+                        },
+                        error(res) {
+                            this.$message({
+                                type: 'error',
+                                message: '出错了哦!'
+                            });
+                            vue.showReview = false;
+                        }
+                    });
+                }
             },
+            handleCancelReject(){
+                this.innerVisible = false;
+                this.showReview = true;
+            },
+            handleConfirmReject(){
+                this.innerVisible = false;
+                if(vue.userType === 1) {
+                    $.ajax({
+                        url: '/province/upload/reject',
+                        type: 'post',
+                        data: {
+                            aimId: vue.aimId,
+                            content: vue.rejectedMessage
+                        },
+                        success(res) {
+                            vue.$message({
+                                type: 'success',
+                                message: '已拒绝!'
+                            });
+                            vue.showReview = false;
+                            vue.getList();
+                            vue.visibleFlag = true;
+                        },
+                        error(res) {
+                            this.$message({
+                                type: 'error',
+                                message: '出错了哦!'
+                            });
+                            vue.showReview = false;
+                        }
+                    })
+                }
+                else if(vue.userType===2){
+                    $.ajax({
+                        url: '/city/upload/reject',
+                        type: 'post',
+                        data: {
+                            aimId: vue.aimId,
+                            content: vue.rejectedMessage
+                        },
+                        success(res) {
+                            vue.$message({
+                                type: 'success',
+                                message: '已拒绝!'
+                            });
+                            vue.showReview = false;
+                            vue.getList();
+                            vue.visibleFlag = true;
+                        },
+                        error(res) {
+                            this.$message({
+                                type: 'error',
+                                message: '出错了哦!'
+                            });
+                            vue.showReview = false;
+                        }
+                    })
+                }
 
+            },
+            handleClose(done) {
+                done();
+            },
+            turnFlag:function () {
+                this.visibleFlag=!this.visibleFlag;
+            },
             loadData:function() {
                 var that = this;
                 $.ajax({
@@ -1071,11 +1269,12 @@
                         tableId: that.tableId,
                     },
                     success(res) {
+                        console.log('form1:');
                         console.log(res);
                         if (res.code == 0) {
                             that.form1data.seek=res.data.needPopu;
                             that.form1data.need=res.data.jobseekPopu;
-                            that.getRate(that.form1data);
+                            that.getRate(1, that.form1data);
                             console.log(that.form1data);
                         }
                         else alert(res.message);
@@ -1090,9 +1289,10 @@
                     url: '/common/data/selectIndustryNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success: function (res) {
+                        console.log('form2+form3:');
                         console.log(res);
                         if (res.code == 0) {
                             that.form2data[0].need = res.data.industry1Need;
@@ -1118,13 +1318,13 @@
                             that.form3data[17].need = res.data.cultSportEnteNeed;
                             that.form3data[18].need = res.data.manaOrgaNeed;
                             that.form3data[19].need = res.data.inteOrgaNeed;
-                            that.getNeedSum2(this.form2data);
-                            that.getNeedRate(this.form2data);
-                            console.log(this.form2data);
+                            that.getNeedSum2(2,that.form2data);
+                            that.getNeedRate(2,that.form2data);
+                            console.log(that.form2data);
 
-                            that.getNeedSum2(this.form3data);
-                            that.getNeedRate(this.form3data);
-                            console.log(this.form3data);
+                            that.getNeedSum2(3,that.form3data);
+                            that.getNeedRate(3,that.form3data);
+                            console.log(that.form3data);
                         }
                         else alert(res.message);
                     },
@@ -1138,9 +1338,10 @@
                     url: '/common/data/selectEmployerNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success: function (res) {
+                        console.log('form4:');
                         console.log(res);
                         if (res.code == 0) {
                             that.form4data[0].need = res.data.staOwnNeed;
@@ -1157,9 +1358,9 @@
                             that.form4data[11].need = res.data.instNeed;
                             that.form4data[12].need = res.data.orgaNeed;
                             that.form4data[13].need = res.data.otherNeed;
-                            that.getNeedSum2(this.form4data);
-                            that.getNeedRate(this.form4data);
-                            console.log(this.form4data);
+                            that.getNeedSum2(4,that.form4data);
+                            that.getNeedRate(4,that.form4data);
+                            console.log(that.form4data);
                         }
                         else alert(res.message);
                     },
@@ -1173,9 +1374,10 @@
                     url: '/common/data/selectProfNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
+                        console.log('form5:');
                         console.log(res);
                         if (res.code == 0) {
                             that.form5data[0].need=res.data.leaderNeed;
@@ -1193,11 +1395,11 @@
                             that.form5data[6].need=res.data.otherNeed;
                             that.form5data[6].seek=res.data.otherJobseek;
                             that.form5data[7].seek=res.data.noRequJobseek;
-                            that.getSum5(this.form5data);
-                            that.getRate(this.form5data);
-                            that.getNeedRate(this.form5data);
-                            that.getSeekRate(this.form5data);
-                            console.log(this.form5data);
+                            that.getSum5(5,that.form5data);
+                            that.getRate(5,that.form5data);
+                            that.getNeedRate(5,that.form5data);
+                            that.getSeekRate(5,that.form5data);
+                            console.log(that.form5data);
                         }
                         else alert(res.message);
                     },
@@ -1211,9 +1413,10 @@
                     url: '/common/data/selectMostNeeded',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success: function (res) {
+                        console.log('form6:');
                         console.log(res);
                         if (res.code == 0) {
                             that.form6data[0].job = res.data.mostProf1Name;
@@ -1224,7 +1427,7 @@
                             that.form6data[1].jobcode = res.data.mostProf2Num;
                             that.form6data[1].need = res.data.mostProf2Need;
                             that.form6data[1].seek = res.data.mostProf2Jobseek;
-                            that.form6data[2].jo = res.data.mostProf3Nameb;
+                            that.form6data[2].job = res.data.mostProf3Name;
                             that.form6data[2].jobcode = res.data.mostProf3Num;
                             that.form6data[2].need = res.data.mostProf3Need;
                             that.form6data[2].seek = res.data.mostProf3Jobseek;
@@ -1256,9 +1459,9 @@
                             that.form6data[9].jobcode = res.data.mostProf10Num;
                             that.form6data[9].need = res.data.mostProf10Need;
                             that.form6data[9].seek = res.data.mostProf10Jobseek;
-                            that.getRate(this.form6data);
-                            that.getGap(this.form6data);
-                            console.log(this.form6data);
+                            that.getRate(6,that.form6data);
+                            that.getGap(6,that.form6data);
+                            console.log(that.form6data);
                         }
                         else alert(res.message);
                     },
@@ -1272,9 +1475,10 @@
                     url: '/common/data/selectLeastNeeded',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
+                        console.log('form7:');
                         console.log(res);
                         if (res.code == 0) {
                             that.form7data[0].job = res.data.leastProf1Name;
@@ -1285,7 +1489,7 @@
                             that.form7data[1].jobcode = res.data.leastProf2Num;
                             that.form7data[1].need = res.data.leastProf2Need;
                             that.form7data[1].seek = res.data.leastProf2Jobseek;
-                            that.form7data[2].jo = res.data.leastProf3Nameb;
+                            that.form7data[2].job = res.data.leastProf3Name;
                             that.form7data[2].jobcode = res.data.leastProf3Num;
                             that.form7data[2].need = res.data.leastProf3Need;
                             that.form7data[2].seek = res.data.leastProf3Jobseek;
@@ -1317,9 +1521,9 @@
                             that.form7data[9].jobcode = res.data.leastProf10Num;
                             that.form7data[9].need = res.data.leastProf10Need;
                             that.form7data[9].seek = res.data.leastProf10Jobseek;
-                            that.getRate(this.form7data);
-                            that.getGap(this.form7data);
-                            console.log(this.form7data);
+                            that.getRate(7,that.form7data);
+                            that.getGap(7,that.form7data);
+                            console.log(that.form7data);
                         }
                         else alert(res.message);
                     },
@@ -1333,9 +1537,10 @@
                     url: '/common/data/selectJobSeekerNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
+                        console.log('form8:');
                         console.log(res);
                         if (res.code == 0) {
                             that.form8data[0].seek = res.data.unempYouth;
@@ -1348,9 +1553,9 @@
                             that.form8data[7].seek = res.data.student;
                             that.form8data[8].seek = res.data.cityRural;
                             that.form8data[9].seek = res.data.fore;
-                            that.getSeekSum2(this.form8data);
-                            that.getSeekRate(this.form8data);
-                            console.log(this.form8data);
+                            that.getSeekSum2(8,that.form8data);
+                            that.getSeekRate(8,that.form8data);
+                            console.log(that.form8data);
                         }
                         else alert(res.message);
                     },
@@ -1364,9 +1569,10 @@
                     url: '/common/data/selectSexNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success: function (res) {
+                        console.log('form9:');
                         console.log(res);
                         if (res.code == 0) {
                             that.form9data[0].need = res.data.maleNeed;
@@ -1374,11 +1580,11 @@
                             that.form9data[1].need = res.data.femaleNeed;
                             that.form9data[1].seek = res.data.femaleJobseek;
                             that.form9data[2].need = res.data.noRequNeed;
-                            that.getSum5(this.form9data);
-                            that.getRate(this.form9data);
-                            that.getNeedRate(this.form9data);
-                            that.getSeekRate(this.form9data);
-                            console.log(this.form9data);
+                            that.getSum5(9,that.form9data);
+                            that.getRate(9,that.form9data);
+                            that.getNeedRate(9,that.form9data);
+                            that.getSeekRate(9,that.form9data);
+                            console.log(that.form9data);
                         }
                         else alert(res.message);
                     },
@@ -1392,9 +1598,10 @@
                     url: '/common/data/selectAgeNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
+                        console.log('form10:');
                         console.log(res);
                         if (res.code == 0) {
                             that.form10data[0].need=res.data.sixteenTwentyfourNeed;
@@ -1406,11 +1613,11 @@
                             that.form10data[3].need=res.data.overFortyfourNeed;
                             that.form10data[3].seek=res.data.overFortyfourJobseek;
                             that.form10data[4].need=res.data.noRequNeed;
-                            that.getSum5(this.form10data);
-                            that.getRate(this.form10data);
-                            that.getNeedRate(this.form10data);
-                            that.getSeekRate(this.form10data);
-                            console.log(this.form10data);
+                            that.getSum5(10,that.form10data);
+                            that.getRate(10,that.form10data);
+                            that.getNeedRate(10,that.form10data);
+                            that.getSeekRate(10,that.form10data);
+                            console.log(that.form10data);
                         }
                         else alert(res.message);
                     },
@@ -1424,9 +1631,10 @@
                     url: '/common/data/selectDegreeNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
+                        console.log('form11:');
                         console.log(res);
                         if (res.code == 0) {
                             that.form11data[0].need=res.data.belowJuniHighSchoNeed;
@@ -1440,11 +1648,11 @@
                             that.form11data[4].need=res.data.univNeed;
                             that.form11data[4].seek=res.data.univJobseek;
                             that.form11data[5].need=res.data.noRequNeed;
-                            that.getSum5(this.form11data);
-                            that.getRate(this.form11data);
-                            that.getNeedRate(this.form11data);
-                            that.getSeekRate(this.form11data);
-                            console.log(this.form11data);
+                            that.getSum5(11,that.form11data);
+                            that.getRate(11,that.form11data);
+                            that.getNeedRate(11,that.form11data);
+                            that.getSeekRate(11,that.form11data);
+                            console.log(that.form11data);
                         }
                         else alert(res.message);
                     },
@@ -1458,9 +1666,10 @@
                     url: '/common/data/selectTechGradeNum',
                     type: 'post',
                     data: {
-                        tableId: this.tableId,
+                        tableId: that.tableId,
                     },
                     success(res) {
+                        console.log('form12:');
                         console.log(res);
                         if (res.code == 0) {
                             that.form12data[0].need=res.data.profLevel5Need;
@@ -1481,11 +1690,11 @@
                             that.form12data[7].seek=res.data.seniProfJobseek;
                             that.form12data[8].seek=res.data.noTechJobseek;
                             that.form12data[9].need=res.data.noRequNeed;
-                            that.getSum5(this.form12data);
-                            that.getRate(this.form12data);
-                            that.getNeedRate(this.form12data);
-                            that.getSeekRate(this.form12data);
-                            console.log(this.form12data);
+                            that.getSum5(12,that.form12data);
+                            that.getRate(12,that.form12data);
+                            that.getNeedRate(12,that.form12data);
+                            that.getSeekRate(12,that.form12data);
+                            console.log(that.form12data);
                         }
                         else alert(res.message);
                     },
@@ -1496,150 +1705,146 @@
                 })
             },
 
-            getNeedSum2:function(param){
-                    var formdata = param;
-                    formdata[formdata.length-1].need=0;
-                    for(var i = 0;i<formdata.length-1;i++){
-                        formdata[formdata.length-1].need+=Number(formdata[i].need);
-                    }
-                    if(this.index==2)
-                        this.form2data=formdata;
-                    else if(this.index==3)
-                        this.form3data=formdata;
-                    else this.form4data=formdata;
+            getNeedSum2:function(index, param){
+                var formdata = param;
+                formdata[formdata.length-1].need=0;
+                for(var i = 0;i<formdata.length-1;i++){
+                    formdata[formdata.length-1].need+=Number(formdata[i].need);
+                }
+                if(index==2)
+                    this.form2data=formdata;
+                else if(index==3)
+                    this.form3data=formdata;
+                else this.form4data=formdata;
             },
 
-            getSeekSum2:function(param){
-                    var formdata = param;
-                    for(var i = 0;i<formdata.length-1;i++){
-                        formdata[formdata.length-1].seek+=Number(formdata[i].seek);
+            getSeekSum2:function(index, param){
+                var formdata = param;
+                for(var i = 0;i<formdata.length-1;i++){
+                    formdata[formdata.length-1].seek+=Number(formdata[i].seek);
+                }
+                this.form8data=formdata;
+            },
+
+            getSum5:function(index, param){
+                var formdata = param;
+                formdata[formdata.length-1].seek=formdata[formdata.length-1].need=0;
+                for(var i = 0;i<formdata.length-1;i++){
+                    if(!((index==5&&i==formdata.length-2)||(index==12&&i==formdata.length-3))) {
+                        formdata[formdata.length - 1].need += Number(formdata[i].need);
                     }
+                    if(!(index>5&&i==formdata.length-2)) {
+                        formdata[formdata.length - 1].seek += Number(formdata[i].seek);
+                    }
+                }
+                if(index==5)
+                    this.form5data=formdata;
+                else if(index==9)
+                    this.form9data=formdata;
+                else if(index==10)
+                    this.form10data=formdata;
+                else if(index==11)
+                    this.form11data=formdata;
+                else this.form12data=formdata;
+            },
+
+            getRate:function(index, param){
+                var formdata = param;
+                // console.log(formdata);
+                if (index == 1) {
+                    this.form1data.rate = (Number(this.form1data.need) / Number(this.form1data.seek)).toFixed(4);
+                }
+                else if(index==6||index==7){
+                    for (var i = 0; i < formdata.length; i++){
+                        formdata[i].rate = (Number(formdata[i].need) / Number(formdata[i].seek)).toFixed(4);
+                    }
+                    if(index==6)
+                        this.form6data = formdata;
+                    else
+                        this.form7data = formdata;
+                }
+                else{
+                    var tmp;
+                    if(index==5)
+                        tmp=Number(formdata[formdata.length-1].seek)/(Number(formdata[formdata.length-1].seek)-Number(formdata[formdata.length-2].seek));
+                    else
+                        tmp=Number(formdata[formdata.length-1].need)/(Number(formdata[formdata.length-1].need)-Number(formdata[formdata.length-2].need));
+                    for (var i = 0; i < formdata.length - 2; i++) {
+                        // console.log(i);
+                        // console.log(formdata);
+                        if(index==5)
+                            formdata[i].rate=Number(formdata[i].need)/(tmp*Number(formdata[i].seek));
+                        else if(index==12&&i==formdata.length-3)
+                            formdata[i].rate=0;
+                        else
+                            formdata[i].rate=tmp*Number(formdata[i].need)/Number(formdata[i].seek);
+                        formdata[i].rate=Number(formdata[i].rate).toFixed(4);
+                    }
+                    // console.log(formdata);
+                    if (index == 5)
+                        form5data = formdata;
+                    else if (index == 9)
+                        form9data = formdata;
+                    else if (index == 10)
+                        form10data = formdata;
+                    else if (index == 11)
+                        form11data = formdata;
+                    else form12data = formdata;
+                }
+            },
+
+            getGap:function (index, param) {
+                var formdata = param;
+                for(var i = 0;i<formdata.length;i++){
+                    formdata[i].gap=Number(formdata[i].need)-Number(formdata[i].seek);
+                }
+                if(index==6)
+                    this.form6data=formdata;
+                else this.form7data=formdata;
+            },
+
+            getNeedRate:function(index, param){
+                var formdata = param;
+                for(var i = 0;i<formdata.length;i++){
+                    if(!((index==5&&i==formdata.length-2)||(index==12&&i==formdata.length-3))) {
+                        formdata[i].needrate = (Number(formdata[i].need) / Number(formdata[formdata.length - 1].need)).toFixed(4);
+                    }
+                }
+                if(index==2)
+                    this.form2data=formdata;
+                else if(index==3)
+                    this.form3data=formdata;
+                else if(index==4)
+                    this.form4data=formdata;
+                else if(index==5)
+                    this.form5data=formdata;
+                else if(index==9)
+                    this.form9data=formdata;
+                else if(index==10)
+                    this.form10data=formdata;
+                else if(index==11)
+                    this.form11data=formdata;
+                else this.form12data=formdata;
+            },
+
+            getSeekRate:function(index, param){
+                var formdata = param;
+                for(var i = 0;i<formdata.length;i++){
+                    if(index<9||i!=formdata.length-2) {
+                        formdata[i].seekrate = (Number(formdata[i].seek) / Number(formdata[formdata.length - 1].seek)).toFixed(4);
+                    }
+                }
+                if(index==8)
                     this.form8data=formdata;
-            },
-
-            getSum5:function(param){
-                    var formdata = param;
-                    formdata[formdata.length-1].seek=formdata[formdata.length-1].need=0;
-                    for(var i = 0;i<formdata.length-1;i++){
-                        if(!((this.index==5&&i==formdata.length-2)||(this.index==12&&i==formdata.length-3))) {
-                            formdata[formdata.length - 1].need += Number(formdata[i].need);
-                        }
-                        if(!(this.index>5&&i==formdata.length-2)) {
-                            formdata[formdata.length - 1].seek += Number(formdata[i].seek);
-                        }
-                    }
-                    if(this.index==5)
-                        this.form5data=formdata;
-                    else if(this.index==9)
-                        this.form9data=formdata;
-                    else if(this.index==10)
-                        this.form10data=formdata;
-                    else if(this.index==11)
-                        this.form11data=formdata;
-                    else this.form12data=formdata;
-            },
-
-            getRate:function(param){
-                    var formdata = param;
-                    console.log(formdata);
-                    if (this.index == 1) {
-                        this.form1data.rate = (Number(this.form1data.need) / Number(this.form1data.seek)).toFixed(4);
-                    }
-                    else if(this.index==6||this.index==7){
-                        for (var i = 0; i < formdata.length; i++){
-                            formdata[i].rate = (Number(formdata[i].need) / Number(formdata[i].seek).toFixed(4));
-                        }
-                        if(this.index==6)
-                            this.form6data = formdata;
-                        else
-                            this.form7data = formdata;
-                    }
-                    else{
-                        var tmp;
-                        if(this.index==5)
-                            tmp=Number(formdata[formdata.length-1].seek)/(Number(formdata[formdata.length-1].seek)-Number(formdata[formdata.length-2].seek));
-                        else
-                            tmp=Number(formdata[formdata.length-1].need)/(Number(formdata[formdata.length-1].need)-Number(formdata[formdata.length-2].need));
-                        for (var i = 0; i < formdata.length - 2; i++) {
-                            console.log(i);
-                            console.log(formdata);
-                            if(this.index==5)
-                                formdata[i].rate=Number(formdata[i].need)/(tmp*Number(formdata[i].seek));
-                            else if(this.index==12&&i==formdata.length-3)
-                                formdata[i].rate=0;
-                            else
-                                formdata[i].rate=tmp*Number(formdata[i].need)/Number(formdata[i].seek);
-                            formdata[i].rate=Number(formdata[i].rate).toFixed(4);
-                        }
-                        console.log(formdata);
-                        if (this.index == 5)
-                            form5data = formdata;
-                        else if (this.index == 9)
-                            form9data = formdata;
-                        else if (this.index == 10)
-                            form10data = formdata;
-                        else if (this.index == 11)
-                            form11data = formdata;
-                        else form12data = formdata;
-                    }
-            },
-
-            getGap:function (param) {
-                    var formdata = param;
-                    for(var i = 0;i<formdata.length;i++){
-                        formdata[i].gap=Number(formdata[i].need)-Number(formdata[i].seek);
-                    }
-                    if(this.index==6)
-                        this.form6data=formdata;
-                    else this.form7data=formdata;
-            },
-
-            getNeedRate:function(param){
-                    var formdata = param;
-                    for(var i = 0;i<formdata.length;i++){
-                        if(!((this.index==5&&i==formdata.length-2)||(this.index==12&&i==formdata.length-3))) {
-                            formdata[i].needrate = (Number(formdata[i].need) / Number(formdata[formdata.length - 1].need)).toFixed(4);
-                        }
-                    }
-                    if(this.index==2)
-                        this.form2data=formdata;
-                    else if(this.index==3)
-                        this.form3data=formdata;
-                    else if(this.index==4)
-                        this.form4data=formdata;
-                    else if(this.index==5)
-                        this.form5data=formdata;
-                    else if(this.index==9)
-                        this.form9data=formdata;
-                    else if(this.index==10)
-                        this.form10data=formdata;
-                    else if(this.index==11)
-                        this.form11data=formdata;
-                    else this.form12data=formdata;
-            },
-
-            getSeekRate:function(param){
-                    var formdata = param;
-                    for(var i = 0;i<formdata.length;i++){
-                        if(this.index<9||i!=formdata.length-2) {
-                            formdata[i].seekrate = (Number(formdata[i].seek) / Number(formdata[formdata.length - 1].seek)).toFixed(4);
-                        }
-                    }
-                    if(this.index==8)
-                        this.form8data=formdata;
-                    else if(this.index==5)
-                        this.form5data=formdata;
-                    else if(this.index==9)
-                        this.form9data=formdata;
-                    else if(this.index==10)
-                        this.form10data=formdata;
-                    else if(this.index==11)
-                        this.form11data=formdata;
-                    else this.form12data=formdata;
-            },
-
-            submit:function(){
-
+                else if(index==5)
+                    this.form5data=formdata;
+                else if(index==9)
+                    this.form9data=formdata;
+                else if(index==10)
+                    this.form10data=formdata;
+                else if(index==11)
+                    this.form11data=formdata;
+                else this.form12data=formdata;
             },
 
             last:function(){
@@ -1653,13 +1858,127 @@
             },
 
             turnForm:function (param) {
-                var div1 = document.getElementsByTagName('button')[this.index-1];
-                var div2 = document.getElementsByTagName('button')[param-1];
+                var div1 = document.getElementsByTagName('button')[this.index];
+                var div2 = document.getElementsByTagName('button')[param];
                 div1.style.backgroundColor = "#F3F2F1";
                 div2.style.backgroundColor = "#e8f0fe";
                 this.index=param;
                 console.log(this.index);
                 console.log(this.forms[this.index-1].title);
+            },
+            getList(){
+                $.ajax({
+                    url:'/user/userType',
+                    type:'post',
+                    success(res){
+                        vue.userType = res;
+                        if(res === 1){
+                            vue.btnContent='确认';
+                            //省
+                            $.ajax({
+                                url:'/province/upload/examineQuery',
+                                type:'post',
+                                success(res){
+                                    if(res.code === 0) {
+                                        console.log(res);
+                                        for (var i = 0; i < res.data.length; i++) {
+                                            res.data[i].number = i + 1;
+                                            res.data[i].stateInChinese = '待审核';
+                                            // $.ajax({
+                                            //     url:'/user/userInfo',
+                                            //     type:'post',
+                                            //     success(res){
+                                            //         console.log(res)
+                                            //     },
+                                            //     error(res){
+                                            //         vue.$message({
+                                            //             message:'出错了！',
+                                            //             type:'error'
+                                            //         });
+                                            //     }
+                                            // })
+                                        }
+                                        vue.dataList = res.data;
+                                    }
+
+                                },
+                                error(res){
+                                    vue.$message({
+                                        message:'出错了！',
+                                        type:'error'
+                                    });
+                                }
+                            })
+                        }
+                        else if(res === 2){
+                            //市
+                            vue.btnContent = '提交'
+                            $.ajax({
+                                url:'/city/upload/examineQuery',
+                                type:'post',
+                                success(res){
+                                    if(res.code === 0){
+                                        // console.log(res);
+                                        vue.dataList = res.data;
+                                        for (var i = 0; i < vue.dataList.length; i++) {
+                                            vue.dataList[i].number = i + 1;
+                                            vue.dataList[i].stateInChinese = '待审核';
+                                            // $.ajax({
+                                            //     url:'/user/userInfo',
+                                            //     type:'post',
+                                            //     data:{
+                                            //         userId:vue.dataList[i].creator
+                                            //     },
+                                            //     success(r){
+                                            //         console.log(r)
+                                            //         // console.log(tmp)
+                                            //         console.log(r.data.fullname)
+                                            //         console.log(i);
+                                            //         vue.dataList[i].regionEmpName = r.data.fullname;
+                                            //     },
+                                            //     error(r){
+                                            //         vue.$message({
+                                            //             message:'出错了！',
+                                            //             type:'error'
+                                            //         });
+                                            //     }
+                                            // });
+                                        }
+                                    }
+                                    else{
+                                        vue.$message({
+                                            message:'出错了！',
+                                            type:'error'
+                                        });
+                                    }
+                                },
+                                error(res){
+                                    vue.$message({
+                                        message:'出错了！',
+                                        type:'error'
+                                    });
+                                }
+                            })
+
+                        }
+                    },
+                    error(res){
+                        vue.$message({
+                            message:'出错了！',
+                            type:'error'
+                        });
+                    }
+                })
+            },
+            handleClick: function(obj) {
+                // console.log(obj);
+                this.tableId = obj.tableId;
+                this.aimId = obj.creator;
+                // console.log(obj)
+                console.log(vue.aimId);
+                this.loadData();
+                // console.log(vue.tableId);
+                this.visibleFlag = false;
             }
         }
     })

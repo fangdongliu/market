@@ -23,7 +23,6 @@
             <el-carousel-item><img :height="screenH+'px'" :width="screenW+'px'" src="/image/index4.jpg"/> </el-carousel-item>
         </el-carousel>
     </div>
-
     <el-form id="login" ref="form" :model="form" label-width="80px" action="/login" method="post">
         <div class="formtitle">人力资源管理系统</div>
         <hr/>
@@ -35,6 +34,20 @@
         </el-form-item>
         <el-form-item class="formitem">
             <el-button type="primary" native-type="submit">登录</el-button>
+            <#if loginError??>
+            <script>alert('用户名或密码错误，请稍后重试！');</script>
+                <#--<el-popover-->
+                    <#--placement="top"-->
+                    <#--width="160"-->
+                    <#--v-model="visible">-->
+                    <#--<p>用户名或密码错误，请稍后重试！</p>-->
+                    <#--<div style="text-align: right; margin: 0">-->
+                        <#--<el-button size="mini" type="text" @click="visible = false">取消</el-button>-->
+                        <#--<el-button type="primary" size="mini" @click="visible = false">确定</el-button>-->
+                    <#--</div>-->
+                    <#--<el-button type="primary" native-type="submit">登录</el-button>-->
+                <#--</el-popover>-->
+            </#if>
         </el-form-item>
     </el-form>
 

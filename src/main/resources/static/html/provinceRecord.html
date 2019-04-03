@@ -172,7 +172,7 @@
                     url:'/province/record/pass',
                     type:'post',
                     data:{
-                        aimId:this.detailData.marketId,
+                        aimId:vue2.detailData.marketId,
                         content:'您的备案已通过审核！'
                     },
                     success(res){
@@ -203,8 +203,8 @@
                     url:'/province/record/reject',
                     type:'post',
                     data:{
-                        aimId:this.detailData.marketId,
-                        content:this.rejectedMessage
+                        aimId:vue2.detailData.marketId,
+                        content:vue2.rejectedMessage
                     },
                     success(res){
                         vue2.$message({

@@ -4,7 +4,7 @@ package cn.fdongl.market.city.service;
 import cn.fdongl.market.city.mapper.CityMapper;
 import cn.fdongl.market.common.mapper.CommonMapper;
 import cn.fdongl.market.market.entity.Record;
-import cn.fdongl.market.market.entity.UploadInfo;
+import cn.fdongl.market.market.entity.UploadInfoExtra;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +26,7 @@ public class CityService {
     }
 
     //市级查询待审核的上传数据（只能查到下属），非事务
-    public List<UploadInfo> uploadExamineQuery(Integer cityId) throws Exception {
+    public List<UploadInfoExtra> uploadExamineQuery(Integer cityId) throws Exception {
         return cityMapper.uploadExamineQuery(cityId);
     }
 

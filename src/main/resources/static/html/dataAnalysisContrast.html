@@ -18,7 +18,7 @@
     <el-main class="content" style="overflow: visible;background-color: #FFFFFF;margin:20px;border-radius: 10px;">
         <div class="contentDetail">
             <el-row>
-                <el-col :span="8" id="historyLeft">
+                <el-col :span="7" id="historyLeft">
                     <el-row>
                         <el-col :span="8">请选择调查期:</el-col>
                         <el-col :span="16">
@@ -39,10 +39,10 @@
                             @node-click="handleNodeClick">
                     </el-tree>
                 </el-col>
-                <el-col :span="15" :offset="1" id="historyRight" style="height:100%;">
+                <el-col :span="16" id="historyRight" style="height:100%;">
 
                     <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-                    <div id="pie" style="width: 800px;height:600px;" ref="pie"></div>
+                    <div id="pie" style="width: 850px;height:600px;" ref="pie"></div>
                     <!--<div id="lineNum" style="width: 600px;height:400px;" ref="lineNum"></div>-->
                     <!--<div id="lineAge" style="width: 600px;height:400px;" ref="lineAge"></div>-->
                 </el-col>

@@ -4,11 +4,16 @@
     /*background-color: #7a9cc9;*/
 }
 
+
 .indexes{
     background-color: rgb(243, 242, 241);
     margin:10px;
     width: 40px;
     height:40px;
+}
+
+#back{
+    margin-right:20px;
 }
 
 #submit{
@@ -31,7 +36,7 @@
     text-align: center;
     margin-bottom:20px;
 }
- 
+
  .periodnote{
      color: red;
      font-size:16px;
