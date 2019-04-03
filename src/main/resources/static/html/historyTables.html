@@ -35,7 +35,7 @@
                 <el-col :span="9" id="historyLeft">
                     <el-row>
                         <el-col :span="8">请选择调查期:</el-col>
-                        <el-col :span="10">
+                        <el-col :span="16">
                             <el-select v-model="periodId" placeholder="请选择" size="small">
                                 <el-option
                                         v-for="item in optionsPeriod"
@@ -45,9 +45,6 @@
                                 >
                                 </el-option>
                             </el-select>
-                        </el-col>
-                        <el-col :span="4" :offset="1">
-                            <el-button  type="primary" size="small" @click="changeURL">查看</el-button>
                         </el-col>
                     </el-row>
                     <el-tree :data="cityOptions" :props="defaultProps" node-key="id" @node-click="handleNodeClick" accordion></el-tree>
