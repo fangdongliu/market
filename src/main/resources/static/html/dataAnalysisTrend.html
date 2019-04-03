@@ -380,71 +380,71 @@
             }
         },
         methods:{
-            initialPie(data){
-                $.ajax({
-                    url: '/common/data/aimUserPieChartIndustryNum ',
-                    type: 'post',
-                    data:{
-                        aimUserId:data.id,
-                        uploadPeriodId:vue.periodId
-                    },
-                    success(res){
-                        console.log(res.data);
-                        if (res.data.tableId==0) {
-                            vue.pieChart = echarts.init(vue.$refs.pie);
-                            // 指定图表的配置项和数据
-                            vue.pieChart.setOption({
-                                title: {
-                                    text: data.fullname+'取样分析数据'
-                                }
-                            });
-                            vue.$message.error('该监测点在该时期暂时没有数据！');
-                        }
-                        else{
-                            vue.pieChart = echarts.init(vue.$refs.pie);
-                            // 指定图表的配置项和数据
-                            vue.pieChart.setOption({
-                                title: {
-                                    text: data.fullname+'取样分析数据'
-                                },
-                                series : [
-                                    {
-                                        name: '访问来源',
-                                        type: 'pie',
-                                        radius: '60%',
-                                        data:[
-                                            {value:res.data.accoCaterNeed, name:'住宿和餐饮业'},
-                                            {value:res.data.archNeed, name:'建筑业'},
-                                            {value:res.data.cultSportEnteNeed, name:'文化、体育和娱乐业'},
-                                            {value:res.data.eduNeed, name:'教育'},
-                                            {value:res.data.elecGasWaterNeed, name:'电力、燃气及水的生产和供应业'},
-                                            {value:res.data.estateNeed, name:'房地产业'},
-                                            {value:res.data.financeNeed, name:'金融业'},
-                                            {value:res.data.healSecuWelfNeed, name:'教育'},
-                                            {value:res.data.industry1Need, name:'农、林、牧、渔业'},
-                                            {value:res.data.infoCompSoftNeed, name:'信息传输、计算机服务和软件业'},
-                                            {value:res.data.inteOrgaNeed, name:'国际组织'},
-                                            {value:res.data.leaseBusiServNeed, name:'租赁和商务服务业'},
-                                            {value:res.data.manaOrgaNeed, name:'公共管理与社会组织'},
-                                            {value:res.data.manuNeed, name:'制造业'},
-                                            {value:res.data.mineNeed, name:'采矿业'},
-                                            {value:res.data.reseTechAddrNeed, name:'科学研究、技术服务和地址勘查业'},
-                                            {value:res.data.resiServNeed, name:'居民服务和其他服务业'},
-                                            {value:res.data.retailNeed, name:'批发和零售业'},
-                                            {value:res.data.tranStorPostNeed, name:'交通运输、仓储和邮政业'},
-                                            {value:res.data.waterEnviFaciNeed, name:'水利、环境和公共设施管理业'},
-                                        ]
-                                    }
-                                ]
-                            });
-                        }
-
-                    },
-                    error(res){
-                        console.log('error')
-                    }
-                });
-            },
+            // initialPie(data){
+            //     $.ajax({
+            //         url: '/common/data/aimUserPieChartIndustryNum ',
+            //         type: 'post',
+            //         data:{
+            //             aimUserId:data.id,
+            //             uploadPeriodId:vue.periodId
+            //         },
+            //         success(res){
+            //             console.log(res.data);
+            //             if (res.data.tableId==0) {
+            //                 vue.pieChart = echarts.init(vue.$refs.pie);
+            //                 // 指定图表的配置项和数据
+            //                 vue.pieChart.setOption({
+            //                     title: {
+            //                         text: data.fullname+'取样分析数据'
+            //                     }
+            //                 });
+            //                 vue.$message.error('该监测点在该时期暂时没有数据！');
+            //             }
+            //             else{
+            //                 vue.pieChart = echarts.init(vue.$refs.pie);
+            //                 // 指定图表的配置项和数据
+            //                 vue.pieChart.setOption({
+            //                     title: {
+            //                         text: data.fullname+'取样分析数据'
+            //                     },
+            //                     series : [
+            //                         {
+            //                             name: '访问来源',
+            //                             type: 'pie',
+            //                             radius: '60%',
+            //                             data:[
+            //                                 {value:res.data.accoCaterNeed, name:'住宿和餐饮业'},
+            //                                 {value:res.data.archNeed, name:'建筑业'},
+            //                                 {value:res.data.cultSportEnteNeed, name:'文化、体育和娱乐业'},
+            //                                 {value:res.data.eduNeed, name:'教育'},
+            //                                 {value:res.data.elecGasWaterNeed, name:'电力、燃气及水的生产和供应业'},
+            //                                 {value:res.data.estateNeed, name:'房地产业'},
+            //                                 {value:res.data.financeNeed, name:'金融业'},
+            //                                 {value:res.data.healSecuWelfNeed, name:'教育'},
+            //                                 {value:res.data.industry1Need, name:'农、林、牧、渔业'},
+            //                                 {value:res.data.infoCompSoftNeed, name:'信息传输、计算机服务和软件业'},
+            //                                 {value:res.data.inteOrgaNeed, name:'国际组织'},
+            //                                 {value:res.data.leaseBusiServNeed, name:'租赁和商务服务业'},
+            //                                 {value:res.data.manaOrgaNeed, name:'公共管理与社会组织'},
+            //                                 {value:res.data.manuNeed, name:'制造业'},
+            //                                 {value:res.data.mineNeed, name:'采矿业'},
+            //                                 {value:res.data.reseTechAddrNeed, name:'科学研究、技术服务和地址勘查业'},
+            //                                 {value:res.data.resiServNeed, name:'居民服务和其他服务业'},
+            //                                 {value:res.data.retailNeed, name:'批发和零售业'},
+            //                                 {value:res.data.tranStorPostNeed, name:'交通运输、仓储和邮政业'},
+            //                                 {value:res.data.waterEnviFaciNeed, name:'水利、环境和公共设施管理业'},
+            //                             ]
+            //                         }
+            //                     ]
+            //                 });
+            //             }
+            //
+            //         },
+            //         error(res){
+            //             console.log('error')
+            //         }
+            //     });
+            // },
             initialLineNum(data){
                 $.ajax({
                     url: '/common/data/aimUserLineChartTotalNum ',
@@ -456,43 +456,45 @@
                     },
                     success(res){
                         console.log(res.data);
-                        if (res.data.tableId==0||res.data.tableId==null) {
-                            // vue.pieChart = echarts.init(vue.$refs.pie);
-                            // // 指定图表的配置项和数据
-                            // vue.pieChart.setOption({
-                            //     title: {
-                            //         text: data.fullname+'对比数据分析'
-                            //     }
-                            // });
-                            vue.$message.error('该监测点在该时期暂时没有数据！');
-                        }
-                        else{
-                            this.lineNumChart = echarts.init(this.$refs.lineNum);
+                        // if (res.data.tableId==0||res.data.tableId==null) {
+                        //     // vue.pieChart = echarts.init(vue.$refs.pie);
+                        //     // // 指定图表的配置项和数据
+                        //     // vue.pieChart.setOption({
+                        //     //     title: {
+                        //     //         text: data.fullname+'对比数据分析'
+                        //     //     }
+                        //     // });
+                        //     vue.$message.error('该监测点在该时期暂时没有数据！');
+                        // }
+                        // else{
+                            vue.lineNumChart = echarts.init(vue.$refs.lineNum);
                             // 指定图表的配置项和数据
-                            this.lineNumChart.setOption({
+                            vue.lineNumChart.setOption({
                                 title: {
-                                    test: data.fullname+'对比数据分析'
+                                    text: data.fullname+'对比数据分析'
                                 },
                                 tooltip: {},
                                 xAxis: {
-                                    // type: 'category',
-                                    // data: ['1','2','3']
+                                    type: 'category',
+                                    data: ['1','2','3']
                                 },
                                 yAxis: {},
                                 series : [
                                     {
                                         name: '需求人数',
                                         type: 'line',
-                                        data: res.data.needPopu,
+                                        // data: res.data.needPopu,
+                                        data: [10, 30, 42]
                                     },
                                     {
                                         name: '求职人数',
                                         type: 'line',
-                                        data: res.data.jobseekPopu,
+                                        // data: res.data.jobseekPopu,
+                                        data: [20, 52, 60]
                                     }
                                 ]
                             });
-                        }
+                        // }
 
                     },
                     error(res){
@@ -512,22 +514,22 @@
                     },
                     success(res){
                         console.log(res.data);
-                        if (res.data.tableId==0||res.data.tableId==null) {
-                            // vue.pieChart = echarts.init(vue.$refs.pie);
-                            // // 指定图表的配置项和数据
-                            // vue.pieChart.setOption({
-                            //     title: {
-                            //         text: data.fullname+'对比数据分析'
-                            //     }
-                            // });
-                            vue.$message.error('该监测点在该时期暂时没有数据！');
-                        }
-                        else{
-                            this.lineAgeChart = echarts.init(this.$refs.lineAge);
+                        // if (res.data.tableId==0||res.data.tableId==null) {
+                        //     // vue.pieChart = echarts.init(vue.$refs.pie);
+                        //     // // 指定图表的配置项和数据
+                        //     // vue.pieChart.setOption({
+                        //     //     title: {
+                        //     //         text: data.fullname+'对比数据分析'
+                        //     //     }
+                        //     // });
+                        //     vue.$message.error('该监测点在该时期暂时没有数据！');
+                        // }
+                        // else{
+                            vue.lineAgeChart = echarts.init(vue.$refs.lineAge);
                             // 指定图表的配置项和数据
-                            this.lineAgeChart.setOption({
+                            vue.lineAgeChart.setOption({
                                 title: {
-                                    test: data.fullname+'年龄数据分析'
+                                    text: data.fullname+'年龄数据分析'
                                 },
                                 tooltip: {},
                                 xAxis: {
@@ -539,18 +541,16 @@
                                     {
                                         name: '需求人数',
                                         type: 'line',
-                                        data: [
-
-                                        ]
+                                        data: [10, 20, 30, 40]
                                     },
                                     {
                                         name: '求职人数',
                                         type: 'line',
-                                        data: [],
+                                        data: [20, 30, 40, 50],
                                     }
                                 ]
                             });
-                        }
+                        // }
 
                     },
                     error(res){
