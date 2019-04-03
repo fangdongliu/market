@@ -34,7 +34,7 @@
                             label="人力资源市场名">
                     </el-table-column>
                     <el-table-column
-                            prop="reviseTime"
+                            prop="createTime"
                             label="上传时间">
                     </el-table-column>
                     <el-table-column
@@ -1166,7 +1166,7 @@
                         }
                     });
                 }
-                else if(userType === 2){
+                else if(vue.userType === 2){
                     $.ajax({
                         url: '/city/upload/pass',
                         type: 'post',
@@ -1972,7 +1972,7 @@
                 this.tableId = obj.tableId;
                 this.aimId = obj.creator;
                 // console.log(obj)
-                // console.log(vue.tableId);
+                console.log(vue.aimId);
                 this.loadData();
                 // console.log(vue.tableId);
                 this.visibleFlag = false;
